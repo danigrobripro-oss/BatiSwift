@@ -1,0 +1,30 @@
+# Déploiement Render — 1 service (site + bot + SQLite sur disque persistant)
+# Le bot et Flask partagent la même base SQLite.
+
+services:
+  - type: web
+    name: batiflash
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: bash start.sh
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.0"
+      - key: PUBLIC_BASE_URL
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: FLASK_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_PATH
+        value: /data/batiflash.db
+    disk:
+      name: batiflash-data
+      mountPath: /data
+      sizeGB: 1
