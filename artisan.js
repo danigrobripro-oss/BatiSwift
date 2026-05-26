@@ -2,18 +2,17 @@
   "use strict";
 
   // ========== CONFIGURATION ==========
-  const API_BASE = "https://agent-btp.onrender.com";  // ← ton backend
+  const API_BASE = "https://agent-btp.onrender.com";
   const params = new URLSearchParams(window.location.search);
   let token = params.get("token") || localStorage.getItem("batiflash-artisan-token");
   const THEME_KEY = "batiflash-theme";
   const TOKEN_KEY = "batiflash-artisan-token";
 
-  // ========== THÈME CLAIR/SOMBRE ==========
+  // ========== THÈME ==========
   function applyTheme(theme) {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem(THEME_KEY, theme);
   }
-
   var savedTheme = localStorage.getItem(THEME_KEY);
   if (savedTheme) applyTheme(savedTheme);
   else if (matchMedia("(prefers-color-scheme: dark)").matches) applyTheme("dark");
@@ -26,7 +25,7 @@
     });
   }
 
-  // ========== GESTION DU TOKEN ==========
+  // ========== GESTION TOKEN ==========
   function saveToken(t) {
     token = t;
     localStorage.setItem(TOKEN_KEY, t);
@@ -35,7 +34,7 @@
     window.history.replaceState({}, "", url);
   }
 
-  // ========== APPEL API GÉNÉRIQUE ==========
+  // ========== API AVEC TOKEN DANS HEADER ET URL ==========
   function api(path, options) {
     options = options || {};
     var headers = {
@@ -46,9 +45,15 @@
       headers["Authorization"] = "Bearer " + token;
     }
     var url = API_BASE + path;
+    // Ajouter token dans l'URL pour être sûr
+    if (token) {
+      var separator = url.indexOf('?') === -1 ? '?' : '&';
+      url += separator + 'token=' + encodeURIComponent(token);
+    }
     return fetch(url, {
-      ...options,
-      headers: headers
+      method: options.method || 'GET',
+      headers: headers,
+      body: options.body || null
     }).then(async function (r) {
       var data = await r.json().catch(function () { return {}; });
       if (!r.ok) throw new Error(data.error || "Erreur serveur");
@@ -56,7 +61,7 @@
     });
   }
 
-  // ========== ÉLÉMENTS DOM ==========
+  // ========== DOM ==========
   var authView = document.getElementById("auth-view");
   var dashboardView = document.getElementById("dashboard-view");
   var userNameEl = document.getElementById("artisan-name");
@@ -70,11 +75,7 @@
     setTimeout(function () { alertBox.hidden = true; }, 5000);
   }
 
-  // ========== ROUTES DU BACKEND ==========
-  // Pas de route /api/artisan/me → on récupère le nom via le token (si besoin)
-  // On peut ignorer loadMe ou le supprimer.
   function loadMe() {
-    // Optionnel : le backend n'a pas de route /me, on laisse un placeholder
     if (userNameEl) userNameEl.textContent = "Artisan";
   }
 
@@ -89,7 +90,6 @@
     return el.innerHTML;
   }
 
-  // ========== AFFICHAGE LEAD (DISPO) ==========
   function renderAvailableLead(lead) {
     var html = "";
     html += '<article class="lead-card">';
@@ -110,7 +110,6 @@
     return html;
   }
 
-  // ========== AFFICHAGE LEAD ACHETÉ ==========
   function renderPurchasedLead(lead) {
     var photos = (lead.photo_urls || []).length;
     var html = "";
@@ -131,13 +130,12 @@
     return html;
   }
 
-  // ========== CHARGEMENT LEADS DISPONIBLES ==========
   function loadAvailableLeads() {
     var container = document.getElementById("leads-available");
     if (!container) return;
     container.innerHTML = '<p class="loading">Chargement…</p>';
-    api("/api/leads/available")   // ← bonne route
-      .then(function (leads) {     // ← la réponse est directement le tableau
+    api("/api/leads/available")
+      .then(function (leads) {
         if (!leads.length) {
           container.innerHTML = '<div class="empty-state"><p>Aucun lead disponible pour le moment.</p></div>';
           return;
@@ -159,17 +157,12 @@
       });
   }
 
-  // ========== CHARGEMENT LEADS ACHETÉS ==========
-  // Note : le backend n'a pas de route /api/artisan/leads/purchased.
-  // On peut soit l'ignorer, soit l'ajouter plus tard. Ici on affiche juste un message.
   function loadPurchasedLeads() {
     var container = document.getElementById("leads-purchased");
     if (!container) return;
     container.innerHTML = '<div class="empty-state"><p>Cette fonctionnalité sera bientôt disponible.</p></div>';
-    // Tu pourras plus tard appeler une route dédiée si tu l'implémentes.
   }
 
-  // ========== ACHETER UN LEAD ==========
   function purchaseLead(leadId) {
     var btn = document.querySelector('.btn-buy[data-lead-id="' + leadId + '"]');
     if (btn) {
@@ -181,7 +174,7 @@
       body: JSON.stringify({ lead_id: leadId })
     })
       .then(function (data) {
-        if (data.url) window.location.href = data.url;  // Stripe Checkout URL
+        if (data.url) window.location.href = data.url;
         else throw new Error("URL de paiement non reçue");
       })
       .catch(function (e) {
@@ -193,23 +186,18 @@
       });
   }
 
-  // ========== GESTION RETOUR STRIPE ==========
   function handleReturnFromStripe() {
     var sessionId = params.get("session_id");
     if (sessionId) {
-      // Succès : on recharge les leads disponibles
       showAlert("Paiement réussi ! Le lead a été débloqué.", "success");
       loadAvailableLeads();
       loadPurchasedLeads();
-      // Nettoyer l'URL
       var url = new URL(window.location.href);
       url.searchParams.delete("session_id");
       window.history.replaceState({}, "", url);
     }
-    // Pas de paramètre cancel car on redirige vers le dashboard après annulation
   }
 
-  // ========== AFFICHAGE DASHBOARD / AUTH ==========
   function showDashboard() {
     if (authView) authView.hidden = true;
     if (dashboardView) dashboardView.hidden = false;
@@ -224,22 +212,16 @@
     if (dashboardView) dashboardView.hidden = true;
   }
 
-  // ========== LOGIN PAR EMAIL ==========
   var loginForm = document.getElementById("email-login-form");
   if (loginForm) {
     loginForm.addEventListener("submit", function (e) {
       e.preventDefault();
       var email = document.getElementById("login-email").value.trim();
       var errEl = document.getElementById("login-error");
-      errEl.textContent = "";
-      // Note : le backend n'a pas de route /api/artisan/auth/email.
-      // Tu devras l'implémenter ou utiliser l'inscription existante.
-      // Ici on affiche un message d'erreur.
-      errEl.textContent = "Connexion par email non disponible pour l'instant. Utilisez votre lien d'inscription.";
+      errEl.textContent = "Connexion par email non disponible. Utilisez votre lien d'inscription.";
     });
   }
 
-  // ========== ONGLETS ==========
   document.querySelectorAll(".tab").forEach(function (tab) {
     tab.addEventListener("click", function () {
       document.querySelectorAll(".tab").forEach(function (t) {
@@ -254,7 +236,6 @@
     });
   });
 
-  // ========== DÉCONNEXION ==========
   var logoutBtn = document.getElementById("logout-btn");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", function () {
@@ -263,13 +244,11 @@
     });
   }
 
-  // ========== LIEN TÉLÉGRAM INSCRIPTION ==========
   var tgLink = document.getElementById("telegram-register");
   if (tgLink && typeof BATIFLASH_CONFIG !== "undefined") {
     tgLink.href = BATIFLASH_CONFIG.telegram.artisanWaitlistUrl || tgLink.href;
   }
 
-  // ========== DÉMARRAGE ==========
   if (token) {
     saveToken(token);
     showDashboard();
