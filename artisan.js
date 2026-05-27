@@ -34,25 +34,18 @@
     window.history.replaceState({}, "", url);
   }
 
-  // ========== API AVEC TOKEN DANS HEADER ET URL ==========
+  // ========== API AVEC TOKEN DANS L'URL ==========
   function api(path, options) {
     options = options || {};
-    var headers = {
-      "Content-Type": "application/json",
-      ...(options.headers || {})
-    };
-    if (token) {
-      headers["Authorization"] = "Bearer " + token;
-    }
     var url = API_BASE + path;
-    // Ajouter token dans l'URL pour être sûr
+    // Ajouter le token dans l'URL (indispensable)
     if (token) {
       var separator = url.indexOf('?') === -1 ? '?' : '&';
       url += separator + 'token=' + encodeURIComponent(token);
     }
     return fetch(url, {
       method: options.method || 'GET',
-      headers: headers,
+      headers: { "Content-Type": "application/json" },
       body: options.body || null
     }).then(async function (r) {
       var data = await r.json().catch(function () { return {}; });
@@ -64,7 +57,6 @@
   // ========== DOM ==========
   var authView = document.getElementById("auth-view");
   var dashboardView = document.getElementById("dashboard-view");
-  var userNameEl = document.getElementById("artisan-name");
   var alertBox = document.getElementById("alert-box");
 
   function showAlert(message, type) {
@@ -76,7 +68,9 @@
   }
 
   function loadMe() {
-    if (userNameEl) userNameEl.textContent = "Artisan";
+    // Ne pas appeler /api/artisan/me, juste un placeholder
+    var nameEl = document.getElementById("artisan-name");
+    if (nameEl) nameEl.textContent = "Artisan";
   }
 
   function urgencyClass(u) {
