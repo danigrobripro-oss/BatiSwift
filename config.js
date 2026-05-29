@@ -1,28 +1,32 @@
-/**
- * BatiFlash — Liens et paramètres du site
- * Modifiez ces valeurs pour coller à votre déploiement réel.
- */
-const BATIFLASH_CONFIG = {
-  siteName: "BatiFlash",
-  siteUrl: "https://batiflash.onrender.com",
+"""Configuration BatiFlash — variables d'environnement."""
+import os
+from pathlib import Path
 
-  telegram: {
-    botUsername: "my_artisan_bot",                // ← corrigé (anciennement mon_agent_btp_bot)
-    botUrl: "https://t.me/my_artisan_bot",        // ← corrigé
-    supportUrl: "https://t.me/my_artisan_bot",    // ← corrigé
-    artisanWaitlistUrl: "https://t.me/my_artisan_bot?start=artisan", // ← corrigé
-  },
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
 
-  contact: {
-    email: "contact@batiflash.fr",
-  },
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR / "data"
+DATA_DIR.mkdir(exist_ok=True)
 
-  links: {
-    github: "https://github.com/DANIEL-GROBRI/BatiFlash", // ton dépôt actuel
-    render: "https://batiflash.onrender.com",
-    renderDashboard: "https://dashboard.render.com",
-    artisanDashboard: "/artisan-dashboard.html",
-  },
+DATABASE_PATH = os.getenv("DATABASE_PATH", str(DATA_DIR / "batiflash.db"))
 
-  apiBaseUrl: "",
-};
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
+
+PUBLIC_BASE_URL = os.getenv("PUBLIC_BASE_URL", "http://localhost:5000").rstrip("/")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://batiflash.onrender.com").rstrip("/")
+
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
+STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "")
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
+
+SMTP_HOST = os.getenv("SMTP_HOST", "")
+SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
+SMTP_USER = os.getenv("SMTP_USER", "")
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
+SMTP_FROM = os.getenv("SMTP_FROM", "BatiFlash <noreply@batiflash.fr>")
+
+FLASK_SECRET_KEY = os.getenv("FLASK_SECRET_KEY", "change-me-in-production")
