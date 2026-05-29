@@ -1,14 +1,12 @@
 (function () {
   "use strict";
 
-  // ========== CONFIGURATION ==========
   const API_BASE = "https://agent-btp.onrender.com";
   const params = new URLSearchParams(window.location.search);
   let token = params.get("token") || localStorage.getItem("batiflash-artisan-token");
   const THEME_KEY = "batiflash-theme";
   const TOKEN_KEY = "batiflash-artisan-token";
 
-  // ========== THÈME ==========
   function applyTheme(theme) {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem(THEME_KEY, theme);
@@ -25,7 +23,6 @@
     });
   }
 
-  // ========== GESTION TOKEN ==========
   function saveToken(t) {
     token = t;
     localStorage.setItem(TOKEN_KEY, t);
@@ -34,11 +31,9 @@
     window.history.replaceState({}, "", url);
   }
 
-  // ========== API AVEC TOKEN DANS L'URL ==========
   function api(path, options) {
     options = options || {};
     var url = API_BASE + path;
-    // Ajouter le token dans l'URL (indispensable)
     if (token) {
       var separator = url.indexOf('?') === -1 ? '?' : '&';
       url += separator + 'token=' + encodeURIComponent(token);
@@ -54,7 +49,6 @@
     });
   }
 
-  // ========== DOM ==========
   var authView = document.getElementById("auth-view");
   var dashboardView = document.getElementById("dashboard-view");
   var alertBox = document.getElementById("alert-box");
@@ -68,7 +62,6 @@
   }
 
   function loadMe() {
-    // Ne pas appeler /api/artisan/me, juste un placeholder
     var nameEl = document.getElementById("artisan-name");
     if (nameEl) nameEl.textContent = "Artisan";
   }
@@ -192,6 +185,36 @@
     }
   }
 
+  // Abonnement
+  function loadSubscriptionStatus() {
+    var subContainer = document.getElementById("subscription-status");
+    if (!subContainer) return;
+    api("/api/artisan/subscription/status")
+      .then(function (data) {
+        if (data.active) {
+          subContainer.innerHTML = '<span class="badge badge--success">✅ Abonnement actif</span>';
+          var subBtn = document.getElementById("subscribe-btn");
+          if (subBtn) subBtn.style.display = "none";
+        } else {
+          subContainer.innerHTML = '<span class="badge badge--danger">❌ Aucun abonnement actif</span>';
+          var subBtn = document.getElementById("subscribe-btn");
+          if (subBtn) subBtn.style.display = "inline-block";
+        }
+      })
+      .catch(function () {});
+  }
+
+  function subscribe() {
+    api("/api/artisan/subscribe", { method: "POST" })
+      .then(function (data) {
+        if (data.url) window.location.href = data.url;
+        else showAlert("Erreur lors de la création de l'abonnement", "error");
+      })
+      .catch(function (e) {
+        showAlert(e.message, "error");
+      });
+  }
+
   function showDashboard() {
     if (authView) authView.hidden = true;
     if (dashboardView) dashboardView.hidden = false;
@@ -199,6 +222,9 @@
     loadAvailableLeads();
     loadPurchasedLeads();
     handleReturnFromStripe();
+    loadSubscriptionStatus();
+    var subBtn = document.getElementById("subscribe-btn");
+    if (subBtn) subBtn.addEventListener("click", subscribe);
   }
 
   function showAuth() {
