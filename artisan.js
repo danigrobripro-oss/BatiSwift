@@ -265,8 +265,8 @@
   }
 
   var tgLink = document.getElementById("telegram-register");
-  if (tgLink && typeof BATIFLASH_CONFIG !== "undefined") {
-    tgLink.href = BATIFLASH_CONFIG.telegram.artisanWaitlistUrl || tgLink.href;
+  if (tgLink && typeof BATISWIFT_CONFIG !== "undefined") {
+    tgLink.href = BATISWIFT_CONFIG.telegram.artisanWaitlistUrl || tgLink.href;
   }
 
   if (token) {
