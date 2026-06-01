@@ -3,9 +3,9 @@
 
   const API_BASE = "https://agent-btp.onrender.com";
   const params = new URLSearchParams(window.location.search);
-  let token = params.get("token") || localStorage.getItem("batiflash-artisan-token");
-  const THEME_KEY = "batiflash-theme";
-  const TOKEN_KEY = "batiflash-artisan-token";
+  let token = params.get("token") || localStorage.getItem("batiswift-artisan-token");
+  const THEME_KEY = "batiswift-theme";
+  const TOKEN_KEY = "batiswift-artisan-token";
 
   function applyTheme(theme) {
     document.documentElement.setAttribute("data-theme", theme);
