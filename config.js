@@ -1,6 +1,6 @@
-const BATIFLASH_CONFIG = {
+const BATISWIFT_CONFIG = {
   siteName: "BatiSwift",
-  siteUrl: "https://batiflash.onrender.com",  // ou le nouveau domaine si vous en changez
+  siteUrl: "https://batiflash.onrender.com",  // Garde l'URL actuelle (ou changez si vous avez un nouveau domaine)
   telegram: {
     botUsername: "my_artisan_bot",
     botUrl: "https://t.me/my_artisan_bot",
@@ -16,4 +16,3 @@ const BATIFLASH_CONFIG = {
   },
   apiBaseUrl: "",
 };
-
