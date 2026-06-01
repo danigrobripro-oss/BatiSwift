@@ -1,12 +1,12 @@
 (function () {
   "use strict";
 
-  // Récupération de la configuration
-  const cfg = typeof BATIFLASH_CONFIG !== "undefined" ? BATIFLASH_CONFIG : {};
+  // Récupération de la configuration (nouveau nom)
+  const cfg = typeof BATISWIFT_CONFIG !== "undefined" ? BATISWIFT_CONFIG : {};
   const BOT_URL = cfg.telegram?.botUrl || "https://t.me/my_artisan_bot";
 
   // ———— Thème clair/sombre ————
-  const THEME_KEY = "batiflash-theme";
+  const THEME_KEY = "batiswift-theme";
   const root = document.documentElement;
   const themeToggle = document.getElementById("theme-toggle");
 
@@ -46,7 +46,7 @@
   setHref("link-github", cfg.links?.github);
   setHref("link-render", cfg.links?.render);
   setHref("link-email", cfg.contact?.email ? "mailto:" + cfg.contact.email : null);
-  setText("footer-email", cfg.contact?.email || "contact@batiflash.fr");
+  setText("footer-email", cfg.contact?.email || "contact@batiswift.fr");
 
   document.querySelectorAll("[data-bot-link]").forEach((el) => {
     el.href = BOT_URL;
@@ -156,8 +156,8 @@
         return;
       }
 
-      // Construction du message
-      let fullMessage = `Bonjour Sarah, je viens de BatiFlash.\n`;
+      // Construction du message (nom du bot mis à jour)
+      let fullMessage = `Bonjour Bati, je viens de BatiSwift.\n`;
       fullMessage += `Travaux : ${category || "non précisé"}\n`;
       fullMessage += `Localisation : ${city || "non précisée"}\n`;
       fullMessage += `Description : ${message}\n`;
