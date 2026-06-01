@@ -53,7 +53,6 @@
   </header>
 
   <main>
-    <!-- tout le contenu reste strictement identique -->
     <section class="hero">
       <div class="container">
         <p class="hero__badge">Assistant Telegram · Réponse rapide</p>
@@ -71,24 +70,117 @@
         </div>
 
         <div class="services" role="list" aria-label="Métiers du bâtiment">
-          <!-- même code que l'original, inchangé -->
           <article class="service-card" data-category="Plomberie" role="listitem" aria-label="Plomberie">
             <div class="service-card__icon" aria-hidden="true">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.32 0z"/></svg>
             </div>
             <span class="service-card__label">Plomberie</span>
           </article>
-          <!-- ... tous les autres services ... -->
+          <article class="service-card" data-category="Électricité" role="listitem" aria-label="Électricité">
+            <div class="service-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <span class="service-card__label">Électricité</span>
+          </article>
+          <article class="service-card" data-category="Peinture" role="listitem" aria-label="Peinture">
+            <div class="service-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18.37 2.63 14 7l-1.59-1.59a2 2 0 0 0-2.82 0L8 7l5 5 1.59-1.59a2 2 0 0 0 0-2.82L13 7l4.37-4.37a2.12 2.12 0 1 1 3 3zM9 18c-2.5 0-4 1.5-4 3h14c0-1.5-1.5-3-4-3H9z"/></svg>
+            </div>
+            <span class="service-card__label">Peinture</span>
+          </article>
+          <article class="service-card" data-category="Maçonnerie" role="listitem" aria-label="Maçonnerie">
+            <div class="service-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            </div>
+            <span class="service-card__label">Maçonnerie</span>
+          </article>
+          <article class="service-card" data-category="Chauffage" role="listitem" aria-label="Chauffage">
+            <div class="service-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+            </div>
+            <span class="service-card__label">Chauffage</span>
+          </article>
+          <article class="service-card" data-category="Serrurerie" role="listitem" aria-label="Serrurerie">
+            <div class="service-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.78 7.78 5.5 5.5 0 0 1 7.78-7.78zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+            </div>
+            <span class="service-card__label">Serrurerie</span>
+          </article>
         </div>
       </div>
     </section>
 
     <section class="section section--muted" id="fonctionnement">
-      <!-- inchangé -->
+      <div class="container">
+        <header class="section__header">
+          <span class="section__tag">Fonctionnement</span>
+          <h2 class="section__title">3 étapes simples</h2>
+          <p class="section__desc">Décrivez votre besoin, nous qualifions la demande, un artisan vous rappelle rapidement.</p>
+        </header>
+        <div class="steps">
+          <article class="step">
+            <div class="step__num" aria-hidden="true">1</div>
+            <div>
+              <h3 class="step__title">Je décris mon problème</h3>
+              <p class="step__text">Texte et photos acceptés — via le chat ou directement sur Telegram.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step__num" aria-hidden="true">2</div>
+            <div>
+              <h3 class="step__title">BatiSwift qualifie ma demande</h3>
+              <p class="step__text">Notre assistant analyse votre besoin et identifie le bon métier.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step__num" aria-hidden="true">3</div>
+            <div>
+              <h3 class="step__title">Un artisan me rappelle sous 1h</h3>
+              <p class="step__text">Un professionnel vérifié vous contacte pour planifier l'intervention.</p>
+            </div>
+          </article>
+        </div>
+      </div>
     </section>
 
     <section class="section" id="avantages">
-      <!-- inchangé -->
+      <div class="container">
+        <header class="section__header">
+          <span class="section__tag">Avantages</span>
+          <h2 class="section__title">Pourquoi passer par BatiSwift</h2>
+          <p class="section__desc">Un service pensé pour vous simplifier la vie, sans engagement.</p>
+        </header>
+        <div class="advantages">
+          <article class="advantage">
+            <div class="advantage__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0 1 12 2.944a11.955 11.955 0 0 1-8.618 3.04A12.02 12.02 0 0 0 3 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <h3 class="advantage__title">Artisans vérifiés</h3>
+            <p class="advantage__text">Des professionnels du BTP sélectionnés pour la qualité de leur travail.</p>
+          </article>
+          <article class="advantage">
+            <div class="advantage__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <h3 class="advantage__title">Réponse sous 1h</h3>
+            <p class="advantage__text">Votre demande est traitée en priorité pour les urgences du quotidien.</p>
+          </article>
+          <article class="advantage">
+            <div class="advantage__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+            </div>
+            <h3 class="advantage__title">Devis gratuit</h3>
+            <p class="advantage__text">Estimation sans engagement avant toute intervention.</p>
+          </article>
+          <article class="advantage">
+            <div class="advantage__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            </div>
+            <h3 class="advantage__title">Photos acceptées</h3>
+            <p class="advantage__text">Envoyez des visuels sur Telegram pour un diagnostic plus précis.</p>
+          </article>
+        </div>
+      </div>
     </section>
 
     <section class="section section--muted" id="artisans">
@@ -105,14 +197,52 @@
         </div>
 
         <div class="infra" aria-label="Liens techniques">
-          <!-- identique -->
+          <a href="#" class="infra__link" id="link-telegram" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.69-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.37-.48 1.02-.73 4-1.74 6.68-2.89 8.05-3.45 3.83-1.57 4.63-1.85 5.15-1.86.11 0 .37.03.53.17.14.12.18.28.2.45-.01.06.01.24 0 .38z"/></svg>
+            Bot Telegram
+          </a>
+          <a href="#" class="infra__link" id="link-github" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A8.996 8.996 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub
+          </a>
+          <a href="#" class="infra__link" id="link-render" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l6.9 3.45L12 11.08 5.1 7.63 12 4.18zM4 8.82l7 3.5v7.36l-7-3.5V8.82zm9 10.86v-7.36l7-3.5v7.36l-7 3.5z"/></svg>
+            Site Render
+          </a>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="footer" id="contact">
-    <!-- identique -->
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a href="#" class="logo">
+            <span class="logo__icon" aria-hidden="true">BS</span>
+            BatiSwift
+          </a>
+          <p>Mise en relation entre particuliers et artisans du BTP — simple, rapide, via Telegram.</p>
+        </div>
+        <div class="footer__col">
+          <h4>Contact</h4>
+          <ul class="footer__links">
+            <li><a href="#" id="link-email"><span id="footer-email">contact@batiswift.fr</span></a></li>
+            <li><a href="#" id="link-telegram-footer" target="_blank" rel="noopener noreferrer">Telegram</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Légal</h4>
+          <ul class="footer__links">
+            <li><a href="mentions-legales.html">Mentions légales</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© <span id="year">2026</span> BatiSwift</span>
+        <span>Site vitrine — agent conversationnel sur Telegram</span>
+      </div>
+    </div>
   </footer>
 
   <button type="button" class="chat-fab" id="chat-fab" aria-label="Ouvrir le chat BatiSwift">
@@ -120,7 +250,47 @@
   </button>
 
   <aside class="chat-panel" id="chat-panel" aria-hidden="true" aria-label="Chat BatiSwift">
-    <!-- identique -->
+    <div class="chat-panel__header">
+      <div>
+        <h3>BatiSwift</h3>
+        <p>Assistant · puis Telegram</p>
+      </div>
+      <button type="button" class="chat-panel__close" id="chat-close" aria-label="Fermer le chat">✕</button>
+    </div>
+    <div class="chat-panel__body">
+      <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
+      <div id="chat-form-view">
+        <form class="chat-form" id="chat-form">
+          <label for="chat-category">Type de travaux</label>
+          <select id="chat-category" name="category">
+            <option value="">Choisir un métier</option>
+            <option value="Plomberie">Plomberie</option>
+            <option value="Électricité">Électricité</option>
+            <option value="Peinture">Peinture</option>
+            <option value="Maçonnerie">Maçonnerie</option>
+            <option value="Chauffage">Chauffage</option>
+            <option value="Serrurerie">Serrurerie</option>
+            <option value="Autre">Autre</option>
+          </select>
+          <label for="chat-city">Ville ou code postal</label>
+          <input type="text" id="chat-city" name="city" placeholder="Ex. Lyon 69003" autocomplete="address-level2">
+          <label for="chat-message">Décrivez votre problème *</label>
+          <textarea id="chat-message" name="message" placeholder="Ex. Fuite sous l'évier depuis ce matin…" required></textarea>
+          <label for="chat-name">Votre prénom (optionnel)</label>
+          <input type="text" id="chat-name" name="name" placeholder="Jean" autocomplete="given-name">
+          <p class="chat-form__hint">Les photos s'envoient directement sur Telegram après redirection.</p>
+          <button type="submit" class="btn btn--primary btn--block">Envoyer ma demande</button>
+        </form>
+      </div>
+      <div id="chat-success-view" class="chat-success hidden">
+        <div class="chat-success__icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </div>
+        <p>Votre message est prêt. Ouvrez Telegram pour le transmettre à notre agent.</p>
+        <a href="#" class="btn btn--primary btn--block" id="chat-telegram-btn" target="_blank" rel="noopener noreferrer">Continuer sur Telegram</a>
+        <button type="button" class="btn btn--ghost btn--block" id="chat-new-request" style="margin-top:0.5rem">Nouvelle demande</button>
+      </div>
+    </div>
   </aside>
 
   <script src="config.js"></script>
