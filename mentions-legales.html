@@ -3,20 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mentions légales — BatiFlash</title>
+  <title>Mentions légales — BatiSwift</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Styles spécifiques à la page légale (au cas où style.css ne chargerait pas) */
+    .legal-page {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: var(--bg-elevated, #fff);
+      border-radius: var(--radius-lg, 24px);
+      box-shadow: var(--shadow, 0 4px 12px rgba(0,0,0,0.05));
+    }
+    .legal-page h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+    .legal-page h2 {
+      font-size: 1.2rem;
+      margin: 1.5rem 0 0.5rem;
+    }
+    .legal-page p {
+      margin-bottom: 0.75rem;
+      color: var(--text-muted, #5c5c66);
+    }
+    .back {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      color: var(--accent, #e11d7a);
+      text-decoration: none;
+    }
+    .back:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
   <div class="container legal-page">
     <a href="index.html" class="back">← Retour à l'accueil</a>
     <h1>Mentions légales</h1>
-    <p>Éditeur : BatiFlash — plateforme de mise en relation BTP.</p>
-    <p>Contact : contact@batiflash.fr</p>
+    <p><strong>Éditeur :</strong> BatiSwift — plateforme de mise en relation BTP.</p>
+    <p><strong>Contact :</strong> contact@batiswift.fr</p>
     <h2>Données personnelles</h2>
     <p>Les données collectées via Telegram et le site servent uniquement à la mise en relation entre clients et artisans.</p>
     <h2>Paiements</h2>
-    <p>Les paiements de leads artisans sont traités par Stripe. BatiFlash n'enregistre pas vos coordonnées bancaires.</p>
+    <p>Les paiements de leads artisans sont traités par Stripe. BatiSwift n'enregistre pas vos coordonnées bancaires.</p>
   </div>
 </body>
 </html>
