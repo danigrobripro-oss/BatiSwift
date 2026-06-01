@@ -185,7 +185,7 @@
     }
   }
 
-  // Abonnement
+  // ---------- Gestion de l'abonnement ----------
   function loadSubscriptionStatus() {
     var subContainer = document.getElementById("subscription-status");
     if (!subContainer) return;
@@ -215,6 +215,34 @@
       });
   }
 
+  // ---------- Gestion des paramètres (téléphone, WhatsApp, relance) ----------
+  function loadSettings() {
+    api("/api/artisan/settings")
+      .then(function (data) {
+        var phoneField = document.getElementById("artisan-phone");
+        var whatsappField = document.getElementById("artisan-whatsapp");
+        var autoRelanceCheck = document.getElementById("auto-relance");
+        if (phoneField) phoneField.value = data.phone || "";
+        if (whatsappField) whatsappField.value = data.whatsapp || "";
+        if (autoRelanceCheck) autoRelanceCheck.checked = data.auto_relance || false;
+      })
+      .catch(function (e) {
+        console.error("Erreur chargement paramètres", e);
+      });
+  }
+
+  function saveSettings(phone, whatsapp, autoRelance) {
+    return api("/api/artisan/settings", {
+      method: "POST",
+      body: JSON.stringify({
+        phone: phone,
+        whatsapp: whatsapp,
+        auto_relance: autoRelance
+      })
+    });
+  }
+
+  // ---------- Initialisation du tableau de bord ----------
   function showDashboard() {
     if (authView) authView.hidden = true;
     if (dashboardView) dashboardView.hidden = false;
@@ -223,8 +251,37 @@
     loadPurchasedLeads();
     handleReturnFromStripe();
     loadSubscriptionStatus();
+    loadSettings();  // charge les paramètres
+
     var subBtn = document.getElementById("subscribe-btn");
     if (subBtn) subBtn.addEventListener("click", subscribe);
+
+    // Gestion du formulaire des paramètres
+    var settingsForm = document.getElementById("artisan-settings-form");
+    if (settingsForm) {
+      settingsForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var phone = document.getElementById("artisan-phone").value.trim();
+        var whatsapp = document.getElementById("artisan-whatsapp").value.trim();
+        var autoRelance = document.getElementById("auto-relance").checked;
+        saveSettings(phone, whatsapp, autoRelance)
+          .then(function () {
+            var statusDiv = document.getElementById("settings-status");
+            if (statusDiv) {
+              statusDiv.textContent = "✅ Paramètres enregistrés !";
+              statusDiv.style.color = "#2b8c4a";
+              setTimeout(function () { statusDiv.textContent = ""; }, 3000);
+            }
+          })
+          .catch(function (e) {
+            var statusDiv = document.getElementById("settings-status");
+            if (statusDiv) {
+              statusDiv.textContent = "❌ Erreur lors de l’enregistrement";
+              statusDiv.style.color = "#e11d7a";
+            }
+          });
+      });
+    }
   }
 
   function showAuth() {
