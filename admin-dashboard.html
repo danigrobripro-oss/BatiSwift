@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin — BatiSwift</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Styles supplémentaires pour l’admin */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+    .stat-card:hover { transform: translateY(-2px); }
+    .stat-number { font-size: 2.5rem; font-weight: 800; color: var(--accent); line-height: 1.2; }
+    .stat-label { color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-elevated);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .admin-table th, .admin-table td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .admin-table th { background: var(--bg-muted); font-weight: 600; }
+    .admin-table tr:hover { background: var(--bg-muted); }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-success { background: #2b8c4a20; color: #2b8c4a; }
+    .badge-warning { background: #e11d7a20; color: #e11d7a; }
+    .refresh-btn {
+      margin-left: 1rem;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.8rem;
+    }
+  </style>
+  <script>
+    const API_BASE = "https://agent-btp.onrender.com";
+    let adminToken = localStorage.getItem("batiswift-admin-token") || "";
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem("batiswift-theme", theme);
+    }
+    var savedTheme = localStorage.getItem("batiswift-theme");
+    if (savedTheme) applyTheme(savedTheme);
+    else if (matchMedia("(prefers-color-scheme: dark)").matches) applyTheme("dark");
+
+    document.getElementById("theme-toggle")?.addEventListener("click", () => {
+      const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      applyTheme(next);
+    });
+
+    async function api(path, options = {}) {
+      const headers = { "Content-Type": "application/json" };
+      if (adminToken) headers["X-Admin-Token"] = adminToken;
+      const res = await fetch(API_BASE + path, { ...options, headers });
+      if (!res.ok) throw new Error(await res.text() || "Erreur");
+      return res.json();
+    }
+
+    async function loadStats() {
+      try {
+        const stats = await api("/admin/stats");
+        document.getElementById("stat-artisans").textContent = stats.artisans || 0;
+        document.getElementById("stat-leads-available").textContent = stats.leads_available || 0;
+        document.getElementById("stat-leads-sold").textContent = stats.leads_sold || 0;
+        document.getElementById("stat-revenue").textContent = (stats.revenue || 0).toFixed(2) + " €";
+        document.getElementById("stat-subscriptions").textContent = stats.active_subscriptions || 0;
+      } catch(e) { console.error("Stats error", e); }
+    }
+
+    async function loadArtisans() {
+      try {
+        const artisans = await api("/admin/artisans");
+        const tbody = document.getElementById("artisans-table-body");
+        tbody.innerHTML = "";
+        artisans.forEach(a => {
+          const row = tbody.insertRow();
+          row.insertCell(0).textContent = a.id;
+          row.insertCell(1).textContent = a.name;
+          row.insertCell(2).textContent = a.email || "—";
+          row.insertCell(3).innerHTML = a.subscription_active ? '<span class="badge badge-success">Actif</span>' : '<span class="badge badge-warning">Inactif</span>';
+          row.insertCell(4).textContent = a.created_at ? new Date(a.created_at).toLocaleDateString() : "—";
+        });
+      } catch(e) { console.error("Artisans error", e); }
+    }
+
+    async function loadLeads() {
+      try {
+        const leads = await api("/admin/leads");
+        const tbody = document.getElementById("leads-table-body");
+        tbody.innerHTML = "";
+        leads.forEach(l => {
+          const row = tbody.insertRow();
+          row.insertCell(0).textContent = l.id;
+          row.insertCell(1).textContent = l.trade_type || "—";
+          row.insertCell(2).textContent = l.client_name || l.client_phone || "—";
+          row.insertCell(3).innerHTML = l.status === 'available' ? '<span class="badge badge-success">Disponible</span>' : '<span class="badge badge-warning">Vendu</span>';
+          row.insertCell(4).textContent = new Date(l.created_at).toLocaleDateString();
+        });
+      } catch(e) { console.error("Leads error", e); }
+    }
+
+    async function triggerRelance() {
+      const btn = document.getElementById("trigger-relance-btn");
+      btn.disabled = true;
+      btn.textContent = "Envoi en cours...";
+      try {
+        const res = await api("/admin/trigger_relance", { method: "POST" });
+        alert("Relance déclenchée ! Vérifie les logs.");
+      } catch(e) { alert("Erreur : " + e.message); }
+      finally { btn.disabled = false; btn.textContent = "Forcer une relance"; }
+    }
+
+    function refreshAll() {
+      loadStats(); loadArtisans(); loadLeads();
+    }
+
+    // Authentification simple
+    function checkAuth() {
+      if (!adminToken) {
+        const token = prompt("🔐 Accès administrateur – Veuillez entrer le token secret :");
+        if (token) {
+          adminToken = token;
+          localStorage.setItem("batiswift-admin-token", token);
+          refreshAll();
+        } else {
+          document.body.innerHTML = "<div style='text-align:center;margin-top:4rem'><h2>Accès interdit</h2><p>Token administrateur requis.</p></div>";
+        }
+      } else {
+        refreshAll();
+      }
+    }
+
+    window.onload = checkAuth;
+  </script>
+</head>
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <a href="index.html" class="logo"><span class="logo__icon">BS</span>BatiSwift Admin</a>
+      <div class="header__actions">
+        <button type="button" class="icon-btn theme-toggle" id="theme-toggle" aria-label="Thème">
+          <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="4"/></svg>
+          <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <a href="index.html" class="btn btn--ghost btn--sm">Retour au site</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 2rem 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+      <h1>📊 Tableau de bord administrateur</h1>
+      <button class="btn btn--primary refresh-btn" onclick="refreshAll()">⟳ Actualiser</button>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-number" id="stat-artisans">0</div><div class="stat-label">Artisans</div></div>
+      <div class="stat-card"><div class="stat-number" id="stat-leads-available">0</div><div class="stat-label">Leads disponibles</div></div>
+      <div class="stat-card"><div class="stat-number" id="stat-leads-sold">0</div><div class="stat-label">Leads vendus</div></div>
+      <div class="stat-card"><div class="stat-number" id="stat-revenue">0 €</div><div class="stat-label">CA (Stripe)</div></div>
+      <div class="stat-card"><div class="stat-number" id="stat-subscriptions">0</div><div class="stat-label">Abonnements actifs</div></div>
+    </div>
+
+    <!-- Actions admin -->
+    <div style="margin-bottom: 2rem; display: flex; gap: 1rem;">
+      <button id="trigger-relance-btn" class="btn btn--primary" onclick="triggerRelance()">⟳ Forcer une relance</button>
+    </div>
+
+    <!-- Liste des artisans -->
+    <h2>👨‍🔧 Artisans inscrits</h2>
+    <div style="overflow-x: auto; margin-bottom: 2rem;">
+      <table class="admin-table">
+        <thead><tr><th>ID</th><th>Nom</th><th>Email</th><th>Abonnement</th><th>Inscrit le</th></tr></thead>
+        <tbody id="artisans-table-body"><tr><td colspan="5">Chargement...</td></tr>
+      </table>
+    </div>
+
+    <!-- Liste des leads -->
+    <h2>📋 Derniers leads</h2>
+    <div style="overflow-x: auto;">
+      <table class="admin-table">
+        <thead><tr><th>ID</th><th>Type</th><th>Client</th><th>Statut</th><th>Date</th></tr></thead>
+        <tbody id="leads-table-body"><tr><td colspan="5">Chargement...</td></tr>
+      </table>
+    </div>
+  </main>
+
+  <footer class="footer" style="margin-top: 2rem;">
+    <div class="container"><div class="footer__bottom"><span>© 2026 BatiSwift – Administration</span></div></div>
+  </footer>
+</body>
+</html>
