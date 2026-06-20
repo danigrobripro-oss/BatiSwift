@@ -24,27 +24,8 @@
   </script>
 </head>
 <body>
-  <header class="header">
-    <div class="container header__inner">
-      <a href="#" class="logo"><span class="logo__icon">BS</span>BatiSwift</a>
-      <nav class="nav">
-        <a href="#fonctionnement">Fonctionnement</a>
-        <a href="#avantages">Avantages</a>
-        <a href="#artisans">Artisans</a>
-        <a href="#aide">Aide</a>
-      </nav>
-      <div class="header__actions">
-        <button type="button" class="icon-btn theme-toggle" id="theme-toggle">
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/></svg>
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        </button>
-        <button type="button" class="icon-btn translucide-toggle" id="translucide-toggle">
-          <svg class="icon-glass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18M12 3v3m0 12v3M3 12h3m12 0h3M5.5 5.5l2 2M16.5 16.5l2 2M16.5 5.5l2 2M5.5 16.5l2 2" stroke="currentColor"/><circle cx="12" cy="12" r="3" stroke="currentColor"/></svg>
-        </button>
-        <a href="artisan-dashboard.html" class="btn btn--primary btn--primary-nav">Espace Pro</a>
-      </div>
-    </div>
-  </header>
+  <!-- Inclusion du header -->
+  <div id="header-placeholder"></div>
 
   <main>
     <section class="hero">
@@ -55,10 +36,9 @@
           Plus d’appels manqués, plus de devis perdus. BatiSwift qualifie vos clients et vous les envoie directement sur WhatsApp.
         </p>
         <div class="hero__cta">
-          <a href="register.html" class="btn btn--primary btn--lg">🔥 Je m’inscris gratuitement</a>
-          <a href="#fonctionnement" class="btn btn--ghost btn--lg">Comment ça marche</a>
+          <a href="inscription.html" class="btn btn--primary btn--lg">🔥 Je m’inscris gratuitement</a>
+          <a href="tarifs.html" class="btn btn--ghost btn--lg">Voir les tarifs</a>
         </div>
-        <!-- Compteurs (preuve sociale) -->
         <div class="counters" id="counters">
           <div class="counter-item">
             <span class="number" id="counter-artisans">0</span>
@@ -69,188 +49,23 @@
             <span class="label">Demandes traitées</span>
           </div>
         </div>
-        <div class="services">
-          <article class="service-card" data-category="Plomberie">
-            <div class="service-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.32 0z"/></svg></div>
-            <span class="service-card__label">Plomberie</span>
-          </article>
-          <article class="service-card" data-category="Électricité">
-            <div class="service-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-            <span class="service-card__label">Électricité</span>
-          </article>
-          <article class="service-card" data-category="Peinture">
-            <div class="service-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.37 2.63 14 7l-1.59-1.59a2 2 0 0 0-2.82 0L8 7l5 5 1.59-1.59a2 2 0 0 0 0-2.82L13 7l4.37-4.37a2.12 2.12 0 1 1 3 3zM9 18c-2.5 0-4 1.5-4 3h14c0-1.5-1.5-3-4-3H9z"/></svg></div>
-            <span class="service-card__label">Peinture</span>
-          </article>
-          <article class="service-card" data-category="Maçonnerie">
-            <div class="service-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
-            <span class="service-card__label">Maçonnerie</span>
-          </article>
-          <article class="service-card" data-category="Chauffage">
-            <div class="service-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg></div>
-            <span class="service-card__label">Chauffage</span>
-          </article>
-          <article class="service-card" data-category="Serrurerie">
-            <div class="service-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.78 7.78 5.5 5.5 0 0 1 7.78-7.78zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg></div>
-            <span class="service-card__label">Serrurerie</span>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section--muted" id="fonctionnement">
-      <div class="container">
-        <div class="section__header">
-          <span class="section__tag">Fonctionnement</span>
-          <h2 class="section__title">3 étapes pour ne plus perdre de clients</h2>
-          <p class="section__desc">BatiSwift capte, qualifie et vous livre les clients prêts à signer.</p>
-        </div>
-        <div class="steps">
-          <article class="step">
-            <div class="step__num">1</div>
-            <div><h3 class="step__title">Appel manqué ou SMS</h3><p class="step__text">Le client vous contacte, même en dehors des heures de travail. BatiSwift prend le relais.</p></div>
-          </article>
-          <article class="step">
-            <div class="step__num">2</div>
-            <div><h3 class="step__title">IA qualifie la demande</h3><p class="step__text">L’IA analyse le besoin, extrait l’urgence, le type de travaux et la localisation.</p></div>
-          </article>
-          <article class="step">
-            <div class="step__num">3</div>
-            <div><h3 class="step__title">Lead envoyé sur WhatsApp</h3><p class="step__text">Vous recevez un résumé clair avec photos et coordonnées. Vous n’avez plus qu’à signer.</p></div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="avantages">
-      <div class="container">
-        <div class="section__header">
-          <span class="section__tag">Avantages</span>
-          <h2 class="section__title">Pourquoi BatiSwift change la donne</h2>
-          <p class="section__desc">Fini les appels manqués et les devis oubliés.</p>
-        </div>
-        <div class="advantages">
-          <article class="advantage">
-            <div class="advantage__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 22v-4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M22 12h-4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div>
-            <h3 class="advantage__title">24h/24, 7j/7</h3>
-            <p class="advantage__text">BatiSwift travaille même quand vous dormez. Aucun client ne reste sans réponse.</p>
-          </article>
-          <article class="advantage">
-            <div class="advantage__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
-            <h3 class="advantage__title">Qualification automatique</h3>
-            <p class="advantage__text">L’IA pose les bonnes questions et classe les urgences [🚨] et les devis [📅].</p>
-          </article>
-          <article class="advantage">
-            <div class="advantage__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0 1 12 2.944a11.955 11.955 0 0 1-8.618 3.04A12.02 12.02 0 0 0 3 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
-            <h3 class="advantage__title">Paiement sécurisé</h3>
-            <p class="advantage__text">Stripe gère les paiements. Vous ne payez que les leads que vous achetez.</p>
-          </article>
-          <article class="advantage">
-            <div class="advantage__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
-            <h3 class="advantage__title">Photos intégrées</h3>
-            <p class="advantage__text">Les clients envoient 1‑2 photos. Vous voyez le problème avant même d’appeler.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section--muted" id="artisans">
-      <div class="container">
-        <div class="artisan-box">
-          <h2 class="artisan-box__title">Vous êtes artisan ? Recevez des clients qualifiés</h2>
-          <p class="artisan-box__text">Inscrivez-vous gratuitement, testez le système 1 mois, puis ne payez que les leads achetés.</p>
-          <a href="register.html" class="btn btn--primary btn--lg">👉 Inscription artisan</a>
-          <p style="margin-top:1rem; font-size:0.85rem; color:var(--text-muted);">
-            Déjà inscrit ? <a href="artisan-dashboard.html" style="color:var(--accent);">Accéder à mon espace</a>
-          </p>
-        </div>
-        <div class="infra">
-          <a href="https://t.me/my_artisan_bot" class="infra__link" target="_blank">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.69-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.37-.48 1.02-.73 4-1.74 6.68-2.89 8.05-3.45 3.83-1.57 4.63-1.85 5.15-1.86.11 0 .37.03.53.17.14.12.18.28.2.45-.01.06.01.24 0 .38z"/></svg>
-            Bot Telegram
-          </a>
-          <a href="https://github.com/danigrobripro-oss/agent-btp" class="infra__link" target="_blank">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A8.996 8.996 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-            GitHub
-          </a>
-          <a href="https://agent-btp.onrender.com" class="infra__link" target="_blank">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l6.9 3.45L12 11.08 5.1 7.63 12 4.18zM4 8.82l7 3.5v7.36l-7-3.5V8.82zm9 10.86v-7.36l7-3.5v7.36l-7 3.5z"/></svg>
-            Statut API
-          </a>
-          <a href="aide.html" class="infra__link">📘 Aide</a>
-        </div>
       </div>
     </section>
   </main>
 
-  <footer class="footer" id="contact">
-    <div class="container">
-      <div class="footer__grid">
-        <div class="footer__brand">
-          <a href="#" class="logo"><span class="logo__icon">BS</span>BatiSwift</a>
-          <p>Assistant IA pour artisans du BTP — simple, rapide, sans engagement.</p>
-        </div>
-        <div class="footer__col">
-          <h4>Contact</h4>
-          <ul class="footer__links">
-            <li><a href="mailto:contact@batiswift.fr">contact@batiswift.fr</a></li>
-            <li><a href="https://t.me/my_artisan_bot" target="_blank">Telegram</a></li>
-          </ul>
-        </div>
-        <div class="footer__col">
-          <h4>Légal</h4>
-          <ul class="footer__links">
-            <li><a href="mentions-legales.html">Mentions légales</a></li>
-            <li><a href="aide.html">Aide</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer__bottom">
-        <span>© <span id="year">2026</span> BatiSwift</span>
-        <span>Design néon · IA pour artisans</span>
-      </div>
-    </div>
-  </footer>
+  <!-- Inclusion du footer -->
+  <div id="footer-placeholder"></div>
 
-  <button type="button" class="chat-fab" id="chat-fab">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-  </button>
-
-  <aside class="chat-panel" id="chat-panel" aria-hidden="true">
-    <div class="chat-panel__header">
-      <div><h3>BatiSwift</h3><p>Assistant · puis Telegram</p></div>
-      <button type="button" class="chat-panel__close" id="chat-close">✕</button>
-    </div>
-    <div class="chat-panel__body">
-      <div class="chat-messages" id="chat-messages"></div>
-      <div id="chat-form-view">
-        <form class="chat-form" id="chat-form">
-          <label for="chat-category">Type de travaux</label>
-          <select id="chat-category">
-            <option value="">Choisir</option><option>Plomberie</option><option>Électricité</option><option>Peinture</option><option>Maçonnerie</option><option>Chauffage</option><option>Serrurerie</option><option>Autre</option>
-          </select>
-          <label for="chat-city">Ville ou code postal</label>
-          <input type="text" id="chat-city" placeholder="Ex: Lyon 69003">
-          <label for="chat-message">Décrivez votre problème *</label>
-          <textarea id="chat-message" placeholder="Ex: Fuite sous l'évier..." required></textarea>
-          <label for="chat-name">Votre prénom</label>
-          <input type="text" id="chat-name" placeholder="Jean">
-          <p class="chat-form__hint">📸 Les photos s’envoient directement sur Telegram après redirection.</p>
-          <button type="submit" class="btn btn--primary btn--block">Envoyer ma demande</button>
-        </form>
-      </div>
-      <div id="chat-success-view" class="hidden">
-        <div class="chat-success__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
-        <p>Votre message est prêt. Ouvrez Telegram pour le transmettre à notre agent.</p>
-        <a href="#" class="btn btn--primary btn--block" id="chat-telegram-btn" target="_blank">Continuer sur Telegram</a>
-        <button type="button" class="btn btn--ghost btn--block" id="chat-new-request">Nouvelle demande</button>
-      </div>
-    </div>
-  </aside>
-
-  <script src="config.js"></script>
-  <script src="main.js"></script>
   <script>
+    // Chargement du header et footer
+    fetch('header.html').then(r => r.text()).then(html => {
+      document.getElementById('header-placeholder').innerHTML = html;
+      // Réappliquer les événements après chargement
+    });
+    fetch('footer.html').then(r => r.text()).then(html => {
+      document.getElementById('footer-placeholder').innerHTML = html;
+    });
+
     // Compteurs
     async function loadCounters() {
       try {
@@ -261,13 +76,6 @@
       } catch(e) { console.error("Erreur compteurs", e); }
     }
     loadCounters();
-
-    // Translucide
-    document.getElementById("translucide-toggle").addEventListener("click", function() {
-      document.body.classList.toggle("translucide");
-      localStorage.setItem("batiswift-translucide", document.body.classList.contains("translucide"));
-    });
   </script>
 </body>
 </html>
-          
