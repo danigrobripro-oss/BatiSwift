@@ -1,0 +1,35 @@
+<!-- header.html – Barre de navigation commune -->
+<header class="header">
+  <div class="container header__inner">
+    <!-- Logo SVG : BatiSwift -->
+    <a href="index.html" class="logo" aria-label="BatiSwift accueil">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Toit / Structure géométrique -->
+        <polygon points="2,30 18,6 34,30" stroke="#FF007F" stroke-width="2.5" fill="none"/>
+        <!-- Éclair / Flèche dynamique -->
+        <polygon points="20,14 26,22 20,30 24,22" fill="#FF007F" opacity="0.9"/>
+        <!-- Ligne de base -->
+        <line x1="6" y1="30" x2="30" y2="30" stroke="#FF007F" stroke-width="2"/>
+      </svg>
+      <span class="logo__text">Bati<span class="logo__accent">Swift</span></span>
+    </a>
+
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="index.html">Accueil</a>
+      <a href="tarifs.html">Tarifs</a>
+      <a href="inscription.html">S’inscrire</a>
+      <a href="dashboard.html">Espace pro</a>
+    </nav>
+
+    <div class="header__actions">
+      <button type="button" class="icon-btn theme-toggle" id="theme-toggle">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button type="button" class="icon-btn translucide-toggle" id="translucide-toggle">
+        <svg class="icon-glass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18M12 3v3m0 12v3M3 12h3m12 0h3M5.5 5.5l2 2M16.5 16.5l2 2M16.5 5.5l2 2M5.5 16.5l2 2"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+      <a href="inscription.html" class="btn btn--primary">🔥 Essayer gratuitement</a>
+    </div>
+  </div>
+</header>
