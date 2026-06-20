@@ -9,7 +9,67 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="artisan.css">
+  <style>
+    .lead-item.lead--blurred {
+      filter: blur(8px);
+      pointer-events: none;
+      opacity: 0.4;
+    }
+    .lead-item.lead--available {
+      filter: none;
+      pointer-events: auto;
+      opacity: 1;
+    }
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
+    .stat-number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-shadow: 0 0 30px var(--accent-glow);
+    }
+    .stat-label { color: var(--text-muted); font-size: 0.85rem; }
+    .lead-list { display: grid; gap: 1rem; }
+    .lead-item {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.2rem;
+      backdrop-filter: blur(8px);
+    }
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .tab {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: 0.2s;
+    }
+    .tab.is-active { color: var(--accent); border-bottom-color: var(--accent); }
+    .tab-panel { display: none; }
+    .tab-panel.is-active { display: block; }
+  </style>
   <script>
     (function () {
       var t = localStorage.getItem("batiswift-theme");
@@ -19,137 +79,97 @@
     })();
   </script>
 </head>
-<body class="artisan-page">
-  <div class="container">
-    <header class="artisan-header">
-      <div class="artisan-header__inner">
-        <a href="index.html" class="logo">
-          <span class="logo__icon">BS</span>BatiSwift Pro
-        </a>
-        <div class="header__actions">
-          <button type="button" class="icon-btn theme-toggle" id="theme-toggle">
-            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/></svg>
-            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          </button>
-          <button type="button" class="btn btn--ghost btn--sm" id="logout-btn" hidden>Déconnexion</button>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main class="container" style="padding: 2rem 0;">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
+      <h1 style="font-size:1.8rem;">👷 Tableau de bord</h1>
+      <span id="user-name" style="color:var(--accent);font-weight:600;">Artisan</span>
+    </div>
+
+    <div class="dashboard-stats">
+      <div class="stat-card"><span class="stat-number" id="stat-leads-dispo">0</span><div class="stat-label">Leads disponibles</div></div>
+      <div class="stat-card"><span class="stat-number" id="stat-leads-achetes">0</span><div class="stat-label">Leads achetés</div></div>
+      <div class="stat-card"><span class="stat-number" id="stat-abonnement">❌</span><div class="stat-label">Abonnement</div></div>
+    </div>
+
+    <nav class="tabs">
+      <button class="tab is-active" data-panel="panel-leads">🔥 Leads disponibles</button>
+      <button class="tab" data-panel="panel-achetes">📦 Mes achats</button>
+      <button class="tab" data-panel="panel-parametres">⚙️ Paramètres</button>
+    </nav>
+
+    <div id="panel-leads" class="tab-panel is-active">
+      <p style="color:var(--text-muted);margin-bottom:1rem;">Les leads floutés sont en exclusivité pour les abonnés (10 min).</p>
+      <div class="lead-list" id="leads-list">
+        <!-- Exemples de leads (simulés) -->
+        <div class="lead-item lead--blurred">
+          <strong>Plomberie</strong> — Lyon 69003<br>
+          <span style="color:var(--text-muted);">Urgence : 🚨</span>
+        </div>
+        <div class="lead-item lead--available">
+          <strong>Électricité</strong> — Paris 75001<br>
+          <span style="color:var(--text-muted);">Urgence : 📅</span>
+          <button class="btn btn--primary btn--sm" style="margin-top:0.5rem;">🔥 Acheter (15€)</button>
         </div>
       </div>
-    </header>
+    </div>
 
-    <section id="auth-view">
-      <div class="auth-card">
-        <h1>👷 Espace artisan</h1>
-        <p>Connectez-vous pour voir et acheter des leads clients qualifiés.</p>
-        <a href="https://t.me/my_artisan_bot?start=artisan" class="btn btn--primary btn--block" id="telegram-register" target="_blank">S'inscrire via Telegram</a>
-        <div class="auth-divider">ou</div>
-        <form id="email-login-form">
-          <div class="form-group">
-            <label for="login-email">Email professionnel</label>
-            <input type="email" id="login-email" required placeholder="artisan@exemple.fr">
-          </div>
-          <button type="submit" class="btn btn--primary btn--block">Se connecter</button>
-          <p class="form-error" id="login-error"></p>
-        </form>
-        <p style="margin-top:1.25rem;font-size:0.82rem;color:var(--text-muted)">Pas encore inscrit ? Utilisez Telegram : <code>/start artisan</code></p>
-      </div>
-    </section>
-
-    <section id="dashboard-view" hidden>
-      <p class="artisan-header__user">Bonjour, <strong id="artisan-name">Artisan</strong></p>
-      <div id="alert-box" class="alert" hidden></div>
-
-      <!-- Section abonnement -->
-      <div style="margin-bottom:1.5rem;padding:1rem;background:var(--bg-elevated);border-radius:var(--radius);border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
-        <div>
-          <strong>📱 Assistant personnel BatiSwift</strong>
-          <div id="subscription-status" style="margin-top:0.25rem;">Chargement…</div>
-        </div>
-        <button id="subscribe-btn" class="btn btn--primary" style="display:none;">S’abonner (19€/mois)</button>
-      </div>
-
-      <!-- Compteurs perso -->
-      <div style="display:flex;gap:1.5rem;margin-bottom:1.5rem;flex-wrap:wrap;">
-        <div><span style="color:var(--accent);font-weight:800;font-size:1.5rem;" id="my-leads-count">0</span> <span style="color:var(--text-muted);">leads achetés</span></div>
-        <div><span style="color:var(--accent);font-weight:800;font-size:1.5rem;" id="my-available-count">0</span> <span style="color:var(--text-muted);">leads dispo</span></div>
-      </div>
-
-      <nav class="tabs" role="tablist">
-        <button type="button" class="tab is-active" data-panel="panel-available">🔥 Leads disponibles</button>
-        <button type="button" class="tab" data-panel="panel-purchased">📦 Mes achats</button>
-        <button type="button" class="tab" data-panel="panel-settings">⚙️ Paramètres</button>
-        <button type="button" class="tab" data-panel="panel-zones">📍 Zone de chalandise</button>
-        <button type="button" class="tab" data-panel="panel-notifications">🔔 Notifications</button>
-      </nav>
-
-      <div id="panel-available" class="tab-panel is-active">
-        <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1rem;">Les coordonnées complètes sont débloquées après paiement par carte (10–20 €).</p>
-        <div id="leads-available"></div>
-      </div>
-
-      <div id="panel-purchased" class="tab-panel">
-        <div id="leads-purchased"></div>
-      </div>
-
-      <div id="panel-settings" class="tab-panel">
-        <div style="margin-top:1rem;">
-          <form id="artisan-settings-form">
-            <div class="form-group">
-              <label>📞 Numéro de téléphone (SMS / appels)</label>
-              <input type="tel" id="artisan-phone" placeholder="+33612345678">
-              <small style="color:var(--text-muted);">Format international</small>
-            </div>
-            <div class="form-group">
-              <label>💬 Numéro WhatsApp</label>
-              <input type="tel" id="artisan-whatsapp" placeholder="+33612345678">
-            </div>
-            <div class="form-group">
-              <label>🔄 Relances automatiques (3 jours)</label>
-              <input type="checkbox" id="auto-relance">
-            </div>
-            <button type="submit" class="btn btn--primary">Enregistrer</button>
-            <div id="settings-status" style="margin-top:1rem;"></div>
-          </form>
+    <div id="panel-achetes" class="tab-panel">
+      <p style="color:var(--text-muted);">Historique de vos achats de leads.</p>
+      <div class="lead-list" id="achats-list">
+        <div class="lead-item">
+          <strong>Plomberie</strong> — Lyon 69003 — Acheté le 20/06/2026<br>
+          <span style="color:var(--text-muted);">Client : Jean Dupont — 06 12 34 56 78</span>
         </div>
       </div>
+    </div>
 
-      <div id="panel-zones" class="tab-panel">
-        <div style="margin-top:1rem;">
-          <p style="color:var(--text-muted);margin-bottom:1rem;">Définissez les villes ou codes postaux où vous souhaitez intervenir.</p>
-          <div class="form-group">
-            <label>Ajouter une zone (ville ou CP)</label>
-            <div style="display:flex;gap:0.5rem;">
-              <input type="text" id="zone-input" placeholder="Ex: Lyon 69003" style="flex:1;">
-              <button class="btn btn--primary" id="zone-add-btn">+ Ajouter</button>
-            </div>
-          </div>
-          <div id="zones-list" style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.5rem;"></div>
-          <button class="btn btn--ghost btn--sm" id="zone-save-btn">💾 Sauvegarder les zones</button>
-          <div id="zone-status" style="margin-top:0.5rem;"></div>
+    <div id="panel-parametres" class="tab-panel">
+      <form id="settings-form">
+        <div class="form-group">
+          <label>📞 Numéro de téléphone (SMS)</label>
+          <input type="tel" id="art-phone" placeholder="+33612345678">
         </div>
-      </div>
-
-      <div id="panel-notifications" class="tab-panel">
-        <div style="margin-top:1rem;">
-          <p style="color:var(--text-muted);margin-bottom:1rem;">Recevez en temps réel les nouveaux leads par SMS ou WhatsApp.</p>
-          <div class="form-group">
-            <label>📱 Notification push (SMS)</label>
-            <input type="checkbox" id="push-sms" checked>
-          </div>
-          <div class="form-group">
-            <label>💬 Notification WhatsApp</label>
-            <input type="checkbox" id="push-whatsapp" checked>
-          </div>
-          <button class="btn btn--primary" id="push-save-btn">Enregistrer les préférences</button>
-          <div id="push-status" style="margin-top:0.5rem;"></div>
+        <div class="form-group">
+          <label>💬 Numéro WhatsApp</label>
+          <input type="tel" id="art-whatsapp" placeholder="+33612345678">
         </div>
-      </div>
-    </section>
-  </div>
+        <div class="form-group">
+          <label>📍 Zone d'intervention (villes, séparées par des virgules)</label>
+          <input type="text" id="art-zones" placeholder="Lyon, Paris, 69003">
+        </div>
+        <div class="form-group" style="display:flex;align-items:center;gap:0.5rem;">
+          <input type="checkbox" id="auto-relance" style="width:auto;">
+          <label for="auto-relance" style="margin:0;">🔄 Relances automatiques (3 jours)</label>
+        </div>
+        <button type="submit" class="btn btn--primary">💾 Enregistrer les paramètres</button>
+        <div id="settings-status" style="margin-top:0.5rem;"></div>
+      </form>
+    </div>
+  </main>
 
-  <script src="config.js"></script>
-  <script src="artisan.js"></script>
+  <div id="footer-placeholder"></div>
+
   <script>
-    document.getElementById("logout-btn").hidden = false;
+    // Gestion des onglets
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('is-active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('is-active'));
+        this.classList.add('is-active');
+        document.getElementById(this.dataset.panel).classList.add('is-active');
+      });
+    });
+
+    // Chargement header/footer
+    fetch('header.html').then(r => r.text()).then(html => {
+      document.getElementById('header-placeholder').innerHTML = html;
+    });
+    fetch('footer.html').then(r => r.text()).then(html => {
+      document.getElementById('footer-placeholder').innerHTML = html;
+    });
   </script>
 </body>
 </html>
