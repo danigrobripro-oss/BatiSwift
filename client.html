@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Client – BâtiSwift</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    (function() {
+      var t = localStorage.getItem("batiswift-theme");
+      if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+      var translucide = localStorage.getItem("batiswift-translucide");
+      if (translucide === "true") document.body.classList.add("translucide");
+    })();
+  </script>
+</head>
+<body>
+
+<div id="header-placeholder"></div>
+
+<main class="container" style="padding:3rem 0;">
+  <div class="glass" style="max-width:700px;margin:0 auto;padding:2.5rem;">
+    <h1 style="font-size:1.8rem;margin-bottom:0.5rem;">🔧 Besoin d’un artisan ?</h1>
+    <p style="color:var(--text-muted);margin-bottom:1.5rem;">Décrivez votre problème en quelques mots. Notre IA se charge de qualifier votre demande et trouve l’artisan idéal près de chez vous en moins de 10 minutes.</p>
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <textarea rows="4" placeholder="Ex: Fuite d’eau sous l’évier – Lyon 69003 – Urgent" style="width:100%;padding:1rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg-glass);color:var(--text);backdrop-filter:blur(8px);"></textarea>
+      <button class="btn btn--primary btn--block">Envoyer ma demande</button>
+    </div>
+    <p style="margin-top:1.5rem;color:var(--text-muted);font-size:0.85rem;">📸 Vous pourrez ajouter des photos après la qualification.</p>
+  </div>
+</main>
+
+<div id="footer-placeholder"></div>
+
+<script>
+  fetch('header.html').then(r => r.text()).then(html => {
+    document.getElementById('header-placeholder').innerHTML = html;
+  });
+  fetch('footer.html').then(r => r.text()).then(html => {
+    document.getElementById('footer-placeholder').innerHTML = html;
+  });
+</script>
+
+</body>
+</html>

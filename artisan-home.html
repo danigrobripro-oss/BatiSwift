@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Espace Pro – BâtiSwift</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .pro-hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2rem;
+      padding: 3rem 0;
+    }
+    .pro-hero .content { flex: 1; }
+    .pro-hero .phone-mock {
+      flex: 0 0 260px;
+      background: var(--bg-glass);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 1.2rem;
+      box-shadow: 0 0 40px var(--accent-glow);
+    }
+    .pro-hero .phone-mock .screen {
+      background: #12121a;
+      border-radius: 20px;
+      padding: 1rem;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: var(--text-muted);
+    }
+    .pro-hero .phone-mock .screen span { color: var(--accent); font-weight:700; }
+    .pro-stats {
+      display: flex;
+      gap: 3rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: var(--bg-glass);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+    }
+  </style>
+  <script>
+    (function() {
+      var t = localStorage.getItem("batiswift-theme");
+      if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+      var translucide = localStorage.getItem("batiswift-translucide");
+      if (translucide === "true") document.body.classList.add("translucide");
+    })();
+  </script>
+</head>
+<body>
+
+<div id="header-placeholder"></div>
+
+<main class="container">
+  <section class="pro-hero">
+    <div class="content">
+      <!-- Logo intégré dans la section (facultatif) -->
+      <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1rem;">
+        <svg width="48" height="48" viewBox="0 0 650 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <mask id="swift-separation-pro">
+              <rect width="650" height="400" fill="#ffffff" />
+              <path d="M 235,195 C 285,175 335,148 385,132 C 340,152 290,182 245,202 Z" fill="#000000" />
+            </mask>
+          </defs>
+          <rect width="100%" height="100%" fill="transparent" />
+          <g fill="#FF007F">
+            <path d="M 205,115 L 205,135 L 235,135 L 250,150 L 235,165 L 205,165 L 205,185 C 245,196 265,190 290,175 C 320,175 350,185 380,205 L 460,150 L 380,95 C 350,115 320,125 290,125 C 265,110 245,104 205,115 Z" mask="url(#swift-separation-pro)" />
+          </g>
+        </svg>
+        <span style="font-size:1.5rem;font-weight:800;">Bâti<span style="color:#FF007F;">Swift</span></span>
+      </div>
+      <h1 style="font-size:2.2rem;font-weight:800;">Votre Assistant IA pour le Chantier</h1>
+      <p style="color:var(--text-muted);font-size:1.1rem;margin:1rem 0 1.5rem;">Automatisez vos tâches, boostez vos projets, débloquez votre potentiel BTP.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:1rem;">
+        <button class="btn btn--primary">Essai Gratuit 14 Jours</button>
+        <a href="tarifs.html" class="btn btn--glass">Voir les tarifs</a>
+      </div>
+    </div>
+    <div class="phone-mock">
+      <div class="screen">
+        <p style="color:var(--text);">📱 <span>BâtiSwift</span></p>
+        <p style="font-size:0.85rem;">12 prospects qualifiés dans votre zone</p>
+        <p style="font-size:0.85rem;">📊 Estimation Tour Eiffel</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="pro-stats">
+    <div class="counter-item"><span class="number" id="stat-artisans">1 245</span><span class="label">Artisans inscrits & actifs</span></div>
+    <div class="counter-item"><span class="number" id="stat-leads">48 912</span><span class="label">Leads générés & qualifiés</span></div>
+  </div>
+</main>
+
+<div id="footer-placeholder"></div>
+
+<script>
+  fetch('header.html').then(r => r.text()).then(html => {
+    document.getElementById('header-placeholder').innerHTML = html;
+  });
+  fetch('footer.html').then(r => r.text()).then(html => {
+    document.getElementById('footer-placeholder').innerHTML = html;
+  });
+</script>
+
+</body>
+</html>

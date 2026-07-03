@@ -1,0 +1,44 @@
+<!-- header.html – Barre de navigation avec nouveau logo -->
+<header class="header">
+  <div class="container header__inner">
+    <a href="index.html" class="logo" aria-label="BâtiSwift accueil">
+      <!-- Nouveau logo SVG (Clé + Flèche) -->
+      <svg width="40" height="40" viewBox="0 0 650 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <mask id="swift-separation">
+            <rect width="650" height="400" fill="#ffffff" />
+            <path d="M 235,195 C 285,175 335,148 385,132 C 340,152 290,182 245,202 Z" fill="#000000" />
+          </mask>
+        </defs>
+        <rect width="100%" height="100%" fill="transparent" />
+        <g fill="#FF007F">
+          <path d="M 205,115 L 205,135 L 235,135 L 250,150 L 235,165 L 205,165 L 205,185 C 245,196 265,190 290,175 C 320,175 350,185 380,205 L 460,150 L 380,95 C 350,115 320,125 290,125 C 265,110 245,104 205,115 Z" mask="url(#swift-separation)" />
+        </g>
+        <!-- Effet de lueur (glow) -->
+        <rect width="100%" height="100%" fill="transparent" />
+        <g fill="#FF007F" opacity="0.15" filter="blur(6px)">
+          <path d="M 205,115 L 205,135 L 235,135 L 250,150 L 235,165 L 205,165 L 205,185 C 245,196 265,190 290,175 C 320,175 350,185 380,205 L 460,150 L 380,95 C 350,115 320,125 290,125 C 265,110 245,104 205,115 Z" mask="url(#swift-separation)" />
+        </g>
+      </svg>
+      <span style="display:inline-flex;">Bâti<span class="logo__accent">Swift</span></span>
+    </a>
+
+    <nav class="nav">
+      <a href="index.html">Accueil</a>
+      <a href="tarifs.html">Tarifs</a>
+      <a href="inscription.html">S’inscrire</a>
+      <a href="dashboard.html">Espace pro</a>
+    </nav>
+
+    <div class="header__actions">
+      <button type="button" class="icon-btn theme-toggle" id="theme-toggle">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button type="button" class="icon-btn translucide-toggle" id="translucide-toggle">
+        <svg class="icon-glass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18M12 3v3m0 12v3M3 12h3m12 0h3M5.5 5.5l2 2M16.5 16.5l2 2M16.5 5.5l2 2M5.5 16.5l2 2"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+      <a href="inscription.html" class="btn btn--primary">🔥 Essayer gratuitement</a>
+    </div>
+  </div>
+</header>

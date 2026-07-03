@@ -41,7 +41,9 @@ def init_db() -> None:
                 telegram_user_id INTEGER UNIQUE,
                 telegram_chat_id INTEGER,
                 auth_token TEXT NOT NULL UNIQUE,
-                created_at TEXT NOT NULL
+                created_at TEXT NOT NULL,
+                subscription_active INTEGER DEFAULT 0,
+                stripe_subscription_id TEXT
             );
 
             CREATE TABLE IF NOT EXISTS leads (
@@ -373,3 +375,26 @@ def get_lead_by_stripe_session(session_id: str) -> dict[str, Any] | None:
             (session_id,),
         ).fetchone()
     return _row_to_dict(row)
+
+
+def get_active_subscribers() -> list[int]:
+    """Retourne les telegram_chat_id des artisans avec abonnement actif."""
+    with get_db() as conn:
+        rows = conn.execute(
+            "SELECT telegram_chat_id FROM artisans WHERE subscription_active = 1 AND telegram_chat_id IS NOT NULL"
+        ).fetchall()
+    return [row["telegram_chat_id"] for row in rows]
+
+
+def update_subscription_status(artisan_id: int, active: bool, stripe_subscription_id: str | None = None) -> None:
+    with get_db() as conn:
+        if stripe_subscription_id:
+            conn.execute(
+                "UPDATE artisans SET subscription_active = ?, stripe_subscription_id = ? WHERE id = ?",
+                (1 if active else 0, stripe_subscription_id, artisan_id),
+            )
+        else:
+            conn.execute(
+                "UPDATE artisans SET subscription_active = ? WHERE id = ?",
+                (1 if active else 0, artisan_id),
+            )

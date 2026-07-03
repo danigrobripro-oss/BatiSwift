@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aide — BatiSwift</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .faq-item { margin-bottom: 1.5rem; }
+    .faq-question { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--accent); cursor: pointer; }
+    .faq-answer { color: var(--text-muted); padding-left: 1rem; border-left: 2px solid var(--accent-soft); }
+    .steps-list { list-style: none; padding: 0; }
+    .steps-list li { margin-bottom: 0.75rem; padding-left: 1.5rem; position: relative; }
+    .steps-list li::before { content: "→"; position: absolute; left: 0; color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <a href="index.html" class="logo"><span class="logo__icon">BS</span>BatiSwift</a>
+      <div class="header__actions">
+        <button type="button" class="icon-btn theme-toggle" id="theme-toggle" aria-label="Thème">
+          <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="4"/></svg>
+          <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <a href="artisan-dashboard.html" class="btn btn--primary btn--sm">Mon espace</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 2rem 0;">
+    <h1>📘 Aide & documentation</h1>
+    <p class="section__desc" style="margin-bottom: 2rem;">Retrouvez ici toutes les informations pour utiliser BatiSwift.</p>
+
+    <div style="display: grid; gap: 2rem;">
+      <!-- Section 1 -->
+      <div>
+        <h2>🚀 Premiers pas</h2>
+        <ul class="steps-list">
+          <li>Inscrivez‑vous via Telegram avec <code>/pro</code> ou via le formulaire <a href="register.html">d’inscription</a>.</li>
+          <li>Connectez‑vous à votre <a href="artisan-dashboard.html">tableau de bord</a> avec le lien reçu.</li>
+          <li>Abonnez‑vous (19€/mois) pour recevoir les résumés clients sur Telegram et WhatsApp.</li>
+          <li>Configurez vos numéros (téléphone et WhatsApp) dans l’onglet <strong>Paramètres</strong>.</li>
+        </ul>
+      </div>
+
+      <!-- Section 2 -->
+      <div>
+        <h2>💬 Comment fonctionne l’assistant Bati ?</h2>
+        <p>Bati répond automatiquement aux clients, qualifie la demande (type de travaux, urgence, localisation) et vous envoie un résumé clair. Vous n’avez rien à gérer, tout est automatisé.</p>
+      </div>
+
+      <!-- Section 3 -->
+      <div>
+        <h2>📞 Gestion des appels manqués</h2>
+        <p>Si un client appelle votre numéro BatiSwift sans réponse, Bati envoie immédiatement un SMS de prise de contact. Le client peut alors décrire son besoin par SMS (ou Telegram).</p>
+      </div>
+
+      <!-- Section 4 -->
+      <div>
+        <h2>🔄 Relances automatiques</h2>
+        <p>Les devis non signés après 3 jours sont automatiquement relancés par Bati (via Telegram). Vous pouvez aussi forcer une relance depuis votre tableau de bord (si activé dans les paramètres).</p>
+      </div>
+
+      <!-- Section 5 : FAQ -->
+      <div>
+        <h2>❓ Questions fréquentes</h2>
+        <div class="faq-item">
+          <div class="faq-question">▶ Comment acheter un lead ?</div>
+          <div class="faq-answer">Rendez‑vous dans l’onglet “Leads disponibles”, choisissez un client et cliquez sur “Acheter ce lead”. Le paiement est sécurisé par Stripe (carte bancaire).</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">▶ Puis‑je être notifié sur WhatsApp ?</div>
+          <div class="faq-answer">Oui, renseignez votre numéro WhatsApp dans les paramètres de votre tableau de bord. Les résumés clients vous seront envoyés automatiquement.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">▶ Comment résilier mon abonnement ?</div>
+          <div class="faq-answer">L’abonnement est géré par Stripe. Vous pouvez le résilier à tout moment depuis le lien de gestion Stripe (dans votre tableau de bord).</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">▶ Les données clients sont‑elles sécurisées ?</div>
+          <div class="faq-answer">Oui. Les échanges sont chiffrés, et nous ne conservons que les informations nécessaires à la mise en relation.</div>
+        </div>
+      </div>
+
+      <!-- Section 6 : Contact -->
+      <div>
+        <h2>📧 Besoin d’aide ?</h2>
+        <p>Contactez‑nous par email : <a href="mailto:contact@batiswift.fr">contact@batiswift.fr</a><br>
+        Ou via Telegram : <a href="https://t.me/my_artisan_bot" target="_blank">@my_artisan_bot</a></p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__bottom">
+        <span>© 2026 BatiSwift – Assistant IA pour artisans BTP</span>
+        <span><a href="index.html">Accueil</a> | <a href="artisan-dashboard.html">Espace pro</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById("theme-toggle");
+    function applyTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem("batiswift-theme", theme);
+    }
+    var savedTheme = localStorage.getItem("batiswift-theme");
+    if (savedTheme) applyTheme(savedTheme);
+    else if (matchMedia("(prefers-color-scheme: dark)").matches) applyTheme("dark");
+    themeToggle?.addEventListener("click", () => {
+      const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      applyTheme(next);
+    });
+    document.querySelectorAll(".faq-question").forEach(q => {
+      q.addEventListener("click", () => {
+        const answer = q.nextElementSibling;
+        answer.style.display = answer.style.display === "none" ? "block" : "none";
+      });
+      q.nextElementSibling.style.display = "none";
+    });
+  </script>
+</body>
+</html>
