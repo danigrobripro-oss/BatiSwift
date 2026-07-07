@@ -10,14 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
-    .lead-item {
-      background: var(--bg-glass);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.2rem;
-      margin-bottom: 1rem;
-      backdrop-filter: blur(8px);
-    }
     .dashboard-sidebar {
       width: 220px;
       flex-shrink: 0;
@@ -40,13 +32,16 @@
       background: rgba(255, 0, 127, 0.08);
       color: var(--accent);
     }
-    .dashboard-layout {
-      display: flex;
-      gap: 1.5rem;
-      padding: 2rem 0;
-      flex-wrap: wrap;
-    }
+    .dashboard-layout { display: flex; gap: 1.5rem; padding: 2rem 0; flex-wrap: wrap; }
     .dashboard-main { flex: 1; }
+    .lead-item {
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(8px);
+    }
   </style>
   <script>
     (function () {
@@ -73,9 +68,7 @@
       <div class="dashboard-main">
         <h2 style="font-size:1.4rem;margin-bottom:1rem;">📦 Mes achats</h2>
         <p style="color:var(--text-muted);margin-bottom:1rem;">Historique de vos achats de leads.</p>
-        <div id="achats-list">
-          <p style="color:var(--text-muted);">Chargement...</p>
-        </div>
+        <div id="achats-list"><p style="color:var(--text-muted);">Chargement...</p></div>
       </div>
     </div>
   </main>
@@ -84,12 +77,14 @@
 
   <script>
     const API_BASE = "https://agent-btp.onrender.com";
-    const params = new URLSearchParams(window.location.search);
-    let token = params.get("token") || localStorage.getItem("batiswift-artisan-token");
     const TOKEN_KEY = "batiswift-artisan-token";
+    const params = new URLSearchParams(window.location.search);
+    let token = params.get("token") || localStorage.getItem(TOKEN_KEY);
 
     if (!token) {
       window.location.href = "inscription.html";
+    } else {
+      localStorage.setItem(TOKEN_KEY, token);
     }
 
     function api(path, options = {}) {

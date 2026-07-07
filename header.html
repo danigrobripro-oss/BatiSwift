@@ -1,8 +1,8 @@
-<!-- header.html – Barre de navigation complète (pro) -->
+<!-- header.html – Barre de navigation complète -->
 <header class="header">
   <div class="container header__inner">
     <a href="index.html" class="logo" aria-label="BâtiSwift accueil">
-      <!-- Logo agrandi (50px) -->
+      <!-- Logo agrandi -->
       <svg width="50" height="50" viewBox="0 0 650 400" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <mask id="swift-separation-header">
@@ -24,12 +24,11 @@
     <nav class="nav" id="main-nav">
       <a href="index.html">Accueil</a>
       <a href="tarifs.html">Tarifs</a>
-      <a href="inscription.html">S’inscrire</a>
-      <a href="artisan-dashboard.html">Espace pro</a>
+      <a href="inscription.html" id="nav-inscription">S’inscrire / Se connecter</a>
+      <a href="artisan-dashboard.html" id="nav-dashboard" style="display:none;">Espace pro</a>
     </nav>
 
     <div class="header__actions">
-      <!-- Compteur artisans en ligne -->
       <span id="online-artisans" style="font-size:0.8rem;color:var(--text-muted);margin-right:0.5rem;">👷 <span id="artisans-count">0</span> en ligne</span>
       <a href="inscription.html" class="btn btn--primary" id="btn-essai">🔥 Essayer gratuitement</a>
     </div>
@@ -37,33 +36,32 @@
 </header>
 
 <script>
+  // Vérifier si l'utilisateur est connecté (token présent dans localStorage)
+  const TOKEN_KEY = "batiswift-artisan-token";
+  const token = localStorage.getItem(TOKEN_KEY);
+  const navInscription = document.getElementById('nav-inscription');
+  const navDashboard = document.getElementById('nav-dashboard');
+  const btnEssai = document.getElementById('btn-essai');
+
+  if (token) {
+    // Connecté : masquer "S'inscrire" et afficher "Espace pro"
+    navInscription.style.display = 'none';
+    navDashboard.style.display = 'inline';
+    btnEssai.style.display = 'none';
+  } else {
+    // Non connecté : afficher "S'inscrire", masquer "Espace pro"
+    navInscription.style.display = 'inline';
+    navDashboard.style.display = 'none';
+    btnEssai.style.display = 'inline';
+  }
+
   // Chargement du compteur d'artisans en ligne
   async function loadArtisansCount() {
     try {
       const res = await fetch('https://agent-btp.onrender.com/api/stats/public');
       const data = await res.json();
       document.getElementById('artisans-count').textContent = data.artisans || 0;
-    } catch(e) {
-      console.error('Erreur compteur', e);
-    }
+    } catch(e) { console.error('Erreur compteur', e); }
   }
   loadArtisansCount();
-
-  // Gestion de l'affichage du bouton "S'inscrire" / "Espace pro" selon connexion
-  // (à remplacer par la vraie logique plus tard)
-  const isAuthenticated = false;  // true si connecté
-  const isPro = true;
-  const navInscription = document.getElementById('nav-inscription');
-  const navDashboard = document.querySelector('a[href="artisan-dashboard.html"]');
-  const btnEssai = document.getElementById('btn-essai');
-
-  if (isAuthenticated) {
-    navInscription.style.display = 'none';
-    if (isPro) {
-      navDashboard.style.display = 'inline';
-      btnEssai.style.display = 'none';
-    }
-  } else {
-    navDashboard.style.display = 'none';
-  }
 </script>

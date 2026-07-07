@@ -32,12 +32,7 @@
       background: rgba(255, 0, 127, 0.08);
       color: var(--accent);
     }
-    .dashboard-layout {
-      display: flex;
-      gap: 1.5rem;
-      padding: 2rem 0;
-      flex-wrap: wrap;
-    }
+    .dashboard-layout { display: flex; gap: 1.5rem; padding: 2rem 0; flex-wrap: wrap; }
     .dashboard-main { flex: 1; }
     .form-group { margin-bottom: 1.2rem; }
     label {
@@ -115,12 +110,14 @@
 
   <script>
     const API_BASE = "https://agent-btp.onrender.com";
-    const params = new URLSearchParams(window.location.search);
-    let token = params.get("token") || localStorage.getItem("batiswift-artisan-token");
     const TOKEN_KEY = "batiswift-artisan-token";
+    const params = new URLSearchParams(window.location.search);
+    let token = params.get("token") || localStorage.getItem(TOKEN_KEY);
 
     if (!token) {
       window.location.href = "inscription.html";
+    } else {
+      localStorage.setItem(TOKEN_KEY, token);
     }
 
     function api(path, options = {}) {

@@ -10,24 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
-    .lead-item {
-      background: var(--bg-glass);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.2rem;
-      margin-bottom: 1rem;
-      backdrop-filter: blur(8px);
-    }
-    .lead-item.lead--blurred {
-      filter: blur(8px);
-      pointer-events: none;
-      opacity: 0.4;
-    }
-    .lead-item.lead--available {
-      filter: none;
-      pointer-events: auto;
-      opacity: 1;
-    }
     .dashboard-sidebar {
       width: 220px;
       flex-shrink: 0;
@@ -57,6 +39,25 @@
       flex-wrap: wrap;
     }
     .dashboard-main { flex: 1; }
+    .lead-item {
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(8px);
+    }
+    .lead-item.lead--blurred {
+      filter: blur(8px);
+      pointer-events: none;
+      opacity: 0.4;
+    }
+    .lead-item.lead--available {
+      filter: none;
+      pointer-events: auto;
+      opacity: 1;
+    }
+    .btn--sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
   </style>
   <script>
     (function () {
@@ -94,12 +95,14 @@
 
   <script>
     const API_BASE = "https://agent-btp.onrender.com";
-    const params = new URLSearchParams(window.location.search);
-    let token = params.get("token") || localStorage.getItem("batiswift-artisan-token");
     const TOKEN_KEY = "batiswift-artisan-token";
+    const params = new URLSearchParams(window.location.search);
+    let token = params.get("token") || localStorage.getItem(TOKEN_KEY);
 
     if (!token) {
       window.location.href = "inscription.html";
+    } else {
+      localStorage.setItem(TOKEN_KEY, token);
     }
 
     function api(path, options = {}) {
@@ -171,7 +174,6 @@
 
     loadLeads();
 
-    // Chargement header/footer
     fetch('header.html').then(r => r.text()).then(html => {
       document.getElementById('header-placeholder').innerHTML = html;
     });

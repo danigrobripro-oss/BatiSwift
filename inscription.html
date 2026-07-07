@@ -66,9 +66,7 @@
     </form>
     <div id="success-container" style="display:none;text-align:center;padding:1rem 0;">
       <div style="color:#2ecc71;font-size:1.2rem;">✅ Inscription réussie !</div>
-      <p style="margin-top:1rem;">Votre lien d’accès :</p>
-      <div id="dashboard-url" style="word-break:break-all;background:var(--bg-muted);padding:0.5rem;border-radius:12px;"></div>
-      <a href="#" id="dashboard-link" class="btn btn--primary" target="_blank" style="margin-top:1rem;">Ouvrir mon espace</a>
+      <p style="margin-top:1rem;">Redirection vers votre espace pro...</p>
     </div>
   </div>
 </main>
@@ -79,6 +77,7 @@
   const API_BASE = "https://agent-btp.onrender.com";
   const form = document.getElementById('register-form');
   const errorEl = document.getElementById('form-error');
+  const TOKEN_KEY = "batiswift-artisan-token";
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -99,10 +98,10 @@
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Erreur');
-      document.getElementById('dashboard-url').textContent = data.dashboard_url;
-      document.getElementById('dashboard-link').href = data.dashboard_url;
-      document.getElementById('success-container').style.display = 'block';
-      form.style.display = 'none';
+      // Stocker le token dans localStorage
+      localStorage.setItem(TOKEN_KEY, data.token);
+      // Rediriger vers le dashboard avec le token
+      window.location.href = `artisan-dashboard.html?token=${data.token}`;
     } catch (err) {
       errorEl.textContent = err.message;
     } finally {

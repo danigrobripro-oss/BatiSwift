@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
   <title>Espace pro — BâtiSwift</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
   <style>
     .dashboard-sidebar {
       width: 220px;
@@ -57,6 +57,7 @@
       pointer-events: auto;
       opacity: 1;
     }
+    .btn--sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
   </style>
   <script>
     (function () {
@@ -94,12 +95,14 @@
 
   <script>
     const API_BASE = "https://agent-btp.onrender.com";
-    const params = new URLSearchParams(window.location.search);
-    let token = params.get("token") || localStorage.getItem("batiswift-artisan-token");
     const TOKEN_KEY = "batiswift-artisan-token";
+    const params = new URLSearchParams(window.location.search);
+    let token = params.get("token") || localStorage.getItem(TOKEN_KEY);
 
     if (!token) {
       window.location.href = "inscription.html";
+    } else {
+      localStorage.setItem(TOKEN_KEY, token);
     }
 
     function api(path, options = {}) {
