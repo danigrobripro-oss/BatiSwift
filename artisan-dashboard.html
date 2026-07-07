@@ -10,33 +10,41 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
-    .dashboard-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    .stat-card {
+    .dashboard-sidebar {
+      width: 220px;
+      flex-shrink: 0;
       background: var(--bg-glass);
+      backdrop-filter: blur(16px);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 1.5rem;
-      text-align: center;
-      backdrop-filter: blur(8px);
     }
-    .stat-number {
-      font-size: 2.2rem;
-      font-weight: 800;
+    .dashboard-sidebar a {
+      display: block;
+      padding: 0.6rem 0.8rem;
+      border-radius: 10px;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-bottom: 0.3rem;
+    }
+    .dashboard-sidebar a:hover,
+    .dashboard-sidebar a.active {
+      background: rgba(255, 0, 127, 0.08);
       color: var(--accent);
-      text-shadow: 0 0 30px var(--accent-glow);
     }
-    .stat-label { color: var(--text-muted); font-size: 0.85rem; }
-    .lead-list { display: grid; gap: 1rem; }
+    .dashboard-layout {
+      display: flex;
+      gap: 1.5rem;
+      padding: 2rem 0;
+      flex-wrap: wrap;
+    }
+    .dashboard-main { flex: 1; }
     .lead-item {
       background: var(--bg-glass);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 1.2rem;
+      margin-bottom: 1rem;
       backdrop-filter: blur(8px);
     }
     .lead-item.lead--blurred {
@@ -49,27 +57,6 @@
       pointer-events: auto;
       opacity: 1;
     }
-    .tabs {
-      display: flex;
-      gap: 0.5rem;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-    .tab {
-      padding: 0.6rem 1.2rem;
-      border: none;
-      background: none;
-      color: var(--text-muted);
-      font-weight: 600;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: 0.2s;
-    }
-    .tab.is-active { color: var(--accent); border-bottom-color: var(--accent); }
-    .tab-panel { display: none; }
-    .tab-panel.is-active { display: block; }
-    .btn--sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
   </style>
   <script>
     (function () {
@@ -83,82 +70,36 @@
 <body>
   <div id="header-placeholder"></div>
 
-  <main class="container" style="padding: 2rem 0;">
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
-      <h1 style="font-size:1.8rem;">👷 Tableau de bord</h1>
-      <span id="user-name" style="color:var(--accent);font-weight:600;">Artisan</span>
-    </div>
+  <main class="container">
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar">
+        <h3 style="margin-bottom:1.5rem;font-size:0.9rem;color:var(--text-muted);">📋 Menu</h3>
+        <a href="leads.html" class="active">🔥 Leads disponibles</a>
+        <a href="achats.html">📦 Mes achats</a>
+        <a href="parametres.html">⚙️ Paramètres</a>
+        <a href="artisan-home.html" style="margin-top:1rem;border-top:1px solid var(--border);padding-top:1rem;">🚪 Retour espace pro</a>
+      </aside>
 
-    <!-- Statistiques -->
-    <div class="dashboard-stats">
-      <div class="stat-card"><span class="stat-number" id="stat-leads-dispo">0</span><div class="stat-label">Leads disponibles</div></div>
-      <div class="stat-card"><span class="stat-number" id="stat-leads-achetes">0</span><div class="stat-label">Leads achetés</div></div>
-      <div class="stat-card"><span class="stat-number" id="stat-abonnement">❌</span><div class="stat-label">Abonnement</div></div>
-    </div>
-
-    <!-- Onglets -->
-    <nav class="tabs">
-      <button class="tab is-active" data-panel="panel-leads">🔥 Leads disponibles</button>
-      <button class="tab" data-panel="panel-achetes">📦 Mes achats</button>
-      <button class="tab" data-panel="panel-parametres">⚙️ Paramètres</button>
-    </nav>
-
-    <!-- Panel Leads -->
-    <div id="panel-leads" class="tab-panel is-active">
-      <p style="color:var(--text-muted);margin-bottom:1rem;">Les leads floutés sont en exclusivité pour les abonnés (10 min).</p>
-      <div class="lead-list" id="leads-list">
-        <p style="color:var(--text-muted);">Chargement des leads...</p>
+      <div class="dashboard-main">
+        <h2 style="font-size:1.4rem;margin-bottom:1rem;">🔥 Leads disponibles</h2>
+        <p style="color:var(--text-muted);margin-bottom:1rem;">Les leads floutés sont en exclusivité pour les abonnés (10 min).</p>
+        <div id="leads-list">
+          <p style="color:var(--text-muted);">Chargement des leads...</p>
+        </div>
       </div>
-    </div>
-
-    <!-- Panel Achats -->
-    <div id="panel-achetes" class="tab-panel">
-      <p style="color:var(--text-muted);">Historique de vos achats de leads.</p>
-      <div class="lead-list" id="achats-list">
-        <p style="color:var(--text-muted);">Chargement...</p>
-      </div>
-    </div>
-
-    <!-- Panel Paramètres -->
-    <div id="panel-parametres" class="tab-panel">
-      <form id="settings-form">
-        <div class="form-group">
-          <label>📞 Numéro de téléphone (SMS)</label>
-          <input type="tel" id="art-phone" placeholder="+33612345678">
-        </div>
-        <div class="form-group">
-          <label>💬 Numéro WhatsApp</label>
-          <input type="tel" id="art-whatsapp" placeholder="+33612345678">
-        </div>
-        <div class="form-group">
-          <label>📍 Zone d'intervention (villes, séparées par des virgules)</label>
-          <input type="text" id="art-zones" placeholder="Lyon, Paris, 69003">
-        </div>
-        <div class="form-group" style="display:flex;align-items:center;gap:0.5rem;">
-          <input type="checkbox" id="auto-relance" style="width:auto;">
-          <label for="auto-relance" style="margin:0;">🔄 Relances automatiques (3 jours)</label>
-        </div>
-        <button type="submit" class="btn btn--primary">💾 Enregistrer les paramètres</button>
-        <div id="settings-status" style="margin-top:0.5rem;color:var(--text-muted);"></div>
-      </form>
     </div>
   </main>
 
   <div id="footer-placeholder"></div>
 
   <script>
-    // ---------- CONFIGURATION ----------
     const API_BASE = "https://agent-btp.onrender.com";
     const params = new URLSearchParams(window.location.search);
     let token = params.get("token") || localStorage.getItem("batiswift-artisan-token");
     const TOKEN_KEY = "batiswift-artisan-token";
 
-    function saveToken(t) {
-      token = t;
-      localStorage.setItem(TOKEN_KEY, t);
-      var url = new URL(window.location.href);
-      url.searchParams.set("token", t);
-      window.history.replaceState({}, "", url);
+    if (!token) {
+      window.location.href = "inscription.html";
     }
 
     function api(path, options = {}) {
@@ -178,16 +119,11 @@
       });
     }
 
-    // ---------- CHARGEMENT DES DONNÉES ----------
-    async function loadStats() {
-      try {
-        const leads = await api("/api/leads/available");
-        document.getElementById("stat-leads-dispo").textContent = leads.length;
-        const purchased = await api("/api/leads/purchased");
-        document.getElementById("stat-leads-achetes").textContent = purchased.length;
-        const sub = await api("/api/artisan/subscription/status");
-        document.getElementById("stat-abonnement").textContent = sub.active ? "✅ Actif" : "❌ Inactif";
-      } catch (e) { console.error("Erreur stats", e); }
+    function escapeHtml(s) {
+      if (!s) return "";
+      var el = document.createElement("div");
+      el.textContent = String(s);
+      return el.innerHTML;
     }
 
     function renderLeads(leads) {
@@ -210,41 +146,6 @@
       container.innerHTML = html;
     }
 
-    function renderPurchased(leads) {
-      var container = document.getElementById("achats-list");
-      if (!leads.length) {
-        container.innerHTML = '<p style="color:var(--text-muted);">Vous n\'avez pas encore acheté de lead.</p>';
-        return;
-      }
-      var html = "";
-      leads.forEach(function (lead) {
-        html += '<div class="lead-item">';
-        html += '<strong>' + escapeHtml(lead.trade_type) + '</strong> — ' + escapeHtml(lead.location_city || "Non précisé") + ' — Acheté le ' + new Date(lead.sold_at).toLocaleDateString() + '<br>';
-        html += '<span style="color:var(--text-muted);">Client : ' + escapeHtml(lead.client_name || "—") + ' — ' + escapeHtml(lead.client_phone || "—") + '</span>';
-        html += '</div>';
-      });
-      container.innerHTML = html;
-    }
-
-    function escapeHtml(s) {
-      if (!s) return "";
-      var el = document.createElement("div");
-      el.textContent = String(s);
-      return el.innerHTML;
-    }
-
-    async function loadLeads() {
-      try {
-        const leads = await api("/api/leads/available");
-        renderLeads(leads);
-        const purchased = await api("/api/leads/purchased");
-        renderPurchased(purchased);
-      } catch (e) {
-        console.error("Erreur leads", e);
-        document.getElementById("leads-list").innerHTML = '<p style="color:var(--accent);">Erreur de chargement.</p>';
-      }
-    }
-
     async function purchaseLead(leadId) {
       try {
         const data = await api("/api/leads/purchase", {
@@ -258,61 +159,18 @@
       }
     }
 
-    // ---------- PARAMÈTRES ----------
-    async function loadSettings() {
+    async function loadLeads() {
       try {
-        const data = await api("/api/artisan/settings");
-        document.getElementById("art-phone").value = data.phone || "";
-        document.getElementById("art-whatsapp").value = data.whatsapp || "";
-        document.getElementById("art-zones").value = (data.zones || []).join(", ");
-        document.getElementById("auto-relance").checked = data.auto_relance || false;
-      } catch (e) { console.error("Erreur paramètres", e); }
-    }
-
-    document.getElementById("settings-form").addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const phone = document.getElementById("art-phone").value.trim();
-      const whatsapp = document.getElementById("art-whatsapp").value.trim();
-      const zones = document.getElementById("art-zones").value.split(",").map(s => s.trim()).filter(Boolean);
-      const autoRelance = document.getElementById("auto-relance").checked;
-      try {
-        await api("/api/artisan/settings", {
-          method: "POST",
-          body: JSON.stringify({ phone, whatsapp, auto_relance })
-        });
-        await api("/api/artisan/zones", {
-          method: "POST",
-          body: JSON.stringify({ zones })
-        });
-        document.getElementById("settings-status").textContent = "✅ Paramètres enregistrés !";
-        document.getElementById("settings-status").style.color = "#2ecc71";
+        const leads = await api("/api/leads/available");
+        renderLeads(leads);
       } catch (e) {
-        document.getElementById("settings-status").textContent = "❌ Erreur : " + e.message;
-        document.getElementById("settings-status").style.color = "#ff2d7a";
+        console.error("Erreur leads", e);
+        document.getElementById("leads-list").innerHTML = '<p style="color:var(--accent);">Erreur de chargement.</p>';
       }
-    });
-
-    // ---------- ONGLETS ----------
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', function() {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('is-active'));
-        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('is-active'));
-        this.classList.add('is-active');
-        document.getElementById(this.dataset.panel).classList.add('is-active');
-      });
-    });
-
-    // ---------- INIT ----------
-    if (token) {
-      saveToken(token);
-      loadStats();
-      loadLeads();
-      loadSettings();
-    } else {
-      window.location.href = "inscription.html";
     }
 
-    // Chargement header/footer
+    loadLeads();
+
     fetch('header.html').then(r => r.text()).then(html => {
       document.getElementById('header-placeholder').innerHTML = html;
     });

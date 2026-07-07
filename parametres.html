@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Paramètres — BâtiSwift</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .dashboard-sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      background: var(--bg-glass);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+    }
+    .dashboard-sidebar a {
+      display: block;
+      padding: 0.6rem 0.8rem;
+      border-radius: 10px;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-bottom: 0.3rem;
+    }
+    .dashboard-sidebar a:hover,
+    .dashboard-sidebar a.active {
+      background: rgba(255, 0, 127, 0.08);
+      color: var(--accent);
+    }
+    .dashboard-layout {
+      display: flex;
+      gap: 1.5rem;
+      padding: 2rem 0;
+      flex-wrap: wrap;
+    }
+    .dashboard-main { flex: 1; }
+    .form-group { margin-bottom: 1.2rem; }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    input {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-family: inherit;
+      background: var(--bg-glass);
+      backdrop-filter: blur(8px);
+      color: var(--text);
+    }
+    input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+  </style>
+  <script>
+    (function () {
+      var t = localStorage.getItem("batiswift-theme");
+      if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main class="container">
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar">
+        <h3 style="margin-bottom:1.5rem;font-size:0.9rem;color:var(--text-muted);">📋 Menu</h3>
+        <a href="leads.html">🔥 Leads disponibles</a>
+        <a href="achats.html">📦 Mes achats</a>
+        <a href="parametres.html" class="active">⚙️ Paramètres</a>
+        <a href="artisan-home.html" style="margin-top:1rem;border-top:1px solid var(--border);padding-top:1rem;">🚪 Retour espace pro</a>
+      </aside>
+
+      <div class="dashboard-main">
+        <h2 style="font-size:1.4rem;margin-bottom:1rem;">⚙️ Paramètres</h2>
+        <form id="settings-form">
+          <div class="form-group">
+            <label>📞 Numéro de téléphone (SMS)</label>
+            <input type="tel" id="art-phone" placeholder="+33612345678">
+          </div>
+          <div class="form-group">
+            <label>💬 Numéro WhatsApp</label>
+            <input type="tel" id="art-whatsapp" placeholder="+33612345678">
+          </div>
+          <div class="form-group">
+            <label>📍 Zone d'intervention (villes, séparées par des virgules)</label>
+            <input type="text" id="art-zones" placeholder="Lyon, Paris, 69003">
+          </div>
+          <div class="form-group" style="display:flex;align-items:center;gap:0.5rem;">
+            <input type="checkbox" id="auto-relance" style="width:auto;">
+            <label for="auto-relance" style="margin:0;">🔄 Relances automatiques (3 jours)</label>
+          </div>
+          <button type="submit" class="btn btn--primary">💾 Enregistrer les paramètres</button>
+          <div id="settings-status" style="margin-top:0.5rem;color:var(--text-muted);"></div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    const API_BASE = "https://agent-btp.onrender.com";
+    const params = new URLSearchParams(window.location.search);
+    let token = params.get("token") || localStorage.getItem("batiswift-artisan-token");
+    const TOKEN_KEY = "batiswift-artisan-token";
+
+    if (!token) {
+      window.location.href = "inscription.html";
+    }
+
+    function api(path, options = {}) {
+      var url = API_BASE + path;
+      if (token) {
+        var sep = url.indexOf('?') === -1 ? '?' : '&';
+        url += sep + 'token=' + encodeURIComponent(token);
+      }
+      return fetch(url, {
+        method: options.method || 'GET',
+        headers: { "Content-Type": "application/json" },
+        body: options.body || null
+      }).then(async function (r) {
+        var data = await r.json().catch(function () { return {}; });
+        if (!r.ok) throw new Error(data.error || "Erreur serveur");
+        return data;
+      });
+    }
+
+    async function loadSettings() {
+      try {
+        const data = await api("/api/artisan/settings");
+        document.getElementById("art-phone").value = data.phone || "";
+        document.getElementById("art-whatsapp").value = data.whatsapp || "";
+        document.getElementById("art-zones").value = (data.zones || []).join(", ");
+        document.getElementById("auto-relance").checked = data.auto_relance || false;
+      } catch (e) { console.error("Erreur paramètres", e); }
+    }
+
+    document.getElementById("settings-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const phone = document.getElementById("art-phone").value.trim();
+      const whatsapp = document.getElementById("art-whatsapp").value.trim();
+      const zones = document.getElementById("art-zones").value.split(",").map(s => s.trim()).filter(Boolean);
+      const autoRelance = document.getElementById("auto-relance").checked;
+      try {
+        await api("/api/artisan/settings", {
+          method: "POST",
+          body: JSON.stringify({ phone, whatsapp, auto_relance })
+        });
+        await api("/api/artisan/zones", {
+          method: "POST",
+          body: JSON.stringify({ zones })
+        });
+        document.getElementById("settings-status").textContent = "✅ Paramètres enregistrés !";
+        document.getElementById("settings-status").style.color = "#2ecc71";
+      } catch (e) {
+        document.getElementById("settings-status").textContent = "❌ Erreur : " + e.message;
+        document.getElementById("settings-status").style.color = "#ff2d7a";
+      }
+    });
+
+    loadSettings();
+
+    fetch('header.html').then(r => r.text()).then(html => {
+      document.getElementById('header-placeholder').innerHTML = html;
+    });
+    fetch('footer.html').then(r => r.text()).then(html => {
+      document.getElementById('footer-placeholder').innerHTML = html;
+    });
+  </script>
+</body>
+</html>

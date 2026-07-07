@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Leads disponibles — BâtiSwift</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .lead-item {
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(8px);
+    }
+    .lead-item.lead--blurred {
+      filter: blur(8px);
+      pointer-events: none;
+      opacity: 0.4;
+    }
+    .lead-item.lead--available {
+      filter: none;
+      pointer-events: auto;
+      opacity: 1;
+    }
+    .dashboard-sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      background: var(--bg-glass);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+    }
+    .dashboard-sidebar a {
+      display: block;
+      padding: 0.6rem 0.8rem;
+      border-radius: 10px;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-bottom: 0.3rem;
+    }
+    .dashboard-sidebar a:hover,
+    .dashboard-sidebar a.active {
+      background: rgba(255, 0, 127, 0.08);
+      color: var(--accent);
+    }
+    .dashboard-layout {
+      display: flex;
+      gap: 1.5rem;
+      padding: 2rem 0;
+      flex-wrap: wrap;
+    }
+    .dashboard-main { flex: 1; }
+  </style>
+  <script>
+    (function () {
+      var t = localStorage.getItem("batiswift-theme");
+      if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main class="container">
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar">
+        <h3 style="margin-bottom:1.5rem;font-size:0.9rem;color:var(--text-muted);">📋 Menu</h3>
+        <a href="leads.html" class="active">🔥 Leads disponibles</a>
+        <a href="achats.html">📦 Mes achats</a>
+        <a href="parametres.html">⚙️ Paramètres</a>
+        <a href="artisan-home.html" style="margin-top:1rem;border-top:1px solid var(--border);padding-top:1rem;">🚪 Retour espace pro</a>
+      </aside>
+
+      <div class="dashboard-main">
+        <h2 style="font-size:1.4rem;margin-bottom:1rem;">🔥 Leads disponibles</h2>
+        <p style="color:var(--text-muted);margin-bottom:1rem;">Les leads floutés sont en exclusivité pour les abonnés (10 min).</p>
+        <div id="leads-list">
+          <p style="color:var(--text-muted);">Chargement des leads...</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    const API_BASE = "https://agent-btp.onrender.com";
+    const params = new URLSearchParams(window.location.search);
+    let token = params.get("token") || localStorage.getItem("batiswift-artisan-token");
+    const TOKEN_KEY = "batiswift-artisan-token";
+
+    if (!token) {
+      window.location.href = "inscription.html";
+    }
+
+    function api(path, options = {}) {
+      var url = API_BASE + path;
+      if (token) {
+        var sep = url.indexOf('?') === -1 ? '?' : '&';
+        url += sep + 'token=' + encodeURIComponent(token);
+      }
+      return fetch(url, {
+        method: options.method || 'GET',
+        headers: { "Content-Type": "application/json" },
+        body: options.body || null
+      }).then(async function (r) {
+        var data = await r.json().catch(function () { return {}; });
+        if (!r.ok) throw new Error(data.error || "Erreur serveur");
+        return data;
+      });
+    }
+
+    function escapeHtml(s) {
+      if (!s) return "";
+      var el = document.createElement("div");
+      el.textContent = String(s);
+      return el.innerHTML;
+    }
+
+    function renderLeads(leads) {
+      var container = document.getElementById("leads-list");
+      if (!leads.length) {
+        container.innerHTML = '<p style="color:var(--text-muted);">Aucun lead disponible pour le moment.</p>';
+        return;
+      }
+      var html = "";
+      leads.forEach(function (lead) {
+        var blurred = lead.status === 'reserved' ? 'lead--blurred' : 'lead--available';
+        html += '<div class="lead-item ' + blurred + '">';
+        html += '<strong>' + escapeHtml(lead.trade_type) + '</strong> — ' + escapeHtml(lead.location_city || "Non précisé") + '<br>';
+        html += '<span style="color:var(--text-muted);">Urgence : ' + (lead.urgency === 'urgent' ? '🚨' : '📅') + '</span>';
+        if (lead.status === 'available') {
+          html += '<br><button class="btn btn--primary btn--sm" style="margin-top:0.5rem;" onclick="purchaseLead(' + lead.id + ')">🔥 Acheter (10€)</button>';
+        }
+        html += '</div>';
+      });
+      container.innerHTML = html;
+    }
+
+    async function purchaseLead(leadId) {
+      try {
+        const data = await api("/api/leads/purchase", {
+          method: "POST",
+          body: JSON.stringify({ lead_id: leadId })
+        });
+        if (data.url) window.location.href = data.url;
+        else alert("Erreur : URL de paiement non reçue.");
+      } catch (e) {
+        alert("Erreur : " + e.message);
+      }
+    }
+
+    async function loadLeads() {
+      try {
+        const leads = await api("/api/leads/available");
+        renderLeads(leads);
+      } catch (e) {
+        console.error("Erreur leads", e);
+        document.getElementById("leads-list").innerHTML = '<p style="color:var(--accent);">Erreur de chargement.</p>';
+      }
+    }
+
+    loadLeads();
+
+    // Chargement header/footer
+    fetch('header.html').then(r => r.text()).then(html => {
+      document.getElementById('header-placeholder').innerHTML = html;
+    });
+    fetch('footer.html').then(r => r.text()).then(html => {
+      document.getElementById('footer-placeholder').innerHTML = html;
+    });
+  </script>
+</body>
+</html>
