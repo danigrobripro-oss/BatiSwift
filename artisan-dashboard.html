@@ -17,7 +17,7 @@
       margin-bottom: 2rem;
     }
     .stat-card {
-      background: var(--bg-elevated);
+      background: var(--bg-glass);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 1.5rem;
@@ -33,7 +33,7 @@
     .stat-label { color: var(--text-muted); font-size: 0.85rem; }
     .lead-list { display: grid; gap: 1rem; }
     .lead-item {
-      background: var(--bg-elevated);
+      background: var(--bg-glass);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 1.2rem;
@@ -153,7 +153,6 @@
     let token = params.get("token") || localStorage.getItem("batiswift-artisan-token");
     const TOKEN_KEY = "batiswift-artisan-token";
 
-    // Sauvegarde du token
     function saveToken(t) {
       token = t;
       localStorage.setItem(TOKEN_KEY, t);
@@ -162,7 +161,6 @@
       window.history.replaceState({}, "", url);
     }
 
-    // Appel API générique
     function api(path, options = {}) {
       var url = API_BASE + path;
       if (token) {
@@ -183,18 +181,13 @@
     // ---------- CHARGEMENT DES DONNÉES ----------
     async function loadStats() {
       try {
-        // Leads disponibles
         const leads = await api("/api/leads/available");
         document.getElementById("stat-leads-dispo").textContent = leads.length;
-        // Leads achetés
         const purchased = await api("/api/leads/purchased");
         document.getElementById("stat-leads-achetes").textContent = purchased.length;
-        // Statut abonnement
         const sub = await api("/api/artisan/subscription/status");
         document.getElementById("stat-abonnement").textContent = sub.active ? "✅ Actif" : "❌ Inactif";
-      } catch (e) {
-        console.error("Erreur stats", e);
-      }
+      } catch (e) { console.error("Erreur stats", e); }
     }
 
     function renderLeads(leads) {
@@ -210,7 +203,7 @@
         html += '<strong>' + escapeHtml(lead.trade_type) + '</strong> — ' + escapeHtml(lead.location_city || "Non précisé") + '<br>';
         html += '<span style="color:var(--text-muted);">Urgence : ' + (lead.urgency === 'urgent' ? '🚨' : '📅') + '</span>';
         if (lead.status === 'available') {
-          html += '<br><button class="btn btn--primary btn--sm" style="margin-top:0.5rem;" onclick="purchaseLead(' + lead.id + ')">🔥 Acheter (' + (lead.price_cents/100) + '€)</button>';
+          html += '<br><button class="btn btn--primary btn--sm" style="margin-top:0.5rem;" onclick="purchaseLead(' + lead.id + ')">🔥 Acheter (10€)</button>';
         }
         html += '</div>';
       });
@@ -316,7 +309,6 @@
       loadLeads();
       loadSettings();
     } else {
-      // Rediriger vers l'inscription si pas de token
       window.location.href = "inscription.html";
     }
 

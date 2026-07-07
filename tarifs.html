@@ -14,8 +14,6 @@
       if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches)) {
         document.documentElement.setAttribute("data-theme", "dark");
       }
-      var translucide = localStorage.getItem("batiswift-translucide");
-      if (translucide === "true") document.body.classList.add("translucide");
     })();
   </script>
 </head>
@@ -28,7 +26,6 @@
   <p style="text-align:center;color:var(--text-muted);max-width:50ch;margin:0 auto 2rem;">Choisissez la formule qui vous correspond.</p>
 
   <div class="pricing-grid" style="grid-template-columns: repeat(2, 1fr); max-width:700px; margin:0 auto;">
-    <!-- Offre 1 : Assistant IA -->
     <div class="pricing-card">
       <h3>📱 Assistant IA</h3>
       <div class="price">19 <span>€/mois</span></div>
@@ -40,8 +37,6 @@
       </ul>
       <a href="inscription.html" class="btn btn--primary btn--block">S’abonner</a>
     </div>
-
-    <!-- Offre 2 : Leads à l'unité -->
     <div class="pricing-card" style="border-color:var(--accent);">
       <h3>🔥 Leads à l’unité</h3>
       <div class="price">10 <span>€/lead</span></div>
