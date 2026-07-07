@@ -1,4 +1,4 @@
-<!-- header.html – Barre de navigation complète -->
+<!-- header.html – Barre de navigation avec gestion de session -->
 <header class="header">
   <div class="container header__inner">
     <a href="index.html" class="logo" aria-label="BâtiSwift accueil">
@@ -24,6 +24,7 @@
     <nav class="nav" id="main-nav">
       <a href="index.html">Accueil</a>
       <a href="tarifs.html">Tarifs</a>
+      <!-- Ces deux liens seront gérés dynamiquement -->
       <a href="inscription.html" id="nav-inscription">S’inscrire / Se connecter</a>
       <a href="artisan-dashboard.html" id="nav-dashboard" style="display:none;">Espace pro</a>
     </nav>
@@ -36,32 +37,61 @@
 </header>
 
 <script>
-  // Vérifier si l'utilisateur est connecté (token présent dans localStorage)
-  const TOKEN_KEY = "batiswift-artisan-token";
-  const token = localStorage.getItem(TOKEN_KEY);
-  const navInscription = document.getElementById('nav-inscription');
-  const navDashboard = document.getElementById('nav-dashboard');
-  const btnEssai = document.getElementById('btn-essai');
+  // ====== GESTION DE LA SESSION ======
+  (function() {
+    const TOKEN_KEY = "batiswift-artisan-token";
 
-  if (token) {
-    // Connecté : masquer "S'inscrire" et afficher "Espace pro"
-    navInscription.style.display = 'none';
-    navDashboard.style.display = 'inline';
-    btnEssai.style.display = 'none';
-  } else {
-    // Non connecté : afficher "S'inscrire", masquer "Espace pro"
-    navInscription.style.display = 'inline';
-    navDashboard.style.display = 'none';
-    btnEssai.style.display = 'inline';
-  }
+    // Récupérer le token (depuis l'URL ou localStorage)
+    const params = new URLSearchParams(window.location.search);
+    let token = params.get("token") || localStorage.getItem(TOKEN_KEY);
 
-  // Chargement du compteur d'artisans en ligne
-  async function loadArtisansCount() {
-    try {
-      const res = await fetch('https://agent-btp.onrender.com/api/stats/public');
-      const data = await res.json();
-      document.getElementById('artisans-count').textContent = data.artisans || 0;
-    } catch(e) { console.error('Erreur compteur', e); }
-  }
-  loadArtisansCount();
+    // Sauvegarder le token dans localStorage s'il est dans l'URL
+    if (params.get("token") && !localStorage.getItem(TOKEN_KEY)) {
+      localStorage.setItem(TOKEN_KEY, params.get("token"));
+      token = params.get("token");
+    }
+
+    // Éléments du DOM
+    const navInscription = document.getElementById('nav-inscription');
+    const navDashboard = document.getElementById('nav-dashboard');
+    const btnEssai = document.getElementById('btn-essai');
+
+    // Fonction de mise à jour de l'affichage
+    function updateHeader() {
+      const hasToken = localStorage.getItem(TOKEN_KEY) !== null;
+      if (hasToken) {
+        // Connecté : masquer "S'inscrire", afficher "Espace pro", masquer "Essayer gratuitement"
+        if (navInscription) navInscription.style.display = 'none';
+        if (navDashboard) navDashboard.style.display = 'inline';
+        if (btnEssai) btnEssai.style.display = 'none';
+        console.log("🔑 Utilisateur connecté – Espace pro affiché");
+      } else {
+        // Déconnecté : afficher "S'inscrire", masquer "Espace pro", afficher "Essayer gratuitement"
+        if (navInscription) navInscription.style.display = 'inline';
+        if (navDashboard) navDashboard.style.display = 'none';
+        if (btnEssai) btnEssai.style.display = 'inline';
+        console.log("👤 Utilisateur déconnecté – S'inscrire affiché");
+      }
+    }
+
+    // Exécuter la mise à jour
+    updateHeader();
+
+    // === OPTIONNEL : Réagir aux changements de session (ex: déconnexion) ===
+    // Tu pourras appeler updateHeader() depuis d'autres scripts si besoin
+    window.updateHeader = updateHeader;
+
+    // ====== COMPTEUR ARTISANS EN LIGNE ======
+    async function loadArtisansCount() {
+      try {
+        const res = await fetch('https://agent-btp.onrender.com/api/stats/public');
+        const data = await res.json();
+        const countEl = document.getElementById('artisans-count');
+        if (countEl) countEl.textContent = data.artisans || 0;
+      } catch(e) {
+        console.error('Erreur compteur', e);
+      }
+    }
+    loadArtisansCount();
+  })();
 </script>

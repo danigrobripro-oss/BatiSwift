@@ -1,8 +1,7 @@
-<!-- header-minimal.html – Logo + nom, sans menu, logo agrandi -->
+<!-- header-minimal.html – Logo + nom, sans navigation -->
 <header class="header header--minimal">
   <div class="container header__inner">
     <a href="index.html" class="logo" aria-label="BâtiSwift accueil">
-      <!-- Logo agrandi (60px) -->
       <svg width="60" height="60" viewBox="0 0 650 400" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <mask id="swift-separation-minimal">
@@ -20,6 +19,30 @@
       </svg>
       <span style="display:inline-flex;font-size:1.2rem;font-weight:800;">Bâti<span style="color:#FF007F;">Swift</span></span>
     </a>
-    <!-- Aucun menu, aucun bouton -->
+    <!-- Aucun menu, mais on peut ajouter un lien "Espace pro" si connecté -->
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <span id="online-artisans-mini" style="font-size:0.8rem;color:var(--text-muted);">👷 <span id="artisans-count-mini">0</span> en ligne</span>
+      <a href="artisan-dashboard.html" id="nav-dashboard-mini" style="display:none;color:var(--accent);font-weight:600;text-decoration:none;">Espace pro</a>
+    </div>
   </div>
 </header>
+
+<script>
+  (function() {
+    const TOKEN_KEY = "batiswift-artisan-token";
+    const token = localStorage.getItem(TOKEN_KEY);
+    const dashboardLink = document.getElementById('nav-dashboard-mini');
+    if (token && dashboardLink) {
+      dashboardLink.style.display = 'inline';
+    }
+  })();
+
+  async function loadArtisansCountMini() {
+    try {
+      const res = await fetch('https://agent-btp.onrender.com/api/stats/public');
+      const data = await res.json();
+      document.getElementById('artisans-count-mini').textContent = data.artisans || 0;
+    } catch(e) { console.error('Erreur compteur', e); }
+  }
+  loadArtisansCountMini();
+</script>
