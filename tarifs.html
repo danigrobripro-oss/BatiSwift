@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tarifs – BâtiSwift</title>
+  <title>Tarifs — BâtiSwift</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -25,9 +25,10 @@
 
 <main class="container" style="padding:3rem 0;">
   <h1 style="text-align:center;font-size:2.2rem;">💰 Des tarifs simples, sans engagement</h1>
-  <p style="text-align:center;color:var(--text-muted);max-width:50ch;margin:0 auto 2rem;">Choisissez la formule qui vous correspond, ou combinez-les.</p>
+  <p style="text-align:center;color:var(--text-muted);max-width:50ch;margin:0 auto 2rem;">Choisissez la formule qui vous correspond.</p>
 
-  <div class="pricing-grid">
+  <div class="pricing-grid" style="grid-template-columns: repeat(2, 1fr); max-width:700px; margin:0 auto;">
+    <!-- Offre 1 : Assistant IA -->
     <div class="pricing-card">
       <h3>📱 Assistant IA</h3>
       <div class="price">19 <span>€/mois</span></div>
@@ -39,9 +40,11 @@
       </ul>
       <a href="inscription.html" class="btn btn--primary btn--block">S’abonner</a>
     </div>
+
+    <!-- Offre 2 : Leads à l'unité -->
     <div class="pricing-card" style="border-color:var(--accent);">
       <h3>🔥 Leads à l’unité</h3>
-      <div class="price">10–20 <span>€/lead</span></div>
+      <div class="price">10 <span>€/lead</span></div>
       <ul>
         <li>✅ Clients qualifiés</li>
         <li>✅ Photos intégrées</li>
@@ -49,17 +52,6 @@
         <li>✅ Paiement Stripe</li>
       </ul>
       <a href="inscription.html" class="btn btn--primary btn--block">Acheter des leads</a>
-    </div>
-    <div class="pricing-card">
-      <h3>🚀 Offre Complète</h3>
-      <div class="price">29 <span>€/mois</span></div>
-      <ul>
-        <li>✅ Assistant IA + Leads</li>
-        <li>✅ 2 leads offerts / mois</li>
-        <li>✅ Priorité absolue</li>
-        <li>✅ Support prioritaire</li>
-      </ul>
-      <a href="inscription.html" class="btn btn--primary btn--block">Choisir cette offre</a>
     </div>
   </div>
 </main>
