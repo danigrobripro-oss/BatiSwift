@@ -1,8 +1,7 @@
-<!-- header.html – Barre de navigation avec gestion de session -->
+<!-- header.html – Barre de navigation avec gestion de session et nom -->
 <header class="header">
   <div class="container header__inner">
     <a href="index.html" class="logo" aria-label="BâtiSwift accueil">
-      <!-- Logo agrandi -->
       <svg width="50" height="50" viewBox="0 0 650 400" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <mask id="swift-separation-header">
@@ -24,8 +23,10 @@
     <nav class="nav" id="main-nav">
       <a href="index.html">Accueil</a>
       <a href="tarifs.html">Tarifs</a>
-      <!-- Ces deux liens seront gérés dynamiquement -->
+      <span id="nav-user" style="display:none;color:var(--accent);font-weight:600;margin-right:0.5rem;">Bonjour, <span id="user-name-display">Artisan</span></span>
+      <a href="profil.html" id="nav-profil" style="display:none;">Mon profil</a>
       <a href="inscription.html" id="nav-inscription">S’inscrire / Se connecter</a>
+      <a href="#" id="nav-logout" style="display:none;color:var(--text-muted);" onclick="logout()">Déconnexion</a>
       <a href="artisan-dashboard.html" id="nav-dashboard" style="display:none;">Espace pro</a>
     </nav>
 
@@ -38,60 +39,75 @@
 
 <script>
   // ====== GESTION DE LA SESSION ======
-  (function() {
-    const TOKEN_KEY = "batiswift-artisan-token";
+  const TOKEN_KEY = "batiswift-artisan-token";
+  const API_BASE = "https://agent-btp.onrender.com";
 
-    // Récupérer le token (depuis l'URL ou localStorage)
-    const params = new URLSearchParams(window.location.search);
-    let token = params.get("token") || localStorage.getItem(TOKEN_KEY);
-
-    // Sauvegarder le token dans localStorage s'il est dans l'URL
-    if (params.get("token") && !localStorage.getItem(TOKEN_KEY)) {
-      localStorage.setItem(TOKEN_KEY, params.get("token"));
-      token = params.get("token");
+  // ====== FONCTION loadUserInfo() ======
+  async function loadUserInfo() {
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (!token) {
+      updateUI(null);
+      return;
     }
 
-    // Éléments du DOM
+    try {
+      const res = await fetch(`${API_BASE}/api/artisan/me?token=${token}`);
+      if (!res.ok) throw new Error('Non autorisé');
+      const data = await res.json();
+      updateUI(data);
+    } catch (e) {
+      console.error('Erreur chargement profil', e);
+      localStorage.removeItem(TOKEN_KEY);
+      updateUI(null);
+    }
+  }
+
+  function updateUI(user) {
     const navInscription = document.getElementById('nav-inscription');
+    const navProfil = document.getElementById('nav-profil');
+    const navLogout = document.getElementById('nav-logout');
     const navDashboard = document.getElementById('nav-dashboard');
     const btnEssai = document.getElementById('btn-essai');
+    const navUser = document.getElementById('nav-user');
+    const userName = document.getElementById('user-name-display');
 
-    // Fonction de mise à jour de l'affichage
-    function updateHeader() {
-      const hasToken = localStorage.getItem(TOKEN_KEY) !== null;
-      if (hasToken) {
-        // Connecté : masquer "S'inscrire", afficher "Espace pro", masquer "Essayer gratuitement"
-        if (navInscription) navInscription.style.display = 'none';
-        if (navDashboard) navDashboard.style.display = 'inline';
-        if (btnEssai) btnEssai.style.display = 'none';
-        console.log("🔑 Utilisateur connecté – Espace pro affiché");
-      } else {
-        // Déconnecté : afficher "S'inscrire", masquer "Espace pro", afficher "Essayer gratuitement"
-        if (navInscription) navInscription.style.display = 'inline';
-        if (navDashboard) navDashboard.style.display = 'none';
-        if (btnEssai) btnEssai.style.display = 'inline';
-        console.log("👤 Utilisateur déconnecté – S'inscrire affiché");
+    if (user) {
+      // Connecté
+      if (navInscription) navInscription.style.display = 'none';
+      if (navProfil) navProfil.style.display = 'inline';
+      if (navLogout) navLogout.style.display = 'inline';
+      if (navDashboard) navDashboard.style.display = 'inline';
+      if (btnEssai) btnEssai.style.display = 'none';
+      if (navUser) {
+        navUser.style.display = 'inline';
+        if (userName) userName.textContent = user.name || 'Artisan';
       }
+    } else {
+      // Déconnecté
+      if (navInscription) navInscription.style.display = 'inline';
+      if (navProfil) navProfil.style.display = 'none';
+      if (navLogout) navLogout.style.display = 'none';
+      if (navDashboard) navDashboard.style.display = 'none';
+      if (btnEssai) btnEssai.style.display = 'inline';
+      if (navUser) navUser.style.display = 'none';
     }
+  }
 
-    // Exécuter la mise à jour
-    updateHeader();
+  function logout() {
+    localStorage.removeItem(TOKEN_KEY);
+    window.location.href = 'index.html';
+  }
 
-    // === OPTIONNEL : Réagir aux changements de session (ex: déconnexion) ===
-    // Tu pourras appeler updateHeader() depuis d'autres scripts si besoin
-    window.updateHeader = updateHeader;
+  // Chargement du compteur d'artisans en ligne
+  async function loadArtisansCount() {
+    try {
+      const res = await fetch(`${API_BASE}/api/stats/public`);
+      const data = await res.json();
+      document.getElementById('artisans-count').textContent = data.artisans || 0;
+    } catch(e) { console.error('Erreur compteur', e); }
+  }
 
-    // ====== COMPTEUR ARTISANS EN LIGNE ======
-    async function loadArtisansCount() {
-      try {
-        const res = await fetch('https://agent-btp.onrender.com/api/stats/public');
-        const data = await res.json();
-        const countEl = document.getElementById('artisans-count');
-        if (countEl) countEl.textContent = data.artisans || 0;
-      } catch(e) {
-        console.error('Erreur compteur', e);
-      }
-    }
-    loadArtisansCount();
-  })();
+  // Initialisation
+  loadUserInfo();
+  loadArtisansCount();
 </script>
