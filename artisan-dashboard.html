@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
   <title>Espace pro — BâtiSwift</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
   <style>
+    .dashboard-layout { display: flex; gap: 1.5rem; padding: 2rem 0; flex-wrap: wrap; }
     .dashboard-sidebar {
       width: 220px;
       flex-shrink: 0;
@@ -27,16 +28,9 @@
       text-decoration: none;
       margin-bottom: 0.3rem;
     }
-    .dashboard-sidebar a:hover,
-    .dashboard-sidebar a.active {
-      background: rgba(255, 0, 127, 0.08);
+    .dashboard-sidebar a:hover, .dashboard-sidebar a.active {
+      background: rgba(255,0,127,0.08);
       color: var(--accent);
-    }
-    .dashboard-layout {
-      display: flex;
-      gap: 1.5rem;
-      padding: 2rem 0;
-      flex-wrap: wrap;
     }
     .dashboard-main { flex: 1; }
     .lead-item {
@@ -57,7 +51,19 @@
       pointer-events: auto;
       opacity: 1;
     }
-    .btn--sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-success { background: rgba(46,204,113,0.2); color: #2ecc71; }
+    .badge-warning { background: rgba(255,45,122,0.2); color: var(--accent); }
+    .badge-urgent { background: rgba(255,0,0,0.2); color: #ff4444; }
+    .badge-normal { background: rgba(255,165,0,0.2); color: #ffa500; }
+    .status-select { margin-left: 0.5rem; }
+    .note-input { width: 100%; margin-top: 0.5rem; padding: 0.5rem; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg-glass); color: var(--text); }
   </style>
   <script>
     (function () {
@@ -78,15 +84,13 @@
         <a href="leads.html" class="active">🔥 Leads disponibles</a>
         <a href="achats.html">📦 Mes achats</a>
         <a href="parametres.html">⚙️ Paramètres</a>
-        <a href="artisan-home.html" style="margin-top:1rem;border-top:1px solid var(--border);padding-top:1rem;">🚪 Retour espace pro</a>
+        <a href="index.html" style="margin-top:1rem;border-top:1px solid var(--border);padding-top:1rem;">🚪 Retour accueil</a>
       </aside>
 
       <div class="dashboard-main">
         <h2 style="font-size:1.4rem;margin-bottom:1rem;">🔥 Leads disponibles</h2>
-        <p style="color:var(--text-muted);margin-bottom:1rem;">Les leads floutés sont en exclusivité pour les abonnés (10 min).</p>
-        <div id="leads-list">
-          <p style="color:var(--text-muted);">Chargement des leads...</p>
-        </div>
+        <p style="color:var(--text-muted);margin-bottom:1rem;">Les leads floutés sont réservés aux abonnés.</p>
+        <div id="leads-list"><p style="color:var(--text-muted);">Chargement...</p></div>
       </div>
     </div>
   </main>
@@ -99,67 +103,60 @@
     const params = new URLSearchParams(window.location.search);
     let token = params.get("token") || localStorage.getItem(TOKEN_KEY);
 
-    if (!token) {
-      window.location.href = "inscription.html";
-    } else {
-      localStorage.setItem(TOKEN_KEY, token);
-    }
+    if (!token) { window.location.href = "inscription.html"; }
+    else { localStorage.setItem(TOKEN_KEY, token); }
 
     function api(path, options = {}) {
       var url = API_BASE + path;
-      if (token) {
-        var sep = url.indexOf('?') === -1 ? '?' : '&';
-        url += sep + 'token=' + encodeURIComponent(token);
-      }
+      if (token) { var sep = url.indexOf('?') === -1 ? '?' : '&'; url += sep + 'token=' + encodeURIComponent(token); }
       return fetch(url, {
         method: options.method || 'GET',
         headers: { "Content-Type": "application/json" },
         body: options.body || null
       }).then(async function (r) {
-        var data = await r.json().catch(function () { return {}; });
+        var data = await r.json().catch(() => ({}));
         if (!r.ok) throw new Error(data.error || "Erreur serveur");
         return data;
       });
     }
 
-    function escapeHtml(s) {
-      if (!s) return "";
-      var el = document.createElement("div");
-      el.textContent = String(s);
-      return el.innerHTML;
+    function escapeHtml(s) { if (!s) return ""; var el = document.createElement("div"); el.textContent = String(s); return el.innerHTML; }
+
+    function renderLead(lead) {
+      var blurred = lead.status === 'reserved' ? 'lead--blurred' : 'lead--available';
+      var urgencyIcon = lead.urgency_tag === 'urgent' ? '🚨' : '📅';
+      var html = '<div class="lead-item ' + blurred + '">';
+      html += '<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">';
+      html += '<strong>' + escapeHtml(lead.trade_type) + '</strong> <span>' + urgencyIcon + ' ' + escapeHtml(lead.location_city || 'Non précisé') + '</span>';
+      html += '</div>';
+      html += '<div style="margin:0.5rem 0;">';
+      html += '<span class="badge">📐 Surface: ' + escapeHtml(lead.surface_estimee || '—') + '</span>';
+      html += '<span class="badge">🔧 Matériaux: ' + escapeHtml(lead.materiau_checklist || '—') + '</span>';
+      html += '<span class="badge">⏱️ Temps: ' + escapeHtml(lead.temps_estime || '—') + '</span>';
+      html += '</div>';
+      html += '<p style="color:var(--text-muted);margin:0.5rem 0;">' + escapeHtml(lead.description_preview || lead.description || '') + '</p>';
+      html += '<div style="display:flex;flex-wrap:wrap;gap:0.5rem;">';
+      if (lead.status === 'available') {
+        html += '<button class="btn btn--primary btn--sm" onclick="purchaseLead(' + lead.id + ')">🔥 Prendre ce chantier (10€)</button>';
+      }
+      html += '<select class="status-select" onchange="updateStatus(' + lead.id + ', this.value)">';
+      ['nouveau','contacté','devis_envoyé','signé','perdu'].forEach(s => {
+        var selected = (lead.statut_lead === s) ? 'selected' : '';
+        html += '<option value="' + s + '" ' + selected + '>' + s.replace('_', ' ') + '</option>';
+      });
+      html += '</select>';
+      html += '</div>';
+      html += '<textarea class="note-input" placeholder="Ajouter une note..." onblur="addNote(' + lead.id + ', this.value)">' + escapeHtml(lead.notes || '') + '</textarea>';
+      html += '</div>';
+      return html;
     }
 
     function renderLeads(leads) {
-      var container = document.getElementById("leads-list");
-      if (!leads.length) {
-        container.innerHTML = '<p style="color:var(--text-muted);">Aucun lead disponible pour le moment.</p>';
-        return;
-      }
-      var html = "";
-      leads.forEach(function (lead) {
-        var blurred = lead.status === 'reserved' ? 'lead--blurred' : 'lead--available';
-        html += '<div class="lead-item ' + blurred + '">';
-        html += '<strong>' + escapeHtml(lead.trade_type) + '</strong> — ' + escapeHtml(lead.location_city || "Non précisé") + '<br>';
-        html += '<span style="color:var(--text-muted);">Urgence : ' + (lead.urgency === 'urgent' ? '🚨' : '📅') + '</span>';
-        if (lead.status === 'available') {
-          html += '<br><button class="btn btn--primary btn--sm" style="margin-top:0.5rem;" onclick="purchaseLead(' + lead.id + ')">🔥 Acheter (10€)</button>';
-        }
-        html += '</div>';
-      });
+      var container = document.getElementById('leads-list');
+      if (!leads.length) { container.innerHTML = '<p style="color:var(--text-muted);">Aucun lead disponible.</p>'; return; }
+      var html = '';
+      leads.forEach(function (lead) { html += renderLead(lead); });
       container.innerHTML = html;
-    }
-
-    async function purchaseLead(leadId) {
-      try {
-        const data = await api("/api/leads/purchase", {
-          method: "POST",
-          body: JSON.stringify({ lead_id: leadId })
-        });
-        if (data.url) window.location.href = data.url;
-        else alert("Erreur : URL de paiement non reçue.");
-      } catch (e) {
-        alert("Erreur : " + e.message);
-      }
     }
 
     async function loadLeads() {
@@ -167,9 +164,29 @@
         const leads = await api("/api/leads/available");
         renderLeads(leads);
       } catch (e) {
-        console.error("Erreur leads", e);
-        document.getElementById("leads-list").innerHTML = '<p style="color:var(--accent);">Erreur de chargement.</p>';
+        document.getElementById('leads-list').innerHTML = '<p style="color:var(--accent);">Erreur de chargement.</p>';
       }
+    }
+
+    async function purchaseLead(leadId) {
+      try {
+        const data = await api("/api/leads/purchase", { method: "POST", body: JSON.stringify({ lead_id: leadId }) });
+        if (data.url) window.location.href = data.url;
+        else alert("Erreur : URL de paiement non reçue.");
+      } catch (e) { alert("Erreur : " + e.message); }
+    }
+
+    async function updateStatus(leadId, status) {
+      try {
+        await api("/api/leads/" + leadId + "/status", { method: "PUT", body: JSON.stringify({ statut: status }) });
+        alert("Statut mis à jour !");
+      } catch (e) { alert("Erreur : " + e.message); }
+    }
+
+    async function addNote(leadId, note) {
+      try {
+        await api("/api/leads/" + leadId + "/note", { method: "POST", body: JSON.stringify({ note: note }) });
+      } catch (e) { console.error(e); }
     }
 
     loadLeads();

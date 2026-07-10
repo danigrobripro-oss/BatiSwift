@@ -1,21 +1,12 @@
-<!-- header.html – Barre de navigation avec gestion de session et nom -->
+<!-- header.html – Header universel -->
 <header class="header">
   <div class="container header__inner">
     <a href="index.html" class="logo" aria-label="BâtiSwift accueil">
       <svg width="50" height="50" viewBox="0 0 650 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <mask id="swift-separation-header">
-            <rect width="650" height="400" fill="#ffffff" />
-            <path d="M 235,195 C 285,175 335,148 385,132 C 340,152 290,182 245,202 Z" fill="#000000" />
-          </mask>
-        </defs>
+        <defs><mask id="header-mask"><rect width="650" height="400" fill="#ffffff" /><path d="M 235,195 C 285,175 335,148 385,132 C 340,152 290,182 245,202 Z" fill="#000000" /></mask></defs>
         <rect width="100%" height="100%" fill="transparent" />
-        <g fill="#FF007F">
-          <path d="M 205,115 L 205,135 L 235,135 L 250,150 L 235,165 L 205,165 L 205,185 C 245,196 265,190 290,175 C 320,175 350,185 380,205 L 460,150 L 380,95 C 350,115 320,125 290,125 C 265,110 245,104 205,115 Z" mask="url(#swift-separation-header)" />
-        </g>
-        <g fill="#FF007F" opacity="0.15" filter="blur(4px)">
-          <path d="M 205,115 L 205,135 L 235,135 L 250,150 L 235,165 L 205,165 L 205,185 C 245,196 265,190 290,175 C 320,175 350,185 380,205 L 460,150 L 380,95 C 350,115 320,125 290,125 C 265,110 245,104 205,115 Z" mask="url(#swift-separation-header)" />
-        </g>
+        <g fill="#FF007F"><path d="M 205,115 L 205,135 L 235,135 L 250,150 L 235,165 L 205,165 L 205,185 C 245,196 265,190 290,175 C 320,175 350,185 380,205 L 460,150 L 380,95 C 350,115 320,125 290,125 C 265,110 245,104 205,115 Z" mask="url(#header-mask)"/></g>
+        <g fill="#FF007F" opacity="0.15" filter="blur(4px)"><path d="M 205,115 L 205,135 L 235,135 L 250,150 L 235,165 L 205,165 L 205,185 C 245,196 265,190 290,175 C 320,175 350,185 380,205 L 460,150 L 380,95 C 350,115 320,125 290,125 C 265,110 245,104 205,115 Z" mask="url(#header-mask)"/></g>
       </svg>
       <span style="display:inline-flex;font-size:1.2rem;font-weight:800;">Bâti<span class="logo__accent">Swift</span></span>
     </a>
@@ -24,10 +15,10 @@
       <a href="index.html">Accueil</a>
       <a href="tarifs.html">Tarifs</a>
       <span id="nav-user" style="display:none;color:var(--accent);font-weight:600;margin-right:0.5rem;">Bonjour, <span id="user-name-display">Artisan</span></span>
-      <a href="profil.html" id="nav-profil" style="display:none;">Mon profil</a>
-      <a href="inscription.html" id="nav-inscription">S’inscrire / Se connecter</a>
-      <a href="#" id="nav-logout" style="display:none;color:var(--text-muted);" onclick="logout()">Déconnexion</a>
       <a href="artisan-dashboard.html" id="nav-dashboard" style="display:none;">Espace pro</a>
+      <a href="client.html" id="nav-client" style="display:none;">Mode client</a>
+      <a href="inscription.html" id="nav-inscription">Se connecter</a>
+      <a href="#" id="nav-logout" style="display:none;color:var(--text-muted);" onclick="logout()">Déconnexion</a>
     </nav>
 
     <div class="header__actions">
@@ -38,18 +29,12 @@
 </header>
 
 <script>
-  // ====== GESTION DE LA SESSION ======
   const TOKEN_KEY = "batiswift-artisan-token";
   const API_BASE = "https://agent-btp.onrender.com";
 
-  // ====== FONCTION loadUserInfo() ======
   async function loadUserInfo() {
     const token = localStorage.getItem(TOKEN_KEY);
-    if (!token) {
-      updateUI(null);
-      return;
-    }
-
+    if (!token) { updateUI(null); return; }
     try {
       const res = await fetch(`${API_BASE}/api/artisan/me?token=${token}`);
       if (!res.ok) throw new Error('Non autorisé');
@@ -64,32 +49,28 @@
 
   function updateUI(user) {
     const navInscription = document.getElementById('nav-inscription');
-    const navProfil = document.getElementById('nav-profil');
-    const navLogout = document.getElementById('nav-logout');
     const navDashboard = document.getElementById('nav-dashboard');
+    const navClient = document.getElementById('nav-client');
+    const navLogout = document.getElementById('nav-logout');
     const btnEssai = document.getElementById('btn-essai');
     const navUser = document.getElementById('nav-user');
     const userName = document.getElementById('user-name-display');
 
     if (user) {
-      // Connecté
-      if (navInscription) navInscription.style.display = 'none';
-      if (navProfil) navProfil.style.display = 'inline';
-      if (navLogout) navLogout.style.display = 'inline';
-      if (navDashboard) navDashboard.style.display = 'inline';
-      if (btnEssai) btnEssai.style.display = 'none';
-      if (navUser) {
-        navUser.style.display = 'inline';
-        if (userName) userName.textContent = user.name || 'Artisan';
-      }
+      navInscription.style.display = 'none';
+      navDashboard.style.display = 'inline';
+      navClient.style.display = 'inline';
+      navLogout.style.display = 'inline';
+      btnEssai.style.display = 'none';
+      navUser.style.display = 'inline';
+      userName.textContent = user.name || 'Artisan';
     } else {
-      // Déconnecté
-      if (navInscription) navInscription.style.display = 'inline';
-      if (navProfil) navProfil.style.display = 'none';
-      if (navLogout) navLogout.style.display = 'none';
-      if (navDashboard) navDashboard.style.display = 'none';
-      if (btnEssai) btnEssai.style.display = 'inline';
-      if (navUser) navUser.style.display = 'none';
+      navInscription.style.display = 'inline';
+      navDashboard.style.display = 'none';
+      navClient.style.display = 'none';
+      navLogout.style.display = 'none';
+      btnEssai.style.display = 'inline';
+      navUser.style.display = 'none';
     }
   }
 
@@ -98,7 +79,6 @@
     window.location.href = 'index.html';
   }
 
-  // Chargement du compteur d'artisans en ligne
   async function loadArtisansCount() {
     try {
       const res = await fetch(`${API_BASE}/api/stats/public`);
@@ -107,7 +87,6 @@
     } catch(e) { console.error('Erreur compteur', e); }
   }
 
-  // Initialisation
   loadUserInfo();
   loadArtisansCount();
 </script>
