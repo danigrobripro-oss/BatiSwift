@@ -2,100 +2,157 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BâtiSwift – Assistant IA pour artisans</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
-    .splash {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: var(--bg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-      animation: fadeOut 1s ease forwards;
-      animation-delay: 1.5s;
-    }
-    .splash.hidden { display: none; }
-    @keyframes fadeOut {
-      0% { opacity: 1; }
-      100% { opacity: 0; visibility: hidden; }
-    }
-    .splash svg { width: 80px; height: 80px; margin-bottom: 1rem; }
-    .splash h1 { font-size: 2rem; font-weight: 800; color: var(--text); }
-    .splash h1 span { color: var(--accent); }
-    .splash .loader {
-      width: 40px;
-      height: 40px;
-      border: 3px solid var(--border);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin-top: 1.5rem;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    /* Styles pour la nouvelle interface */
+    .hero-split { display: flex; flex-wrap: wrap; gap: 2rem; padding: 3rem 0; }
+    .hero-split .card { flex: 1; min-width: 280px; padding: 2.5rem 2rem; text-align: center; background: var(--bg-glass); backdrop-filter: blur(16px); border: 1px solid var(--border); border-radius: var(--radius-lg); transition: 0.3s; }
+    .hero-split .card:hover { border-color: var(--accent); box-shadow: 0 0 40px var(--accent-glow); transform: translateY(-4px); }
+    .hero-split .card h2 { font-size: 1.5rem; margin-bottom: 0.8rem; }
+    .hero-split .card p { color: var(--text-muted); margin-bottom: 1.5rem; }
+
+    .agent-activity { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2rem; margin-top: 2rem; }
+    .agent-activity .badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .badge-success { background: rgba(46,204,113,0.2); color: #2ecc71; }
+    .badge-warning { background: rgba(255,45,122,0.2); color: var(--accent); }
+    .badge-info { background: rgba(52,152,219,0.2); color: #3498db; }
+    .activity-item { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-item .icon { width: 40px; height: 40px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; flex-shrink: 0; }
+    .activity-item .content { flex: 1; }
+    .activity-item .content strong { display: block; }
+    .activity-item .content .time { font-size: 0.75rem; color: var(--text-muted); }
+
+    .leads-marketplace { display: grid; gap: 1.5rem; margin-top: 2rem; }
+    .lead-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; backdrop-filter: blur(8px); }
+    .lead-card .lead-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+    .lead-card .lead-header .price { font-weight: 800; color: var(--accent); font-size: 1.2rem; }
+    .lead-card .lead-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.75rem 0; }
+    .lead-card .lead-meta .badge { font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 12px; background: var(--bg-muted); color: var(--text-muted); }
+    .lead-card .lead-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
   </style>
   <script>
-    (function() {
-      var t = localStorage.getItem("batiswift-theme");
-      if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches)) {
-        document.documentElement.setAttribute("data-theme", "dark");
-      }
-    })();
+    document.addEventListener('DOMContentLoaded', function() {
+      // Les compteurs seront chargés via session.js
+    });
   </script>
 </head>
 <body>
+  <div id="header-placeholder"></div>
 
-<!-- Splash Screen -->
-<div class="splash" id="splash">
-  <svg width="80" height="80" viewBox="0 0 650 400" fill="none">
-    <defs><mask id="splash-mask"><rect width="650" height="400" fill="#fff"/><path d="M 235,195 C 285,175 335,148 385,132 C 340,152 290,182 245,202 Z" fill="#000"/></mask></defs>
-    <g fill="#FF007F"><path d="M 205,115 L 205,135 L 235,135 L 250,150 L 235,165 L 205,165 L 205,185 C 245,196 265,190 290,175 C 320,175 350,185 380,205 L 460,150 L 380,95 C 350,115 320,125 290,125 C 265,110 245,104 205,115 Z" mask="url(#splash-mask)"/></g>
-  </svg>
-  <h1>Bâti<span>Swift</span></h1>
-  <div class="loader"></div>
-</div>
+  <main>
+    <div class="container">
+      <!-- SECTION CLIENT -->
+      <section class="hero-split">
+        <div class="card">
+          <h2>🔧 Un artisan qualifié pour vos travaux en 2 minutes chrono</h2>
+          <p>Décrivez votre problème, notre IA qualifie votre demande et trouve l’artisan idéal près de chez vous.</p>
+          <a href="client.html" class="btn btn--primary btn--lg">👉 Je suis client</a>
+        </div>
+        <div class="card">
+          <h2>🛠️ L’interface vivante de votre Agent IA</h2>
+          <p>Recevez des leads qualifiés, gérez vos chantiers et suivez l’activité de l’agent en temps réel.</p>
+          <a href="artisan-dashboard.html" class="btn btn--primary btn--lg">👉 Je suis artisan</a>
+        </div>
+      </section>
 
-<div id="header-placeholder"></div>
+      <!-- SECTION AGENT EN DIRECT -->
+      <section class="agent-activity">
+        <h3 style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1.5rem;">
+          <span class="badge badge-success">● En ligne</span>
+          Activité de l’Agent IA
+        </h3>
+        <div class="activity-item">
+          <div class="icon">💬</div>
+          <div class="content">
+            <strong>Qualification en cours</strong>
+            <span style="color:var(--text-muted);">Demande de rénovation à Nantes – 3 photos reçues, surface 45m²</span>
+            <span class="time">Il y a 2 minutes</span>
+          </div>
+          <span class="badge badge-info">WhatsApp actif</span>
+        </div>
+        <div class="activity-item">
+          <div class="icon">📨</div>
+          <div class="content">
+            <strong>Relance automatique</strong>
+            <span style="color:var(--text-muted);">SMS envoyé au client pour chantier d’isolation (relance J+3)</span>
+            <span class="time">Il y a 12 minutes</span>
+          </div>
+          <span class="badge badge-success">SMS envoyé</span>
+        </div>
+        <div class="activity-item">
+          <div class="icon">📋</div>
+          <div class="content">
+            <strong>Brief technique généré</strong>
+            <span style="color:var(--text-muted);">Plomberie – Lyon 69003 – Surface 20m² – Matériaux : 10L de peinture</span>
+            <span class="time">Il y a 34 minutes</span>
+          </div>
+          <span class="badge badge-warning">IA active</span>
+        </div>
+      </section>
 
-<main>
-  <section class="hero-split container">
-    <div class="card" style="flex:1;min-width:280px;max-width:420px;padding:2.5rem 2rem;text-align:center;background:var(--bg-glass);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:var(--radius-lg);">
-      <h2 style="font-size:1.5rem;margin-bottom:0.8rem;">🔧 Besoin d’un dépannage ?</h2>
-      <p style="color:var(--text-muted);margin-bottom:1.5rem;">Décrivez votre problème, notre IA qualifie votre demande et trouve l’artisan idéal près de chez vous en moins de 10 minutes.</p>
-      <a href="client.html" class="btn btn--primary btn--lg">Je suis client</a>
+      <!-- SECTION MARKETPLACE LEADS -->
+      <section style="margin-top:3rem;">
+        <h2 style="font-size:1.8rem;font-weight:800;">🔥 Leads qualifiés par IA</h2>
+        <p style="color:var(--text-muted);margin-bottom:1.5rem;">Des chantiers vérifiés, prêts à être achetés en un clic.</p>
+        <div class="leads-marketplace">
+          <div class="lead-card">
+            <div class="lead-header">
+              <strong>Plomberie – Fuite d’eau</strong>
+              <span class="price">10 €</span>
+            </div>
+            <div class="lead-meta">
+              <span class="badge">📍 Lyon 69003</span>
+              <span class="badge">📐 Surface : 15m²</span>
+              <span class="badge">⏱️ Temps estimé : 2h</span>
+            </div>
+            <p style="color:var(--text-muted);font-size:0.9rem;">Urgence : 🚨 – Client : Jean D.</p>
+            <div class="lead-actions">
+              <button class="btn btn--primary btn--sm">🔥 Acheter le lead</button>
+              <button class="btn btn--ghost btn--sm">📄 Voir le brief technique</button>
+            </div>
+          </div>
+          <div class="lead-card">
+            <div class="lead-header">
+              <strong>Électricité – Panne tableau</strong>
+              <span class="price">10 €</span>
+            </div>
+            <div class="lead-meta">
+              <span class="badge">📍 Paris 75001</span>
+              <span class="badge">📐 Surface : 25m²</span>
+              <span class="badge">⏱️ Temps estimé : 4h</span>
+            </div>
+            <p style="color:var(--text-muted);font-size:0.9rem;">Urgence : 🚨 – Client : Marie L.</p>
+            <div class="lead-actions">
+              <button class="btn btn--primary btn--sm">🔥 Acheter le lead</button>
+              <button class="btn btn--ghost btn--sm">📄 Voir le brief technique</button>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
-    <div class="card" style="flex:1;min-width:280px;max-width:420px;padding:2.5rem 2rem;text-align:center;background:var(--bg-glass);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:var(--radius-lg);">
-      <h2 style="font-size:1.5rem;margin-bottom:0.8rem;">🛠️ Vous êtes un professionnel ?</h2>
-      <p style="color:var(--text-muted);margin-bottom:1.5rem;">Recevez des leads qualifiés, gérez vos chantiers et boostez votre activité avec notre assistant IA.</p>
-      <a href="artisan-dashboard.html" class="btn btn--primary btn--lg">Je suis pro</a>
-    </div>
-  </section>
-</main>
+  </main>
 
-<div id="footer-placeholder"></div>
+  <div id="footer-placeholder"></div>
 
-<script>
-  // Splash screen – hidden after animation
-  setTimeout(() => {
-    document.getElementById('splash').classList.add('hidden');
-  }, 2500);
-
-  // Chargement header/footer
-  fetch('header.html').then(r => r.text()).then(html => {
-    document.getElementById('header-placeholder').innerHTML = html;
-  });
-  fetch('footer.html').then(r => r.text()).then(html => {
-    document.getElementById('footer-placeholder').innerHTML = html;
-  });
-</script>
+  <script src="session.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Chargement header/footer
+      fetch('header.html').then(r => r.text()).then(html => {
+        document.getElementById('header-placeholder').innerHTML = html;
+        // Réinitialiser la session après chargement du header
+        initSession();
+      });
+      fetch('footer.html').then(r => r.text()).then(html => {
+        document.getElementById('footer-placeholder').innerHTML = html;
+      });
+    });
+  </script>
 </body>
 </html>

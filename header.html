@@ -1,92 +1,65 @@
-<!-- header.html – Header universel -->
+<!-- header.html – Barre de navigation modernisée -->
 <header class="header">
   <div class="container header__inner">
+    <!-- Logo agrandi + texte fin -->
     <a href="index.html" class="logo" aria-label="BâtiSwift accueil">
-      <svg width="50" height="50" viewBox="0 0 650 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs><mask id="header-mask"><rect width="650" height="400" fill="#ffffff" /><path d="M 235,195 C 285,175 335,148 385,132 C 340,152 290,182 245,202 Z" fill="#000000" /></mask></defs>
-        <rect width="100%" height="100%" fill="transparent" />
-        <g fill="#FF007F"><path d="M 205,115 L 205,135 L 235,135 L 250,150 L 235,165 L 205,165 L 205,185 C 245,196 265,190 290,175 C 320,175 350,185 380,205 L 460,150 L 380,95 C 350,115 320,125 290,125 C 265,110 245,104 205,115 Z" mask="url(#header-mask)"/></g>
-        <g fill="#FF007F" opacity="0.15" filter="blur(4px)"><path d="M 205,115 L 205,135 L 235,135 L 250,150 L 235,165 L 205,165 L 205,185 C 245,196 265,190 290,175 C 320,175 350,185 380,205 L 460,150 L 380,95 C 350,115 320,125 290,125 C 265,110 245,104 205,115 Z" mask="url(#header-mask)"/></g>
+      <svg width="52" height="52" viewBox="0 0 650 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <mask id="logo-mask">
+            <rect width="650" height="400" fill="#ffffff" />
+            <path d="M 235,195 C 285,175 335,148 385,132 C 340,152 290,182 245,202 Z" fill="#000000" />
+          </mask>
+        </defs>
+        <rect width="650" height="400" fill="transparent" />
+        <g fill="#FF007F">
+          <path d="M 205,115 L 205,135 L 235,135 L 250,150 L 235,165 L 205,165 L 205,185 C 245,196 265,190 290,175 C 320,175 350,185 380,205 L 460,150 L 380,95 C 350,115 320,125 290,125 C 265,110 245,104 205,115 Z" mask="url(#logo-mask)" />
+        </g>
+        <g fill="#FF007F" opacity="0.15" filter="blur(4px)">
+          <path d="M 205,115 L 205,135 L 235,135 L 250,150 L 235,165 L 205,165 L 205,185 C 245,196 265,190 290,175 C 320,175 350,185 380,205 L 460,150 L 380,95 C 350,115 320,125 290,125 C 265,110 245,104 205,115 Z" mask="url(#logo-mask)" />
+        </g>
       </svg>
-      <span style="display:inline-flex;font-size:1.2rem;font-weight:800;">Bâti<span class="logo__accent">Swift</span></span>
+      <span class="logo__text">Bâti<span class="logo__accent">Swift</span></span>
     </a>
 
+    <!-- Navigation -->
     <nav class="nav" id="main-nav">
       <a href="index.html">Accueil</a>
       <a href="tarifs.html">Tarifs</a>
-      <span id="nav-user" style="display:none;color:var(--accent);font-weight:600;margin-right:0.5rem;">Bonjour, <span id="user-name-display">Artisan</span></span>
+      
+      <!-- Éléments dynamiques (session) -->
+      <span id="nav-user" style="display:none;color:var(--accent);font-weight:500;margin-right:0.5rem;font-size:0.9rem;">
+        👋 <span id="user-name-display">Artisan</span>
+      </span>
       <a href="artisan-dashboard.html" id="nav-dashboard" style="display:none;">Espace pro</a>
       <a href="client.html" id="nav-client" style="display:none;">Mode client</a>
-      <a href="inscription.html" id="nav-inscription">Se connecter</a>
+      <a href="inscription.html" id="nav-register" style="display:inline;">S’inscrire</a>
+      <a href="login.html" id="nav-login" style="display:inline;">Se connecter</a>
       <a href="#" id="nav-logout" style="display:none;color:var(--text-muted);" onclick="logout()">Déconnexion</a>
     </nav>
 
     <div class="header__actions">
-      <span id="online-artisans" style="font-size:0.8rem;color:var(--text-muted);margin-right:0.5rem;">👷 <span id="artisans-count">0</span> en ligne</span>
+      <span id="online-artisans" style="font-size:0.8rem;color:var(--text-muted);margin-right:0.5rem;">
+        👷 <span id="artisans-count">0</span> en ligne
+      </span>
       <a href="inscription.html" class="btn btn--primary" id="btn-essai">🔥 Essayer gratuitement</a>
     </div>
   </div>
 </header>
 
+<script src="session.js"></script>
 <script>
-  const TOKEN_KEY = "batiswift-artisan-token";
-  const API_BASE = "https://agent-btp.onrender.com";
+  // Initialisation de la session au chargement
+  document.addEventListener('DOMContentLoaded', function() {
+    initSession();
+    loadArtisansCount();
+  });
 
-  async function loadUserInfo() {
-    const token = localStorage.getItem(TOKEN_KEY);
-    if (!token) { updateUI(null); return; }
-    try {
-      const res = await fetch(`${API_BASE}/api/artisan/me?token=${token}`);
-      if (!res.ok) throw new Error('Non autorisé');
-      const data = await res.json();
-      updateUI(data);
-    } catch (e) {
-      console.error('Erreur chargement profil', e);
-      localStorage.removeItem(TOKEN_KEY);
-      updateUI(null);
-    }
-  }
-
-  function updateUI(user) {
-    const navInscription = document.getElementById('nav-inscription');
-    const navDashboard = document.getElementById('nav-dashboard');
-    const navClient = document.getElementById('nav-client');
-    const navLogout = document.getElementById('nav-logout');
-    const btnEssai = document.getElementById('btn-essai');
-    const navUser = document.getElementById('nav-user');
-    const userName = document.getElementById('user-name-display');
-
-    if (user) {
-      navInscription.style.display = 'none';
-      navDashboard.style.display = 'inline';
-      navClient.style.display = 'inline';
-      navLogout.style.display = 'inline';
-      btnEssai.style.display = 'none';
-      navUser.style.display = 'inline';
-      userName.textContent = user.name || 'Artisan';
-    } else {
-      navInscription.style.display = 'inline';
-      navDashboard.style.display = 'none';
-      navClient.style.display = 'none';
-      navLogout.style.display = 'none';
-      btnEssai.style.display = 'inline';
-      navUser.style.display = 'none';
-    }
-  }
-
-  function logout() {
-    localStorage.removeItem(TOKEN_KEY);
-    window.location.href = 'index.html';
-  }
-
+  // Compteur artisans en ligne
   async function loadArtisansCount() {
     try {
-      const res = await fetch(`${API_BASE}/api/stats/public`);
+      const res = await fetch('https://agent-btp.onrender.com/api/stats/public');
       const data = await res.json();
       document.getElementById('artisans-count').textContent = data.artisans || 0;
     } catch(e) { console.error('Erreur compteur', e); }
   }
-
-  loadUserInfo();
-  loadArtisansCount();
 </script>
