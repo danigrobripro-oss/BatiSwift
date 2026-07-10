@@ -28,7 +28,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Rediriger si déjà connecté
-      if (getToken()) {
+      if (typeof getToken === 'function' && getToken()) {
         window.location.href = 'index.html';
       }
     });
@@ -128,8 +128,12 @@
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Erreur');
-        setToken(data.token);
-        window.location.href = 'index.html';
+        if (typeof setToken === 'function') {
+          setToken(data.token);
+          window.location.href = 'index.html';
+        } else {
+          document.getElementById('register-error').textContent = 'Erreur de session – rechargez la page.';
+        }
       } catch (err) {
         document.getElementById('register-error').textContent = err.message;
       } finally {
@@ -156,8 +160,12 @@
           throw new Error(err.error || 'Email non trouvé.');
         }
         const data = await res.json();
-        setToken(data.token);
-        window.location.href = 'index.html';
+        if (typeof setToken === 'function') {
+          setToken(data.token);
+          window.location.href = 'index.html';
+        } else {
+          document.getElementById('login-error').textContent = 'Erreur de session – rechargez la page.';
+        }
       } catch (err) {
         document.getElementById('login-error').textContent = err.message;
       } finally {
@@ -168,7 +176,11 @@
     // Chargement header/footer
     fetch('header.html').then(r => r.text()).then(html => {
       document.getElementById('header-placeholder').innerHTML = html;
-      initSession();
+      if (typeof initSession === 'function') {
+        initSession();
+      } else {
+        console.warn('⚠️ initSession non disponible – session.js non chargé');
+      }
     });
     fetch('footer.html').then(r => r.text()).then(html => {
       document.getElementById('footer-placeholder').innerHTML = html;

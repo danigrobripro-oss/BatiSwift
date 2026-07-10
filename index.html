@@ -37,6 +37,7 @@
     .lead-card .lead-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
   </style>
   <script>
+    // Vérification avant de charger le reste
     document.addEventListener('DOMContentLoaded', function() {
       // Les compteurs seront chargés via session.js
     });
@@ -114,7 +115,7 @@
             <p style="color:var(--text-muted);font-size:0.9rem;">Urgence : 🚨 – Client : Jean D.</p>
             <div class="lead-actions">
               <button class="btn btn--primary btn--sm">🔥 Acheter le lead</button>
-              <button class="btn btn--ghost btn--sm">📄 Voir le brief technique</button>
+              <button class="btn btn--ghost btn--sm">📄 Voir le brief teknik</button>
             </div>
           </div>
           <div class="lead-card">
@@ -130,7 +131,7 @@
             <p style="color:var(--text-muted);font-size:0.9rem;">Urgence : 🚨 – Client : Marie L.</p>
             <div class="lead-actions">
               <button class="btn btn--primary btn--sm">🔥 Acheter le lead</button>
-              <button class="btn btn--ghost btn--sm">📄 Voir le brief technique</button>
+              <button class="btn btn--ghost btn--sm">📄 Voir le brief teknik</button>
             </div>
           </div>
         </div>
@@ -146,8 +147,12 @@
       // Chargement header/footer
       fetch('header.html').then(r => r.text()).then(html => {
         document.getElementById('header-placeholder').innerHTML = html;
-        // Réinitialiser la session après chargement du header
-        initSession();
+        // Vérifier que initSession est définie avant de l'appeler
+        if (typeof initSession === 'function') {
+          initSession();
+        } else {
+          console.warn('⚠️ initSession non disponible – session.js non chargé');
+        }
       });
       fetch('footer.html').then(r => r.text()).then(html => {
         document.getElementById('footer-placeholder').innerHTML = html;

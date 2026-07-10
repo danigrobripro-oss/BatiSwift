@@ -50,7 +50,11 @@
 <script>
   // Initialisation de la session au chargement
   document.addEventListener('DOMContentLoaded', function() {
-    initSession();
+    if (typeof initSession === 'function') {
+      initSession();
+    } else {
+      console.warn('⚠️ initSession non disponible – session.js non chargé');
+    }
     loadArtisansCount();
   });
 

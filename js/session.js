@@ -1,5 +1,4 @@
-// session.js – Gestion de session et mise à jour de l'interface
-
+// session.js – Gestion de session persistante pour BâtiSwift
 const TOKEN_KEY = "batiswift-artisan-token";
 const API_BASE = "https://agent-btp.onrender.com";
 
@@ -44,7 +43,6 @@ async function fetchUserInfo() {
 function updateUI(user) {
     const isLoggedIn = !!user;
     
-    // Éléments à masquer/afficher
     const loginBtn = document.getElementById('nav-login');
     const registerBtn = document.getElementById('nav-register');
     const logoutBtn = document.getElementById('nav-logout');
@@ -54,7 +52,6 @@ function updateUI(user) {
     const userNameSpan = document.getElementById('user-name-display');
 
     if (isLoggedIn) {
-        // Connecté
         if (loginBtn) loginBtn.style.display = 'none';
         if (registerBtn) registerBtn.style.display = 'none';
         if (logoutBtn) logoutBtn.style.display = 'inline';
@@ -65,7 +62,6 @@ function updateUI(user) {
             if (userNameSpan) userNameSpan.textContent = user.name || 'Artisan';
         }
     } else {
-        // Déconnecté
         if (loginBtn) loginBtn.style.display = 'inline';
         if (registerBtn) registerBtn.style.display = 'inline';
         if (logoutBtn) logoutBtn.style.display = 'none';
