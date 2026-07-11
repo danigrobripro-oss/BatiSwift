@@ -1,8 +1,7 @@
-// session.js – Gestion de session persistante pour BâtiSwift
+// session.js – Gestion de session persistante
 const TOKEN_KEY = "batiswift-artisan-token";
 const API_BASE = "https://agent-btp.onrender.com";
 
-// ========== GESTION DE SESSION ==========
 function getToken() {
     return localStorage.getItem(TOKEN_KEY);
 }
@@ -24,7 +23,6 @@ function logout() {
     window.location.href = 'index.html';
 }
 
-// ========== RÉCUPÉRATION DES INFOS UTILISATEUR ==========
 async function fetchUserInfo() {
     const token = getToken();
     if (!token) return null;
@@ -39,10 +37,8 @@ async function fetchUserInfo() {
     }
 }
 
-// ========== MISE À JOUR DE L'INTERFACE ==========
 function updateUI(user) {
     const isLoggedIn = !!user;
-    
     const loginBtn = document.getElementById('nav-login');
     const registerBtn = document.getElementById('nav-register');
     const logoutBtn = document.getElementById('nav-logout');
@@ -71,7 +67,6 @@ function updateUI(user) {
     }
 }
 
-// ========== INITIALISATION ==========
 async function initSession() {
     const token = getToken();
     if (!token) {
@@ -82,7 +77,6 @@ async function initSession() {
     updateUI(user);
 }
 
-// Exposer les fonctions globalement
 window.initSession = initSession;
 window.logout = logout;
 window.updateUI = updateUI;

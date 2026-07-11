@@ -25,15 +25,14 @@
     <nav class="nav" id="main-nav">
       <a href="index.html">Accueil</a>
       <a href="tarifs.html">Tarifs</a>
-      
-      <!-- Éléments dynamiques (session) -->
+      <a href="client.html">Client</a>
+      <a href="artisan.html">Artisan</a>
       <span id="nav-user" style="display:none;color:var(--accent);font-weight:500;margin-right:0.5rem;font-size:0.9rem;">
         👋 <span id="user-name-display">Artisan</span>
       </span>
-      <a href="artisan-dashboard.html" id="nav-dashboard" style="display:none;">Espace pro</a>
-      <a href="client.html" id="nav-client" style="display:none;">Mode client</a>
+      <a href="artisan.html" id="nav-dashboard" style="display:none;">Dashboard</a>
       <a href="inscription.html" id="nav-register" style="display:inline;">S’inscrire</a>
-      <a href="login.html" id="nav-login" style="display:inline;">Se connecter</a>
+      <a href="#" id="nav-login" style="display:inline;" onclick="window.location.href='inscription.html'">Se connecter</a>
       <a href="#" id="nav-logout" style="display:none;color:var(--text-muted);" onclick="logout()">Déconnexion</a>
     </nav>
 
@@ -48,7 +47,6 @@
 
 <script src="session.js"></script>
 <script>
-  // Initialisation de la session au chargement
   document.addEventListener('DOMContentLoaded', function() {
     if (typeof initSession === 'function') {
       initSession();
@@ -58,7 +56,6 @@
     loadArtisansCount();
   });
 
-  // Compteur artisans en ligne
   async function loadArtisansCount() {
     try {
       const res = await fetch('https://agent-btp.onrender.com/api/stats/public');

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Espace Artisan – BâtiSwift</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .dashboard { padding: 2rem 0; }
+    .activity-feed { background: var(--bg-glass); backdrop-filter: blur(16px); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 2rem; }
+    .activity-item { display: flex; gap: 1rem; padding: 0.8rem 0; border-bottom: 1px solid var(--border); }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-item .badge { align-self: center; }
+    .leads-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+    .lead-card { background: var(--bg-glass); backdrop-filter: blur(16px); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; transition: 0.3s; }
+    .lead-card:hover { border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow); }
+    .lead-card .price { font-weight: 800; color: var(--accent); font-size: 1.3rem; }
+    .lead-card .badge-budget { background: rgba(46,204,113,0.2); color: #2ecc71; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem; }
+    .lead-card .btn--sm { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
+  </style>
+  <script src="session.js"></script>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main class="container dashboard">
+    <h1 style="font-size:1.8rem;">🛠️ Tableau de bord artisan</h1>
+
+    <!-- Activité de l'agent en direct -->
+    <section class="activity-feed">
+      <h3 style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
+        <span class="badge badge-success">● En ligne</span> Activité de l’Agent IA
+      </h3>
+      <div id="activity-list">
+        <div class="activity-item">
+          <span class="badge badge-info">Qualification</span>
+          <span>Demande de rénovation à Nantes – 3 photos reçues, surface 45m²</span>
+          <span style="font-size:0.75rem;color:var(--text-muted);">Il y a 2 min</span>
+        </div>
+        <div class="activity-item">
+          <span class="badge badge-success">SMS envoyé</span>
+          <span>Relance automatique pour chantier d’isolation</span>
+          <span style="font-size:0.75rem;color:var(--text-muted);">Il y a 12 min</span>
+        </div>
+        <div class="activity-item">
+          <span class="badge badge-warning">IA active</span>
+          <span>Brief technique généré – Plomberie Lyon 69003</span>
+          <span style="font-size:0.75rem;color:var(--text-muted);">Il y a 34 min</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marketplace de leads -->
+    <section>
+      <h2 style="font-size:1.5rem;margin-bottom:1rem;">🔥 Leads qualifiés par IA</h2>
+      <div class="leads-grid" id="leads-container">
+        <!-- Les leads seront chargés dynamiquement -->
+        <p style="color:var(--text-muted);">Chargement...</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    const API_BASE = "https://agent-btp.onrender.com";
+
+    async function loadLeads() {
+      try {
+        const res = await fetch(`${API_BASE}/api/leads/available`);
+        const leads = await res.json();
+        const container = document.getElementById('leads-container');
+        if (!leads.length) {
+          container.innerHTML = '<p style="color:var(--text-muted);">Aucun lead disponible pour le moment.</p>';
+          return;
+        }
+        container.innerHTML = leads.map(lead => `
+          <div class="lead-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <strong>${lead.trade_type || 'Non précisé'}</strong>
+              <span class="price">10 €</span>
+            </div>
+            <div style="margin:0.5rem 0;display:flex;gap:0.5rem;flex-wrap:wrap;">
+              <span class="badge">📍 ${lead.location_city || '—'}</span>
+              <span class="badge-budget">✅ Budget vérifié</span>
+            </div>
+            <p style="color:var(--text-muted);font-size:0.9rem;">${lead.description ? lead.description.substring(0,80)+'...' : ''}</p>
+            <div style="margin-top:1rem;display:flex;gap:0.5rem;">
+              <button class="btn btn--primary btn--sm" onclick="purchaseLead(${lead.id})">🔥 Acheter ce lead</button>
+              <button class="btn btn--ghost btn--sm">📄 Brief</button>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        document.getElementById('leads-container').innerHTML = '<p style="color:var(--accent);">Erreur de chargement.</p>';
+      }
+    }
+
+    async function purchaseLead(leadId) {
+      const token = getToken();
+      if (!token) {
+        alert('Veuillez vous connecter pour acheter un lead.');
+        window.location.href = 'inscription.html';
+        return;
+      }
+      try {
+        const res = await fetch(`${API_BASE}/api/leads/purchase?token=${token}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lead_id: leadId })
+        });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert('Erreur : ' + (data.error || 'Impossible de créer la session de paiement.'));
+        }
+      } catch (e) {
+        alert('Erreur réseau.');
+      }
+    }
+
+    // Chargement header/footer et leads
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch('header.html').then(r => r.text()).then(html => {
+        document.getElementById('header-placeholder').innerHTML = html;
+        if (typeof initSession === 'function') initSession();
+      });
+      fetch('footer.html').then(r => r.text()).then(html => {
+        document.getElementById('footer-placeholder').innerHTML = html;
+      });
+      loadLeads();
+    });
+  </script>
+</body>
+</html>
