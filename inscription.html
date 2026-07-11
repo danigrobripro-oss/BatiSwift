@@ -1,189 +1,99 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Inscription — BâtiSwift</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    .register-card {
-      max-width: 560px;
-      margin: 2rem auto;
-      background: var(--bg-glass);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 2.5rem;
-      backdrop-filter: blur(16px);
-    }
-    .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
-    .tab-btn { padding: 0.6rem 1.2rem; border: none; background: none; color: var(--text-muted); font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; transition: 0.2s; }
-    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
-  </style>
-  <script src="session.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Rediriger si déjà connecté
-      if (typeof getToken === 'function' && getToken()) {
-        window.location.href = 'index.html';
-      }
-    });
-  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscription Artisan – BâtiSwift</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div id="header-placeholder"></div>
+  <div id="page-loader" class="page-loader"><div class="spinner spinner-dark" style="width:40px; height:40px;"></div></div>
+  <header>
+    <div class="container">
+      <a href="index.html" class="nav-logo"><img src="assets/logo.svg" alt="BâtiSwift" class="logo-svg"> BâtiSwift</a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="connexion.html">Connexion</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-  <main class="container">
-    <div class="register-card">
-      <h1 style="font-size:1.8rem;">👷 Espace artisan</h1>
-      <p style="color:var(--text-muted);margin-bottom:1.5rem;">Inscrivez-vous ou connectez-vous à votre espace BâtiSwift.</p>
-
-      <div class="tabs" id="auth-tabs">
-        <button class="tab-btn active" data-tab="register">S’inscrire</button>
-        <button class="tab-btn" data-tab="login">Se connecter</button>
-      </div>
-
-      <!-- Panel Inscription -->
-      <div id="panel-register" class="tab-panel active">
-        <form id="register-form">
+  <main>
+    <section class="section" style="padding-top: 120px;">
+      <div class="container-xs">
+        <h2 class="text-center reveal">Inscription artisan</h2>
+        <form id="register-form" class="glass-card mt-lg reveal reveal-delay-1">
           <div class="form-group">
-            <label>Nom / raison sociale *</label>
-            <input type="text" id="art-name" placeholder="SARAS Plomberie" required />
+            <label class="form-label">Nom complet <span class="req">*</span></label>
+            <input type="text" id="reg-nom" class="form-control" required>
           </div>
           <div class="form-group">
-            <label>Email professionnel *</label>
-            <input type="email" id="art-email" placeholder="contact@artisan.fr" required />
+            <label class="form-label">E-mail <span class="req">*</span></label>
+            <input type="email" id="reg-email" class="form-control" required>
           </div>
           <div class="form-group">
-            <label>Téléphone</label>
-            <input type="tel" id="art-phone" placeholder="0612345678" />
+            <label class="form-label">Mot de passe <span class="req">*</span> (6 caractères min)</label>
+            <input type="password" id="reg-password" class="form-control" minlength="6" required>
           </div>
           <div class="form-group">
-            <label>Métier principal</label>
-            <select id="art-trade">
-              <option value="">Sélectionner</option>
-              <option>Plomberie</option><option>Électricité</option><option>Peinture</option>
-              <option>Maçonnerie</option><option>Chauffage</option><option>Serrurerie</option><option>Autre</option>
+            <label class="form-label">Téléphone <span class="req">*</span></label>
+            <input type="tel" id="reg-telephone" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ville <span class="req">*</span></label>
+            <input type="text" id="reg-ville" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Rayon d'intervention (km)</label>
+            <input type="number" id="reg-rayon" class="form-control" value="30" min="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Spécialité</label>
+            <select id="reg-specialite" class="form-control">
+              <option value="">Non spécifié</option>
+              <option value="plomberie">Plomberie</option>
+              <option value="electricite">Électricité</option>
+              <option value="peinture">Peinture</option>
+              <option value="maconnerie">Maçonnerie</option>
+              <option value="chauffage">Chauffage</option>
+              <option value="serrurerie">Serrurerie</option>
+              <option value="autre">Autre</option>
             </select>
           </div>
-          <div class="form-group">
-            <label>Zone d’intervention (ville/CP)</label>
-            <input type="text" id="art-zone" placeholder="Ex: Lyon, 69003" />
-          </div>
-          <button type="submit" class="btn btn--primary btn--block">S’inscrire</button>
-          <div id="register-error" style="color:var(--accent);margin-top:0.5rem;"></div>
+          <div id="register-error" class="alert alert-danger hidden"></div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg">Créer mon compte</button>
         </form>
+        <p class="text-center mt-md">Déjà inscrit ? <a href="connexion.html">Connectez-vous</a></p>
       </div>
-
-      <!-- Panel Connexion -->
-      <div id="panel-login" class="tab-panel">
-        <form id="login-form">
-          <div class="form-group">
-            <label>Email professionnel *</label>
-            <input type="email" id="login-email" placeholder="contact@artisan.fr" required />
-          </div>
-          <button type="submit" class="btn btn--primary btn--block">Se connecter</button>
-          <div id="login-error" style="color:var(--accent);margin-top:0.5rem;"></div>
-        </form>
-      </div>
-    </div>
+    </section>
   </main>
 
-  <div id="footer-placeholder"></div>
-
+  <script src="js/config.js"></script>
+  <script src="js/session.js"></script>
+  <script src="js/main.js"></script>
   <script>
-    const API_BASE = "https://agent-btp.onrender.com";
-
-    // ====== GESTION DES ONGLETS ======
-    document.querySelectorAll('.tab-btn').forEach(tab => {
-      tab.addEventListener('click', function() {
-        document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
-        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-        document.getElementById('panel-' + this.dataset.tab).classList.add('active');
-      });
-    });
-
-    // ====== INSCRIPTION ======
-    document.getElementById('register-form').addEventListener('submit', async function(e) {
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const name = document.getElementById('art-name').value.trim();
-      const email = document.getElementById('art-email').value.trim();
-      const phone = document.getElementById('art-phone').value.trim();
-      const trade = document.getElementById('art-trade').value;
-      const zone = document.getElementById('art-zone').value.trim();
-      if (!name || !email) { document.getElementById('register-error').textContent = 'Nom et email obligatoires.'; return; }
-      document.getElementById('register-error').textContent = '';
-      const btn = this.querySelector('button[type="submit"]');
-      btn.disabled = true; btn.textContent = 'Inscription...';
+      const payload = {
+        nom: document.getElementById('reg-nom').value,
+        email: document.getElementById('reg-email').value,
+        password: document.getElementById('reg-password').value,
+        telephone: document.getElementById('reg-telephone').value,
+        ville: document.getElementById('reg-ville').value,
+        rayon: parseInt(document.getElementById('reg-rayon').value) || 30,
+        specialite: document.getElementById('reg-specialite').value
+      };
+      const errorDiv = document.getElementById('register-error');
+      errorDiv.classList.add('hidden');
       try {
-        const res = await fetch(`${API_BASE}/api/artisan/register`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, phone, trade, zone })
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Erreur');
-        if (typeof setToken === 'function') {
-          setToken(data.token);
-          window.location.href = 'index.html';
-        } else {
-          document.getElementById('register-error').textContent = 'Erreur de session – rechargez la page.';
-        }
-      } catch (err) {
-        document.getElementById('register-error').textContent = err.message;
-      } finally {
-        btn.disabled = false; btn.textContent = "S'inscrire";
+        await register(payload);
+        window.location.href = 'dashboard.html';
+      } catch(err) {
+        errorDiv.textContent = err.message;
+        errorDiv.classList.remove('hidden');
       }
-    });
-
-    // ====== CONNEXION ======
-    document.getElementById('login-form').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const email = document.getElementById('login-email').value.trim();
-      if (!email) { document.getElementById('login-error').textContent = 'Email obligatoire.'; return; }
-      document.getElementById('login-error').textContent = '';
-      const btn = this.querySelector('button[type="submit"]');
-      btn.disabled = true; btn.textContent = 'Connexion...';
-      try {
-        const res = await fetch(`${API_BASE}/api/artisan/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
-        });
-        if (!res.ok) {
-          const err = await res.json();
-          throw new Error(err.error || 'Email non trouvé.');
-        }
-        const data = await res.json();
-        if (typeof setToken === 'function') {
-          setToken(data.token);
-          window.location.href = 'index.html';
-        } else {
-          document.getElementById('login-error').textContent = 'Erreur de session – rechargez la page.';
-        }
-      } catch (err) {
-        document.getElementById('login-error').textContent = err.message;
-      } finally {
-        btn.disabled = false; btn.textContent = "Se connecter";
-      }
-    });
-
-    // Chargement header/footer
-    fetch('header.html').then(r => r.text()).then(html => {
-      document.getElementById('header-placeholder').innerHTML = html;
-      if (typeof initSession === 'function') {
-        initSession();
-      } else {
-        console.warn('⚠️ initSession non disponible – session.js non chargé');
-      }
-    });
-    fetch('footer.html').then(r => r.text()).then(html => {
-      document.getElementById('footer-placeholder').innerHTML = html;
     });
   </script>
 </body>

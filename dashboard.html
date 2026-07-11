@@ -1,67 +1,56 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="robots" content="noindex" />
-  <title>Dashboard – BâtiSwift</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-  <script>
-    (function() {
-      var t = localStorage.getItem("batiswift-theme");
-      if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches)) {
-        document.documentElement.setAttribute("data-theme", "dark");
-      }
-    })();
-  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tableau de bord – BâtiSwift</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
-
-<div id="header-placeholder"></div>
-
-<main class="container">
-  <div class="dashboard-layout">
-    <aside class="dashboard-sidebar">
-      <h3 style="margin-bottom:1.5rem;font-size:1rem;">📊 Menu</h3>
-      <a href="#"><strong>🏠 Accueil</strong></a>
-      <a href="#">📋 Leads disponibles</a>
-      <a href="#">📦 Mes achats</a>
-      <a href="#">⚙️ Paramètres</a>
-      <a href="artisan-home.html">🚪 Retour espace pro</a>
-    </aside>
-    <div class="dashboard-main">
-      <h2 style="font-size:1.4rem;margin-bottom:1rem;">🔥 Leads disponibles</h2>
-      <p style="color:var(--text-muted);margin-bottom:1rem;">Les leads floutés sont en exclusivité pour les abonnés (10 min).</p>
-      <div class="lead-item lead--blurred">
-        <strong>Plomberie</strong> — Lyon 69003<br>
-        <span style="color:var(--text-muted);">Urgence : 🚨</span>
-      </div>
-      <div class="lead-item">
-        <strong>Électricité</strong> — Paris 75001<br>
-        <span style="color:var(--text-muted);">Urgence : 📅</span>
-        <button class="btn btn--primary btn--sm" style="margin-top:0.5rem;">🔥 Acheter (15€)</button>
-      </div>
-      <div class="lead-item lead--blurred">
-        <strong>Peinture</strong> — Marseille 13001<br>
-        <span style="color:var(--text-muted);">Devis : 📅</span>
+  <div id="page-loader" class="page-loader"><div class="spinner spinner-dark" style="width:40px; height:40px;"></div></div>
+  <header>
+    <div class="container">
+      <a href="index.html" class="nav-logo"><img src="assets/logo.svg" alt="BâtiSwift" class="logo-svg"> BâtiSwift</a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="#" id="nav-username"></a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <button id="btn-logout" class="btn btn-secondary btn-sm">Déconnexion</button>
       </div>
     </div>
-  </div>
-</main>
+  </header>
 
-<div id="footer-placeholder"></div>
+  <main>
+    <section class="section-sm" style="padding-top: 100px;">
+      <div class="container">
+        <h2 class="reveal">Leads disponibles</h2>
+        <div id="available-leads" class="grid-3 mt-md"></div>
+        
+        <h2 class="mt-xl reveal">Mes leads achetés</h2>
+        <div id="purchased-leads" class="grid-2 mt-md"></div>
+      </div>
+    </section>
+  </main>
 
-<script>
-  fetch('header.html').then(r => r.text()).then(html => {
-    document.getElementById('header-placeholder').innerHTML = html;
-  });
-  fetch('footer.html').then(r => r.text()).then(html => {
-    document.getElementById('footer-placeholder').innerHTML = html;
-  });
-</script>
-
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/session.js"></script>
+  <script src="js/artisan.js"></script>
+  <script>
+    (async function() {
+      await checkSession();
+      if (!currentUser) {
+        window.location.href = 'connexion.html';
+        return;
+      }
+      document.getElementById('nav-username').textContent = currentUser.nom || 'Artisan';
+      document.getElementById('btn-logout').addEventListener('click', logout);
+      loadArtisanLeads();
+    })();
+  </script>
 </body>
 </html>

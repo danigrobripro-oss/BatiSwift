@@ -1,83 +1,62 @@
-// session.js – Gestion de session persistante
-const TOKEN_KEY = "batiswift-artisan-token";
-const API_BASE = "https://agent-btp.onrender.com";
+// BâtiSwift — Gestion de l'authentification et de la session
 
-function getToken() {
-    return localStorage.getItem(TOKEN_KEY);
-}
+let currentUser = null;   // { id, nom, email, telephone, ville, ... }
 
-function setToken(token) {
-    if (token) {
-        localStorage.setItem(TOKEN_KEY, token);
-    } else {
-        localStorage.removeItem(TOKEN_KEY);
+async function checkSession() {
+  try {
+    const res = await fetch(`${API_BASE}/api/me`, { credentials: 'include' });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.authenticated && data.artisan) {
+        currentUser = data.artisan;
+        return currentUser;
+      }
     }
+  } catch (e) { /* ignore */ }
+  currentUser = null;
+  return null;
 }
 
 function isLoggedIn() {
-    return !!getToken();
+  return currentUser !== null;
 }
 
-function logout() {
-    setToken(null);
-    window.location.href = 'index.html';
+function requireAuth() {
+  if (!isLoggedIn()) {
+    window.location.href = 'connexion.html';
+    return false;
+  }
+  return true;
 }
 
-async function fetchUserInfo() {
-    const token = getToken();
-    if (!token) return null;
-    try {
-        const res = await fetch(`${API_BASE}/api/artisan/me?token=${token}`);
-        if (!res.ok) throw new Error('Non autorisé');
-        return await res.json();
-    } catch (e) {
-        console.error('Erreur chargement profil', e);
-        setToken(null);
-        return null;
-    }
+async function login(email, password) {
+  const res = await fetch(`${API_BASE}/api/artisan/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+    credentials: 'include'
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Erreur de connexion');
+  currentUser = data.artisan;
+  return data;
 }
 
-function updateUI(user) {
-    const isLoggedIn = !!user;
-    const loginBtn = document.getElementById('nav-login');
-    const registerBtn = document.getElementById('nav-register');
-    const logoutBtn = document.getElementById('nav-logout');
-    const dashboardBtn = document.getElementById('nav-dashboard');
-    const clientBtn = document.getElementById('nav-client');
-    const userDisplay = document.getElementById('nav-user');
-    const userNameSpan = document.getElementById('user-name-display');
-
-    if (isLoggedIn) {
-        if (loginBtn) loginBtn.style.display = 'none';
-        if (registerBtn) registerBtn.style.display = 'none';
-        if (logoutBtn) logoutBtn.style.display = 'inline';
-        if (dashboardBtn) dashboardBtn.style.display = 'inline';
-        if (clientBtn) clientBtn.style.display = 'inline';
-        if (userDisplay) {
-            userDisplay.style.display = 'inline';
-            if (userNameSpan) userNameSpan.textContent = user.name || 'Artisan';
-        }
-    } else {
-        if (loginBtn) loginBtn.style.display = 'inline';
-        if (registerBtn) registerBtn.style.display = 'inline';
-        if (logoutBtn) logoutBtn.style.display = 'none';
-        if (dashboardBtn) dashboardBtn.style.display = 'none';
-        if (clientBtn) clientBtn.style.display = 'none';
-        if (userDisplay) userDisplay.style.display = 'none';
-    }
+async function register(formData) {
+  const res = await fetch(`${API_BASE}/api/artisan/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(formData),
+    credentials: 'include'
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Erreur d\'inscription');
+  currentUser = data.artisan;
+  return data;
 }
 
-async function initSession() {
-    const token = getToken();
-    if (!token) {
-        updateUI(null);
-        return;
-    }
-    const user = await fetchUserInfo();
-    updateUI(user);
+async function logout() {
+  await fetch(`${API_BASE}/api/artisan/logout`, { method: 'POST', credentials: 'include' });
+  currentUser = null;
+  window.location.href = 'index.html';
 }
-
-window.initSession = initSession;
-window.logout = logout;
-window.updateUI = updateUI;
-window.getToken = getToken;
