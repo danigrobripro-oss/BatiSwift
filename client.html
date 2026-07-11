@@ -3,112 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Client – BâtiSwift</title>
+  <title>BâtiSwift – Décrivez votre projet</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <link rel="stylesheet" href="style.css" />
-  <style>
-    .client-card { max-width: 600px; margin: 2rem auto; background: var(--bg-glass); backdrop-filter: blur(16px); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2.5rem; }
-    .form-group { margin-bottom: 1.5rem; }
-    label { display: block; font-weight: 600; margin-bottom: 0.4rem; }
-    input, select, textarea { width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--text); }
-    textarea { min-height: 120px; resize: vertical; }
-    .btn--block { width: 100%; }
-    .alert { padding: 1rem; border-radius: var(--radius); margin-top: 1rem; }
-    .alert-error { background: rgba(255,0,0,0.1); color: #ff4444; border: 1px solid #ff4444; }
-    .alert-success { background: rgba(46,204,113,0.1); color: #2ecc71; border: 1px solid #2ecc71; }
-  </style>
-  <script src="session.js"></script>
 </head>
 <body>
-  <div id="header-placeholder"></div>
-
-  <main class="container">
-    <div class="client-card">
-      <h1 style="font-size:1.8rem;">🔧 Trouver un artisan en 2 minutes</h1>
-      <p style="color:var(--text-muted);margin-bottom:1.5rem;">Décrivez votre besoin, notre IA qualifie votre demande et vous met en relation avec l’artisan idéal.</p>
-
-      <form id="client-form">
-        <div class="form-group">
-          <label>Quel est votre problème ? *</label>
-          <textarea id="client-description" placeholder="Ex: Fuite d’eau sous l’évier, salle de bain à rénover..." required></textarea>
-        </div>
-        <div class="form-group">
-          <label>Localisation *</label>
-          <input type="text" id="client-location" placeholder="Ville, code postal" required />
-        </div>
-        <div class="form-group">
-          <label>Budget estimé (€) *</label>
-          <input type="number" id="client-budget" placeholder="Ex: 500" min="0" required />
-        </div>
-        <div class="form-group">
-          <label>Type de travaux (optionnel)</label>
-          <select id="client-trade">
-            <option value="">Sélectionner</option>
-            <option>Plomberie</option><option>Électricité</option><option>Peinture</option>
-            <option>Maçonnerie</option><option>Chauffage</option><option>Serrurerie</option><option>Autre</option>
-          </select>
-        </div>
-        <button type="submit" class="btn btn--primary btn--block">Envoyer ma demande</button>
-      </form>
-
-      <div id="client-response" style="margin-top:1.5rem;"></div>
+  <!-- ===== HEADER ===== -->
+  <header>
+    <div class="container">
+      <div class="logo">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="40" height="40" rx="8" fill="#2B2B2B" />
+          <path d="M12 14L20 22L28 14" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M12 22L20 30L28 22" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span>BâtiSwift</span>
+      </div>
+      <nav class="nav-links">
+        <a href="index.html"><i class="fas fa-arrow-left"></i> Accueil</a>
+      </nav>
     </div>
-  </main>
+  </header>
 
-  <div id="footer-placeholder"></div>
+  <!-- ===== CHAT ===== -->
+  <div class="container">
+    <div class="chat-container glass">
+      <h2 style="text-align:center; margin-bottom: var(--spacing-sm);">Décrivez votre projet</h2>
+      <div id="chat-messages" class="chat-messages">
+        <!-- Les messages s'affichent ici -->
+        <div class="message bot">Bonjour ! Décrivez-moi votre projet de rénovation ou construction.</div>
+      </div>
+      <form id="chat-form" class="chat-input">
+        <textarea id="client-message" rows="2" placeholder="Ex : Rénovation complète de salle de bain, 10m², à Paris..." required></textarea>
+        <button type="submit" id="send-btn">Envoyer</button>
+      </form>
+    </div>
+  </div>
 
-  <script>
-    const API_BASE = "https://agent-btp.onrender.com";
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="container">
+      <p>© 2026 BâtiSwift – <a href="artisan.html">Espace Artisan</a></p>
+    </div>
+  </footer>
 
-    document.getElementById('client-form').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const description = document.getElementById('client-description').value.trim();
-      const location = document.getElementById('client-location').value.trim();
-      const budget = parseInt(document.getElementById('client-budget').value.trim());
-      const trade = document.getElementById('client-trade').value;
-
-      if (!description || !location || isNaN(budget)) {
-        document.getElementById('client-response').innerHTML = '<div class="alert alert-error">Veuillez remplir tous les champs obligatoires.</div>';
-        return;
-      }
-
-      const btn = this.querySelector('button[type="submit"]');
-      btn.disabled = true; btn.textContent = 'Envoi en cours...';
-      const responseDiv = document.getElementById('client-response');
-      responseDiv.innerHTML = '';
-
-      try {
-        // Ici, on appelle une route /api/client/request qui fera la qualification IA
-        const res = await fetch(`${API_BASE}/api/client/request`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ description, location, budget, trade })
-        });
-        const data = await res.json();
-        if (res.ok) {
-          responseDiv.innerHTML = `<div class="alert alert-success">✅ ${data.message || 'Demande envoyée ! Un artisan vous contactera bientôt.'}</div>`;
-        } else {
-          responseDiv.innerHTML = `<div class="alert alert-error">❌ ${data.error || 'Erreur lors de l’envoi.'}</div>`;
-        }
-      } catch (err) {
-        responseDiv.innerHTML = `<div class="alert alert-error">❌ Erreur de connexion au serveur.</div>`;
-      } finally {
-        btn.disabled = false; btn.textContent = 'Envoyer ma demande';
-      }
-    });
-
-    // Chargement header/footer
-    document.addEventListener('DOMContentLoaded', function() {
-      fetch('header.html').then(r => r.text()).then(html => {
-        document.getElementById('header-placeholder').innerHTML = html;
-        if (typeof initSession === 'function') initSession();
-      });
-      fetch('footer.html').then(r => r.text()).then(html => {
-        document.getElementById('footer-placeholder').innerHTML = html;
-      });
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>

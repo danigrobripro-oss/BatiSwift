@@ -3,51 +3,72 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BâtiSwift – Assistant IA pour artisans</title>
+  <title>BâtiSwift – Devis BTP en un clic</title>
+  <!-- Google Fonts & Font Awesome (pour icônes) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <link rel="stylesheet" href="style.css" />
-  <style>
-    .hero-split { display: flex; flex-wrap: wrap; gap: 2rem; padding: 3rem 0; justify-content: center; }
-    .hero-split .card { flex: 1; min-width: 280px; max-width: 420px; padding: 2.5rem 2rem; text-align: center; background: var(--bg-glass); backdrop-filter: blur(16px); border: 1px solid var(--border); border-radius: var(--radius-lg); transition: 0.3s; }
-    .hero-split .card:hover { border-color: var(--accent); box-shadow: 0 0 40px var(--accent-glow); transform: translateY(-4px); }
-    .btn--lg { padding: 1rem 2rem; font-size: 1.1rem; }
-  </style>
-  <script src="session.js"></script>
 </head>
 <body>
-  <div id="header-placeholder"></div>
-
-  <main>
+  <!-- ===== HEADER ===== -->
+  <header>
     <div class="container">
-      <section class="hero-split">
-        <div class="card">
-          <h2>🔧 Trouver un artisan en 2 minutes</h2>
-          <p>Décrivez votre problème, notre IA qualifie votre demande et vous met en relation avec l’artisan idéal.</p>
-          <a href="client.html" class="btn btn--primary btn--lg">👉 Je suis client</a>
-        </div>
-        <div class="card">
-          <h2>🛠️ L’interface vivante de votre Agent IA</h2>
-          <p>Recevez des leads qualifiés, gérez vos chantiers et suivez l’activité de l’agent en temps réel.</p>
-          <a href="artisan.html" class="btn btn--primary btn--lg">👉 Je suis artisan</a>
-        </div>
-      </section>
+      <div class="logo">
+        <!-- Logo SVG inline (minimal) -->
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="40" height="40" rx="8" fill="#2B2B2B" />
+          <path d="M12 14L20 22L28 14" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M12 22L20 30L28 22" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span>BâtiSwift</span>
+      </div>
+      <nav class="nav-links">
+        <a href="artisan.html" class="btn-ghost btn-sm">Espace Artisan</a>
+      </nav>
     </div>
-  </main>
+  </header>
 
-  <div id="footer-placeholder"></div>
+  <!-- ===== HERO ===== -->
+  <section class="hero container">
+    <h1>Votre devis BTP<br />en un échange</h1>
+    <p>Décrivez votre projet, recevez des offres d’artisans qualifiés près de chez vous.</p>
+    <div class="actions">
+      <a href="client.html" class="btn-primary">Obtenir un devis</a>
+      <a href="artisan.html" class="btn-secondary">Rejoindre la plateforme</a>
+    </div>
+  </section>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      fetch('header.html').then(r => r.text()).then(html => {
-        document.getElementById('header-placeholder').innerHTML = html;
-        if (typeof initSession === 'function') initSession();
-      });
-      fetch('footer.html').then(r => r.text()).then(html => {
-        document.getElementById('footer-placeholder').innerHTML = html;
-      });
-    });
-  </script>
+  <!-- ===== FEATURES ===== -->
+  <div class="container">
+    <div class="features">
+      <div class="feature-card glass">
+        <i class="fas fa-bolt"></i>
+        <h3>Rapidité</h3>
+        <p>Réponse sous 24h, pas de longs formulaires.</p>
+      </div>
+      <div class="feature-card glass">
+        <i class="fas fa-handshake"></i>
+        <h3>Transparence</h3>
+        <p>Prix clairs, évaluations vérifiées.</p>
+      </div>
+      <div class="feature-card glass">
+        <i class="fas fa-hard-hat"></i>
+        <h3>Artisans certifiés</h3>
+        <p>Professionnels sélectionnés avec soin.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="container">
+      <p>© 2026 BâtiSwift – <a href="artisan.html">Espace Artisan</a></p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
 </body>
 </html>
