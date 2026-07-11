@@ -1,6 +1,6 @@
-// BâtiSwift — Gestion de l'authentification et de la session
+// BâtiSwift — Gestion de l'authentification et des sessions
 
-let currentUser = null;   // { id, nom, email, telephone, ville, ... }
+let currentUser = null;
 
 async function checkSession() {
   try {
@@ -21,12 +21,15 @@ function isLoggedIn() {
   return currentUser !== null;
 }
 
-function requireAuth() {
+/**
+ * Redirige vers la page de connexion si l'utilisateur n'est pas authentifié.
+ * À appeler en début de script sur chaque page protégée.
+ */
+async function requireAuth() {
+  await checkSession();
   if (!isLoggedIn()) {
     window.location.href = 'connexion.html';
-    return false;
   }
-  return true;
 }
 
 async function login(email, password) {
