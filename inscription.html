@@ -3,128 +3,195 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inscription Artisan – BâtiSwift</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>Inscription artisan — BâtiSwift</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body { background: var(--beige); }
+    .inscription-wrapper {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: calc(var(--header-h) + 40px) 5vw 60px;
+    }
+    .inscription-card {
+      background: var(--blanc);
+      border-radius: var(--radius-xl);
+      padding: 52px 48px;
+      width: 100%; max-width: 620px;
+      box-shadow: 0 8px 48px rgba(43,43,43,.10);
+    }
+    .inscription-header { margin-bottom: var(--space-xl); }
+    .inscription-title  { font-family: var(--font-display); font-size: 2rem; font-weight: 700; margin-bottom: 6px; }
+    .inscription-sub    { color: var(--gris); font-size: .9rem; }
+    .section-divider { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gris); margin: var(--space-lg) 0 var(--space-md); display: flex; align-items: center; gap: 12px; }
+    .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--beige-dark); }
+    .specialites-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: var(--space-md); }
+    .spec-chip {
+      display: flex; align-items: center; gap: 8px;
+      border: 1.5px solid var(--beige-dark); border-radius: var(--radius); padding: 10px 12px;
+      cursor: pointer; font-size: .85rem; font-weight: 500; transition: all var(--transition);
+      background: var(--blanc); user-select: none;
+    }
+    .spec-chip input { display: none; }
+    .spec-chip:has(input:checked) { background: var(--anthracite); color: var(--blanc); border-color: var(--anthracite); }
+    .pw-strength { font-size: .78rem; margin-top: 5px; }
+    .auth-footer-link { text-align: center; margin-top: var(--space-lg); font-size: .88rem; color: var(--gris); }
+    .auth-footer-link a { color: var(--anthracite); font-weight: 600; }
+    @media (max-width: 640px) {
+      .inscription-card { padding: 32px 22px; }
+      .specialites-grid { grid-template-columns: repeat(2,1fr); }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
-<body>
-  <div id="page-loader" class="page-loader"><div class="spinner spinner-dark" style="width:40px; height:40px;"></div></div>
-  <header>
-    <div class="container">
-      <a href="index.html" class="nav-logo"><img src="assets/logo.svg" alt="BâtiSwift" class="logo-svg"> BâtiSwift</a>
-      <nav>
-        <ul class="nav-links">
-          <li><a href="index.html">Accueil</a></li>
-          <li><a href="connexion.html">Connexion</a></li>
-        </ul>
-      </nav>
+<body class="minimal-layout">
+
+<div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
+<div id="header-container"></div>
+
+<div class="inscription-wrapper">
+  <div class="inscription-card">
+
+    <div class="inscription-header">
+      <div class="inscription-title">Rejoignez BâtiSwift</div>
+      <div class="inscription-sub">Créez votre compte artisan et recevez vos premiers leads dès aujourd'hui.</div>
     </div>
-  </header>
 
-  <main>
-    <section class="section" style="padding-top: 120px;">
-      <div class="container-xs">
-        <h2 class="text-center reveal">Inscription artisan</h2>
-        <form id="register-form" class="glass-card mt-lg reveal reveal-delay-1">
-          <div class="form-group">
-            <label class="form-label">Nom complet <span class="req">*</span></label>
-            <input type="text" id="reg-nom" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">E-mail <span class="req">*</span></label>
-            <input type="email" id="reg-email" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Mot de passe <span class="req">*</span> (6 caractères min)</label>
-            <input type="password" id="reg-password" class="form-control" minlength="6" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Téléphone <span class="req">*</span></label>
-            <input type="tel" id="reg-telephone" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Ville <span class="req">*</span></label>
-            <input type="text" id="reg-ville" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Rayon d'intervention (km)</label>
-            <input type="number" id="reg-rayon" class="form-control" value="30" min="1">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Spécialité</label>
-            <select id="reg-specialite" class="form-control">
-              <option value="">Non spécifié</option>
-              <option value="plomberie">Plomberie</option>
-              <option value="electricite">Électricité</option>
-              <option value="peinture">Peinture</option>
-              <option value="maconnerie">Maçonnerie</option>
-              <option value="chauffage">Chauffage</option>
-              <option value="serrurerie">Serrurerie</option>
-              <option value="autre">Autre</option>
-            </select>
-          </div>
-          <div id="register-error" class="alert alert-danger hidden"></div>
-          <button type="submit" class="btn btn-primary btn-block btn-lg">Créer mon compte</button>
-        </form>
-        <p class="text-center mt-md">Déjà inscrit ? <a href="connexion.html">Connectez-vous</a></p>
-      </div>
-    </section>
-  </main>
+    <div id="alert-register" class="alert" style="display:none"></div>
 
-  <footer>
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="nav-logo">BâtiSwift</a>
-          <p>Place de marché inversée pour artisans du BTP.</p>
+    <form id="form-register" novalidate>
+
+      <div class="section-divider">Informations personnelles</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="nom">Nom complet <span class="req">*</span></label>
+          <input id="nom" type="text" class="form-control" placeholder="Jean Dupont" required autocomplete="name">
         </div>
-        <div class="footer-col">
-          <h4>Navigation</h4>
-          <a href="index.html">Accueil</a>
-          <a href="client.html">Déposer une demande</a>
-        </div>
-        <div class="footer-col">
-          <h4>Artisans</h4>
-          <a href="connexion.html">Connexion</a>
-          <a href="inscription.html">Inscription</a>
-        </div>
-        <div class="footer-col">
-          <h4>Légal</h4>
-          <a href="mentions-legales.html">Mentions légales</a>
-          <a href="cgu.html">CGU</a>
+        <div class="form-group">
+          <label class="form-label" for="telephone">Téléphone <span class="req">*</span></label>
+          <input id="telephone" type="tel" class="form-control" placeholder="06 12 34 56 78" required autocomplete="tel">
         </div>
       </div>
-      <div class="footer-bottom">
-        <span>© 2024 BâtiSwift</span>
-        <a href="mentions-legales.html">Mentions légales</a>
+
+      <div class="form-group">
+        <label class="form-label" for="email">E-mail professionnel <span class="req">*</span></label>
+        <input id="email" type="email" class="form-control" placeholder="vous@exemple.fr" required autocomplete="email">
       </div>
+
+      <div class="section-divider">Zone d'intervention</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="ville">Ville principale <span class="req">*</span></label>
+          <input id="ville" type="text" class="form-control" placeholder="Paris, Lyon, Luxembourg..." required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="rayon">Rayon d'intervention (km)</label>
+          <select id="rayon" class="form-control">
+            <option value="10">10 km</option>
+            <option value="20">20 km</option>
+            <option value="30" selected>30 km</option>
+            <option value="50">50 km</option>
+            <option value="100">100 km</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="section-divider">Spécialités</div>
+      <div class="specialites-grid">
+        <label class="spec-chip"><input type="checkbox" name="spec" value="plomberie"> 🔧 Plomberie</label>
+        <label class="spec-chip"><input type="checkbox" name="spec" value="electricite"> ⚡ Électricité</label>
+        <label class="spec-chip"><input type="checkbox" name="spec" value="peinture"> 🎨 Peinture</label>
+        <label class="spec-chip"><input type="checkbox" name="spec" value="maconnerie"> 🧱 Maçonnerie</label>
+        <label class="spec-chip"><input type="checkbox" name="spec" value="chauffage"> 🔥 Chauffage</label>
+        <label class="spec-chip"><input type="checkbox" name="spec" value="serrurerie"> 🔐 Serrurerie</label>
+      </div>
+
+      <div class="section-divider">Sécurité</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="password">Mot de passe <span class="req">*</span></label>
+          <input id="password" type="password" class="form-control" placeholder="Min. 6 caractères" required autocomplete="new-password">
+          <div id="pw-strength" class="pw-strength"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password-confirm">Confirmer <span class="req">*</span></label>
+          <input id="password-confirm" type="password" class="form-control" placeholder="••••••••" required autocomplete="new-password">
+        </div>
+      </div>
+
+      <button type="submit" id="btn-register" class="btn btn-primary btn-block btn-lg" style="margin-top:12px">
+        Créer mon compte gratuitement
+      </button>
+
+      <p style="font-size:.75rem;color:var(--gris);text-align:center;margin-top:12px">
+        En créant un compte, vous acceptez nos <a href="/cgu.html">CGU</a> et notre <a href="/mentions-legales.html">politique de confidentialité</a>.
+      </p>
+    </form>
+
+    <div class="auth-footer-link">
+      Déjà un compte ? <a href="/connexion.html">Se connecter</a>
     </div>
-  </footer>
+  </div>
+</div>
 
-  <script src="js/config.js"></script>
-  <script src="js/session.js"></script>
-  <script src="js/main.js"></script>
-  <script>
-    document.getElementById('register-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const payload = {
-        nom: document.getElementById('reg-nom').value,
-        email: document.getElementById('reg-email').value,
-        password: document.getElementById('reg-password').value,
-        telephone: document.getElementById('reg-telephone').value,
-        ville: document.getElementById('reg-ville').value,
-        rayon: parseInt(document.getElementById('reg-rayon').value) || 30,
-        specialite: document.getElementById('reg-specialite').value
-      };
-      const errorDiv = document.getElementById('register-error');
-      errorDiv.classList.add('hidden');
-      try {
-        await register(payload);
-        window.location.href = 'dashboard.html';
-      } catch(err) {
-        errorDiv.textContent = err.message;
-        errorDiv.classList.remove('hidden');
-      }
-    });
-  </script>
+<div id="footer-container"></div>
+
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/session.js"></script>
+<script src="/js/main.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  await Session.redirectIfAuth('/dashboard.html');
+
+  // Indicateur force mot de passe
+  document.getElementById('password')?.addEventListener('input', function() {
+    const el = document.getElementById('pw-strength');
+    if (!el) return;
+    const v = this.value;
+    if (!v) { el.textContent = ''; return; }
+    const strong = v.length >= 8 && /[A-Z]/.test(v) && /[0-9]/.test(v);
+    const medium = v.length >= 6;
+    el.textContent = strong ? '🟢 Fort' : medium ? '🟡 Moyen' : '🔴 Trop court';
+    el.style.color  = strong ? 'var(--success)' : medium ? 'var(--warning)' : 'var(--danger)';
+  });
+
+  document.getElementById('form-register').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const alertEl = 'alert-register';
+    hideAlert(alertEl);
+
+    const pw  = document.getElementById('password').value;
+    const pw2 = document.getElementById('password-confirm').value;
+    if (pw !== pw2) { showAlert(alertEl, 'Les mots de passe ne correspondent pas.', 'danger'); return; }
+    if (pw.length < 6) { showAlert(alertEl, 'Mot de passe trop court (6 caractères minimum).', 'danger'); return; }
+
+    const specs = [...document.querySelectorAll('input[name="spec"]:checked')].map(el => el.value);
+
+    const btn  = document.getElementById('btn-register');
+    btnLoading(btn, true);
+
+    try {
+      const data = await API.register({
+        nom:        document.getElementById('nom').value.trim(),
+        email:      document.getElementById('email').value.trim(),
+        password:   pw,
+        telephone:  document.getElementById('telephone').value.trim(),
+        ville:      document.getElementById('ville').value.trim(),
+        rayon:      document.getElementById('rayon').value,
+        specialite: specs.join(', '),
+      });
+      Session.save(data.token, data.artisan);
+      toast('Compte créé ! Bienvenue 🎉', 'success');
+      setTimeout(() => window.location.href = '/dashboard.html', 700);
+    } catch (err) {
+      showAlert(alertEl, err.message, 'danger');
+      btnLoading(btn, false);
+    }
+  });
+});
+</script>
 </body>
 </html>

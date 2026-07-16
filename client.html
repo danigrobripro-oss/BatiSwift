@@ -3,88 +3,239 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Déposer une demande – BâtiSwift</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>Déposer une demande — BâtiSwift</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .client-layout {
+      display: grid; grid-template-columns: 1fr 380px;
+      gap: 0; min-height: calc(100vh - var(--header-h));
+    }
+    .chat-pane {
+      display: flex; flex-direction: column;
+      background: var(--blanc);
+      border-right: 1px solid var(--beige-dark);
+    }
+    .chat-top-bar {
+      padding: 20px var(--space-lg);
+      border-bottom: 1px solid var(--beige-dark);
+      display: flex; align-items: center; gap: 14px;
+    }
+    .chat-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--anthracite);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; flex-shrink: 0;
+    }
+    .chat-agent-name { font-weight: 600; font-size: .95rem; }
+    .chat-status { font-size: .75rem; color: var(--success); }
+    .chat-status::before { content: '●'; margin-right: 4px; }
+
+    .chat-messages {
+      flex: 1; overflow-y: auto; padding: var(--space-lg);
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .chat-bubble {
+      max-width: 80%; border-radius: 18px; padding: 12px 16px;
+      font-size: .92rem; line-height: 1.5; word-wrap: break-word;
+    }
+    .chat-bubble.chat-assistant {
+      background: var(--beige); color: var(--anthracite);
+      border-bottom-left-radius: 4px; align-self: flex-start;
+    }
+    .chat-bubble.chat-user {
+      background: var(--anthracite); color: var(--blanc);
+      border-bottom-right-radius: 4px; align-self: flex-end;
+    }
+    .chat-bubble p { margin: 0; }
+    .typing-dots { display: flex; gap: 5px; align-items: center; padding: 4px 0; }
+    .typing-dots span { width: 7px; height: 7px; border-radius: 50%; background: var(--gris-light); animation: typingDot 1.2s infinite; }
+    .typing-dots span:nth-child(2) { animation-delay: .15s; }
+    .typing-dots span:nth-child(3) { animation-delay: .30s; }
+    @keyframes typingDot { 0%,80%,100%{opacity:.3;transform:scale(.8)} 40%{opacity:1;transform:scale(1)} }
+
+    .chat-input-zone {
+      padding: var(--space-md) var(--space-lg);
+      border-top: 1px solid var(--beige-dark);
+      background: var(--blanc);
+    }
+    .chat-input-row { display: flex; gap: 10px; align-items: flex-end; }
+    #chat-input {
+      flex: 1; padding: 12px 16px;
+      border: 1.5px solid var(--beige-dark); border-radius: 14px;
+      font-size: .93rem; resize: none; max-height: 100px;
+      outline: none; transition: border-color var(--transition);
+      font-family: var(--font-body);
+    }
+    #chat-input:focus { border-color: var(--anthracite); }
+    #btn-send {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: var(--anthracite); color: var(--blanc);
+      border: none; cursor: pointer; font-size: 1.1rem; flex-shrink: 0;
+      transition: all var(--transition);
+    }
+    #btn-send:hover:not(:disabled) { background: var(--or); transform: scale(1.05); }
+    #btn-send:disabled { opacity: .4; cursor: not-allowed; }
+    .chat-hint { font-size: .75rem; color: var(--gris); margin-top: 8px; text-align: center; }
+
+    /* Panneau droite */
+    .info-pane { padding: var(--space-xl) var(--space-lg); background: var(--gris-ultra); }
+    .info-pane h2 { font-family: var(--font-display); font-size: 1.5rem; margin-bottom: var(--space-md); }
+    .contact-form .form-group { margin-bottom: 14px; }
+    .steps-mini { margin-top: var(--space-xl); }
+    .step-mini { display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; }
+    .step-mini-num { width: 28px; height: 28px; border-radius: 50%; background: var(--anthracite); color: var(--blanc); display: flex; align-items: center; justify-content: center; font-size: .78rem; font-weight: 700; flex-shrink: 0; }
+    .step-mini-text h4 { font-size: .9rem; margin-bottom: 3px; }
+    .step-mini-text p { font-size: .8rem; color: var(--gris); }
+
+    #lead-confirmation { margin-top: var(--space-md); }
+
+    @media (max-width: 900px) {
+      .client-layout { grid-template-columns: 1fr; }
+      .info-pane { order: -1; padding: var(--space-lg); }
+    }
+  </style>
 </head>
 <body>
-  <div id="page-loader" class="page-loader"><div class="spinner spinner-dark" style="width:40px; height:40px;"></div></div>
-  <header>
-    <div class="container">
-      <a href="index.html" class="nav-logo"><img src="assets/logo.svg" alt="BâtiSwift" class="logo-svg"> BâtiSwift</a>
-      <nav>
-        <ul class="nav-links">
-          <li><a href="index.html">Accueil</a></li>
-          <li><a href="client.html" class="active">Déposer une demande</a></li>
-        </ul>
-      </nav>
-      <div class="nav-actions">
-        <a href="connexion.html" class="btn btn-secondary btn-sm">Connexion</a>
-      </div>
-    </div>
-  </header>
 
-  <main>
-    <section class="section" style="padding-top: 120px;">
-      <div class="container-xs">
-        <h2 class="text-center reveal">Décrivez votre besoin</h2>
-        <p class="text-center reveal reveal-delay-1">Notre assistant vous posera quelques questions puis transmettra votre demande aux artisans.</p>
-        <form id="client-form" class="glass-card mt-lg reveal reveal-delay-2">
-          <div class="form-group">
-            <label class="form-label">Votre nom <span class="req">*</span></label>
-            <input type="text" name="nom" class="form-control" placeholder="ex: Jean Dupont" required>
+<div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
+<div id="header-container"></div>
+
+<main class="main-content">
+  <div class="client-layout">
+
+    <!-- ── CHAT ── -->
+    <div class="chat-pane">
+      <div class="chat-top-bar">
+        <div class="chat-avatar">🤖</div>
+        <div>
+          <div class="chat-agent-name">Assistant BâtiSwift</div>
+          <div class="chat-status">En ligne</div>
+        </div>
+      </div>
+
+      <div class="chat-messages" id="chat-messages"></div>
+
+      <div id="lead-confirmation"></div>
+
+      <div class="chat-input-zone">
+        <form id="chat-form">
+          <div class="chat-input-row">
+            <textarea id="chat-input" rows="1" placeholder="Décrivez votre problème..." aria-label="Votre message"></textarea>
+            <button type="submit" id="btn-send" aria-label="Envoyer">➤</button>
           </div>
-          <div class="form-group">
-            <label class="form-label">Téléphone <span class="req">*</span></label>
-            <input type="tel" name="telephone" class="form-control" placeholder="0612345678" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Ville du chantier <span class="req">*</span></label>
-            <input type="text" name="ville" class="form-control" placeholder="ex: Lyon" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Description du problème <span class="req">*</span></label>
-            <textarea name="description" class="form-control" rows="5" placeholder="Décrivez précisément votre besoin..." required></textarea>
-          </div>
-          <div id="client-error" class="alert alert-danger hidden"></div>
-          <div id="client-success" class="alert alert-success hidden"></div>
-          <button type="submit" class="btn btn-primary btn-block btn-lg">Envoyer ma demande</button>
         </form>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="nav-logo">BâtiSwift</a>
-          <p>Place de marché inversée pour artisans du BTP.</p>
-        </div>
-        <div class="footer-col">
-          <h4>Navigation</h4>
-          <a href="index.html">Accueil</a>
-          <a href="client.html">Déposer une demande</a>
-        </div>
-        <div class="footer-col">
-          <h4>Artisans</h4>
-          <a href="connexion.html">Connexion</a>
-          <a href="inscription.html">Inscription</a>
-        </div>
-        <div class="footer-col">
-          <h4>Légal</h4>
-          <a href="mentions-legales.html">Mentions légales</a>
-          <a href="cgu.html">CGU</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>© 2024 BâtiSwift</span>
-        <a href="mentions-legales.html">Mentions légales</a>
+        <div class="chat-hint">Appuyez sur Entrée pour envoyer · Shift+Entrée pour une nouvelle ligne</div>
       </div>
     </div>
-  </footer>
 
-  <script src="js/config.js"></script>
-  <script src="js/main.js"></script>
-  <script src="js/script.js"></script>
+    <!-- ── INFO PANE ── -->
+    <div class="info-pane">
+      <h2>Votre demande</h2>
+      <p style="color:var(--gris);font-size:.9rem;margin-bottom:var(--space-lg)">Laissez vos coordonnées pour qu'un artisan puisse vous rappeler.</p>
+
+      <div class="contact-form">
+        <div class="form-group">
+          <label class="form-label" for="client-nom">Votre prénom</label>
+          <input id="client-nom" type="text" class="form-control" placeholder="Marie">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="client-telephone">Téléphone</label>
+          <input id="client-telephone" type="tel" class="form-control" placeholder="06 12 34 56 78">
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="steps-mini">
+        <h4 style="font-family:var(--font-display);margin-bottom:var(--space-md)">Comment ça fonctionne</h4>
+        <div class="step-mini">
+          <div class="step-mini-num">1</div>
+          <div class="step-mini-text"><h4>Décrivez votre problème</h4><p>Notre IA analyse votre besoin et le qualifie automatiquement.</p></div>
+        </div>
+        <div class="step-mini">
+          <div class="step-mini-num">2</div>
+          <div class="step-mini-text"><h4>Artisans notifiés</h4><p>Les artisans disponibles dans votre zone reçoivent votre demande.</p></div>
+        </div>
+        <div class="step-mini">
+          <div class="step-mini-num">3</div>
+          <div class="step-mini-text"><h4>Rappel sous 1h</h4><p>Un professionnel vous contacte avec un devis gratuit.</p></div>
+        </div>
+      </div>
+
+      <div style="margin-top:var(--space-xl);padding:var(--space-md);background:rgba(201,168,76,.08);border-radius:var(--radius);border:1px solid rgba(201,168,76,.2)">
+        <p style="font-size:.82rem;color:#7a5b1a">💡 <strong>100% gratuit pour les clients.</strong> Aucune inscription requise. Vos données ne sont jamais revendues.</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div id="footer-container"></div>
+
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/session.js"></script>
+<script src="/js/main.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  let historique = [];
+  let leadCreated = false;
+  const msgs   = document.getElementById('chat-messages');
+  const input  = document.getElementById('chat-input');
+  const btn    = document.getElementById('btn-send');
+
+  function addMsg(role, content) {
+    const d = document.createElement('div');
+    d.className = `chat-bubble chat-${role} fade-in`;
+    d.innerHTML = `<p>${content.replace(/\n/g,'<br>')}</p>`;
+    msgs.appendChild(d);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function addTyping() {
+    const d = document.createElement('div');
+    d.id = 'typing'; d.className = 'chat-bubble chat-assistant';
+    d.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+    msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  async function send(text) {
+    if (!text.trim() || leadCreated) return;
+    addMsg('user', text); input.value = ''; btn.disabled = true;
+    addTyping();
+    try {
+      const data = await API.ask(text, historique, {
+        nom:       document.getElementById('client-nom')?.value.trim() || '',
+        telephone: document.getElementById('client-telephone')?.value.trim() || '',
+      });
+      document.getElementById('typing')?.remove();
+      historique = data.historique || historique;
+      addMsg('assistant', data.response);
+      if (data.lead_created) {
+        leadCreated = true;
+        const conf = document.getElementById('lead-confirmation');
+        if (conf) {
+          conf.innerHTML = `<div class="alert alert-success" style="margin:0 var(--space-lg) var(--space-md)">
+            ✅ Demande enregistrée ! Un artisan vous rappellera sous 1h. Référence #${data.lead_id}
+          </div>`;
+        }
+        input.disabled = true; btn.disabled = true;
+      }
+    } catch {
+      document.getElementById('typing')?.remove();
+      addMsg('assistant', 'Désolé, une erreur est survenue. Rafraîchissez la page et réessayez.');
+    } finally { btn.disabled = false; input.focus(); }
+  }
+
+  document.getElementById('chat-form').addEventListener('submit', e => { e.preventDefault(); send(input.value); });
+  input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(input.value); } });
+
+  // Auto-resize textarea
+  input.addEventListener('input', function() { this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 100) + 'px'; });
+
+  // Message d'accueil
+  setTimeout(() => addMsg('assistant', 'Bonjour 👋 Je suis l\'assistant BâtiSwift.\n\nDécrivez-moi votre problème (plomberie, électricité, peinture...) et je mets en relation avec un artisan qualifié sous 1h — gratuitement !'), 500);
+});
+</script>
 </body>
 </html>
