@@ -36,6 +36,7 @@
     .pw-strength { font-size: .78rem; margin-top: 5px; }
     .auth-footer-link { text-align: center; margin-top: var(--space-lg); font-size: .88rem; color: var(--gris); }
     .auth-footer-link a { color: var(--anthracite); font-weight: 600; }
+    .spec-input-autre { margin-top: 6px; }
     @media (max-width: 640px) {
       .inscription-card { padding: 32px 22px; }
       .specialites-grid { grid-template-columns: repeat(2,1fr); }
@@ -105,6 +106,15 @@
         <label class="spec-chip"><input type="checkbox" name="spec" value="maconnerie"> 🧱 Maçonnerie</label>
         <label class="spec-chip"><input type="checkbox" name="spec" value="chauffage"> 🔥 Chauffage</label>
         <label class="spec-chip"><input type="checkbox" name="spec" value="serrurerie"> 🔐 Serrurerie</label>
+        <!-- AJOUT : option Autre -->
+        <label class="spec-chip" id="spec-autre-chip">
+          <input type="checkbox" name="spec" value="__autre__" id="spec-autre-check"> ➕ Autre
+        </label>
+      </div>
+      <!-- Champ pour saisir la spécialité "Autre" -->
+      <div class="form-group spec-input-autre" id="spec-autre-input" style="display:none">
+        <label class="form-label" for="spec-autre-text">Précisez votre spécialité</label>
+        <input type="text" id="spec-autre-text" class="form-control" placeholder="Ex: carreleur, menuisier...">
       </div>
 
       <div class="section-divider">Sécurité</div>
@@ -146,6 +156,15 @@
 document.addEventListener('DOMContentLoaded', async () => {
   await Session.redirectIfAuth('/dashboard.html');
 
+  // --- Gestion de l'option "Autre" ---
+  const autreCheck = document.getElementById('spec-autre-check');
+  const autreInput = document.getElementById('spec-autre-input');
+  if (autreCheck && autreInput) {
+    autreCheck.addEventListener('change', () => {
+      autreInput.style.display = autreCheck.checked ? 'block' : 'none';
+    });
+  }
+
   // Indicateur force mot de passe
   document.getElementById('password')?.addEventListener('input', function() {
     const el = document.getElementById('pw-strength');
@@ -168,7 +187,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (pw !== pw2) { showAlert(alertEl, 'Les mots de passe ne correspondent pas.', 'danger'); return; }
     if (pw.length < 6) { showAlert(alertEl, 'Mot de passe trop court (6 caractères minimum).', 'danger'); return; }
 
-    const specs = [...document.querySelectorAll('input[name="spec"]:checked')].map(el => el.value);
+    // Récupération des spécialités cochées
+    const specs = [...document.querySelectorAll('input[name="spec"]:checked')].map(el => {
+      if (el.value === '__autre__') {
+        const custom = document.getElementById('spec-autre-text').value.trim();
+        return custom || 'Autre';  // fallback si rien saisi
+      }
+      return el.value;
+    });
 
     const btn  = document.getElementById('btn-register');
     btnLoading(btn, true);
