@@ -106,10 +106,12 @@
         <label class="spec-chip"><input type="checkbox" name="spec" value="maconnerie"> 🧱 Maçonnerie</label>
         <label class="spec-chip"><input type="checkbox" name="spec" value="chauffage"> 🔥 Chauffage</label>
         <label class="spec-chip"><input type="checkbox" name="spec" value="serrurerie"> 🔐 Serrurerie</label>
+        <!-- AJOUT : option Autre -->
         <label class="spec-chip" id="spec-autre-chip">
           <input type="checkbox" name="spec" value="__autre__" id="spec-autre-check"> ➕ Autre
         </label>
       </div>
+      <!-- AJOUT : champ pour saisir la spécialité Autre -->
       <div class="form-group spec-input-autre" id="spec-autre-input" style="display:none">
         <label class="form-label" for="spec-autre-text">Précisez votre spécialité</label>
         <input type="text" id="spec-autre-text" class="form-control" placeholder="Ex: carreleur, menuisier...">
@@ -146,15 +148,16 @@
 
 <div id="footer-container"></div>
 
-<script src="/js/config.js?v=2"></script>
-<script src="/js/api.js?v=2"></script>
-<script src="/js/session.js?v=2"></script>
-<script src="/js/main.js?v=2"></script>
+<!-- MODIF : version forcée à v=3 pour casser le cache -->
+<script src="/js/config.js?v=3"></script>
+<script src="/js/api.js?v=3"></script>
+<script src="/js/session.js?v=3"></script>
+<script src="/js/main.js?v=3"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
   await Session.redirectIfAuth('/dashboard.html');
 
-  // --- Gestion de l'option "Autre" ---
+  // AJOUT : gestion de l'option "Autre"
   const autreCheck = document.getElementById('spec-autre-check');
   const autreInput = document.getElementById('spec-autre-input');
   if (autreCheck && autreInput) {
@@ -185,7 +188,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (pw !== pw2) { showAlert(alertEl, 'Les mots de passe ne correspondent pas.', 'danger'); return; }
     if (pw.length < 6) { showAlert(alertEl, 'Mot de passe trop court (6 caractères minimum).', 'danger'); return; }
 
-    // Récupération des spécialités cochées (avec gestion de "Autre")
+    // MODIF : récupération des spécialités avec gestion de "Autre"
     const specs = [...document.querySelectorAll('input[name="spec"]:checked')].map(el => {
       if (el.value === '__autre__') {
         const custom = document.getElementById('spec-autre-text').value.trim();
@@ -198,6 +201,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     btnLoading(btn, true);
 
     try {
+      // AJOUT : vérification que l'API est bien chargée
+      if (typeof API === 'undefined' || !API.register) {
+        throw new Error('Erreur de chargement. Rafraîchissez la page (Ctrl+F5).');
+      }
+
       const data = await API.register({
         nom:        document.getElementById('nom').value.trim(),
         email:      document.getElementById('email').value.trim(),
