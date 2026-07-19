@@ -1,83 +1,65 @@
 /**
  * BâtiSwift — session.js
- * Auth Guard via cookie de session Flask (pas de JWT).
- * Interface identique à la version JWT de Claude pour compatibilité.
+ * Auth Guard JWT complet.
  * Charge après config.js et api.js.
  */
 
 const Session = {
 
-  /** Vérifie la session via /api/me (cookie) */
-  async verify() {
-    try {
-      const data = await API.me();
-      if (data.authenticated && data.artisan) {
-        localStorage.setItem(CONFIG.USER_KEY, JSON.stringify(data.artisan));
-        return data.artisan;
-      }
-      this.clear();
-      return null;
-    } catch {
-      this.clear();
-      return null;
-    }
-  },
+  getToken()  { return localStorage.getItem(CONFIG.TOKEN_KEY) || null; },
+  getUser()   { try { return JSON.parse(localStorage.getItem(CONFIG.USER_KEY) || 'null'); } catch { return null; } },
 
-  /** Vérifie si l'utilisateur est connecté (basé sur la dernière vérification) */
-  isLoggedIn() {
-    const user = this.getUser();
-    return !!user;
-  },
-
-  /** Récupère l'utilisateur stocké localement (issu du dernier /api/me) */
-  getUser() {
-    try {
-      return JSON.parse(localStorage.getItem(CONFIG.USER_KEY) || 'null');
-    } catch {
-      return null;
-    }
-  },
-
-  /** Sauvegarde l'utilisateur localement (ignore le token JWT inexistant) */
   save(token, artisan) {
-    // Le backend Flask ne renvoie pas de token JWT, on ignore le premier argument
+    localStorage.setItem(CONFIG.TOKEN_KEY, token);
     localStorage.setItem(CONFIG.USER_KEY, JSON.stringify(artisan));
   },
 
-  /** Efface toutes les données de session */
   clear() {
     localStorage.removeItem(CONFIG.TOKEN_KEY);
     localStorage.removeItem(CONFIG.USER_KEY);
   },
 
+  /** Vérifie le token côté client (sans réseau) */
+  isLoggedIn() {
+    const token = this.getToken();
+    if (!token) return false;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp * 1000 > Date.now();
+    } catch { return false; }
+  },
+
+  /** Vérifie le token côté serveur (avec réseau) */
+  async verify() {
+    if (!this.getToken()) return null;
+    try {
+      const data = await API.me();
+      if (data.artisan) {
+        localStorage.setItem(CONFIG.USER_KEY, JSON.stringify(data.artisan));
+        return data.artisan;
+      }
+      this.clear(); return null;
+    } catch { this.clear(); return null; }
+  },
+
   /** PAGE PRIVÉE — redirige vers connexion si non connecté */
   async requireAuth() {
-    const user = await this.verify();
-    if (!user) {
+    if (!this.isLoggedIn()) {
       window.location.href = '/connexion.html?redirect=' + encodeURIComponent(window.location.pathname);
       return null;
     }
+    const user = await this.verify();
+    if (!user) return null;   // verify() gère déjà la redirection si 401
     return user;
   },
 
   /** PAGE PUBLIQUE AUTH — redirige vers dashboard si déjà connecté */
   async redirectIfAuth(to = '/dashboard.html') {
-    const user = await this.verify();
-    if (user) {
-      window.location.href = to;
-      return true;
-    }
+    if (this.isLoggedIn()) { window.location.href = to; return true; }
     return false;
   },
 
-  /** Déconnexion : appelle l'API pour supprimer le cookie, puis nettoie le localStorage */
-  async logout() {
-    try {
-      await API.logout();   // POST /api/artisan/logout
-    } catch (e) { /* ignore */ }
-    this.clear();
-    window.location.href = '/index.html';
-  },
+  logout() { this.clear(); window.location.href = '/index.html'; },
 
   /**
    * Met à jour le header dynamiquement.

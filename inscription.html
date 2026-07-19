@@ -99,19 +99,17 @@
       </div>
 
       <div class="section-divider">Spécialités</div>
-      <div class="specialites-grid">
+      <div class="specialites-grid" id="specialites-grid">
         <label class="spec-chip"><input type="checkbox" name="spec" value="plomberie"> 🔧 Plomberie</label>
         <label class="spec-chip"><input type="checkbox" name="spec" value="electricite"> ⚡ Électricité</label>
         <label class="spec-chip"><input type="checkbox" name="spec" value="peinture"> 🎨 Peinture</label>
         <label class="spec-chip"><input type="checkbox" name="spec" value="maconnerie"> 🧱 Maçonnerie</label>
         <label class="spec-chip"><input type="checkbox" name="spec" value="chauffage"> 🔥 Chauffage</label>
         <label class="spec-chip"><input type="checkbox" name="spec" value="serrurerie"> 🔐 Serrurerie</label>
-        <!-- AJOUT : option Autre -->
         <label class="spec-chip" id="spec-autre-chip">
           <input type="checkbox" name="spec" value="__autre__" id="spec-autre-check"> ➕ Autre
         </label>
       </div>
-      <!-- Champ pour saisir la spécialité "Autre" -->
       <div class="form-group spec-input-autre" id="spec-autre-input" style="display:none">
         <label class="form-label" for="spec-autre-text">Précisez votre spécialité</label>
         <input type="text" id="spec-autre-text" class="form-control" placeholder="Ex: carreleur, menuisier...">
@@ -148,10 +146,10 @@
 
 <div id="footer-container"></div>
 
-<script src="/js/config.js"></script>
-<script src="/js/api.js"></script>
-<script src="/js/session.js"></script>
-<script src="/js/main.js"></script>
+<script src="/js/config.js?v=2"></script>
+<script src="/js/api.js?v=2"></script>
+<script src="/js/session.js?v=2"></script>
+<script src="/js/main.js?v=2"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
   await Session.redirectIfAuth('/dashboard.html');
@@ -187,11 +185,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (pw !== pw2) { showAlert(alertEl, 'Les mots de passe ne correspondent pas.', 'danger'); return; }
     if (pw.length < 6) { showAlert(alertEl, 'Mot de passe trop court (6 caractères minimum).', 'danger'); return; }
 
-    // Récupération des spécialités cochées
+    // Récupération des spécialités cochées (avec gestion de "Autre")
     const specs = [...document.querySelectorAll('input[name="spec"]:checked')].map(el => {
       if (el.value === '__autre__') {
         const custom = document.getElementById('spec-autre-text').value.trim();
-        return custom || 'Autre';  // fallback si rien saisi
+        return custom || 'Autre';
       }
       return el.value;
     });
