@@ -106,37 +106,75 @@ function leadCard(lead, withContact) {
   const emoji = TRAVAUX_EMOJI[lead.type_travaux] || '🏗️';
   const tags  = (lead.tags || []).map(t => `<span class="badge badge-neutral">${t}</span>`).join('');
 
-  const contactBlock = withContact ? `
-    <div class="lead-contact-box">
-      <a href="tel:${lead.client_telephone}" class="btn btn-primary btn-sm">📞 ${lead.client_telephone}</a>
-      <span>${lead.client_nom}</span>
-    </div>` : '';
+  // ✅ MODIFICATIONS ICI UNIQUEMENT
+  if (withContact) {
+    // Après achat : afficher toutes les infos
+    const contactBlock = `
+      <div class="lead-contact-box" style="background:var(--beige);padding:12px;border-radius:12px;margin:8px 0;">
+        <p><strong>👤 Client :</strong> ${lead.client_nom || 'Non renseigné'}</p>
+        <p><strong>📞 Téléphone :</strong> <a href="tel:${lead.client_telephone}" style="color:var(--anthracite);font-weight:600;">${lead.client_telephone || 'Non renseigné'}</a></p>
+        ${lead.adresse ? `<p><strong>📍 Adresse :</strong> ${lead.adresse}</p>` : ''}
+      </div>`;
 
-  const actionBlock = withContact
-    ? `<button class="btn btn-secondary btn-sm" data-tag-lead="${lead.id}">🏷 Ajouter tag</button>`
-    : `<button class="btn btn-gold btn-sm" data-buy="${lead.id}">Acheter — 10€</button>`;
-
-  return `
-    <article class="lead-card fade-in">
-      <div class="lead-card-header">
-        <div>
-          <h4 class="lead-card-title">${emoji} ${capitalize(lead.type_travaux || 'Travaux')}</h4>
-          <div class="lead-card-meta">
-            <span class="badge ${urg.class}">${urg.label}</span>
-            <span class="badge badge-neutral">📍 ${lead.client_ville || '—'}</span>
-            ${lead.statut === 'acheté' ? '<span class="badge badge-success">✅ Acheté</span>' : ''}
+    return `
+      <article class="lead-card fade-in">
+        <div class="lead-card-header">
+          <div>
+            <h4 class="lead-card-title">${emoji} ${capitalize(lead.type_travaux || 'Travaux')}</h4>
+            <div class="lead-card-meta">
+              <span class="badge ${urg.class}">${urg.label}</span>
+              <span class="badge badge-neutral">📍 ${lead.client_ville || '—'}</span>
+              <span class="badge badge-success">✅ Acheté</span>
+            </div>
           </div>
+          <span class="lead-date"><small>${fmtDate(lead.date_creation)}</small></span>
         </div>
-        <span class="lead-date"><small>${fmtDate(lead.date_creation)}</small></span>
-      </div>
-      <p class="lead-card-description">${lead.description || 'Aucune description.'}</p>
-      ${tags ? `<div class="lead-tags">${tags}</div>` : ''}
-      ${contactBlock}
-      <div class="lead-card-footer">
-        ${withContact ? '<span></span>' : '<span class="lead-price">10 €</span>'}
-        ${actionBlock}
-      </div>
-    </article>`;
+        <p class="lead-card-description">${lead.description || 'Aucune description.'}</p>
+        ${tags ? `<div class="lead-tags">${tags}</div>` : ''}
+        ${contactBlock}
+        <div class="lead-card-footer">
+          <span></span>
+          <button class="btn btn-secondary btn-sm" data-tag-lead="${lead.id}">🏷 Ajouter tag</button>
+        </div>
+      </article>`;
+  } else {
+    // Avant achat : masquer les informations sensibles
+    const maskedContact = `
+      <div class="lead-contact-box" style="background:var(--beige);padding:12px;border-radius:12px;margin:8px 0;">
+        <p><strong>👤 Client :</strong> Client vérifié #${String(lead.id).padStart(4, '0')}</p>
+        <p><strong>📞 Téléphone :</strong> 06 XX XX XX XX</p>
+        <p style="color:var(--success);margin-top:6px;font-weight:500;">
+          🔒 Lead 100% vérifié par notre Agent IA. Numéro et adresse débloqués instantanément après validation du paiement sécurisé par Stripe.
+        </p>
+      </div>`;
+
+    // Détails techniques (surface, budget) si disponibles
+    const details = [];
+    if (lead.surface_estimee) details.push(`<span class="badge badge-neutral">📐 ${lead.surface_estimee} m²</span>`);
+    if (lead.budget_estime)  details.push(`<span class="badge badge-neutral">💰 ${lead.budget_estime}€</span>`);
+    const detailsBlock = details.length ? `<div class="lead-card-meta" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;">${details.join('')}</div>` : '';
+
+    return `
+      <article class="lead-card fade-in">
+        <div class="lead-card-header">
+          <div>
+            <h4 class="lead-card-title">${emoji} ${capitalize(lead.type_travaux || 'Travaux')}</h4>
+            <div class="lead-card-meta">
+              <span class="badge ${urg.class}">${urg.label}</span>
+              <span class="badge badge-neutral">📍 ${lead.client_ville || '—'}</span>
+            </div>
+          </div>
+          <span class="lead-date"><small>${fmtDate(lead.date_creation)}</small></span>
+        </div>
+        <p class="lead-card-description">${lead.description || 'Aucune description.'}</p>
+        ${detailsBlock}
+        ${maskedContact}
+        <div class="lead-card-footer">
+          <span class="lead-price">10 €</span>
+          <button class="btn btn-gold btn-sm" data-buy="${lead.id}">Acheter — 10€</button>
+        </div>
+      </article>`;
+  }
 }
 
 // ─── MODAL ACHAT ────────────────────────────────────────────
