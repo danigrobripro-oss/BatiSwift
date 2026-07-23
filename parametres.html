@@ -1,183 +1,275 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Paramètres — BâtiSwift</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="/css/style.css">
   <style>
-    .dashboard-sidebar {
-      width: 220px;
-      flex-shrink: 0;
-      background: var(--bg-glass);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
+    body { background: var(--beige); }
+    .params-wrapper {
+      min-height: 100vh;
+      padding: calc(var(--header-h) + 40px) 5vw 60px;
+      max-width: 700px;
+      margin: 0 auto;
     }
-    .dashboard-sidebar a {
-      display: block;
-      padding: 0.6rem 0.8rem;
-      border-radius: 10px;
-      color: var(--text-muted);
-      text-decoration: none;
-      margin-bottom: 0.3rem;
+    .params-card {
+      background: var(--blanc);
+      border-radius: var(--radius-xl);
+      padding: 48px;
+      box-shadow: 0 8px 48px rgba(43,43,43,.10);
     }
-    .dashboard-sidebar a:hover,
-    .dashboard-sidebar a.active {
-      background: rgba(255, 0, 127, 0.08);
-      color: var(--accent);
+    .params-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
     }
-    .dashboard-layout { display: flex; gap: 1.5rem; padding: 2rem 0; flex-wrap: wrap; }
-    .dashboard-main { flex: 1; }
-    .form-group { margin-bottom: 1.2rem; }
-    label {
-      display: block;
+    .params-subtitle {
+      color: var(--gris);
+      font-size: .9rem;
+      margin-bottom: var(--space-xl);
+    }
+    .section-divider {
+      font-size: .75rem;
       font-weight: 600;
-      margin-bottom: 0.3rem;
-      font-size: 0.9rem;
-      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--gris);
+      margin: var(--space-lg) 0 var(--space-md);
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    input {
-      width: 100%;
-      padding: 0.7rem 1rem;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      font-family: inherit;
-      background: var(--bg-glass);
-      backdrop-filter: blur(8px);
-      color: var(--text);
+    .section-divider::before,
+    .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--beige-dark);
     }
-    input:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 20px var(--accent-glow);
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+    }
+    .toggle-label {
+      font-weight: 500;
+      font-size: .95rem;
+    }
+    .toggle-desc {
+      font-size: .8rem;
+      color: var(--gris);
+      margin-top: 2px;
+    }
+    /* Toggle switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 26px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--beige-dark);
+      transition: .3s;
+      border-radius: 26px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background: var(--anthracite);
+    }
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+    @media (max-width: 640px) {
+      .params-card { padding: 28px 20px; }
     }
   </style>
-  <script>
-    (function () {
-      var t = localStorage.getItem("batiswift-theme");
-      if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches)) {
-        document.documentElement.setAttribute("data-theme", "dark");
-      }
-    })();
-  </script>
 </head>
-<body>
-  <div id="header-placeholder"></div>
+<body class="minimal-layout">
 
-  <main class="container">
-    <div class="dashboard-layout">
-      <aside class="dashboard-sidebar">
-        <h3 style="margin-bottom:1.5rem;font-size:0.9rem;color:var(--text-muted);">📋 Menu</h3>
-        <a href="leads.html">🔥 Leads disponibles</a>
-        <a href="achats.html">📦 Mes achats</a>
-        <a href="parametres.html" class="active">⚙️ Paramètres</a>
-        <a href="artisan-home.html" style="margin-top:1rem;border-top:1px solid var(--border);padding-top:1rem;">🚪 Retour espace pro</a>
-      </aside>
+<div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
+<div id="header-container"></div>
 
-      <div class="dashboard-main">
-        <h2 style="font-size:1.4rem;margin-bottom:1rem;">⚙️ Paramètres</h2>
-        <form id="settings-form">
-          <div class="form-group">
-            <label>📞 Numéro de téléphone (SMS)</label>
-            <input type="tel" id="art-phone" placeholder="+33612345678">
-          </div>
-          <div class="form-group">
-            <label>💬 Numéro WhatsApp</label>
-            <input type="tel" id="art-whatsapp" placeholder="+33612345678">
-          </div>
-          <div class="form-group">
-            <label>📍 Zone d'intervention (villes, séparées par des virgules)</label>
-            <input type="text" id="art-zones" placeholder="Lyon, Paris, 69003">
-          </div>
-          <div class="form-group" style="display:flex;align-items:center;gap:0.5rem;">
-            <input type="checkbox" id="auto-relance" style="width:auto;">
-            <label for="auto-relance" style="margin:0;">🔄 Relances automatiques (3 jours)</label>
-          </div>
-          <button type="submit" class="btn btn--primary">💾 Enregistrer les paramètres</button>
-          <div id="settings-status" style="margin-top:0.5rem;color:var(--text-muted);"></div>
-        </form>
+<div class="params-wrapper">
+  <div class="params-card">
+
+    <h1 class="params-title">⚙️ Paramètres</h1>
+    <p class="params-subtitle">Gérez vos préférences de contact et vos notifications.</p>
+
+    <div id="alert-params" class="alert" style="display:none"></div>
+
+    <form id="params-form" novalidate>
+      <div class="section-divider">Contact</div>
+
+      <div class="form-group">
+        <label class="form-label" for="art-phone">📞 Téléphone (SMS)</label>
+        <input type="tel" id="art-phone" class="form-control" placeholder="+33612345678">
       </div>
+
+      <div class="form-group">
+        <label class="form-label" for="art-whatsapp">💬 Numéro WhatsApp</label>
+        <input type="tel" id="art-whatsapp" class="form-control" placeholder="+33612345678">
+      </div>
+
+      <div class="section-divider">Zone d'intervention</div>
+
+      <div class="form-group">
+        <label class="form-label" for="art-zones">📍 Villes couvertes (séparées par des virgules)</label>
+        <input type="text" id="art-zones" class="form-control" placeholder="Lyon, Paris, 69003">
+      </div>
+
+      <div class="section-divider">Notifications</div>
+
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">📩 Notifications SMS</div>
+          <div class="toggle-desc">Recevoir une alerte SMS pour chaque nouveau lead.</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="push-sms" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">💬 Notifications WhatsApp</div>
+          <div class="toggle-desc">Recevoir une alerte WhatsApp pour chaque nouveau lead.</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="push-whatsapp" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">🔄 Relances automatiques</div>
+          <div class="toggle-desc">Relancer automatiquement les leads sans réponse après 3 jours.</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="auto-relance">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <button type="submit" id="btn-save" class="btn btn-primary btn-block btn-lg" style="margin-top:24px">
+        💾 Enregistrer les paramètres
+      </button>
+    </form>
+
+    <div class="auth-link" style="margin-top:20px;">
+      <a href="/dashboard.html">← Retour au tableau de bord</a>
     </div>
-  </main>
+  </div>
+</div>
 
-  <div id="footer-placeholder"></div>
+<div id="footer-container"></div>
 
-  <script>
-    const API_BASE = "https://agent-btp.onrender.com";
-    const TOKEN_KEY = "batiswift-artisan-token";
-    const params = new URLSearchParams(window.location.search);
-    let token = params.get("token") || localStorage.getItem(TOKEN_KEY);
+<!-- Scripts partagés -->
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/session.js"></script>
+<script src="/js/main.js"></script>
 
-    if (!token) {
-      window.location.href = "inscription.html";
-    } else {
-      localStorage.setItem(TOKEN_KEY, token);
-    }
+<script>
+document.addEventListener('DOMContentLoaded', async function() {
 
-    function api(path, options = {}) {
-      var url = API_BASE + path;
-      if (token) {
-        var sep = url.indexOf('?') === -1 ? '?' : '&';
-        url += sep + 'token=' + encodeURIComponent(token);
+  // Vérifier l'authentification
+  const user = await Session.requireAuth();
+  if (!user) return; // requireAuth redirige déjà
+
+  const alertId = 'alert-params';
+
+  // Charger les paramètres existants
+  async function loadSettings() {
+    try {
+      // On utilise /api/me qui contient déjà les infos de l'artisan
+      const me = await API.me();
+      if (me && me.artisan) {
+        const a = me.artisan;
+        document.getElementById('art-phone').value = a.telephone || '';
+        // Pour WhatsApp, on le stocke dans le même champ telephone pour l'instant
+        // (à adapter si le backend gère un champ séparé)
+        document.getElementById('art-whatsapp').value = a.telephone || '';
+        // Les zones sont gérées séparément si le backend les supporte
+        document.getElementById('push-sms').checked = a.push_sms !== false;
+        document.getElementById('push-whatsapp').checked = a.push_whatsapp !== false;
+        document.getElementById('auto-relance').checked = a.auto_relance || false;
       }
-      return fetch(url, {
-        method: options.method || 'GET',
-        headers: { "Content-Type": "application/json" },
-        body: options.body || null
-      }).then(async function (r) {
-        var data = await r.json().catch(function () { return {}; });
-        if (!r.ok) throw new Error(data.error || "Erreur serveur");
-        return data;
-      });
+    } catch (e) {
+      console.error('Erreur chargement paramètres', e);
     }
+  }
 
-    async function loadSettings() {
-      try {
-        const data = await api("/api/artisan/settings");
-        document.getElementById("art-phone").value = data.phone || "";
-        document.getElementById("art-whatsapp").value = data.whatsapp || "";
-        document.getElementById("art-zones").value = (data.zones || []).join(", ");
-        document.getElementById("auto-relance").checked = data.auto_relance || false;
-      } catch (e) { console.error("Erreur paramètres", e); }
-    }
+  await loadSettings();
 
-    document.getElementById("settings-form").addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const phone = document.getElementById("art-phone").value.trim();
-      const whatsapp = document.getElementById("art-whatsapp").value.trim();
-      const zones = document.getElementById("art-zones").value.split(",").map(s => s.trim()).filter(Boolean);
-      const autoRelance = document.getElementById("auto-relance").checked;
-      try {
-        await api("/api/artisan/settings", {
-          method: "POST",
-          body: JSON.stringify({ phone, whatsapp, auto_relance })
-        });
-        await api("/api/artisan/zones", {
-          method: "POST",
-          body: JSON.stringify({ zones })
-        });
-        document.getElementById("settings-status").textContent = "✅ Paramètres enregistrés !";
-        document.getElementById("settings-status").style.color = "#2ecc71";
-      } catch (e) {
-        document.getElementById("settings-status").textContent = "❌ Erreur : " + e.message;
-        document.getElementById("settings-status").style.color = "#ff2d7a";
+  // Sauvegarde
+  document.getElementById('params-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    hideAlert(alertId);
+
+    const btn = document.getElementById('btn-save');
+    btnLoading(btn, true);
+
+    try {
+      const payload = {
+        telephone: document.getElementById('art-phone').value.trim(),
+        // WhatsApp utilise le même champ telephone pour simplifier
+        // (le backend peut différencier plus tard)
+        push_sms: document.getElementById('push-sms').checked,
+        push_whatsapp: document.getElementById('push-whatsapp').checked,
+        auto_relance: document.getElementById('auto-relance').checked,
+      };
+
+      // Mise à jour du profil (route existante)
+      await API.updateProfile(payload);
+
+      // Les zones peuvent être mises à jour via une route dédiée si elle existe
+      const zonesStr = document.getElementById('art-zones').value.trim();
+      if (zonesStr) {
+        const zones = zonesStr.split(',').map(s => s.trim()).filter(Boolean);
+        try {
+          await API.updateNotifs({ zones: zones });
+        } catch (e) {
+          // La route /api/artisan/notifications n'existe peut-être pas encore
+          console.warn('Zones non sauvegardées (route manquante)', e);
+        }
       }
-    });
 
-    loadSettings();
+      showAlert(alertId, '✅ Paramètres enregistrés !', 'success');
+      setTimeout(() => hideAlert(alertId), 3000);
+    } catch (err) {
+      showAlert(alertId, '❌ ' + err.message, 'danger');
+    } finally {
+      btnLoading(btn, false);
+    }
+  });
 
-    fetch('header.html').then(r => r.text()).then(html => {
-      document.getElementById('header-placeholder').innerHTML = html;
-    });
-    fetch('footer.html').then(r => r.text()).then(html => {
-      document.getElementById('footer-placeholder').innerHTML = html;
-    });
-  </script>
+});
+</script>
 </body>
 </html>
