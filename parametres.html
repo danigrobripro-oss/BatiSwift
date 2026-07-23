@@ -8,103 +8,71 @@
   <style>
     body { background: var(--beige); }
     .params-wrapper {
-      min-height: 100vh;
+      max-width: 860px; margin: 0 auto;
       padding: calc(var(--header-h) + 40px) 5vw 60px;
-      max-width: 700px;
-      margin: 0 auto;
     }
     .params-card {
-      background: var(--blanc);
-      border-radius: var(--radius-xl);
-      padding: 48px;
-      box-shadow: 0 8px 48px rgba(43,43,43,.10);
+      background: var(--blanc); border-radius: var(--radius-xl);
+      padding: 52px 48px; box-shadow: 0 8px 48px rgba(43,43,43,.10);
     }
-    .params-title {
-      font-family: var(--font-display);
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 8px;
+    .params-title { font-family: var(--font-display); font-size: 2rem; font-weight: 700; margin-bottom: 6px; }
+    .params-subtitle { color: var(--gris); font-size: .9rem; margin-bottom: var(--space-xl); }
+
+    /* Onglets */
+    .tab-nav {
+      display: flex; gap: 6px; margin-bottom: var(--space-xl);
+      border-bottom: 2px solid var(--beige-dark); padding-bottom: 0;
     }
-    .params-subtitle {
-      color: var(--gris);
-      font-size: .9rem;
-      margin-bottom: var(--space-xl);
+    .tab-btn {
+      background: none; border: none;
+      padding: 12px 22px; font-size: .88rem; font-weight: 600;
+      cursor: pointer; color: var(--gris);
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+      font-family: inherit;
     }
+    .tab-btn:hover { color: var(--anthracite); }
+    .tab-btn.active {
+      color: var(--anthracite);
+      border-bottom-color: var(--anthracite);
+    }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
     .section-divider {
-      font-size: .75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--gris);
+      font-size: .75rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--gris);
       margin: var(--space-lg) 0 var(--space-md);
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      display: flex; align-items: center; gap: 12px;
     }
-    .section-divider::before,
-    .section-divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--beige-dark);
+    .section-divider::before, .section-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--beige-dark);
     }
+    .form-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    .form-group { margin-bottom: 18px; }
     .toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 12px 0;
     }
-    .toggle-label {
-      font-weight: 500;
-      font-size: .95rem;
-    }
-    .toggle-desc {
-      font-size: .8rem;
-      color: var(--gris);
-      margin-top: 2px;
-    }
-    /* Toggle switch */
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 48px;
-      height: 26px;
-    }
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: var(--beige-dark);
-      transition: .3s;
-      border-radius: 26px;
-    }
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 20px;
-      width: 20px;
-      left: 3px;
-      bottom: 3px;
-      background: white;
-      transition: .3s;
-      border-radius: 50%;
-    }
-    input:checked + .slider {
-      background: var(--anthracite);
-    }
-    input:checked + .slider:before {
-      transform: translateX(22px);
+    .toggle-label { font-weight: 500; font-size: .95rem; }
+    .toggle-desc { font-size: .8rem; color: var(--gris); margin-top: 2px; }
+    .switch { position: relative; display: inline-block; width: 48px; height: 26px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: var(--beige-dark); transition: .3s; border-radius: 26px; }
+    .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background: white; transition: .3s; border-radius: 50%; }
+    input:checked + .slider { background: var(--anthracite); }
+    input:checked + .slider:before { transform: translateX(22px); }
+    .badge-plan {
+      display: inline-block; padding: 4px 12px; border-radius: 20px;
+      font-size: .8rem; font-weight: 600; background: var(--or); color: var(--blanc);
     }
     @media (max-width: 640px) {
       .params-card { padding: 28px 20px; }
+      .form-row { grid-template-columns: 1fr; }
+      .tab-nav { flex-wrap: wrap; gap: 2px; }
+      .tab-btn { padding: 10px 14px; font-size: .8rem; }
     }
   </style>
 </head>
@@ -117,71 +85,177 @@
   <div class="params-card">
 
     <h1 class="params-title">⚙️ Paramètres</h1>
-    <p class="params-subtitle">Gérez vos préférences de contact et vos notifications.</p>
+    <p class="params-subtitle">Personnalisez votre expérience BâtiSwift et les informations transmises à vos clients.</p>
 
     <div id="alert-params" class="alert" style="display:none"></div>
 
     <form id="params-form" novalidate>
-      <div class="section-divider">Contact</div>
 
-      <div class="form-group">
-        <label class="form-label" for="art-phone">📞 Téléphone (SMS)</label>
-        <input type="tel" id="art-phone" class="form-control" placeholder="+33612345678">
+      <!-- Barre d'onglets -->
+      <div class="tab-nav">
+        <button type="button" class="tab-btn active" data-tab="tab-entreprise">🏢 Entreprise</button>
+        <button type="button" class="tab-btn" data-tab="tab-zone">📍 Zone & Leads</button>
+        <button type="button" class="tab-btn" data-tab="tab-notifs">🔔 Notifications</button>
+        <button type="button" class="tab-btn" data-tab="tab-ia">🤖 Agent IA</button>
+        <button type="button" class="tab-btn" data-tab="tab-compte">💳 Abonnement & Sécurité</button>
       </div>
 
-      <div class="form-group">
-        <label class="form-label" for="art-whatsapp">💬 Numéro WhatsApp</label>
-        <input type="tel" id="art-whatsapp" class="form-control" placeholder="+33612345678">
-      </div>
-
-      <div class="section-divider">Zone d'intervention</div>
-
-      <div class="form-group">
-        <label class="form-label" for="art-zones">📍 Villes couvertes (séparées par des virgules)</label>
-        <input type="text" id="art-zones" class="form-control" placeholder="Lyon, Paris, 69003">
-      </div>
-
-      <div class="section-divider">Notifications</div>
-
-      <div class="toggle-row">
-        <div>
-          <div class="toggle-label">📩 Notifications SMS</div>
-          <div class="toggle-desc">Recevoir une alerte SMS pour chaque nouveau lead.</div>
+      <!-- Onglet 1 : Entreprise -->
+      <div class="tab-pane active" id="tab-entreprise">
+        <div class="section-divider">🏢 Informations de l'entreprise</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="nom">Nom de l'entreprise</label>
+            <input type="text" id="nom" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email professionnel</label>
+            <input type="email" id="email" class="form-control" disabled>
+          </div>
         </div>
-        <label class="switch">
-          <input type="checkbox" id="push-sms" checked>
-          <span class="slider"></span>
-        </label>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="telephone">Téléphone</label>
+            <input type="tel" id="telephone" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="adresse">Adresse du siège</label>
+            <input type="text" id="adresse" class="form-control">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="siret">Numéro SIRET</label>
+            <input type="text" id="siret" class="form-control" placeholder="123 456 789 00012">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="tva">Numéro de TVA</label>
+            <input type="text" id="tva" class="form-control" placeholder="FR12345678900">
+          </div>
+        </div>
       </div>
 
-      <div class="toggle-row">
-        <div>
-          <div class="toggle-label">💬 Notifications WhatsApp</div>
-          <div class="toggle-desc">Recevoir une alerte WhatsApp pour chaque nouveau lead.</div>
+      <!-- Onglet 2 : Zone & Leads -->
+      <div class="tab-pane" id="tab-zone">
+        <div class="section-divider">📍 Zone d'intervention & Leads</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="ville">Ville principale</label>
+            <input type="text" id="ville" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="rayon">Rayon (km)</label>
+            <select id="rayon" class="form-control">
+              <option value="10">10 km</option><option value="20">20 km</option>
+              <option value="30" selected>30 km</option><option value="50">50 km</option>
+              <option value="100">100 km</option>
+            </select>
+          </div>
         </div>
-        <label class="switch">
-          <input type="checkbox" id="push-whatsapp" checked>
-          <span class="slider"></span>
-        </label>
+        <div class="form-group">
+          <label class="form-label" for="zones">Zones supplémentaires (villes, séparées par des virgules)</label>
+          <input type="text" id="zones" class="form-control" placeholder="Lyon, Paris, 69003">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="budget_min">Budget minimum (€)</label>
+            <input type="number" id="budget_min" class="form-control" placeholder="1500">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="specialite">Spécialités</label>
+            <input type="text" id="specialite" class="form-control" placeholder="plomberie, chauffage">
+          </div>
+        </div>
       </div>
 
-      <div class="toggle-row">
-        <div>
-          <div class="toggle-label">🔄 Relances automatiques</div>
-          <div class="toggle-desc">Relancer automatiquement les leads sans réponse après 3 jours.</div>
+      <!-- Onglet 3 : Notifications -->
+      <div class="tab-pane" id="tab-notifs">
+        <div class="section-divider">🔔 Notifications & Disponibilités</div>
+        <div class="toggle-row">
+          <div><div class="toggle-label">📩 Notifications SMS</div></div>
+          <label class="switch"><input type="checkbox" id="push_sms" checked><span class="slider"></span></label>
         </div>
-        <label class="switch">
-          <input type="checkbox" id="auto-relance">
-          <span class="slider"></span>
-        </label>
+        <div class="toggle-row">
+          <div><div class="toggle-label">💬 Notifications WhatsApp</div></div>
+          <label class="switch"><input type="checkbox" id="push_whatsapp" checked><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">🔄 Relances automatiques (3 jours)</div>
+            <div class="toggle-desc">L'agent IA relance automatiquement les leads sans réponse après 3 jours.</div>
+          </div>
+          <label class="switch"><input type="checkbox" id="auto_relance"><span class="slider"></span></label>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="horaires_debut">Heure début (contact)</label>
+            <input type="time" id="horaires_debut" class="form-control" value="08:00">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="horaires_fin">Heure fin</label>
+            <input type="time" id="horaires_fin" class="form-control" value="19:00">
+          </div>
+        </div>
+      </div>
+
+      <!-- Onglet 4 : Agent IA -->
+      <div class="tab-pane" id="tab-ia">
+        <div class="section-divider">🤖 Agent IA & Traduction</div>
+        <div class="form-group">
+          <label class="form-label" for="ton_agent">Ton de l'agent IA</label>
+          <select id="ton_agent" class="form-control">
+            <option value="pro">Professionnel & formel</option>
+            <option value="chaleureux">Direct & chaleureux</option>
+          </select>
+        </div>
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">🌐 Traduction automatique (DeepL)</div>
+            <div class="toggle-desc">L'agent traduira les échanges avec les clients non francophones.</div>
+          </div>
+          <label class="switch"><input type="checkbox" id="deep_actif"><span class="slider"></span></label>
+        </div>
+        <div class="form-group" id="langue-group" style="display:none">
+          <label class="form-label" for="langue_par_defaut">Langue par défaut</label>
+          <select id="langue_par_defaut" class="form-control">
+            <option value="fr">Français</option><option value="en">English</option>
+            <option value="ar">العربية</option><option value="pt">Português</option>
+            <option value="es">Español</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Onglet 5 : Abonnement & Sécurité -->
+      <div class="tab-pane" id="tab-compte">
+        <div class="section-divider">💳 Abonnement</div>
+        <div class="form-group">
+          <label class="form-label">Formule actuelle</label>
+          <div class="badge-plan" id="plan-badge">Standard</div>
+          <p style="font-size:.8rem;color:var(--gris);margin-top:4px">Gérez votre abonnement et vos factures dans votre espace Stripe.</p>
+        </div>
+        <div class="section-divider">🔒 Sécurité</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="password-new">Nouveau mot de passe</label>
+            <input type="password" id="password-new" class="form-control" placeholder="Laissez vide pour ne pas changer">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="password-confirm">Confirmer</label>
+            <input type="password" id="password-confirm" class="form-control">
+          </div>
+        </div>
+        <p style="font-size:.75rem;color:var(--gris);text-align:center;margin-top:12px">
+          <a href="#" id="delete-account" style="color:var(--danger)">Supprimer mon compte</a> (conformément au RGPD)
+        </p>
       </div>
 
       <button type="submit" id="btn-save" class="btn btn-primary btn-block btn-lg" style="margin-top:24px">
-        💾 Enregistrer les paramètres
+        💾 Enregistrer tous les paramètres
       </button>
+
     </form>
 
-    <div class="auth-link" style="margin-top:20px;">
+    <div class="auth-link" style="margin-top:20px">
       <a href="/dashboard.html">← Retour au tableau de bord</a>
     </div>
   </div>
@@ -197,78 +271,113 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', async function() {
-
-  // Vérifier l'authentification
   const user = await Session.requireAuth();
-  if (!user) return; // requireAuth redirige déjà
+  if (!user) return;
 
   const alertId = 'alert-params';
 
-  // Charger les paramètres existants
+  // Gestion des onglets
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Chargement des données existantes
   async function loadSettings() {
     try {
-      // On utilise /api/me qui contient déjà les infos de l'artisan
-      const me = await API.me();
-      if (me && me.artisan) {
-        const a = me.artisan;
-        document.getElementById('art-phone').value = a.telephone || '';
-        // Pour WhatsApp, on le stocke dans le même champ telephone pour l'instant
-        // (à adapter si le backend gère un champ séparé)
-        document.getElementById('art-whatsapp').value = a.telephone || '';
-        // Les zones sont gérées séparément si le backend les supporte
-        document.getElementById('push-sms').checked = a.push_sms !== false;
-        document.getElementById('push-whatsapp').checked = a.push_whatsapp !== false;
-        document.getElementById('auto-relance').checked = a.auto_relance || false;
-      }
-    } catch (e) {
-      console.error('Erreur chargement paramètres', e);
-    }
+      const resp = await API.me();
+      if (!resp.artisan) return;
+      const a = resp.artisan;
+      document.getElementById('nom').value = a.nom || '';
+      document.getElementById('email').value = a.email || '';
+      document.getElementById('telephone').value = a.telephone || '';
+      document.getElementById('adresse').value = a.adresse || '';
+      document.getElementById('siret').value = a.siret || '';
+      document.getElementById('tva').value = a.tva || '';
+      document.getElementById('ville').value = a.ville || '';
+      document.getElementById('rayon').value = a.rayon || 30;
+      document.getElementById('zones').value = (a.zones || []).join(', ');
+      document.getElementById('budget_min').value = a.budget_min || '';
+      document.getElementById('specialite').value = a.specialite || '';
+      document.getElementById('push_sms').checked = a.push_sms !== false;
+      document.getElementById('push_whatsapp').checked = a.push_whatsapp !== false;
+      document.getElementById('auto_relance').checked = a.auto_relance || false;
+      document.getElementById('horaires_debut').value = a.horaires_debut || '08:00';
+      document.getElementById('horaires_fin').value = a.horaires_fin || '19:00';
+      document.getElementById('ton_agent').value = a.ton_agent || 'pro';
+      document.getElementById('deep_actif').checked = a.deep_actif || false;
+      document.getElementById('langue_par_defaut').value = a.langue_par_defaut || 'fr';
+      document.getElementById('plan-badge').textContent = a.plan === 'pro' ? 'Pro' : 'Standard';
+      document.getElementById('langue-group').style.display = a.deep_actif ? 'block' : 'none';
+    } catch(e) { console.error(e); }
   }
 
   await loadSettings();
 
-  // Sauvegarde
+  // Toggle langue
+  document.getElementById('deep_actif').addEventListener('change', function() {
+    document.getElementById('langue-group').style.display = this.checked ? 'block' : 'none';
+  });
+
+  // Soumission
   document.getElementById('params-form').addEventListener('submit', async function(e) {
     e.preventDefault();
     hideAlert(alertId);
-
     const btn = document.getElementById('btn-save');
     btnLoading(btn, true);
 
+    const pwNew = document.getElementById('password-new').value;
+    const pwConfirm = document.getElementById('password-confirm').value;
+    if (pwNew && pwNew !== pwConfirm) {
+      showAlert(alertId, 'Les mots de passe ne correspondent pas.', 'danger');
+      btnLoading(btn, false);
+      return;
+    }
+
+    const payload = {
+      nom: document.getElementById('nom').value.trim(),
+      telephone: document.getElementById('telephone').value.trim(),
+      adresse: document.getElementById('adresse').value.trim(),
+      siret: document.getElementById('siret').value.trim(),
+      tva: document.getElementById('tva').value.trim(),
+      ville: document.getElementById('ville').value.trim(),
+      rayon: parseInt(document.getElementById('rayon').value),
+      zones: document.getElementById('zones').value.split(',').map(s => s.trim()).filter(Boolean),
+      budget_min: parseInt(document.getElementById('budget_min').value) || null,
+      specialite: document.getElementById('specialite').value.trim(),
+      push_sms: document.getElementById('push_sms').checked,
+      push_whatsapp: document.getElementById('push_whatsapp').checked,
+      auto_relance: document.getElementById('auto_relance').checked,
+      horaires_debut: document.getElementById('horaires_debut').value,
+      horaires_fin: document.getElementById('horaires_fin').value,
+      ton_agent: document.getElementById('ton_agent').value,
+      deep_actif: document.getElementById('deep_actif').checked,
+      langue_par_defaut: document.getElementById('langue_par_defaut').value,
+    };
+    if (pwNew) payload.password = pwNew;
+
     try {
-      const payload = {
-        telephone: document.getElementById('art-phone').value.trim(),
-        // WhatsApp utilise le même champ telephone pour simplifier
-        // (le backend peut différencier plus tard)
-        push_sms: document.getElementById('push-sms').checked,
-        push_whatsapp: document.getElementById('push-whatsapp').checked,
-        auto_relance: document.getElementById('auto-relance').checked,
-      };
-
-      // Mise à jour du profil (route existante)
       await API.updateProfile(payload);
-
-      // Les zones peuvent être mises à jour via une route dédiée si elle existe
-      const zonesStr = document.getElementById('art-zones').value.trim();
-      if (zonesStr) {
-        const zones = zonesStr.split(',').map(s => s.trim()).filter(Boolean);
-        try {
-          await API.updateNotifs({ zones: zones });
-        } catch (e) {
-          // La route /api/artisan/notifications n'existe peut-être pas encore
-          console.warn('Zones non sauvegardées (route manquante)', e);
-        }
-      }
-
-      showAlert(alertId, '✅ Paramètres enregistrés !', 'success');
-      setTimeout(() => hideAlert(alertId), 3000);
-    } catch (err) {
+      showAlert(alertId, '✅ Tous les paramètres ont été enregistrés.', 'success');
+      setTimeout(() => hideAlert(alertId), 4000);
+    } catch(err) {
       showAlert(alertId, '❌ ' + err.message, 'danger');
     } finally {
       btnLoading(btn, false);
     }
   });
 
+  // Suppression de compte (placeholder)
+  document.getElementById('delete-account').addEventListener('click', function(e) {
+    e.preventDefault();
+    if (confirm('Voulez-vous vraiment supprimer votre compte ? Cette action est irréversible.')) {
+      alert('Fonctionnalité en cours de développement. Contactez le support.');
+    }
+  });
 });
 </script>
 </body>
