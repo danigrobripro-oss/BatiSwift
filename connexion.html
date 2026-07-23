@@ -9,14 +9,12 @@
     body { background: var(--beige); }
     .auth-wrapper {
       min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      display: grid; grid-template-columns: 1fr 1fr;
     }
     .auth-visual {
       background: linear-gradient(145deg, var(--anthracite2) 0%, #0d0d0d 100%);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: var(--space-xl);
-      position: relative; overflow: hidden;
+      padding: var(--space-xl); position: relative; overflow: hidden;
     }
     .auth-visual::before {
       content: '';
@@ -24,37 +22,25 @@
       background: radial-gradient(circle at 30% 70%, rgba(201,168,76,.15) 0%, transparent 60%);
     }
     .auth-visual-content { position: relative; z-index: 1; text-align: center; color: var(--blanc); }
-    .auth-visual h2 { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; margin-bottom: 16px; }
-    .auth-visual p  { color: rgba(255,255,255,.6); font-size: .95rem; line-height: 1.7; max-width: 340px; }
+    .auth-visual-content h2 { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; margin-bottom: 16px; }
+    .auth-visual-content p  { color: rgba(255,255,255,.6); font-size: .95rem; line-height: 1.7; max-width: 340px; }
     .auth-stats { display: flex; gap: 32px; margin-top: 40px; justify-content: center; }
     .auth-stat-num { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--or); }
     .auth-stat-lbl { font-size: .75rem; color: rgba(255,255,255,.4); margin-top: 2px; }
-
     .auth-form-side {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       padding: var(--space-xl) 5vw;
     }
-    .auth-card {
-      width: 100%; max-width: 420px;
-    }
-    .auth-logo { margin-bottom: var(--space-xl); }
-    .auth-logo .nav-logo { font-size: 1.3rem; }
-    .auth-title   { font-family: var(--font-display); font-size: 2rem; font-weight: 700; margin-bottom: 6px; }
+    .auth-card { width: 100%; max-width: 420px; }
+    .auth-title    { font-family: var(--font-display); font-size: 2rem; font-weight: 700; margin-bottom: 6px; }
     .auth-subtitle { color: var(--gris); font-size: .9rem; margin-bottom: var(--space-xl); }
-
     .pass-wrapper { position: relative; }
     .pass-toggle {
       position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
-      background: none; border: none; cursor: pointer; font-size: 1rem;
-      color: var(--gris); padding: 4px;
+      background: none; border: none; cursor: pointer; font-size: 1rem; color: var(--gris); padding: 4px;
     }
-
-    .auth-footer-link {
-      text-align: center; margin-top: var(--space-lg);
-      font-size: .88rem; color: var(--gris);
-    }
-    .auth-footer-link a { color: var(--anthracite); font-weight: 600; }
-
+    .auth-link { text-align: center; margin-top: var(--space-lg); font-size: .88rem; color: var(--gris); }
+    .auth-link a { color: var(--anthracite); font-weight: 600; }
     @media (max-width: 768px) {
       .auth-wrapper { grid-template-columns: 1fr; }
       .auth-visual  { display: none; }
@@ -72,8 +58,8 @@
   <!-- Visuel gauche -->
   <div class="auth-visual">
     <div class="auth-visual-content">
-      <img src="/assets/logo.svg" alt="BâtiSwift" style="width:60px;filter:invert(1);margin:0 auto 20px">
-      <h2>Bienvenue sur BâtiSwift</h2>
+      <img src="/assets/logo.svg" alt="BâtiSwift" style="width:60px;filter:invert(1);margin:0 auto 20px;display:block">
+      <h2>BâtiSwift</h2>
       <p>La plateforme qui connecte artisans BTP et clients qualifiés en moins de 2 minutes.</p>
       <div class="auth-stats">
         <div>
@@ -99,12 +85,9 @@
       <div class="auth-title">Connexion</div>
       <div class="auth-subtitle">Accédez à votre espace artisan</div>
 
-      <!-- Alerte session expirée -->
       <div id="alert-expired" class="alert alert-warning" style="display:none">
         ⏰ Votre session a expiré. Reconnectez-vous.
       </div>
-
-      <!-- Alert erreur/succès -->
       <div id="alert-login" class="alert" style="display:none"></div>
 
       <form id="form-login" novalidate>
@@ -112,39 +95,37 @@
           <label class="form-label" for="email">E-mail <span class="req">*</span></label>
           <input id="email" type="email" class="form-control" placeholder="vous@exemple.fr" required autocomplete="email">
         </div>
-
         <div class="form-group">
           <label class="form-label" for="password">Mot de passe <span class="req">*</span></label>
           <div class="pass-wrapper">
             <input id="password" type="password" class="form-control" placeholder="••••••••" required autocomplete="current-password" style="padding-right:44px">
-            <button type="button" class="pass-toggle" id="toggle-password" aria-label="Voir le mot de passe">👁</button>
+            <button type="button" class="pass-toggle" id="toggle-pw">👁</button>
           </div>
         </div>
-
         <button type="submit" id="btn-login" class="btn btn-primary btn-block btn-lg" style="margin-top:8px">
           Se connecter
         </button>
       </form>
 
-      <div class="auth-footer-link">
-        Pas encore de compte ? <a href="/inscription.html">S'inscrire gratuitement</a>
-      </div>
-      <div class="auth-footer-link" style="margin-top:10px">
+      <div class="auth-link">Pas encore de compte ? <a href="/inscription.html">S'inscrire gratuitement</a></div>
+      <div class="auth-link" style="margin-top:8px">
         <a href="/client.html" style="color:var(--gris)">Je suis client — Déposer une demande →</a>
       </div>
-
     </div>
   </div>
 </div>
 
 <div id="footer-container"></div>
 
+<!-- ① config   ② api   ③ session   ④ main — ordre obligatoire -->
 <script src="/js/config.js"></script>
 <script src="/js/api.js"></script>
 <script src="/js/session.js"></script>
 <script src="/js/main.js"></script>
+
 <script>
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', async function() {
+
   // Affiche message si session expirée
   if (new URLSearchParams(window.location.search).get('expired')) {
     document.getElementById('alert-expired').style.display = 'flex';
@@ -153,34 +134,40 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Redirige si déjà connecté
   await Session.redirectIfAuth('/dashboard.html');
 
-  const form   = document.getElementById('form-login');
-  const btn    = document.getElementById('btn-login');
-  const alertEl = 'alert-login';
+  // Toggle mot de passe
+  document.getElementById('toggle-pw').addEventListener('click', function() {
+    var inp = document.getElementById('password');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+    this.textContent = inp.type === 'password' ? '👁' : '🙈';
+  });
 
-  form.addEventListener('submit', async (e) => {
+  // Soumission
+  document.getElementById('form-login').addEventListener('submit', async function(e) {
     e.preventDefault();
-    hideAlert(alertEl);
+    var alertId = 'alert-login';
+    hideAlert(alertId);
+
+    var email = document.getElementById('email').value.trim();
+    var pass  = document.getElementById('password').value;
+
+    if (!email) { showAlert(alertId, 'Veuillez saisir votre e-mail.', 'danger'); return; }
+    if (!pass)  { showAlert(alertId, 'Veuillez saisir votre mot de passe.', 'danger'); return; }
+
+    var btn = document.getElementById('btn-login');
     btnLoading(btn, true);
+
     try {
-      const data = await API.login(
-        document.getElementById('email').value.trim(),
-        document.getElementById('password').value
-      );
+      var data = await API.login(email, pass);
       Session.save(data.token, data.artisan);
       toast('Connexion réussie !', 'success');
-      const redirect = new URLSearchParams(window.location.search).get('redirect') || '/dashboard.html';
-      setTimeout(() => window.location.href = redirect, 600);
-    } catch (err) {
-      showAlert(alertEl, err.message, 'danger');
+      var redirect = new URLSearchParams(window.location.search).get('redirect') || '/dashboard.html';
+      setTimeout(function() { window.location.href = redirect; }, 600);
+    } catch(err) {
+      showAlert(alertId, err.message, 'danger');
       btnLoading(btn, false);
     }
   });
 
-  document.getElementById('toggle-password')?.addEventListener('click', function() {
-    const inp = document.getElementById('password');
-    inp.type = inp.type === 'password' ? 'text' : 'password';
-    this.textContent = inp.type === 'password' ? '👁' : '🙈';
-  });
 });
 </script>
 </body>
