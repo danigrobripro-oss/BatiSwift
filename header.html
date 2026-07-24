@@ -1,10 +1,13 @@
+<!-- header.html – avec sidebar mobile -->
 <header class="site-header">
   <div class="container">
+    <!-- Logo -->
     <a href="/index.html" class="nav-logo">
       <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
       BâtiSwift
     </a>
 
+    <!-- Navigation Desktop -->
     <nav aria-label="Navigation principale">
       <ul class="nav-links" id="nav-links-list">
         <li><a href="/index.html" class="nav-link">Accueil</a></li>
@@ -14,23 +17,22 @@
       </ul>
     </nav>
 
+    <!-- Actions Desktop -->
     <div class="nav-actions">
-      <!-- Invité : Connexion + Inscription -->
-      <div class="nav-guest" id="nav-guest-buttons">
+      <div class="nav-guest" style="display:flex;gap:10px;align-items:center">
         <a href="/connexion.html" class="btn btn-secondary btn-sm">Connexion</a>
         <a href="/inscription.html" class="btn btn-primary btn-sm">S'inscrire</a>
       </div>
-      <!-- Connecté -->
-      <div class="nav-user" id="nav-user-buttons" style="display:none;">
-        <span id="nav-user-greeting"></span>
+      <div class="nav-user" style="display:none;gap:10px;align-items:center;flex-wrap:nowrap">
+        <span id="nav-user-greeting" style="font-size:.86rem;font-weight:600;color:var(--anthracite)"></span>
         <a href="/dashboard.html" class="btn btn-secondary btn-sm">Mon Espace</a>
         <a href="/parametres.html" class="btn btn-secondary btn-sm">⚙</a>
         <button data-action="logout" class="btn btn-primary btn-sm">Déconnexion</button>
       </div>
     </div>
 
-    <!-- Hamburger mobile -->
-    <button class="nav-hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+    <!-- Bouton Burger pour mobile -->
+    <button class="nav-hamburger" id="burger-btn" aria-label="Menu" aria-expanded="false">
       <span class="bar"></span>
       <span class="bar"></span>
       <span class="bar"></span>
@@ -38,43 +40,43 @@
   </div>
 </header>
 
-<!-- Overlay (fond sombre derrière la sidebar) -->
-<div class="mobile-overlay" id="mobile-overlay"></div>
-
-<!-- Sidebar mobile -->
-<div class="mobile-sidebar" id="mobile-sidebar">
+<!-- SIDEBAR MOBILE (overlay + panneau) -->
+<div id="sidebar-overlay" class="sidebar-overlay"></div>
+<div id="mobile-sidebar" class="mobile-sidebar">
   <div class="sidebar-header">
-    <div class="sidebar-logo">
+    <a href="/index.html" class="nav-logo">
       <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
       BâtiSwift
-    </div>
-    <button class="sidebar-close" id="sidebar-close">✕</button>
+    </a>
+    <button id="sidebar-close" class="sidebar-close" aria-label="Fermer le menu">✕</button>
   </div>
   <nav class="sidebar-nav">
-    <a href="/index.html" class="sidebar-link">🏠 Accueil</a>
-    <a href="/client.html" class="sidebar-link">💬 Déposer une demande</a>
-    <a href="/tarifs.html" class="sidebar-link">💰 Tarifs</a>
-    <a href="/aide.html" class="sidebar-link">❓ Aide</a>
-    <div class="sidebar-divider"></div>
-    <a href="/connexion.html" class="sidebar-link btn btn-secondary btn-block">Connexion</a>
-    <a href="/inscription.html" class="sidebar-link btn btn-primary btn-block">S'inscrire</a>
+    <a href="/index.html">🏠 Accueil</a>
+    <a href="/client.html">💬 Déposer une demande</a>
+    <a href="/tarifs.html">💰 Tarifs</a>
+    <a href="/aide.html">❓ Aide</a>
   </nav>
+  <div class="sidebar-actions">
+    <a href="/connexion.html" class="btn btn-secondary btn-block">Connexion</a>
+    <a href="/inscription.html" class="btn btn-primary btn-block">S'inscrire</a>
+  </div>
 </div>
 
+<!-- Styles pour la sidebar -->
 <style>
-/* ─── SIDEBAR MOBILE ─── */
-.mobile-overlay {
+/* ── SIDEBAR MOBILE ── */
+.sidebar-overlay {
   position: fixed;
   inset: 0;
+  background: rgba(0,0,0,0.4);
   z-index: 299;
-  background: rgba(0,0,0,0.5);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
 }
-.mobile-overlay.active {
+.sidebar-overlay.active {
   opacity: 1;
-  pointer-events: all;
+  pointer-events: auto;
 }
 
 .mobile-sidebar {
@@ -82,148 +84,134 @@
   top: 0;
   left: -320px;
   width: 300px;
+  max-width: 80vw;
   height: 100vh;
+  background: var(--blanc, #fff);
   z-index: 300;
-  background: var(--blanc, #ffffff);
-  box-shadow: 4px 0 32px rgba(0,0,0,0.15);
+  padding: 1.5rem;
+  box-shadow: 4px 0 32px rgba(0,0,0,0.12);
   transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
-  padding: 20px 0;
+  gap: 1.5rem;
   overflow-y: auto;
 }
-.mobile-sidebar.open {
+.mobile-sidebar.active {
   left: 0;
 }
-
 .sidebar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px 20px;
+  padding-bottom: 1rem;
   border-bottom: 1px solid var(--beige-dark, #ede6dd);
-}
-.sidebar-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--font-display, 'Cormorant Garamond', serif);
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--anthracite, #2b2b2b);
-}
-.sidebar-logo img {
-  width: 32px;
-  height: auto;
 }
 .sidebar-close {
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   color: var(--gris, #8b8b8b);
   cursor: pointer;
-  padding: 4px 8px;
-  transition: color 0.2s;
+  padding: 0 0.5rem;
 }
 .sidebar-close:hover {
   color: var(--anthracite, #2b2b2b);
 }
-
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  gap: 4px;
-  flex: 1;
+  gap: 0.5rem;
 }
-.sidebar-link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
+.sidebar-nav a {
+  padding: 0.8rem 1rem;
   border-radius: var(--radius, 14px);
   font-size: 1rem;
   font-weight: 500;
   color: var(--anthracite, #2b2b2b);
-  text-decoration: none;
   transition: background 0.2s;
+  text-decoration: none;
 }
-.sidebar-link:hover {
+.sidebar-nav a:hover {
   background: var(--beige, #f5f0eb);
 }
-.sidebar-divider {
-  height: 1px;
-  background: var(--beige-dark, #ede6dd);
-  margin: 12px 0;
+.sidebar-actions {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--beige-dark, #ede6dd);
 }
-.sidebar-nav .btn {
-  justify-content: center;
-  margin-top: 4px;
+.sidebar-actions .btn {
+  text-align: center;
 }
 
-/* ─── RESPONSIVE ─── */
+/* ── RESPONSIVE ── */
+@media (min-width: 769px) {
+  .sidebar-overlay,
+  .mobile-sidebar,
+  .nav-hamburger {
+    display: none !important;
+  }
+}
 @media (max-width: 768px) {
   .nav-links {
     display: none !important;
   }
+  .nav-actions .nav-guest,
+  .nav-actions .nav-user {
+    display: none !important;
+  }
+  /* On garde le burger visible */
   .nav-hamburger {
     display: flex !important;
   }
-  .nav-guest .btn {
-    font-size: 0.75rem;
-    padding: 6px 12px;
-  }
 }
 
-@media (min-width: 769px) {
-  .mobile-overlay,
-  .mobile-sidebar {
-    display: none !important;
-  }
+/* Animation du burger en X */
+.nav-hamburger.open .bar:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.nav-hamburger.open .bar:nth-child(2) {
+  opacity: 0;
+}
+.nav-hamburger.open .bar:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
 }
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  var hamburger = document.getElementById('hamburger');
+// ─── SIDEBAR MOBILE ──────────────────────────────────────
+(function initMobileSidebar() {
+  var burgerBtn = document.getElementById('burger-btn');
+  var overlay = document.getElementById('sidebar-overlay');
   var sidebar = document.getElementById('mobile-sidebar');
-  var overlay = document.getElementById('mobile-overlay');
   var closeBtn = document.getElementById('sidebar-close');
+  var sidebarLinks = sidebar ? sidebar.querySelectorAll('a') : [];
 
-  function openMenu() {
-    sidebar.classList.add('open');
-    overlay.classList.add('active');
-    hamburger.setAttribute('aria-expanded', 'true');
+  function openSidebar() {
+    if (burgerBtn) burgerBtn.classList.add('open');
+    if (overlay) overlay.classList.add('active');
+    if (sidebar) sidebar.classList.add('active');
+    document.body.style.overflow = 'hidden';
   }
 
-  function closeMenu() {
-    sidebar.classList.remove('open');
-    overlay.classList.remove('active');
-    hamburger.setAttribute('aria-expanded', 'false');
+  function closeSidebar() {
+    if (burgerBtn) burgerBtn.classList.remove('open');
+    if (overlay) overlay.classList.remove('active');
+    if (sidebar) sidebar.classList.remove('active');
+    document.body.style.overflow = '';
   }
 
-  if (hamburger) {
-    hamburger.addEventListener('click', function(e) {
-      e.stopPropagation();
-      if (sidebar.classList.contains('open')) {
-        closeMenu();
-      } else {
-        openMenu();
-      }
+  if (burgerBtn) burgerBtn.addEventListener('click', openSidebar);
+  if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+  if (overlay) overlay.addEventListener('click', closeSidebar);
+
+  // Fermer la sidebar au clic sur un lien
+  sidebarLinks.forEach(function(link) {
+    link.addEventListener('click', function() {
+      closeSidebar();
     });
-  }
-
-  if (closeBtn) {
-    closeBtn.addEventListener('click', closeMenu);
-  }
-
-  if (overlay) {
-    overlay.addEventListener('click', closeMenu);
-  }
-
-  // Fermer en cliquant sur un lien
-  document.querySelectorAll('.sidebar-link').forEach(function(link) {
-    link.addEventListener('click', closeMenu);
   });
-});
+})();
 </script>
