@@ -1,66 +1,355 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tarifs — BâtiSwift</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-  <script>
-    (function() {
-      var t = localStorage.getItem("batiswift-theme");
-      if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches)) {
-        document.documentElement.setAttribute("data-theme", "dark");
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarifs – BâtiSwift</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* ============================================================
+       PAGE TARIFAIRE – Design moderne et conversion
+       ============================================================ */
+    .pricing-hero {
+      padding: calc(var(--header-h) + 60px) 0 20px;
+      text-align: center;
+    }
+    .pricing-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    .pricing-hero .hero-accent {
+      color: var(--or);
+    }
+    .pricing-hero .subhead {
+      font-size: 1.1rem;
+      color: var(--gris);
+      max-width: 700px;
+      margin: 0 auto 3rem;
+      line-height: 1.7;
+    }
+
+    /* Grille des offres */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      max-width: 1000px;
+      margin: 0 auto 3rem;
+    }
+    .pricing-column {
+      background: var(--blanc);
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .pricing-column:first-child {
+      border-radius: var(--radius-xl) 0 0 var(--radius-xl);
+      border: 1px solid var(--beige-dark);
+      border-right: 0;
+    }
+    .pricing-column:last-child {
+      border-radius: 0 var(--radius-xl) var(--radius-xl) 0;
+      background: linear-gradient(180deg, #FFFFFF 0%, #FFFDF5 100%);
+      border: 2px solid var(--or);
+      box-shadow: 0 20px 60px rgba(201,168,76,0.15);
+      position: relative;
+      z-index: 1;
+    }
+    .popular-badge {
+      position: absolute;
+      top: -16px;
+      right: 30px;
+      background: var(--or);
+      color: var(--blanc);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 6px 20px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 6px 20px rgba(201,168,76,0.4);
+    }
+    .plan-name {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+    .plan-price {
+      font-size: 2.6rem;
+      font-weight: 800;
+      color: var(--anthracite);
+      margin-bottom: 0.5rem;
+    }
+    .plan-price small {
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: var(--gris);
+    }
+    .plan-desc {
+      font-size: 0.9rem;
+      color: var(--gris);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    .plan-divider {
+      height: 1px;
+      background: var(--beige-dark);
+      margin: 1.5rem 0;
+    }
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 2rem;
+      flex: 1;
+    }
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      padding: 0.55rem 0;
+      font-size: 0.9rem;
+      color: var(--anthracite);
+    }
+    .feature-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .feature-icon.check { color: var(--success); }
+    .feature-icon.cross { color: var(--gris-light); }
+    .feature-icon.star { color: var(--or); }
+
+    .plan-cta {
+      margin-top: auto;
+    }
+
+    /* Bloc de rentabilité */
+    .rentability-box {
+      max-width: 1000px;
+      margin: 0 auto 2rem;
+      background: linear-gradient(135deg, var(--anthracite2) 0%, #1a1a1a 100%);
+      border-radius: var(--radius-xl);
+      padding: 2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      color: var(--blanc);
+    }
+    .rentability-icon {
+      font-size: 3rem;
+    }
+    .rentability-text h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      margin-bottom: 0.3rem;
+      color: var(--or-light);
+    }
+    .rentability-text p {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.7);
+      margin: 0;
+    }
+
+    /* Barre de réassurance */
+    .trust-bar {
+      max-width: 1000px;
+      margin: 0 auto 4rem;
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      text-align: center;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.9rem;
+      color: var(--gris);
+    }
+    .trust-item .icon {
+      font-size: 1.5rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .pricing-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
       }
-    })();
-  </script>
+      .pricing-column:first-child,
+      .pricing-column:last-child {
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--beige-dark);
+      }
+      .pricing-column:last-child {
+        border-color: var(--or);
+      }
+      .rentability-box {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+      }
+    }
+  </style>
 </head>
-<body>
+<body class="minimal-layout">
 
-<div id="header-placeholder"></div>
+<div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
+<div id="header-container"></div>
 
-<main class="container" style="padding:3rem 0;">
-  <h1 style="text-align:center;font-size:2.2rem;">💰 Des tarifs simples, sans engagement</h1>
-  <p style="text-align:center;color:var(--text-muted);max-width:50ch;margin:0 auto 2rem;">Choisissez la formule qui vous correspond.</p>
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="pricing-hero">
+  <div class="container">
+    <h1>Remplissez votre carnet de commandes<br>sans effort, <span class="hero-accent">24h/24</span></h1>
+    <p class="subhead">
+      Choisissez la formule qui correspond à votre activité. Achetez des chantiers à l'unité, ou confiez la prospection à votre assistant IA pour ne plus jamais rater une opportunité.
+    </p>
+  </div>
+</section>
 
-  <div class="pricing-grid" style="grid-template-columns: repeat(2, 1fr); max-width:700px; margin:0 auto;">
-    <div class="pricing-card">
-      <h3>📱 Assistant IA</h3>
-      <div class="price">19 <span>€/mois</span></div>
-      <ul>
-        <li>✅ Réponse automatique 24h/24</li>
-        <li>✅ Qualification des leads</li>
-        <li>✅ Résumé WhatsApp</li>
-        <li>✅ Relances automatiques</li>
+<!-- ============================================================
+     GRILLE TARIFAIRE
+     ============================================================ -->
+<div class="container">
+  <div class="pricing-grid">
+
+    <!-- Colonne 1 : Offre découverte / à l'acte -->
+    <div class="pricing-column">
+      <div class="plan-name">🔍 Découverte & À l'acte</div>
+      <div class="plan-price">0€ <small>/ mois</small></div>
+      <p class="plan-desc">Pour les artisans qui veulent tester la plateforme ou acheter des chantiers au coup par coup.</p>
+
+      <ul class="feature-list">
+        <li><span class="feature-icon check">✅</span> Traduction de l'interface du site</li>
+        <li><span class="feature-icon check">✅</span> Catalogue des leads géolocalisés</li>
+        <li><span class="feature-icon check">✅</span> Visualisation : type, urgence, distance</li>
+        <li><span class="feature-icon cross">🔒</span> Coordonnées masquées avant achat</li>
+        <li><span class="feature-icon cross">—</span> Agent IA et réponses automatiques</li>
+        <li><span class="feature-icon cross">—</span> Notifications WhatsApp</li>
+        <li><span class="feature-icon cross">—</span> Relances automatiques</li>
+        <li><span class="feature-icon cross">—</span> Dashboard de suivi avancé</li>
+        <li><span class="feature-icon cross">—</span> Traduction des conversations</li>
       </ul>
-      <a href="inscription.html" class="btn btn--primary btn--block">S’abonner</a>
+
+      <p class="plan-desc" style="margin-bottom:1rem;">
+        <strong>Achat de lead unitaire : 10 €</strong> par lead (paiement sécurisé Stripe).
+      </p>
+
+      <div class="plan-cta">
+        <a href="/dashboard.html" class="btn btn-primary btn-block btn-lg">Explorer les chantiers disponibles</a>
+      </div>
     </div>
-    <div class="pricing-card" style="border-color:var(--accent);">
-      <h3>🔥 Leads à l’unité</h3>
-      <div class="price">10 <span>€/lead</span></div>
-      <ul>
-        <li>✅ Clients qualifiés</li>
-        <li>✅ Photos intégrées</li>
-        <li>✅ Exclusivité 10 min</li>
-        <li>✅ Paiement Stripe</li>
+
+    <!-- Colonne 2 : Offre Pro (mise en avant) -->
+    <div class="pricing-column" style="position:relative;">
+      <div class="popular-badge">⭐ Le plus populaire</div>
+      <div class="plan-name">🤖 BatiSwift Pro — Votre Agent IA</div>
+      <div class="plan-price">19€ <small>/ mois</small></div>
+      <p class="plan-desc">L'assistant qui prospecte, filtre et vous alerte 24h/24. Sans engagement, annulable en un clic.</p>
+
+      <ul class="feature-list">
+        <li><span class="feature-icon check">✅</span> Traduction de l'interface du site</li>
+        <li><span class="feature-icon check">✅</span> Catalogue des leads géolocalisés (coordonnées incluses)</li>
+        <li><span class="feature-icon star">⚡</span> Réactivité Instant-Reply (en 60 secondes)</li>
+        <li><span class="feature-icon star">📍</span> Filtres de géolocalisation et de rentabilité</li>
+        <li><span class="feature-icon star">💬</span> Notifications & Alertes WhatsApp directes (Infobip)</li>
+        <li><span class="feature-icon star">🔄</span> Relances automatiques (6 types d'emails & SMS)</li>
+        <li><span class="feature-icon star">📊</span> Dashboard de suivi complet (tags, notes, statuts)</li>
+        <li><span class="feature-icon star">🌐</span> Traduction des conversations clients (DeepL via IA)</li>
       </ul>
-      <a href="inscription.html" class="btn btn--primary btn--block">Acheter des leads</a>
+
+      <div class="plan-cta">
+        <button id="btn-subscribe" class="btn btn-gold btn-block btn-lg">
+          Activer mon Agent IA (19€/mois)
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================
+       BLOC DE RENTABILITÉ
+       ============================================================ -->
+  <div class="rentability-box">
+    <div class="rentability-icon">💰</div>
+    <div class="rentability-text">
+      <h3>Un seul chantier décroché rembourse votre année d'abonnement</h3>
+      <p>Avec un panier moyen de 800 € à 2 000 € dans le BTP, l'abonnement Pro est amorti dès votre première intervention. Tout le reste, c'est du bénéfice net.</p>
     </div>
   </div>
-</main>
 
-<div id="footer-placeholder"></div>
+  <!-- ============================================================
+       BARRE DE RÉASSURANCE
+       ============================================================ -->
+  <div class="trust-bar">
+    <div class="trust-item">
+      <span class="icon">🔒</span>
+      <span>Paiement 100% sécurisé par Stripe</span>
+    </div>
+    <div class="trust-item">
+      <span class="icon">❌</span>
+      <span>Sans engagement, annulable en un clic</span>
+    </div>
+    <div class="trust-item">
+      <span class="icon">💬</span>
+      <span>Support client dédié</span>
+    </div>
+  </div>
+</div>
+
+<div id="footer-container"></div>
+
+<!-- Scripts partagés -->
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/session.js"></script>
+<script src="/js/main.js"></script>
 
 <script>
-  fetch('header.html').then(r => r.text()).then(html => {
-    document.getElementById('header-placeholder').innerHTML = html;
-  });
-  fetch('footer.html').then(r => r.text()).then(html => {
-    document.getElementById('footer-placeholder').innerHTML = html;
-  });
-</script>
+document.addEventListener('DOMContentLoaded', function() {
 
+  // Bouton d'abonnement Pro
+  var btnSubscribe = document.getElementById('btn-subscribe');
+  if (btnSubscribe) {
+    btnSubscribe.addEventListener('click', async function() {
+      // Vérifier que l'utilisateur est connecté
+      var user = await Session.verify();
+      if (!user) {
+        window.location.href = '/connexion.html?redirect=' + encodeURIComponent('/tarifs.html');
+        return;
+      }
+
+      btnSubscribe.disabled = true;
+      btnSubscribe.innerHTML = '<span class="spinner"></span> Création de votre abonnement...';
+
+      try {
+        var data = await API.post('/api/create-subscription');
+        // Redirection vers Stripe Checkout
+        window.location.href = data.checkout_url;
+      } catch(err) {
+        toast('Erreur : ' + err.message, 'danger');
+        btnSubscribe.disabled = false;
+        btnSubscribe.textContent = 'Activer mon Agent IA (19€/mois)';
+      }
+    });
+  }
+
+  // Afficher un toast si retour de paiement réussi
+  var urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('session_id')) {
+    toast('✅ Paiement validé ! Votre abonnement est actif.', 'success', 6000);
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }
+
+});
+</script>
 </body>
 </html>
