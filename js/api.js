@@ -41,6 +41,14 @@ async function apiFetch(endpoint, options = {}) {
 // ─── OBJET API — tous les endpoints du backend ───────────────
 const API = {
 
+  // ─── Méthode générique POST (pour tout endpoint) ───────────
+  post: function(endpoint, body) {
+    return apiFetch(endpoint, {
+      method: 'POST',
+      body: JSON.stringify(body)
+    });
+  },
+
   // Auth
   register: function(body) {
     return apiFetch('/api/artisan/register', { method: 'POST', body: JSON.stringify(body) });
