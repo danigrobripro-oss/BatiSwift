@@ -20,7 +20,7 @@
         <a href="/connexion.html" class="btn btn-secondary btn-sm">Connexion</a>
         <a href="/inscription.html" class="btn btn-primary btn-sm">S'inscrire</a>
       </div>
-      <!-- Connecté : Prénom + Dashboard + Paramètres + Déconnexion -->
+      <!-- Connecté -->
       <div class="nav-user" id="nav-user-buttons" style="display:none;">
         <span id="nav-user-greeting"></span>
         <a href="/dashboard.html" class="btn btn-secondary btn-sm">Mon Espace</a>
@@ -38,162 +38,192 @@
   </div>
 </header>
 
+<!-- Overlay (fond sombre derrière la sidebar) -->
+<div class="mobile-overlay" id="mobile-overlay"></div>
+
+<!-- Sidebar mobile -->
+<div class="mobile-sidebar" id="mobile-sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
+      BâtiSwift
+    </div>
+    <button class="sidebar-close" id="sidebar-close">✕</button>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="/index.html" class="sidebar-link">🏠 Accueil</a>
+    <a href="/client.html" class="sidebar-link">💬 Déposer une demande</a>
+    <a href="/tarifs.html" class="sidebar-link">💰 Tarifs</a>
+    <a href="/aide.html" class="sidebar-link">❓ Aide</a>
+    <div class="sidebar-divider"></div>
+    <a href="/connexion.html" class="sidebar-link btn btn-secondary btn-block">Connexion</a>
+    <a href="/inscription.html" class="sidebar-link btn btn-primary btn-block">S'inscrire</a>
+  </nav>
+</div>
+
 <style>
-/* ── Correction mobile : boutons en ligne ── */
-.nav-actions {
+/* ─── SIDEBAR MOBILE ─── */
+.mobile-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 299;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.mobile-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.mobile-sidebar {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100vh;
+  z-index: 300;
+  background: var(--blanc, #ffffff);
+  box-shadow: 4px 0 32px rgba(0,0,0,0.15);
+  transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  overflow-y: auto;
+}
+.mobile-sidebar.open {
+  left: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--beige-dark, #ede6dd);
+}
+.sidebar-logo {
   display: flex;
   align-items: center;
   gap: 10px;
+  font-family: var(--font-display, 'Cormorant Garamond', serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--anthracite, #2b2b2b);
 }
-.nav-guest,
-.nav-user {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: nowrap; /* ← FORCE l'alignement horizontal */
+.sidebar-logo img {
+  width: 32px;
+  height: auto;
 }
-.nav-guest .btn,
-.nav-user .btn {
-  white-space: nowrap; /* ← Empêche le texte de passer à la ligne */
-}
-
-/* ── Correction menu hamburger ── */
-.nav-hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 4px;
+.sidebar-close {
   background: none;
   border: none;
+  font-size: 1.5rem;
+  color: var(--gris, #8b8b8b);
   cursor: pointer;
-  padding: 4px;
+  padding: 4px 8px;
+  transition: color 0.2s;
 }
-.nav-hamburger .bar {
-  width: 26px;
-  height: 3px;
-  background: var(--anthracite, #2b2b2b);
-  border-radius: 4px;
-  transition: all 0.3s ease;
+.sidebar-close:hover {
+  color: var(--anthracite, #2b2b2b);
 }
 
-/* ── RESPONSIVE ── */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 4px;
+  flex: 1;
+}
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius, 14px);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--anthracite, #2b2b2b);
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.sidebar-link:hover {
+  background: var(--beige, #f5f0eb);
+}
+.sidebar-divider {
+  height: 1px;
+  background: var(--beige-dark, #ede6dd);
+  margin: 12px 0;
+}
+.sidebar-nav .btn {
+  justify-content: center;
+  margin-top: 4px;
+}
+
+/* ─── RESPONSIVE ─── */
 @media (max-width: 768px) {
-  /* Afficher le hamburger */
-  .nav-hamburger {
-    display: flex;
-  }
-
-  /* Cacher la navigation par défaut */
   .nav-links {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: var(--header-h, 72px);
-    left: 0;
-    right: 0;
-    background: var(--blanc, #ffffff);
-    padding: 1.5rem 2rem;
-    border-bottom: 1px solid var(--beige-dark, #ede6dd);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-    gap: 8px;
-    z-index: 999;
+    display: none !important;
   }
-  .nav-links.mobile-open {
-    display: flex;
+  .nav-hamburger {
+    display: flex !important;
   }
-  .nav-links li {
-    width: 100%;
-  }
-  .nav-links li a {
-    display: block;
-    padding: 12px 16px;
-    text-align: center;
-    font-size: 1rem;
-    border-radius: var(--radius, 14px);
-    transition: background 0.2s;
-  }
-  .nav-links li a:hover {
-    background: var(--beige, #f5f0eb);
-  }
-
-  /* Animation du hamburger en "X" */
-  .nav-hamburger.open .bar:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-  }
-  .nav-hamburger.open .bar:nth-child(2) {
-    opacity: 0;
-  }
-  .nav-hamburger.open .bar:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px);
-  }
-
-  /* Correction : boutons en ligne sur mobile */
-  .nav-guest,
-  .nav-user {
-    flex-wrap: nowrap !important;
-    gap: 6px;
-  }
-  .nav-guest .btn,
-  .nav-user .btn {
+  .nav-guest .btn {
     font-size: 0.75rem;
     padding: 6px 12px;
-    white-space: nowrap;
-  }
-  #nav-user-greeting {
-    font-size: 0.75rem;
-    margin-right: 4px;
   }
 }
 
-@media (max-width: 480px) {
-  .nav-guest .btn,
-  .nav-user .btn {
-    font-size: 0.7rem;
-    padding: 4px 8px;
-  }
-  .nav-links li a {
-    padding: 10px 12px;
-    font-size: 0.9rem;
+@media (min-width: 769px) {
+  .mobile-overlay,
+  .mobile-sidebar {
+    display: none !important;
   }
 }
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // ─── HAMBURGER ──────────────────────────────────────
   var hamburger = document.getElementById('hamburger');
-  var navLinks = document.getElementById('nav-links-list');
+  var sidebar = document.getElementById('mobile-sidebar');
+  var overlay = document.getElementById('mobile-overlay');
+  var closeBtn = document.getElementById('sidebar-close');
 
-  if (hamburger && navLinks) {
-    // Ouvrir/fermer le menu
+  function openMenu() {
+    sidebar.classList.add('open');
+    overlay.classList.add('active');
+    hamburger.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeMenu() {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('active');
+    hamburger.setAttribute('aria-expanded', 'false');
+  }
+
+  if (hamburger) {
     hamburger.addEventListener('click', function(e) {
-      e.stopPropagation(); // Évite que le clic remonte
-      var isOpen = this.classList.toggle('open');
-      navLinks.classList.toggle('mobile-open');
-      this.setAttribute('aria-expanded', isOpen);
-    });
-
-    // Fermer le menu en cliquant sur un lien
-    navLinks.querySelectorAll('a').forEach(function(link) {
-      link.addEventListener('click', function() {
-        navLinks.classList.remove('mobile-open');
-        hamburger.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
-      });
-    });
-
-    // Fermer le menu en cliquant en dehors (optionnel)
-    document.addEventListener('click', function(e) {
-      if (!e.target.closest('.site-header')) {
-        navLinks.classList.remove('mobile-open');
-        hamburger.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
+      e.stopPropagation();
+      if (sidebar.classList.contains('open')) {
+        closeMenu();
+      } else {
+        openMenu();
       }
     });
   }
 
-  // ─── GESTION DE LA SESSION ──────────────────────────
-  // (le code existant de gestion de session peut rester)
-  // Exemple de bascule entre mode invité/connecté
-  // Tu peux garder ton code existant ici.
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeMenu);
+  }
+
+  if (overlay) {
+    overlay.addEventListener('click', closeMenu);
+  }
+
+  // Fermer en cliquant sur un lien
+  document.querySelectorAll('.sidebar-link').forEach(function(link) {
+    link.addEventListener('click', closeMenu);
+  });
 });
 </script>
