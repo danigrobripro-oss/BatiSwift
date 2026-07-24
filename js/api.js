@@ -69,10 +69,11 @@ const API = {
     return apiFetch('/api/artisan/notifications', { method: 'PUT', body: JSON.stringify(body) });
   },
 
-  // Agent IA
+  // ─── Agent IA (CORRIGÉ : utilise /api/client/request) ──────
   ask: function(message, historique, extras) {
-    var body = Object.assign({ message: message, historique: historique || [] }, extras || {});
-    return apiFetch('/api/ask', { method: 'POST', body: JSON.stringify(body) });
+    // On mappe 'message' → 'description' pour la route /api/client/request
+    var body = Object.assign({ description: message, historique: historique || [] }, extras || {});
+    return apiFetch('/api/client/request', { method: 'POST', body: JSON.stringify(body) });
   },
 
   // Leads
