@@ -57,6 +57,18 @@
     .stats-band .stat-num span { color: var(--or); }
     .stats-band .stat-lbl { font-size: .8rem; color: rgba(255,255,255,.5); margin-top: 4px; }
 
+    /* ── RESPONSIVE STATS ── */
+    @media (max-width: 768px) {
+      .stats-band { flex-direction: column; align-items: center; padding: 24px 5vw; }
+      .stats-band .stat { 
+        min-width: unset; max-width: 100%; width: 100%;
+        border-right: none; border-bottom: 1px solid rgba(255,255,255,.08);
+        padding: 12px 0;
+      }
+      .stats-band .stat:last-child { border-bottom: none; }
+      .stats-band .stat-num { font-size: 1.8rem; }
+    }
+
     /* ── HOW IT WORKS ── */
     .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 24px; margin-top: 56px; }
     .step-card { background: var(--blanc); border-radius: var(--radius-lg); padding: var(--space-lg); border: 1.5px solid var(--beige-dark); position: relative; overflow: hidden; }
@@ -89,6 +101,26 @@
     .artisans-features li::before { content: '✓'; width: 20px; height: 20px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .7rem; font-weight: 700; flex-shrink: 0; }
     .btn-or { background: var(--or); color: var(--blanc); box-shadow: 0 4px 18px rgba(201,168,76,.4); }
     .btn-or:hover { background: #b8952e; transform: translateY(-2px); }
+
+    /* ── RESPONSIVE ARTISANS CTA ── */
+    @media (max-width: 768px) {
+      .artisans-cta-section {
+        padding: 32px 4vw;
+        margin: 0 4vw var(--space-xl);
+        flex-direction: column;
+        text-align: center;
+      }
+      .artisans-features li { justify-content: center; }
+      .btn-or { width: 100%; justify-content: center; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 1.8rem; }
+      .hero-sub { font-size: 0.9rem; }
+      .hero-cta .btn { width: 100%; justify-content: center; }
+      .step-card { padding: var(--space-md); }
+      .av-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>

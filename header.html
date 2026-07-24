@@ -1,48 +1,63 @@
 <header class="site-header">
-    <div class="container">
-      <a href="/index.html" class="nav-logo">
-        <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
-        BâtiSwift
-      </a>
-  
-      <nav aria-label="Navigation principale">
-        <ul class="nav-links" id="nav-links-list">
-          <li><a href="/index.html"  class="nav-link">Accueil</a></li>
-          <li><a href="/client.html" class="nav-link">Déposer une demande</a></li>
-          <li><a href="/tarifs.html" class="nav-link nav-guest">Tarifs</a></li>
-          <li><a href="/aide.html"   class="nav-link nav-guest">Aide</a></li>
-        </ul>
-      </nav>
-  
-      <div class="nav-actions">
-        <!-- Invité : Connexion + Inscription -->
-        <div class="nav-guest" style="display:flex;gap:10px;align-items:center">
-          <a href="/connexion.html"   class="btn btn-secondary btn-sm">Connexion</a>
-          <a href="/inscription.html" class="btn btn-primary   btn-sm">S'inscrire</a>
-        </div>
-        <!-- Connecté : Prénom + Dashboard + Paramètres + Déconnexion -->
-        <div class="nav-user" style="display:none;gap:10px;align-items:center;flex-wrap:nowrap">
-          <span id="nav-user-greeting" style="font-size:.86rem;font-weight:600;color:var(--anthracite)"></span>
-          <a href="/dashboard.html"   class="btn btn-secondary btn-sm">Mon Espace</a>
-          <a href="/parametres.html"  class="btn btn-secondary btn-sm">⚙ Paramètres</a>
-          <button data-action="logout" class="btn btn-primary btn-sm">Déconnexion</button>
-        </div>
+  <div class="container">
+    <a href="/index.html" class="nav-logo">
+      <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
+      BâtiSwift
+    </a>
+
+    <nav aria-label="Navigation principale">
+      <ul class="nav-links" id="nav-links-list">
+        <li><a href="/index.html" class="nav-link">Accueil</a></li>
+        <li><a href="/client.html" class="nav-link nav-guest">Déposer une demande</a></li>
+        <li><a href="/tarifs.html" class="nav-link nav-guest">Tarifs</a></li>
+        <li><a href="/aide.html" class="nav-link nav-guest">Aide</a></li>
+      </ul>
+    </nav>
+
+    <div class="nav-actions">
+      <!-- Invité : Connexion + Inscription -->
+      <div class="nav-guest" style="display:flex;gap:10px;align-items:center">
+        <a href="/connexion.html" class="btn btn-secondary btn-sm">Connexion</a>
+        <a href="/inscription.html" class="btn btn-primary btn-sm">S'inscrire</a>
       </div>
-  
-      <!-- Hamburger mobile -->
-      <button class="nav-hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
-        <svg width="22" height="16" viewBox="0 0 22 16" fill="none">
-          <rect y="0"  width="22" height="2" rx="1" fill="currentColor"/>
-          <rect y="7"  width="22" height="2" rx="1" fill="currentColor"/>
-          <rect y="14" width="22" height="2" rx="1" fill="currentColor"/>
-        </svg>
-      </button>
+      <!-- Connecté : Prénom + Dashboard + Paramètres + Déconnexion -->
+      <div class="nav-user" style="display:none;gap:10px;align-items:center;flex-wrap:nowrap">
+        <span id="nav-user-greeting" style="font-size:.86rem;font-weight:600;color:var(--anthracite)"></span>
+        <a href="/dashboard.html" class="btn btn-secondary btn-sm">Mon Espace</a>
+        <a href="/parametres.html" class="btn btn-secondary btn-sm">⚙</a>
+        <button data-action="logout" class="btn btn-primary btn-sm">Déconnexion</button>
+      </div>
     </div>
-  </header>
-  <script>
-    document.getElementById('hamburger')?.addEventListener('click', function() {
-      const open = this.getAttribute('aria-expanded') === 'true';
-      this.setAttribute('aria-expanded', String(!open));
-      document.getElementById('nav-links-list')?.classList.toggle('mobile-open');
+
+    <!-- Hamburger mobile -->
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+  </div>
+</header>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('nav-links-list');
+
+  if (hamburger && navLinks) {
+    hamburger.addEventListener('click', function() {
+      const isOpen = this.classList.toggle('open');
+      navLinks.classList.toggle('mobile-open');
+      this.setAttribute('aria-expanded', isOpen);
     });
-  </script>
+
+    // Fermer le menu en cliquant sur un lien
+    navLinks.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        navLinks.classList.remove('mobile-open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+});
+</script>

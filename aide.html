@@ -3,127 +3,427 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aide — BatiSwift</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <title>Aide – BâtiSwift</title>
+  <link rel="stylesheet" href="/css/style.css">
   <style>
-    .faq-item { margin-bottom: 1.5rem; }
-    .faq-question { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--accent); cursor: pointer; }
-    .faq-answer { color: var(--text-muted); padding-left: 1rem; border-left: 2px solid var(--accent-soft); }
-    .steps-list { list-style: none; padding: 0; }
-    .steps-list li { margin-bottom: 0.75rem; padding-left: 1.5rem; position: relative; }
-    .steps-list li::before { content: "→"; position: absolute; left: 0; color: var(--accent); }
+    /* ============================================================
+       PAGE AIDE – Help Center avec Assistant IA
+       ============================================================ */
+    .help-hero {
+      padding: calc(var(--header-h) + 50px) 0 20px;
+      text-align: center;
+    }
+    .help-hero h1 {
+      font-family: var(--font-display);
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .help-hero .subhead {
+      font-size: 1rem;
+      color: var(--gris);
+      margin-bottom: 2rem;
+    }
+
+    /* Barre de recherche IA */
+    .ai-search-box {
+      max-width: 650px;
+      margin: 0 auto 2rem;
+      display: flex;
+      gap: 0.5rem;
+      background: var(--blanc);
+      border-radius: 60px;
+      padding: 0.5rem;
+      border: 2px solid var(--beige-dark);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .ai-search-box:focus-within {
+      border-color: var(--anthracite);
+      box-shadow: 0 0 0 4px rgba(43,43,43,0.06);
+    }
+    .ai-search-box input {
+      flex: 1;
+      border: none;
+      padding: 0.9rem 1.2rem;
+      font-size: 1rem;
+      background: transparent;
+      outline: none;
+    }
+    .ai-search-box button {
+      background: var(--anthracite);
+      color: var(--blanc);
+      border: none;
+      padding: 0 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .ai-search-box button:hover {
+      background: var(--anthracite2);
+    }
+
+    /* Zone de réponse IA */
+    .ai-response {
+      max-width: 650px;
+      margin: 0 auto 2rem;
+      text-align: left;
+    }
+    .ai-thinking {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem 1.5rem;
+      background: var(--beige);
+      border-radius: var(--radius-lg);
+      color: var(--gris);
+      font-style: italic;
+    }
+    .ai-bubble {
+      background: var(--blanc);
+      border: 1.5px solid var(--beige-dark);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+      animation: fadeIn 0.4s ease;
+    }
+    .ai-bubble .question {
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      color: var(--anthracite);
+    }
+    .ai-bubble .answer {
+      color: var(--gris);
+      line-height: 1.7;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Catégories */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      max-width: 900px;
+      margin: 0 auto 3rem;
+    }
+    .cat-card {
+      background: var(--blanc);
+      border: 1.5px solid var(--beige-dark);
+      border-radius: var(--radius-lg);
+      padding: 1.8rem 1.2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .cat-card:hover,
+    .cat-card.active {
+      border-color: var(--anthracite);
+      background: var(--anthracite);
+      color: var(--blanc);
+    }
+    .cat-card .cat-icon {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    /* FAQ Accordéon */
+    .faq-section {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+    }
+    .faq-item {
+      border: 1px solid var(--beige-dark);
+      border-radius: var(--radius);
+      margin-bottom: 0.8rem;
+      overflow: hidden;
+      background: var(--blanc);
+      transition: box-shadow 0.2s;
+    }
+    .faq-item:hover {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    }
+    .faq-question {
+      padding: 1.2rem 1.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.95rem;
+    }
+    .faq-question .arrow {
+      transition: transform 0.3s;
+      font-size: 0.8rem;
+      color: var(--gris);
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+      padding: 0 1.5rem;
+      color: var(--gris);
+      line-height: 1.7;
+      font-size: 0.9rem;
+    }
+    .faq-item.open .faq-answer {
+      max-height: 300px;
+      padding: 0 1.5rem 1.2rem;
+    }
+    .faq-item.open .faq-question .arrow {
+      transform: rotate(180deg);
+    }
+
+    /* Bloc contact */
+    .contact-box {
+      max-width: 700px;
+      margin: 4rem auto;
+      background: linear-gradient(135deg, var(--anthracite2) 0%, #1a1a1a 100%);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem;
+      text-align: center;
+      color: var(--blanc);
+    }
+    .contact-box h3 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+      color: var(--or-light);
+    }
+    .contact-box p {
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+    .contact-box .btn-contact {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--or);
+      color: var(--blanc);
+      padding: 0.9rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .contact-box .btn-contact:hover {
+      background: #b8952e;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 2rem;
+      color: var(--gris);
+    }
+
+    @media (max-width: 768px) {
+      .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .faq-section {
+        padding: 0 1rem;
+      }
+      .ai-search-box {
+        flex-direction: column;
+        border-radius: 20px;
+        padding: 1rem;
+      }
+      .ai-search-box input {
+        padding: 0.8rem;
+      }
+      .ai-search-box button {
+        padding: 0.8rem;
+      }
+    }
+    @media (max-width: 480px) {
+      .categories-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
-<body>
-  <header class="header">
-    <div class="container header__inner">
-      <a href="index.html" class="logo"><span class="logo__icon">BS</span>BatiSwift</a>
-      <div class="header__actions">
-        <button type="button" class="icon-btn theme-toggle" id="theme-toggle" aria-label="Thème">
-          <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="4"/></svg>
-          <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        </button>
-        <a href="artisan-dashboard.html" class="btn btn--primary btn--sm">Mon espace</a>
-      </div>
+<body class="minimal-layout">
+
+<div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
+<div id="header-container"></div>
+
+<!-- Hero avec Assistant IA -->
+<section class="help-hero">
+  <div class="container">
+    <h1>Comment pouvons-nous vous aider ?</h1>
+    <p class="subhead">Posez votre question à notre assistant IA, il vous répond instantanément.</p>
+
+    <!-- Barre de recherche IA -->
+    <div class="ai-search-box">
+      <input type="text" id="ai-question" placeholder="Ex : Comment acheter un lead ? Problème de paiement ?...">
+      <button id="btn-ask-ai">🤖 Demander à l'IA</button>
     </div>
-  </header>
 
-  <main class="container" style="padding: 2rem 0;">
-    <h1>📘 Aide & documentation</h1>
-    <p class="section__desc" style="margin-bottom: 2rem;">Retrouvez ici toutes les informations pour utiliser BatiSwift.</p>
+    <!-- Zone de réponse IA -->
+    <div class="ai-response" id="ai-response"></div>
+  </div>
+</section>
 
-    <div style="display: grid; gap: 2rem;">
-      <!-- Section 1 -->
-      <div>
-        <h2>🚀 Premiers pas</h2>
-        <ul class="steps-list">
-          <li>Inscrivez‑vous via Telegram avec <code>/pro</code> ou via le formulaire <a href="register.html">d’inscription</a>.</li>
-          <li>Connectez‑vous à votre <a href="artisan-dashboard.html">tableau de bord</a> avec le lien reçu.</li>
-          <li>Abonnez‑vous (19€/mois) pour recevoir les résumés clients sur Telegram et WhatsApp.</li>
-          <li>Configurez vos numéros (téléphone et WhatsApp) dans l’onglet <strong>Paramètres</strong>.</li>
-        </ul>
-      </div>
-
-      <!-- Section 2 -->
-      <div>
-        <h2>💬 Comment fonctionne l’assistant Bati ?</h2>
-        <p>Bati répond automatiquement aux clients, qualifie la demande (type de travaux, urgence, localisation) et vous envoie un résumé clair. Vous n’avez rien à gérer, tout est automatisé.</p>
-      </div>
-
-      <!-- Section 3 -->
-      <div>
-        <h2>📞 Gestion des appels manqués</h2>
-        <p>Si un client appelle votre numéro BatiSwift sans réponse, Bati envoie immédiatement un SMS de prise de contact. Le client peut alors décrire son besoin par SMS (ou Telegram).</p>
-      </div>
-
-      <!-- Section 4 -->
-      <div>
-        <h2>🔄 Relances automatiques</h2>
-        <p>Les devis non signés après 3 jours sont automatiquement relancés par Bati (via Telegram). Vous pouvez aussi forcer une relance depuis votre tableau de bord (si activé dans les paramètres).</p>
-      </div>
-
-      <!-- Section 5 : FAQ -->
-      <div>
-        <h2>❓ Questions fréquentes</h2>
-        <div class="faq-item">
-          <div class="faq-question">▶ Comment acheter un lead ?</div>
-          <div class="faq-answer">Rendez‑vous dans l’onglet “Leads disponibles”, choisissez un client et cliquez sur “Acheter ce lead”. Le paiement est sécurisé par Stripe (carte bancaire).</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question">▶ Puis‑je être notifié sur WhatsApp ?</div>
-          <div class="faq-answer">Oui, renseignez votre numéro WhatsApp dans les paramètres de votre tableau de bord. Les résumés clients vous seront envoyés automatiquement.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question">▶ Comment résilier mon abonnement ?</div>
-          <div class="faq-answer">L’abonnement est géré par Stripe. Vous pouvez le résilier à tout moment depuis le lien de gestion Stripe (dans votre tableau de bord).</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question">▶ Les données clients sont‑elles sécurisées ?</div>
-          <div class="faq-answer">Oui. Les échanges sont chiffrés, et nous ne conservons que les informations nécessaires à la mise en relation.</div>
-        </div>
-      </div>
-
-      <!-- Section 6 : Contact -->
-      <div>
-        <h2>📧 Besoin d’aide ?</h2>
-        <p>Contactez‑nous par email : <a href="mailto:contact@batiswift.fr">contact@batiswift.fr</a><br>
-        Ou via Telegram : <a href="https://t.me/my_artisan_bot" target="_blank">@my_artisan_bot</a></p>
-      </div>
+<!-- Catégories -->
+<div class="container">
+  <div class="categories-grid" id="categories-grid">
+    <div class="cat-card active" data-cat="all">
+      <span class="cat-icon">📋</span> Tout
     </div>
-  </main>
-
-  <footer class="footer">
-    <div class="container">
-      <div class="footer__bottom">
-        <span>© 2026 BatiSwift – Assistant IA pour artisans BTP</span>
-        <span><a href="index.html">Accueil</a> | <a href="artisan-dashboard.html">Espace pro</a></span>
-      </div>
+    <div class="cat-card" data-cat="compte">
+      <span class="cat-icon">🚀</span> Premiers pas & Compte
     </div>
-  </footer>
+    <div class="cat-card" data-cat="leads">
+      <span class="cat-icon">📍</span> Leads & Paiements
+    </div>
+    <div class="cat-card" data-cat="ia">
+      <span class="cat-icon">🤖</span> Agent IA & Pro
+    </div>
+    <div class="cat-card" data-cat="facturation">
+      <span class="cat-icon">💳</span> Facturation & Sécurité
+    </div>
+  </div>
+</div>
 
-  <script>
-    const themeToggle = document.getElementById("theme-toggle");
-    function applyTheme(theme) {
-      document.documentElement.setAttribute("data-theme", theme);
-      localStorage.setItem("batiswift-theme", theme);
-    }
-    var savedTheme = localStorage.getItem("batiswift-theme");
-    if (savedTheme) applyTheme(savedTheme);
-    else if (matchMedia("(prefers-color-scheme: dark)").matches) applyTheme("dark");
-    themeToggle?.addEventListener("click", () => {
-      const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
-      applyTheme(next);
+<!-- FAQ Accordéon -->
+<div class="faq-section" id="faq-container"></div>
+
+<div class="no-results" id="no-results" style="display:none;">
+  <p>Aucune question ne correspond à votre recherche. Essayez avec d'autres mots-clés.</p>
+</div>
+
+<!-- Bloc Contact -->
+<div class="contact-box">
+  <h3>Vous n'avez pas trouvé la réponse ?</h3>
+  <p>Notre équipe est disponible pour vous aider. Réponse en moins de 2 heures.</p>
+  <a href="mailto:support@batiswift.fr" class="btn-contact">
+    💬 Contacter un humain (WhatsApp / E-mail)
+  </a>
+</div>
+
+<div id="footer-container"></div>
+
+<!-- Scripts partagés -->
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/session.js"></script>
+<script src="/js/main.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  // ─── Base de données FAQ (pour l'accordéon) ──────────────
+  var faqData = [
+    { category: 'compte', q: 'Comment créer mon compte artisan ?', a: 'Rendez-vous sur la page d\'inscription, remplissez le formulaire avec vos informations (nom, téléphone, ville, spécialité). Vous recevrez un email de confirmation.' },
+    { category: 'compte', q: 'Comment modifier mon rayon d\'intervention ?', a: 'Connectez-vous à votre tableau de bord, allez dans Paramètres > Zone & Leads. Modifiez votre ville principale et le rayon souhaité.' },
+    { category: 'compte', q: 'Puis-je changer mon adresse email ?', a: 'Oui, dans Paramètres > Entreprise, vous pouvez mettre à jour votre email professionnel.' },
+    { category: 'leads', q: 'Comment fonctionne l\'achat d\'un lead à 10 € ?', a: 'Dans votre tableau de bord, vous voyez les leads disponibles (type de travaux, urgence, distance, description). Avant achat, les coordonnées du client sont masquées. Cliquez sur "Acheter ce lead", payez 10 € par carte bancaire (Stripe), et les coordonnées complètes sont débloquées instantanément.' },
+    { category: 'leads', q: 'Que contient un lead avant achat ?', a: 'Vous voyez : le type de travaux (plomberie, électricité...), l\'urgence (immédiate, normale, faible), la ville, la distance par rapport à chez vous, et une description qualifiée par notre IA. Le nom et le téléphone du client sont masqués (Client vérifié #XXXX, 06 XX XX XX XX).' },
+    { category: 'leads', q: 'Comment être sûr que le lead est sérieux ?', a: 'Chaque lead est qualifié par notre Agent IA (Claude) qui vérifie la cohérence de la demande. Nous affichons le message "Lead 100% vérifié par notre Agent IA". Vous ne payez que si vous décidez de l\'acheter.' },
+    { category: 'leads', q: 'Puis-je être remboursé si le lead ne me convient pas ?', a: 'Si le lead s\'avère manifestement non conforme (fausse information, numéro invalide), contactez notre support sous 48h pour un remboursement.' },
+    { category: 'ia', q: 'Qu\'est-ce qui est inclus dans l\'abonnement Pro à 19 €/mois ?', a: 'L\'abonnement Pro inclut : la réactivité Instant-Reply (l\'IA répond en 60 secondes aux clients), les filtres avancés de géolocalisation, les notifications WhatsApp instantanées, les relances automatiques (6 types d\'emails/SMS), le dashboard de suivi complet (tags, notes, statuts) et la traduction DeepL des conversations.' },
+    { category: 'ia', q: 'Comment l\'Agent IA répond-il aux clients ?', a: 'Dès qu\'un client dépose une demande, notre IA (Claude) la qualifie et peut répondre automatiquement si vous avez activé l\'abonnement Pro. L\'agent respecte le ton que vous avez choisi (professionnel ou chaleureux) et peut relancer automatiquement les devis non signés.' },
+    { category: 'ia', q: 'Puis-je configurer les horaires de l\'agent IA ?', a: 'Oui, dans Paramètres > Notifications, vous pouvez définir les horaires de contact (début/fin). L\'agent respectera ces plages pour les relances.' },
+    { category: 'ia', q: 'Comment activer la traduction DeepL ?', a: 'Dans Paramètres > Agent IA, activez l\'option "Traduction automatique" et choisissez votre langue par défaut. L\'agent traduira automatiquement les échanges avec les clients non francophones.' },
+    { category: 'facturation', q: 'Où puis-je retrouver mes factures pour mon comptable ?', a: 'Connectez-vous, allez dans Paramètres > Abonnement & Sécurité. Vous y trouverez l\'historique complet de vos factures avec un lien de téléchargement PDF pour chacune.' },
+    { category: 'facturation', q: 'Comment mettre à jour ma carte bancaire ?', a: 'Dans Paramètres > Abonnement & Sécurité, cliquez sur "Mettre à jour ma carte". Vous serez redirigé vers le portail sécurisé Stripe pour modifier vos informations de paiement. BatiSwift ne stocke aucune donnée bancaire.' },
+    { category: 'facturation', q: 'L\'abonnement est-il sans engagement ?', a: 'Oui, vous pouvez annuler à tout moment en un clic depuis le portail Stripe (accessible dans Paramètres > Abonnement & Sécurité). Aucun frais d\'annulation.' },
+    { category: 'facturation', q: 'Mes données bancaires sont-elles sécurisées ?', a: 'Absolument. Toutes les transactions sont cryptées et traitées par Stripe, leader mondial du paiement en ligne certifié PCI-DSS niveau 1. BatiSwift ne voit ni ne stocke vos numéros de carte.' },
+    { category: 'ia', q: 'Que faire si je ne reçois pas mes alertes WhatsApp ?', a: 'Vérifiez d\'abord que votre numéro WhatsApp est correctement renseigné dans Paramètres > Notifications. Ensuite, assurez-vous que l\'option "Notifications WhatsApp" est activée. Si le problème persiste, contactez le support.' },
+    { category: 'compte', q: 'Comment supprimer mon compte ?', a: 'Conformément au RGPD, vous pouvez demander la suppression de votre compte depuis Paramètres > Abonnement & Sécurité en cliquant sur "Supprimer mon compte", ou en contactant notre support.' }
+  ];
+
+  var currentCategory = 'all';
+  var faqContainer = document.getElementById('faq-container');
+  var noResults = document.getElementById('no-results');
+
+  function renderFAQ() {
+    var filtered = faqData.filter(function(item) {
+      return (currentCategory === 'all' || item.category === currentCategory);
     });
-    document.querySelectorAll(".faq-question").forEach(q => {
-      q.addEventListener("click", () => {
-        const answer = q.nextElementSibling;
-        answer.style.display = answer.style.display === "none" ? "block" : "none";
+    if (filtered.length === 0) {
+      faqContainer.innerHTML = '';
+      noResults.style.display = 'block';
+    } else {
+      noResults.style.display = 'none';
+      faqContainer.innerHTML = filtered.map(function(item) {
+        return '<div class="faq-item">' +
+          '<div class="faq-question">' + item.q + ' <span class="arrow">▼</span></div>' +
+          '<div class="faq-answer">' + item.a + '</div>' +
+          '</div>';
+      }).join('');
+      faqContainer.querySelectorAll('.faq-question').forEach(function(q) {
+        q.addEventListener('click', function() {
+          var item = this.parentElement;
+          var wasOpen = item.classList.contains('open');
+          faqContainer.querySelectorAll('.faq-item').forEach(function(el) { el.classList.remove('open'); });
+          if (!wasOpen) item.classList.add('open');
+        });
       });
-      q.nextElementSibling.style.display = "none";
+    }
+  }
+
+  // Filtres par catégorie
+  document.querySelectorAll('.cat-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      document.querySelectorAll('.cat-card').forEach(function(c) { c.classList.remove('active'); });
+      this.classList.add('active');
+      currentCategory = this.dataset.cat;
+      renderFAQ();
     });
-  </script>
+  });
+
+  // Affichage initial FAQ
+  renderFAQ();
+
+  // ─── Assistant IA ────────────────────────────────────────
+  var aiQuestion = document.getElementById('ai-question');
+  var btnAskAI = document.getElementById('btn-ask-ai');
+  var aiResponse = document.getElementById('ai-response');
+
+  function askAI(question) {
+    if (!question.trim()) return;
+
+    // Afficher l'indicateur de chargement
+    aiResponse.innerHTML = '<div class="ai-thinking"><span class="spinner spinner-dark" style="width:18px;height:18px;"></span> L\'IA réfléchit...</div>';
+
+    // Appel à l'API FAQ existante
+    API.post('/api/faq', { question: question })
+      .then(function(data) {
+        var answer = data.reponse || 'Désolé, je n\'ai pas pu trouver de réponse. Veuillez reformuler ou contacter le support.';
+        aiResponse.innerHTML = '<div class="ai-bubble">' +
+          '<div class="question">🤖 ' + question + '</div>' +
+          '<div class="answer">' + answer + '</div>' +
+          '</div>';
+      })
+      .catch(function(err) {
+        aiResponse.innerHTML = '<div class="ai-bubble">' +
+          '<div class="question">🤖 ' + question + '</div>' +
+          '<div class="answer" style="color:var(--danger);">⚠️ Impossible de contacter l\'assistant IA pour le moment. Veuillez réessayer ou contacter le support.</div>' +
+          '</div>';
+      });
+  }
+
+  // Bouton "Demander à l'IA"
+  btnAskAI.addEventListener('click', function() {
+    askAI(aiQuestion.value);
+  });
+
+  // Envoi avec la touche Entrée
+  aiQuestion.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      askAI(aiQuestion.value);
+    }
+  });
+
+});
+</script>
 </body>
 </html>

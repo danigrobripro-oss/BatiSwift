@@ -45,10 +45,26 @@
     .auth-link { text-align: center; margin-top: var(--space-lg); font-size: .88rem; color: var(--gris); }
     .auth-link a { color: var(--anthracite); font-weight: 600; }
     .spec-input-autre { margin-top: 6px; display: none; }
-    @media (max-width: 640px) {
-      .inscription-card { padding: 32px 20px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .inscription-wrapper {
+        padding: calc(var(--header-h) + 20px) 4vw 40px;
+      }
+      .inscription-card { 
+        padding: 32px 24px; 
+        border-radius: var(--radius-lg);
+      }
       .specialites-grid { grid-template-columns: repeat(2, 1fr); }
       .form-row { grid-template-columns: 1fr; }
+      .inscription-title { font-size: 1.6rem; }
+    }
+    @media (max-width: 480px) {
+      .inscription-card { padding: 24px 16px; }
+      .inscription-title { font-size: 1.3rem; }
+      .specialites-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+      .spec-chip { font-size: .75rem; padding: 8px 10px; }
+      .section-divider { font-size: .65rem; }
     }
   </style>
 </head>
@@ -109,10 +125,8 @@
         <div class="spec-chip" data-value="maconnerie">🧱 Maçonnerie</div>
         <div class="spec-chip" data-value="chauffage">🔥 Chauffage</div>
         <div class="spec-chip" data-value="serrurerie">🔐 Serrurerie</div>
-        <!-- AJOUT : bouton "Autre" -->
         <div class="spec-chip" id="spec-autre-chip" data-value="__autre__">➕ Autre</div>
       </div>
-      <!-- AJOUT : champ texte pour la spécialité Autre -->
       <div class="form-group spec-input-autre" id="spec-autre-input">
         <label class="form-label" for="spec-autre-text">Précisez votre spécialité</label>
         <input type="text" id="spec-autre-text" class="form-control" placeholder="Ex: carreleur, menuisier...">
@@ -145,7 +159,7 @@
 
 <div id="footer-container"></div>
 
-<!-- ① config   ② api   ③ session   ④ main — ordre obligatoire -->
+<!-- Scripts -->
 <script src="/js/config.js"></script>
 <script src="/js/api.js"></script>
 <script src="/js/session.js"></script>
@@ -155,13 +169,14 @@
 document.addEventListener('DOMContentLoaded', async function() {
 
   // Redirige si déjà connecté
-  await Session.redirectIfAuth('/dashboard.html');
+  if (typeof Session !== 'undefined' && Session.redirectIfAuth) {
+    await Session.redirectIfAuth('/dashboard.html');
+  }
 
   // Sélection des spécialités (toggle)
   document.querySelectorAll('.spec-chip').forEach(function(chip) {
     chip.addEventListener('click', function() {
       this.classList.toggle('selected');
-      // Si on clique sur "Autre", on affiche/masque le champ texte
       if (this.id === 'spec-autre-chip') {
         var champ = document.getElementById('spec-autre-input');
         champ.style.display = this.classList.contains('selected') ? 'block' : 'none';
@@ -170,33 +185,36 @@ document.addEventListener('DOMContentLoaded', async function() {
   });
 
   // Indicateur force mot de passe
-  document.getElementById('password').addEventListener('input', function() {
-    var el = document.getElementById('pw-hint');
-    var v  = this.value;
-    if (!v) { el.textContent = ''; return; }
-    var fort = v.length >= 8 && /[A-Z]/.test(v) && /[0-9]/.test(v);
-    var moyen = v.length >= 6;
-    el.textContent = fort ? '🟢 Fort' : moyen ? '🟡 Moyen — ajoutez des chiffres/majuscules' : '🔴 Trop court';
-    el.style.color = fort ? 'var(--success)' : moyen ? 'var(--warning)' : 'var(--danger)';
-  });
+  var pwInput = document.getElementById('password');
+  if (pwInput) {
+    pwInput.addEventListener('input', function() {
+      var el = document.getElementById('pw-hint');
+      var v  = this.value;
+      if (!v) { el.textContent = ''; return; }
+      var fort = v.length >= 8 && /[A-Z]/.test(v) && /[0-9]/.test(v);
+      var moyen = v.length >= 6;
+      el.textContent = fort ? '🟢 Fort' : moyen ? '🟡 Moyen — ajoutez des chiffres/majuscules' : '🔴 Trop court';
+      el.style.color = fort ? 'var(--success)' : moyen ? 'var(--warning)' : 'var(--danger)';
+    });
+  }
 
   // Soumission du formulaire
   document.getElementById('form-register').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     var alertId = 'alert-register';
-    hideAlert(alertId);
+    if (typeof hideAlert === 'function') hideAlert(alertId);
 
     var pw  = document.getElementById('password').value;
     var pw2 = document.getElementById('password-confirm').value;
 
     // Validations côté client
-    if (!document.getElementById('nom').value.trim())       { showAlert(alertId, 'Le nom est obligatoire.', 'danger'); return; }
-    if (!document.getElementById('email').value.trim())     { showAlert(alertId, 'L\'e-mail est obligatoire.', 'danger'); return; }
-    if (!document.getElementById('telephone').value.trim()) { showAlert(alertId, 'Le téléphone est obligatoire.', 'danger'); return; }
-    if (!document.getElementById('ville').value.trim())     { showAlert(alertId, 'La ville est obligatoire.', 'danger'); return; }
-    if (pw.length < 6)  { showAlert(alertId, 'Le mot de passe doit contenir au moins 6 caractères.', 'danger'); return; }
-    if (pw !== pw2)     { showAlert(alertId, 'Les mots de passe ne correspondent pas.', 'danger'); return; }
+    if (!document.getElementById('nom').value.trim())       { if (typeof showAlert === 'function') showAlert(alertId, 'Le nom est obligatoire.', 'danger'); return; }
+    if (!document.getElementById('email').value.trim())     { if (typeof showAlert === 'function') showAlert(alertId, 'L\'e-mail est obligatoire.', 'danger'); return; }
+    if (!document.getElementById('telephone').value.trim()) { if (typeof showAlert === 'function') showAlert(alertId, 'Le téléphone est obligatoire.', 'danger'); return; }
+    if (!document.getElementById('ville').value.trim())     { if (typeof showAlert === 'function') showAlert(alertId, 'La ville est obligatoire.', 'danger'); return; }
+    if (pw.length < 6)  { if (typeof showAlert === 'function') showAlert(alertId, 'Le mot de passe doit contenir au moins 6 caractères.', 'danger'); return; }
+    if (pw !== pw2)     { if (typeof showAlert === 'function') showAlert(alertId, 'Les mots de passe ne correspondent pas.', 'danger'); return; }
 
     // Récupère les spécialités sélectionnées
     var specs = [];
@@ -209,24 +227,23 @@ document.addEventListener('DOMContentLoaded', async function() {
       }
     });
 
-    // Si "Autre" est sélectionné, on récupère la valeur du champ texte
     if (autreChecked) {
       var custom = document.getElementById('spec-autre-text').value.trim();
       if (custom) {
         specs.push(custom);
       } else {
-        showAlert(alertId, 'Veuillez saisir votre spécialité dans le champ "Autre".', 'danger');
+        if (typeof showAlert === 'function') showAlert(alertId, 'Veuillez saisir votre spécialité dans le champ "Autre".', 'danger');
         return;
       }
     }
 
     if (specs.length === 0) {
-      showAlert(alertId, 'Veuillez sélectionner au moins une spécialité.', 'danger');
+      if (typeof showAlert === 'function') showAlert(alertId, 'Veuillez sélectionner au moins une spécialité.', 'danger');
       return;
     }
 
     var btn = document.getElementById('btn-register');
-    btnLoading(btn, true);
+    if (typeof btnLoading === 'function') btnLoading(btn, true);
 
     try {
       var data = await API.register({
@@ -239,14 +256,17 @@ document.addEventListener('DOMContentLoaded', async function() {
         specialite: specs.join(', '),
       });
 
-      // Sauvegarde token + user
-      Session.save(data.token, data.artisan);
-      toast('Compte créé ! Bienvenue 🎉', 'success');
+      if (typeof Session !== 'undefined' && Session.save) {
+        Session.save(data.token, data.artisan);
+      }
+      if (typeof toast === 'function') {
+        toast('Compte créé ! Bienvenue 🎉', 'success');
+      }
       setTimeout(function() { window.location.href = '/dashboard.html'; }, 700);
 
     } catch(err) {
-      showAlert(alertId, err.message, 'danger');
-      btnLoading(btn, false);
+      if (typeof showAlert === 'function') showAlert(alertId, err.message || 'Erreur lors de l\'inscription.', 'danger');
+      if (typeof btnLoading === 'function') btnLoading(btn, false);
     }
   });
 
