@@ -232,6 +232,18 @@
    .urgence-immediate { color: var(--danger);  font-weight: 600; }
    .urgence-normale   { color: var(--warning); font-weight: 500; }
    .urgence-faible    { color: var(--success); font-weight: 500; }
+
+   /* ---- BADGE PRO ---- */
+   .badge-pro {
+     background: var(--or);
+     color: var(--blanc);
+     font-weight: 600;
+     padding: 2px 12px;
+     border-radius: 50px;
+     font-size: 0.7rem;
+     text-transform: uppercase;
+     letter-spacing: 0.5px;
+   }
    
    /* ---- DIVIDER ---- */
    .divider { height: 1px; background: var(--beige-dark); margin: var(--space-lg) 0; }
@@ -415,6 +427,21 @@
      font-family: var(--font-display);
      font-size: 1.4rem; font-weight: 700; color: var(--or);
    }
+
+   /* ---- DISTANCE BADGE ---- */
+   .distance-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 4px;
+     background: rgba(43,43,43,0.06);
+     padding: 2px 10px;
+     border-radius: 50px;
+     font-size: 0.75rem;
+     color: var(--anthracite);
+   }
+   .distance-badge .km {
+     font-weight: 600;
+   }
    
    /* ---- MODAL ---- */
    .modal-overlay {
@@ -495,7 +522,282 @@
    }
    .sidebar-nav li a .icon { font-size: 1.1rem; }
    .sidebar-content { padding: var(--space-xl); }
-   
+
+   /* ============================================================
+      TOAST / NOTIFICATIONS
+      ============================================================ */
+   .toast-container {
+     position: fixed;
+     bottom: 24px;
+     right: 24px;
+     z-index: 9999;
+     display: flex;
+     flex-direction: column;
+     gap: 12px;
+     max-width: 360px;
+     width: 100%;
+   }
+   .toast {
+     background: var(--blanc);
+     border-radius: var(--radius);
+     padding: 14px 20px;
+     box-shadow: 0 8px 32px rgba(43,43,43,0.16);
+     border: 1px solid var(--beige-dark);
+     display: flex;
+     align-items: center;
+     gap: 12px;
+     animation: slideUp 0.35s ease both;
+     font-size: 0.9rem;
+   }
+   .toast-success { border-left: 4px solid var(--success); }
+   .toast-danger  { border-left: 4px solid var(--danger); }
+   .toast-warning { border-left: 4px solid var(--warning); }
+   .toast-info    { border-left: 4px solid var(--or); }
+   .toast .toast-icon { font-size: 1.2rem; }
+   .toast .toast-close {
+     margin-left: auto;
+     background: none;
+     border: none;
+     color: var(--gris);
+     cursor: pointer;
+     font-size: 1.2rem;
+   }
+   @keyframes slideUp {
+     from { opacity: 0; transform: translateY(20px); }
+     to   { opacity: 1; transform: translateY(0); }
+   }
+
+   /* ============================================================
+      TARIFS (Pricing Cards)
+      ============================================================ */
+   .pricing-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+     gap: var(--space-lg);
+     margin-top: var(--space-lg);
+   }
+   .pricing-card {
+     background: var(--blanc);
+     border-radius: var(--radius-xl);
+     padding: var(--space-xl);
+     border: 1.5px solid var(--beige-dark);
+     text-align: center;
+     transition: all var(--transition);
+   }
+   .pricing-card:hover {
+     transform: translateY(-4px);
+     box-shadow: 0 12px 48px rgba(43,43,43,0.10);
+   }
+   .pricing-card.featured {
+     border-color: var(--or);
+     background: linear-gradient(180deg, rgba(201,168,76,0.04) 0%, var(--blanc) 100%);
+     position: relative;
+   }
+   .pricing-card.featured::before {
+     content: '⭐ Populaire';
+     position: absolute;
+     top: -12px;
+     left: 50%;
+     transform: translateX(-50%);
+     background: var(--or);
+     color: var(--blanc);
+     padding: 2px 18px;
+     border-radius: 50px;
+     font-size: 0.75rem;
+     font-weight: 600;
+   }
+   .pricing-card .price {
+     font-family: var(--font-display);
+     font-size: 3rem;
+     font-weight: 700;
+     color: var(--anthracite);
+     margin: var(--space-md) 0;
+   }
+   .pricing-card .price span {
+     font-size: 1rem;
+     color: var(--gris);
+     font-weight: 400;
+   }
+   .pricing-card ul {
+     list-style: none;
+     padding: 0;
+     margin: var(--space-lg) 0;
+     text-align: left;
+   }
+   .pricing-card ul li {
+     padding: 6px 0;
+     display: flex;
+     align-items: center;
+     gap: 10px;
+     font-size: 0.9rem;
+     color: var(--gris);
+   }
+   .pricing-card ul li::before {
+     content: '✅';
+     font-size: 0.8rem;
+   }
+
+   /* ============================================================
+      CHAT / AGENT IA (bulles)
+      ============================================================ */
+   .chat-container {
+     display: flex;
+     flex-direction: column;
+     gap: 12px;
+     max-width: 600px;
+     margin: 0 auto;
+   }
+   .chat-bubble {
+     max-width: 80%;
+     padding: 14px 20px;
+     border-radius: var(--radius-lg);
+     font-size: 0.95rem;
+     line-height: 1.6;
+     animation: fadeIn 0.3s ease;
+   }
+   .chat-bubble.user {
+     align-self: flex-end;
+     background: var(--anthracite);
+     color: var(--blanc);
+     border-bottom-right-radius: 4px;
+   }
+   .chat-bubble.assistant {
+     align-self: flex-start;
+     background: var(--blanc);
+     border: 1.5px solid var(--beige-dark);
+     color: var(--anthracite);
+     border-bottom-left-radius: 4px;
+   }
+   .chat-bubble .timestamp {
+     font-size: 0.7rem;
+     color: var(--gris);
+     margin-top: 4px;
+     display: block;
+   }
+   .chat-input-area {
+     display: flex;
+     gap: 10px;
+     margin-top: 12px;
+   }
+   .chat-input-area input {
+     flex: 1;
+   }
+
+   /* ============================================================
+      FILTRES DE RECHERCHE
+      ============================================================ */
+   .filters-bar {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 12px;
+     align-items: center;
+     padding: var(--space-md) 0;
+   }
+   .filters-bar .filter-group {
+     display: flex;
+     align-items: center;
+     gap: 8px;
+     background: var(--blanc);
+     border: 1.5px solid var(--beige-dark);
+     border-radius: 50px;
+     padding: 4px 12px 4px 16px;
+   }
+   .filters-bar .filter-group select,
+   .filters-bar .filter-group input {
+     border: none;
+     background: transparent;
+     padding: 6px 0;
+     font-size: 0.85rem;
+     outline: none;
+     color: var(--anthracite);
+   }
+   .filters-bar .filter-group select {
+     padding-right: 8px;
+   }
+   .filters-bar .filter-clear {
+     background: none;
+     border: none;
+     color: var(--gris);
+     cursor: pointer;
+     font-size: 0.8rem;
+     padding: 4px 8px;
+   }
+   .filters-bar .filter-clear:hover {
+     color: var(--danger);
+   }
+
+   /* ============================================================
+      AVIS / ÉTOILES
+      ============================================================ */
+   .stars {
+     display: flex;
+     gap: 2px;
+     color: var(--or);
+     font-size: 1.2rem;
+     letter-spacing: 2px;
+   }
+   .stars .empty {
+     color: var(--gris-light);
+   }
+   .review-item {
+     background: var(--blanc);
+     border-radius: var(--radius);
+     padding: var(--space-md);
+     border: 1px solid var(--beige-dark);
+     margin-bottom: var(--space-sm);
+   }
+   .review-item .review-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     margin-bottom: 6px;
+   }
+   .review-item .review-author {
+     font-weight: 600;
+     color: var(--anthracite);
+   }
+   .review-item .review-date {
+     font-size: 0.8rem;
+     color: var(--gris);
+   }
+   .review-item .review-text {
+     font-size: 0.9rem;
+     color: var(--gris);
+     line-height: 1.6;
+   }
+
+   /* ============================================================
+      TABLEAUX (factures, historique)
+      ============================================================ */
+   .table-wrap {
+     overflow-x: auto;
+     -webkit-overflow-scrolling: touch;
+     border-radius: var(--radius);
+     border: 1.5px solid var(--beige-dark);
+     background: var(--blanc);
+   }
+   .table-wrap table {
+     width: 100%;
+     border-collapse: collapse;
+     font-size: 0.9rem;
+     min-width: 500px;
+   }
+   .table-wrap th {
+     background: var(--beige);
+     color: var(--anthracite);
+     font-weight: 600;
+     padding: 12px 16px;
+     text-align: left;
+   }
+   .table-wrap td {
+     padding: 10px 16px;
+     border-top: 1px solid var(--beige-dark);
+     color: var(--gris);
+   }
+   .table-wrap tr:hover td {
+     background: var(--gris-ultra);
+   }
+
    /* ============================================================
       RESPONSIVE — TOUS LES ÉCRANS
       ============================================================ */
@@ -658,6 +960,37 @@
      .lead-price {
        font-size: 1.2rem;
      }
+
+     /* Pricing */
+     .pricing-grid {
+       grid-template-columns: 1fr;
+       max-width: 400px;
+       margin-left: auto;
+       margin-right: auto;
+     }
+
+     /* Chat */
+     .chat-bubble {
+       max-width: 90%;
+     }
+
+     /* Filtres */
+     .filters-bar {
+       flex-direction: column;
+       align-items: stretch;
+     }
+     .filters-bar .filter-group {
+       border-radius: var(--radius);
+       padding: 8px 16px;
+     }
+
+     /* Toasts */
+     .toast-container {
+       left: 16px;
+       right: 16px;
+       bottom: 16px;
+       max-width: 100%;
+     }
    }
    
    /* ---- Très petits mobiles (max 480px) ---- */
@@ -749,6 +1082,14 @@
      }
      .modal-header {
        margin-bottom: var(--space-md);
+     }
+
+     /* Pricing */
+     .pricing-card {
+       padding: var(--space-lg);
+     }
+     .pricing-card .price {
+       font-size: 2.4rem;
      }
    }
    
