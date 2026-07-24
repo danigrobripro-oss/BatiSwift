@@ -48,9 +48,7 @@
     .section-divider::before, .section-divider::after {
       content: ''; flex: 1; height: 1px; background: var(--beige-dark);
     }
-    .form-row {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
-    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .form-group { margin-bottom: 18px; }
     .toggle-row {
       display: flex; align-items: center; justify-content: space-between;
@@ -227,13 +225,40 @@
 
       <!-- Onglet 5 : Abonnement & Sécurité -->
       <div class="tab-pane" id="tab-compte">
+
+        <!-- SOUS-SECTION ABONNEMENT (existante) -->
         <div class="section-divider">💳 Abonnement</div>
         <div class="form-group">
           <label class="form-label">Formule actuelle</label>
           <div class="badge-plan" id="plan-badge">Standard</div>
           <p style="font-size:.8rem;color:var(--gris);margin-top:4px">Gérez votre abonnement et vos factures dans votre espace Stripe.</p>
         </div>
-        <div class="section-divider">🔒 Sécurité</div>
+
+        <!-- NOUVEAU : MOYEN DE PAIEMENT -->
+        <div class="section-divider">💳 Moyen de paiement</div>
+        <div id="payment-method" style="margin-bottom:12px;">
+          <p style="color:var(--gris);">Chargement…</p>
+        </div>
+        <button type="button" id="btn-update-card" class="btn btn-secondary btn-sm">
+          Mettre à jour ma carte
+        </button>
+
+        <!-- NOUVEAU : HISTORIQUE DES FACTURES -->
+        <div class="section-divider" style="margin-top:24px;">📄 Historique des factures</div>
+        <div id="invoices-table" style="margin-bottom:12px;">
+          <p style="color:var(--gris);">Chargement…</p>
+        </div>
+
+        <!-- BLOC SÉCURITÉ & RÉASSURANCE -->
+        <div style="background:var(--beige);padding:14px;border-radius:12px;margin-top:16px;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:1.4rem;">🔒</span>
+          <p style="font-size:.82rem;color:var(--anthracite);margin:0;">
+            Vos transactions et coordonnées bancaires sont cryptées et sécurisées par <strong>Stripe</strong>. BâtiSwift ne stocke aucune donnée bancaire.
+          </p>
+        </div>
+
+        <!-- SÉCURITÉ (existante) -->
+        <div class="section-divider" style="margin-top:24px;">🔒 Sécurité</div>
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" for="password-new">Nouveau mot de passe</label>
@@ -270,28 +295,121 @@
 <script src="/js/main.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', async function() {
-  const user = await Session.requireAuth();
-  if (!user) return;
+document.addEventListener('DOMContentLoaded', function() {
 
-  const alertId = 'alert-params';
-
-  // Gestion des onglets
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById(btn.dataset.tab).classList.add('active');
+  // ─── 1. Initialisation immédiate des onglets ────────────────
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      document.querySelectorAll('.tab-pane').forEach(function(p) { p.classList.remove('active'); });
+      this.classList.add('active');
+      var targetId = this.getAttribute('data-tab');
+      var target = document.getElementById(targetId);
+      if (target) target.classList.add('active');
     });
   });
 
-  // Chargement des données existantes
-  async function loadSettings() {
-    try {
-      const resp = await API.me();
+  // ─── 2. Vérification de l'authentification ────────────────
+  var alertId = 'alert-params';
+
+  Session.requireAuth().then(function(user) {
+    if (!user) return;
+
+    // Chargement des données existantes
+    loadSettings();
+    // Chargement des infos bancaires et factures
+    loadBillingInfo();
+
+    // Toggle langue
+    var deepCheck = document.getElementById('deep_actif');
+    if (deepCheck) {
+      deepCheck.addEventListener('change', function() {
+        var langueGroup = document.getElementById('langue-group');
+        if (langueGroup) langueGroup.style.display = this.checked ? 'block' : 'none';
+      });
+    }
+
+    // Bouton mise à jour carte → Stripe Customer Portal
+    var btnCard = document.getElementById('btn-update-card');
+    if (btnCard) {
+      btnCard.addEventListener('click', function() {
+        API.post('/api/create-customer-portal-session').then(function(data) {
+          if (data.url) window.location.href = data.url;
+        }).catch(function(err) {
+          showAlert(alertId, 'Erreur : ' + err.message, 'danger');
+        });
+      });
+    }
+
+    // Soumission du formulaire
+    var form = document.getElementById('params-form');
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        hideAlert(alertId);
+        var btn = document.getElementById('btn-save');
+        btnLoading(btn, true);
+
+        var pwNew = document.getElementById('password-new').value;
+        var pwConfirm = document.getElementById('password-confirm').value;
+        if (pwNew && pwNew !== pwConfirm) {
+          showAlert(alertId, 'Les mots de passe ne correspondent pas.', 'danger');
+          btnLoading(btn, false);
+          return;
+        }
+
+        var payload = {
+          nom: document.getElementById('nom').value.trim(),
+          telephone: document.getElementById('telephone').value.trim(),
+          adresse: document.getElementById('adresse').value.trim(),
+          siret: document.getElementById('siret').value.trim(),
+          tva: document.getElementById('tva').value.trim(),
+          ville: document.getElementById('ville').value.trim(),
+          rayon: parseInt(document.getElementById('rayon').value),
+          zones: document.getElementById('zones').value.split(',').map(function(s) { return s.trim(); }).filter(Boolean),
+          budget_min: parseInt(document.getElementById('budget_min').value) || null,
+          specialite: document.getElementById('specialite').value.trim(),
+          push_sms: document.getElementById('push_sms').checked,
+          push_whatsapp: document.getElementById('push_whatsapp').checked,
+          auto_relance: document.getElementById('auto_relance').checked,
+          horaires_debut: document.getElementById('horaires_debut').value,
+          horaires_fin: document.getElementById('horaires_fin').value,
+          ton_agent: document.getElementById('ton_agent').value,
+          deep_actif: document.getElementById('deep_actif').checked,
+          langue_par_defaut: document.getElementById('langue_par_defaut').value,
+        };
+        if (pwNew) payload.password = pwNew;
+
+        API.updateProfile(payload).then(function() {
+          showAlert(alertId, '✅ Tous les paramètres ont été enregistrés.', 'success');
+          setTimeout(function() { hideAlert(alertId); }, 4000);
+          btnLoading(btn, false);
+        }).catch(function(err) {
+          showAlert(alertId, '❌ ' + err.message, 'danger');
+          btnLoading(btn, false);
+        });
+      });
+    }
+
+    // Suppression de compte
+    var deleteLink = document.getElementById('delete-account');
+    if (deleteLink) {
+      deleteLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (confirm('Voulez-vous vraiment supprimer votre compte ? Cette action est irréversible.')) {
+          alert('Fonctionnalité en cours de développement. Contactez le support.');
+        }
+      });
+    }
+  }).catch(function(err) {
+    console.error('Erreur auth:', err);
+  });
+
+  // ─── Chargement des paramètres ──────────────────────────
+  function loadSettings() {
+    API.me().then(function(resp) {
       if (!resp.artisan) return;
-      const a = resp.artisan;
+      var a = resp.artisan;
       document.getElementById('nom').value = a.nom || '';
       document.getElementById('email').value = a.email || '';
       document.getElementById('telephone').value = a.telephone || '';
@@ -312,72 +430,62 @@ document.addEventListener('DOMContentLoaded', async function() {
       document.getElementById('deep_actif').checked = a.deep_actif || false;
       document.getElementById('langue_par_defaut').value = a.langue_par_defaut || 'fr';
       document.getElementById('plan-badge').textContent = a.plan === 'pro' ? 'Pro' : 'Standard';
-      document.getElementById('langue-group').style.display = a.deep_actif ? 'block' : 'none';
-    } catch(e) { console.error(e); }
+      var langueGroup = document.getElementById('langue-group');
+      if (langueGroup) langueGroup.style.display = a.deep_actif ? 'block' : 'none';
+    }).catch(function(e) {
+      console.error('Erreur chargement paramètres:', e);
+    });
   }
 
-  await loadSettings();
+  // ─── Chargement infos bancaires & factures ──────────────
+  function loadBillingInfo() {
+    // Récupère le moyen de paiement et les factures depuis le backend
+    API.get('/api/artisan/billing').then(function(data) {
+      // Moyen de paiement
+      var pmDiv = document.getElementById('payment-method');
+      if (pmDiv && data.payment_method) {
+        pmDiv.innerHTML = `
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-size:1.2rem;">💳</span>
+            <span>${data.payment_method.brand} •••• ${data.payment_method.last4} — Expire le ${data.payment_method.exp_month}/${data.payment_method.exp_year}</span>
+          </div>`;
+      } else if (pmDiv) {
+        pmDiv.innerHTML = '<p style="color:var(--gris);">Aucune carte enregistrée.</p>';
+      }
 
-  // Toggle langue
-  document.getElementById('deep_actif').addEventListener('change', function() {
-    document.getElementById('langue-group').style.display = this.checked ? 'block' : 'none';
-  });
+      // Historique des factures
+      var invDiv = document.getElementById('invoices-table');
+      if (invDiv && data.invoices && data.invoices.length) {
+        var html = '<table style="width:100%;font-size:.85rem;border-collapse:collapse;">';
+        html += '<thead><tr style="border-bottom:1px solid var(--beige-dark);">';
+        html += '<th style="text-align:left;padding:8px;">Date</th>';
+        html += '<th style="text-align:left;padding:8px;">Description</th>';
+        html += '<th style="text-align:right;padding:8px;">Montant</th>';
+        html += '<th style="text-align:right;padding:8px;"></th>';
+        html += '</tr></thead><tbody>';
 
-  // Soumission
-  document.getElementById('params-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    hideAlert(alertId);
-    const btn = document.getElementById('btn-save');
-    btnLoading(btn, true);
+        data.invoices.forEach(function(inv) {
+          html += '<tr style="border-bottom:1px solid var(--beige-dark);">';
+          html += '<td style="padding:8px;">' + inv.date + '</td>';
+          html += '<td style="padding:8px;">' + inv.description + '</td>';
+          html += '<td style="text-align:right;padding:8px;">' + inv.amount + ' €</td>';
+          html += '<td style="text-align:right;padding:8px;"><a href="' + inv.pdf_url + '" target="_blank" style="color:var(--anthracite);text-decoration:underline;">PDF</a></td>';
+          html += '</tr>';
+        });
 
-    const pwNew = document.getElementById('password-new').value;
-    const pwConfirm = document.getElementById('password-confirm').value;
-    if (pwNew && pwNew !== pwConfirm) {
-      showAlert(alertId, 'Les mots de passe ne correspondent pas.', 'danger');
-      btnLoading(btn, false);
-      return;
-    }
-
-    const payload = {
-      nom: document.getElementById('nom').value.trim(),
-      telephone: document.getElementById('telephone').value.trim(),
-      adresse: document.getElementById('adresse').value.trim(),
-      siret: document.getElementById('siret').value.trim(),
-      tva: document.getElementById('tva').value.trim(),
-      ville: document.getElementById('ville').value.trim(),
-      rayon: parseInt(document.getElementById('rayon').value),
-      zones: document.getElementById('zones').value.split(',').map(s => s.trim()).filter(Boolean),
-      budget_min: parseInt(document.getElementById('budget_min').value) || null,
-      specialite: document.getElementById('specialite').value.trim(),
-      push_sms: document.getElementById('push_sms').checked,
-      push_whatsapp: document.getElementById('push_whatsapp').checked,
-      auto_relance: document.getElementById('auto_relance').checked,
-      horaires_debut: document.getElementById('horaires_debut').value,
-      horaires_fin: document.getElementById('horaires_fin').value,
-      ton_agent: document.getElementById('ton_agent').value,
-      deep_actif: document.getElementById('deep_actif').checked,
-      langue_par_defaut: document.getElementById('langue_par_defaut').value,
-    };
-    if (pwNew) payload.password = pwNew;
-
-    try {
-      await API.updateProfile(payload);
-      showAlert(alertId, '✅ Tous les paramètres ont été enregistrés.', 'success');
-      setTimeout(() => hideAlert(alertId), 4000);
-    } catch(err) {
-      showAlert(alertId, '❌ ' + err.message, 'danger');
-    } finally {
-      btnLoading(btn, false);
-    }
-  });
-
-  // Suppression de compte (placeholder)
-  document.getElementById('delete-account').addEventListener('click', function(e) {
-    e.preventDefault();
-    if (confirm('Voulez-vous vraiment supprimer votre compte ? Cette action est irréversible.')) {
-      alert('Fonctionnalité en cours de développement. Contactez le support.');
-    }
-  });
+        html += '</tbody></table>';
+        invDiv.innerHTML = html;
+      } else if (invDiv) {
+        invDiv.innerHTML = '<p style="color:var(--gris);">Aucune facture pour le moment.</p>';
+      }
+    }).catch(function(e) {
+      console.error('Erreur chargement billing:', e);
+      var pmDiv = document.getElementById('payment-method');
+      if (pmDiv) pmDiv.innerHTML = '<p style="color:var(--gris);">Impossible de charger les informations bancaires.</p>';
+      var invDiv = document.getElementById('invoices-table');
+      if (invDiv) invDiv.innerHTML = '<p style="color:var(--gris);">Impossible de charger les factures.</p>';
+    });
+  }
 });
 </script>
 </body>
