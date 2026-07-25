@@ -1,30 +1,14 @@
-<!-- header.html – Version mobile corrigée -->
-<header class="site-header" id="main-header">
-  <div class="container header-container">
-    <!-- Logo -->
+<!-- header.html – Fusionné : logo + burger + sidebar universelle -->
+<header class="site-header">
+  <div class="container">
+    <!-- Logo (lien vers l'accueil) -->
     <a href="/index.html" class="nav-logo">
       <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
-      <span>BâtiSwift</span>
+      BâtiSwift
     </a>
 
-    <!-- Actions (Connexion / Inscription) – TOUJOURS VISIBLES sur desktop, MASQUÉES sur mobile -->
-    <div class="nav-actions" id="nav-actions">
-      <!-- Version desktop + mobile (masquée sur mobile via CSS) -->
-      <div class="nav-guest">
-        <a href="/connexion.html" class="btn btn-secondary btn-sm">Connexion</a>
-        <a href="/inscription.html" class="btn btn-primary btn-sm">S'inscrire</a>
-      </div>
-      <!-- Version connecté (masquée par défaut) -->
-      <div class="nav-user" style="display:none;">
-        <span id="nav-user-greeting"></span>
-        <a href="/dashboard.html" class="btn btn-secondary btn-sm">Mon Espace</a>
-        <a href="/parametres.html" class="btn btn-secondary btn-sm">⚙</a>
-        <button data-action="logout" class="btn btn-primary btn-sm">Déconnexion</button>
-      </div>
-    </div>
-
-    <!-- Bouton Burger (visible uniquement sur mobile) -->
-    <button class="nav-hamburger" id="burger-btn" aria-label="Menu" aria-expanded="false">
+    <!-- Bouton menu (3 barres) -->
+    <button class="menu-toggle" id="menu-toggle" aria-label="Ouvrir le menu">
       <span class="bar"></span>
       <span class="bar"></span>
       <span class="bar"></span>
@@ -32,125 +16,107 @@
   </div>
 </header>
 
-<!-- OVERLAY + SIDEBAR MOBILE -->
+<!-- Overlay -->
 <div id="sidebar-overlay" class="sidebar-overlay"></div>
-<div id="mobile-sidebar" class="mobile-sidebar">
+
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar">
   <div class="sidebar-header">
     <a href="/index.html" class="nav-logo">
       <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
-      <span>BâtiSwift</span>
+      BâtiSwift
     </a>
-    <button id="sidebar-close" class="sidebar-close" aria-label="Fermer le menu">✕</button>
+    <button id="sidebar-close" class="sidebar-close">✕</button>
   </div>
+
   <nav class="sidebar-nav">
     <a href="/index.html">🏠 Accueil</a>
     <a href="/client.html">💬 Déposer une demande</a>
     <a href="/tarifs.html">💰 Tarifs</a>
     <a href="/aide.html">❓ Aide</a>
   </nav>
+
   <div class="sidebar-actions">
-    <a href="/connexion.html" class="btn btn-secondary btn-block">Connexion</a>
-    <a href="/inscription.html" class="btn btn-primary btn-block">S'inscrire</a>
+    <!-- Invité -->
+    <div class="sidebar-guest">
+      <a href="/connexion.html" class="btn btn-secondary btn-block">Connexion</a>
+      <a href="/inscription.html" class="btn btn-primary btn-block">S'inscrire</a>
+    </div>
+    <!-- Connecté -->
+    <div class="sidebar-user" style="display:none;">
+      <span id="sidebar-user-name" style="font-weight:600;display:block;padding:0.5rem 0;">👋 <span id="sidebar-user-nom"></span></span>
+      <a href="/dashboard.html" class="btn btn-secondary btn-block">📊 Mon Dashboard</a>
+      <a href="/parametres.html" class="btn btn-secondary btn-block">⚙ Paramètres</a>
+      <button id="sidebar-logout" class="btn btn-danger btn-block">Déconnexion</button>
+    </div>
   </div>
 </div>
 
-<!-- ============================================================
-     STYLES CRITIQUES (intégrés directement pour être sûrs)
-     ============================================================ -->
 <style>
-/* ---- Reset local pour le header ---- */
-.header-container {
+/* ============================================================
+   HEADER
+   ============================================================ */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  background: rgba(245,240,235,0.9);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid #EDE6DD;
+  padding: 0 1.5rem;
+}
+.site-header .container {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  gap: 10px;
-  flex-wrap: nowrap;
+  max-width: 1180px;
+  margin: 0 auto;
 }
-
-/* ---- Logo ---- */
 .nav-logo {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-family: var(--font-display, 'Cormorant Garamond', serif);
-  font-size: 1.3rem;
+  gap: 10px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
   font-weight: 700;
-  color: var(--anthracite, #2B2B2B);
+  color: #2B2B2B;
   text-decoration: none;
-  flex-shrink: 0;
 }
 .logo-svg {
-  width: 36px;
+  width: 40px;
   height: auto;
-  display: block;
 }
 
-/* ---- Actions (Connexion / Inscription) ---- */
-.nav-actions {
+/* ---- Bouton menu ---- */
+.menu-toggle {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-.nav-guest {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: nowrap;
-}
-.nav-guest .btn {
-  white-space: nowrap;
-  font-size: 0.8rem;
-  padding: 6px 12px;
-}
-.nav-user {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: nowrap;
-}
-.nav-user .btn {
-  white-space: nowrap;
-  font-size: 0.75rem;
-  padding: 4px 10px;
-}
-#nav-user-greeting {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--anthracite, #2B2B2B);
-  white-space: nowrap;
-}
-
-/* ---- Burger ---- */
-.nav-hamburger {
-  display: none;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
-  flex-shrink: 0;
+  padding: 8px;
 }
-.nav-hamburger .bar {
-  width: 24px;
-  height: 2.5px;
-  background: var(--anthracite, #2B2B2B);
+.menu-toggle .bar {
+  width: 28px;
+  height: 3px;
+  background: #2B2B2B;
   border-radius: 4px;
   transition: all 0.3s ease;
 }
-.nav-hamburger.open .bar:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-.nav-hamburger.open .bar:nth-child(2) {
-  opacity: 0;
-}
-.nav-hamburger.open .bar:nth-child(3) {
-  transform: rotate(-45deg) translate(5px, -5px);
-}
+.menu-toggle.open .bar:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+.menu-toggle.open .bar:nth-child(2) { opacity: 0; }
+.menu-toggle.open .bar:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
 
-/* ---- Overlay ---- */
+/* ============================================================
+   OVERLAY
+   ============================================================ */
 .sidebar-overlay {
   position: fixed;
   inset: 0;
@@ -165,27 +131,30 @@
   pointer-events: auto;
 }
 
-/* ---- Sidebar mobile ---- */
-.mobile-sidebar {
+/* ============================================================
+   SIDEBAR UNIVERSELLE
+   ============================================================ */
+.sidebar {
   position: fixed;
   top: 0;
-  right: -320px;
-  width: 300px;
-  max-width: 80vw;
+  right: -380px;
+  width: 340px;
+  max-width: 85vw;
   height: 100vh;
   background: #FFFFFF;
   z-index: 300;
-  padding: 1.5rem;
-  box-shadow: -4px 0 32px rgba(0,0,0,0.12);
+  padding: 1.8rem;
+  box-shadow: -4px 0 40px rgba(0,0,0,0.15);
   transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   overflow-y: auto;
 }
-.mobile-sidebar.active {
+.sidebar.active {
   right: 0;
 }
+
 .sidebar-header {
   display: flex;
   justify-content: space-between;
@@ -204,6 +173,7 @@
 .sidebar-close:hover {
   color: #2B2B2B;
 }
+
 .sidebar-nav {
   display: flex;
   flex-direction: column;
@@ -221,6 +191,7 @@
 .sidebar-nav a:hover {
   background: #F5F0EB;
 }
+
 .sidebar-actions {
   margin-top: auto;
   display: flex;
@@ -234,92 +205,80 @@
   display: block;
   width: 100%;
 }
-
-/* ============================================================
-   RESPONSIVE : CE QUI CHANGE SUR MOBILE
-   ============================================================ */
-@media (max-width: 768px) {
-  /* 1. Le burger apparaît */
-  .nav-hamburger {
-    display: flex;
-  }
-
-  /* 2. Les boutons Connexion / Inscription sont RÉDUITS mais RESTENT VISIBLES */
-  .nav-guest .btn {
-    font-size: 0.65rem !important;
-    padding: 4px 8px !important;
-  }
-  .nav-user .btn {
-    font-size: 0.6rem !important;
-    padding: 3px 6px !important;
-  }
-  #nav-user-greeting {
-    font-size: 0.7rem !important;
-  }
-
-  /* 3. Le logo se réduit un peu */
-  .nav-logo {
-    font-size: 1.1rem;
-  }
-  .logo-svg {
-    width: 28px;
-  }
+.sidebar-actions .btn-secondary {
+  background: transparent;
+  color: #2B2B2B;
+  border: 1.5px solid #D4D0CB;
 }
-
-@media (min-width: 769px) {
-  /* Sur desktop, la sidebar et l'overlay disparaissent */
-  .sidebar-overlay,
-  .mobile-sidebar {
-    display: none !important;
-  }
+.sidebar-actions .btn-primary {
+  background: #2B2B2B;
+  color: #FFFFFF;
+}
+.sidebar-actions .btn-danger {
+  background: #EF4444;
+  color: #FFFFFF;
+}
+.sidebar-actions .btn-block {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.2s;
 }
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // ─── SIDEBAR MOBILE ──────────────────────────────────────
-  var burgerBtn = document.getElementById('burger-btn');
+  // ─── SIDEBAR ──────────────────────────────────────────────
+  var toggle = document.getElementById('menu-toggle');
   var overlay = document.getElementById('sidebar-overlay');
-  var sidebar = document.getElementById('mobile-sidebar');
+  var sidebar = document.getElementById('sidebar');
   var closeBtn = document.getElementById('sidebar-close');
-  var sidebarLinks = sidebar ? sidebar.querySelectorAll('a') : [];
+  var allLinks = sidebar ? sidebar.querySelectorAll('a') : [];
 
   function openSidebar() {
-    if (burgerBtn) burgerBtn.classList.add('open');
-    if (overlay) overlay.classList.add('active');
-    if (sidebar) sidebar.classList.add('active');
+    toggle.classList.add('open');
+    overlay.classList.add('active');
+    sidebar.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
 
   function closeSidebar() {
-    if (burgerBtn) burgerBtn.classList.remove('open');
-    if (overlay) overlay.classList.remove('active');
-    if (sidebar) sidebar.classList.remove('active');
+    toggle.classList.remove('open');
+    overlay.classList.remove('active');
+    sidebar.classList.remove('active');
     document.body.style.overflow = '';
   }
 
-  if (burgerBtn) burgerBtn.addEventListener('click', openSidebar);
+  if (toggle) toggle.addEventListener('click', openSidebar);
   if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
   if (overlay) overlay.addEventListener('click', closeSidebar);
 
-  sidebarLinks.forEach(function(link) {
+  allLinks.forEach(function(link) {
     link.addEventListener('click', closeSidebar);
   });
 
   // ─── GESTION DE SESSION ──────────────────────────────────
   var user = JSON.parse(localStorage.getItem('batiswift_user') || 'null');
-  var guest = document.querySelector('.nav-guest');
-  var userDiv = document.querySelector('.nav-user');
-  var greeting = document.getElementById('nav-user-greeting');
+  var guestDiv = document.querySelector('.sidebar-guest');
+  var userDiv = document.querySelector('.sidebar-user');
+  var userNameSpan = document.getElementById('sidebar-user-nom');
 
-  if (user && userDiv && guest) {
-    guest.style.display = 'none';
+  if (user && userDiv && guestDiv) {
+    guestDiv.style.display = 'none';
     userDiv.style.display = 'flex';
-    if (greeting) greeting.textContent = '👋 ' + user.nom;
+    userDiv.style.flexDirection = 'column';
+    userDiv.style.gap = '0.8rem';
+    if (userNameSpan) userNameSpan.textContent = user.nom || 'Artisan';
   }
 
   // ─── DÉCONNEXION ─────────────────────────────────────────
-  document.querySelector('[data-action="logout"]')?.addEventListener('click', function() {
+  document.getElementById('sidebar-logout')?.addEventListener('click', function() {
     localStorage.removeItem('batiswift_token');
     localStorage.removeItem('batiswift_user');
     window.location.href = '/index.html';
