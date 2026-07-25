@@ -66,6 +66,7 @@
       display: inline-block; padding: 4px 12px; border-radius: 20px;
       font-size: .8rem; font-weight: 600; background: var(--or); color: var(--blanc);
     }
+    .badge-plan.standard { background: var(--gris-light); color: var(--anthracite); }
     @media (max-width: 640px) {
       .params-card { padding: 28px 20px; }
       .form-row { grid-template-columns: 1fr; }
@@ -98,22 +99,22 @@
         <button type="button" class="tab-btn" data-tab="tab-compte">💳 Abonnement & Sécurité</button>
       </div>
 
-      <!-- Onglet 1 : Entreprise -->
+      <!-- ══ ONGLET 1 : ENTREPRISE ══ -->
       <div class="tab-pane active" id="tab-entreprise">
         <div class="section-divider">🏢 Informations de l'entreprise</div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label" for="nom">Nom de l'entreprise</label>
+            <label class="form-label" for="nom">Nom complet <span class="req">*</span></label>
             <input type="text" id="nom" class="form-control" required>
           </div>
           <div class="form-group">
-            <label class="form-label" for="email">Email professionnel</label>
+            <label class="form-label" for="email">E-mail (non modifiable)</label>
             <input type="email" id="email" class="form-control" disabled>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label" for="telephone">Téléphone</label>
+            <label class="form-label" for="telephone">Téléphone professionnel</label>
             <input type="tel" id="telephone" class="form-control">
           </div>
           <div class="form-group">
@@ -133,13 +134,13 @@
         </div>
       </div>
 
-      <!-- Onglet 2 : Zone & Leads -->
+      <!-- ══ ONGLET 2 : ZONE & LEADS ══ -->
       <div class="tab-pane" id="tab-zone">
         <div class="section-divider">📍 Zone d'intervention & Leads</div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label" for="ville">Ville principale</label>
-            <input type="text" id="ville" class="form-control">
+            <label class="form-label" for="ville">Ville principale <span class="req">*</span></label>
+            <input type="text" id="ville" class="form-control" required>
           </div>
           <div class="form-group">
             <label class="form-label" for="rayon">Rayon (km)</label>
@@ -153,40 +154,51 @@
         <div class="form-group">
           <label class="form-label" for="zones">Zones supplémentaires (villes, séparées par des virgules)</label>
           <input type="text" id="zones" class="form-control" placeholder="Lyon, Paris, 69003">
+          <div class="form-hint">Ces zones s'ajoutent à votre ville principale pour la réception de leads.</div>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label" for="budget_min">Budget minimum (€)</label>
-            <input type="number" id="budget_min" class="form-control" placeholder="1500">
+            <label class="form-label" for="budget_min">Budget minimum chantier (€)</label>
+            <input type="number" id="budget_min" class="form-control" placeholder="1500" min="0" step="100">
           </div>
           <div class="form-group">
-            <label class="form-label" for="specialite">Spécialités</label>
-            <input type="text" id="specialite" class="form-control" placeholder="plomberie, chauffage">
+            <label class="form-label" for="specialite">Spécialités (séparées par des virgules)</label>
+            <input type="text" id="specialite" class="form-control" placeholder="plomberie, chauffage, serrurerie">
           </div>
+        </div>
+        <div style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:var(--radius);padding:14px;margin-bottom:var(--space-md)">
+          <p style="font-size:.82rem;color:#7a5b1a;margin:0">💡 <strong>Astuce :</strong> Plus votre zone et vos spécialités sont précises, plus les leads reçus seront rentables. L'IA filtre automatiquement les chantiers incompatibles.</p>
         </div>
       </div>
 
-      <!-- Onglet 3 : Notifications -->
+      <!-- ══ ONGLET 3 : NOTIFICATIONS ══ -->
       <div class="tab-pane" id="tab-notifs">
         <div class="section-divider">🔔 Notifications & Disponibilités</div>
         <div class="toggle-row">
-          <div><div class="toggle-label">📩 Notifications SMS</div></div>
+          <div>
+            <div class="toggle-label">📩 Notifications SMS</div>
+            <div class="toggle-desc">Canal de secours si WhatsApp n'est pas disponible.</div>
+          </div>
           <label class="switch"><input type="checkbox" id="push_sms" checked><span class="slider"></span></label>
         </div>
         <div class="toggle-row">
-          <div><div class="toggle-label">💬 Notifications WhatsApp</div></div>
+          <div>
+            <div class="toggle-label">💬 Notifications WhatsApp</div>
+            <div class="toggle-desc">Alerte instantanée dès qu'un lead compatible est disponible.</div>
+          </div>
           <label class="switch"><input type="checkbox" id="push_whatsapp" checked><span class="slider"></span></label>
         </div>
         <div class="toggle-row">
           <div>
-            <div class="toggle-label">🔄 Relances automatiques (3 jours)</div>
-            <div class="toggle-desc">L'agent IA relance automatiquement les leads sans réponse après 3 jours.</div>
+            <div class="toggle-label">📧 Notifications E-mail</div>
+            <div class="toggle-desc">Récapitulatif quotidien des leads disponibles.</div>
           </div>
-          <label class="switch"><input type="checkbox" id="auto_relance"><span class="slider"></span></label>
+          <label class="switch"><input type="checkbox" id="push_email"><span class="slider"></span></label>
         </div>
+        <div class="section-divider">⏰ Disponibilités</div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label" for="horaires_debut">Heure début (contact)</label>
+            <label class="form-label" for="horaires_debut">Heure début (alertes)</label>
             <input type="time" id="horaires_debut" class="form-control" value="08:00">
           </div>
           <div class="form-group">
@@ -194,47 +206,70 @@
             <input type="time" id="horaires_fin" class="form-control" value="19:00">
           </div>
         </div>
+        <div class="form-hint" style="margin-bottom:var(--space-md)">
+          En dehors de ces horaires, l'agent IA continue de répondre aux clients mais ne vous envoie pas d'alerte.
+        </div>
       </div>
 
-      <!-- Onglet 4 : Agent IA -->
+      <!-- ══ ONGLET 4 : AGENT IA ══ -->
       <div class="tab-pane" id="tab-ia">
         <div class="section-divider">🤖 Agent IA & Traduction</div>
         <div class="form-group">
           <label class="form-label" for="ton_agent">Ton de l'agent IA</label>
           <select id="ton_agent" class="form-control">
-            <option value="pro">Professionnel & formel</option>
-            <option value="chaleureux">Direct & chaleureux</option>
+            <option value="chaleureux">Direct & chaleureux (recommandé)</option>
+            <option value="formel">Professionnel & formel</option>
+            <option value="direct">Ultra-direct & concis</option>
           </select>
+          <div class="form-hint">Ce ton est utilisé dans toutes les réponses automatiques de l'agent à vos clients.</div>
         </div>
         <div class="toggle-row">
           <div>
             <div class="toggle-label">🌐 Traduction automatique (DeepL)</div>
-            <div class="toggle-desc">L'agent traduira les échanges avec les clients non francophones.</div>
+            <div class="toggle-desc">L'agent détecte la langue du client et répond dans sa langue.</div>
           </div>
           <label class="switch"><input type="checkbox" id="deep_actif"><span class="slider"></span></label>
         </div>
         <div class="form-group" id="langue-group" style="display:none">
-          <label class="form-label" for="langue_par_defaut">Langue par défaut</label>
-          <select id="langue_par_defaut" class="form-control">
-            <option value="fr">Français</option><option value="en">English</option>
-            <option value="ar">العربية</option><option value="pt">Português</option>
-            <option value="es">Español</option>
-          </select>
+          <label class="form-label">Langues autorisées (en plus du français)</label>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px">
+            <label style="display:flex;align-items:center;gap:6px;font-size:.88rem;cursor:pointer">
+              <input type="checkbox" value="en" class="lang-check"> 🇬🇧 English
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:.88rem;cursor:pointer">
+              <input type="checkbox" value="de" class="lang-check"> 🇩🇪 Deutsch
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:.88rem;cursor:pointer">
+              <input type="checkbox" value="pt" class="lang-check"> 🇵🇹 Português
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:.88rem;cursor:pointer">
+              <input type="checkbox" value="es" class="lang-check"> 🇪🇸 Español
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:.88rem;cursor:pointer">
+              <input type="checkbox" value="ar" class="lang-check"> 🇲🇦 العربية
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:.88rem;cursor:pointer">
+              <input type="checkbox" value="lu" class="lang-check"> 🇱🇺 Lëtzebuergesch
+            </label>
+          </div>
+          <div class="form-hint">Le français est toujours inclus par défaut.</div>
         </div>
       </div>
 
-      <!-- Onglet 5 : Abonnement & Sécurité -->
+      <!-- ══ ONGLET 5 : ABONNEMENT & SÉCURITÉ ══ -->
       <div class="tab-pane" id="tab-compte">
 
-        <!-- SOUS-SECTION ABONNEMENT (existante) -->
         <div class="section-divider">💳 Abonnement</div>
         <div class="form-group">
           <label class="form-label">Formule actuelle</label>
-          <div class="badge-plan" id="plan-badge">Standard</div>
-          <p style="font-size:.8rem;color:var(--gris);margin-top:4px">Gérez votre abonnement et vos factures dans votre espace Stripe.</p>
+          <div id="plan-badge" class="badge-plan standard">Standard</div>
+          <p style="font-size:.8rem;color:var(--gris);margin-top:4px" id="plan-detail">10€ / lead acheté · Aucun abonnement mensuel</p>
+        </div>
+        <div id="sub-actions" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+          <a href="/tarifs.html" class="btn btn-gold btn-sm" id="btn-upgrade" style="display:none">⚡ Passer à Pro (19€/mois)</a>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-cancel-sub" style="display:none">Annuler l'abonnement</button>
         </div>
 
-        <!-- NOUVEAU : MOYEN DE PAIEMENT -->
         <div class="section-divider">💳 Moyen de paiement</div>
         <div id="payment-method" style="margin-bottom:12px;">
           <p style="color:var(--gris);">Chargement…</p>
@@ -243,13 +278,11 @@
           Mettre à jour ma carte
         </button>
 
-        <!-- NOUVEAU : HISTORIQUE DES FACTURES -->
         <div class="section-divider" style="margin-top:24px;">📄 Historique des factures</div>
         <div id="invoices-table" style="margin-bottom:12px;">
           <p style="color:var(--gris);">Chargement…</p>
         </div>
 
-        <!-- BLOC SÉCURITÉ & RÉASSURANCE -->
         <div style="background:var(--beige);padding:14px;border-radius:12px;margin-top:16px;display:flex;align-items:center;gap:12px;">
           <span style="font-size:1.4rem;">🔒</span>
           <p style="font-size:.82rem;color:var(--anthracite);margin:0;">
@@ -257,7 +290,6 @@
           </p>
         </div>
 
-        <!-- SÉCURITÉ (existante) -->
         <div class="section-divider" style="margin-top:24px;">🔒 Sécurité</div>
         <div class="form-row">
           <div class="form-group">
@@ -297,189 +329,272 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
-  // ─── 1. Initialisation immédiate des onglets ────────────────
+  // ─── Helpers ──────────────────────────────────────────────────
+  function val(id) {
+    var el = document.getElementById(id);
+    return el ? el.value.trim() : '';
+  }
+  function setVal(id, value) {
+    var el = document.getElementById(id);
+    if (el && value !== undefined && value !== null) el.value = value;
+  }
+  function setChecked(id, bool) {
+    var el = document.getElementById(id);
+    if (el) el.checked = !!bool;
+  }
+  function getChecked(id) {
+    var el = document.getElementById(id);
+    return el ? el.checked : false;
+  }
+
+  var alertId = 'alert-params';
+
+  // ─── 1. Onglets ──────────────────────────────────────────────
   document.querySelectorAll('.tab-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
       document.querySelectorAll('.tab-pane').forEach(function(p) { p.classList.remove('active'); });
       this.classList.add('active');
-      var targetId = this.getAttribute('data-tab');
-      var target = document.getElementById(targetId);
+      var target = document.getElementById(this.getAttribute('data-tab'));
       if (target) target.classList.add('active');
     });
   });
 
-  // ─── 2. Vérification de l'authentification ────────────────
-  var alertId = 'alert-params';
+  // ─── 2. Toggle DeepL → afficher les langues ────────────────
+  var deepCheck = document.getElementById('deep_actif');
+  if (deepCheck) {
+    deepCheck.addEventListener('change', function() {
+      var langGroup = document.getElementById('langue-group');
+      if (langGroup) langGroup.style.display = this.checked ? 'block' : 'none';
+    });
+  }
 
+  // ─── 3. Auth guard + chargement initial ─────────────────────
   Session.requireAuth().then(function(user) {
     if (!user) return;
 
-    // Chargement des données existantes
+    // Chargement des paramètres
     loadSettings();
-    // Chargement des infos bancaires et factures
     loadBillingInfo();
 
-    // Toggle langue
-    var deepCheck = document.getElementById('deep_actif');
-    if (deepCheck) {
-      deepCheck.addEventListener('change', function() {
-        var langueGroup = document.getElementById('langue-group');
-        if (langueGroup) langueGroup.style.display = this.checked ? 'block' : 'none';
+    // ─── 4. Bouton Stripe Customer Portal ──────────────────────
+    document.getElementById('btn-update-card').addEventListener('click', function() {
+      API.post('/api/create-customer-portal-session', {}).then(function(data) {
+        if (data.url) window.location.href = data.url;
+      }).catch(function(err) {
+        showAlert(alertId, 'Erreur : ' + err.message, 'danger');
       });
-    }
+    });
 
-    // Bouton mise à jour carte → Stripe Customer Portal
-    var btnCard = document.getElementById('btn-update-card');
-    if (btnCard) {
-      btnCard.addEventListener('click', function() {
-        API.post('/api/create-customer-portal-session').then(function(data) {
-          if (data.url) window.location.href = data.url;
-        }).catch(function(err) {
-          showAlert(alertId, 'Erreur : ' + err.message, 'danger');
-        });
+    // ─── 5. Annulation abonnement ──────────────────────────────
+    document.getElementById('btn-cancel-sub').addEventListener('click', function() {
+      if (!confirm('Annuler votre abonnement Pro ? Vous garderez l\'accès jusqu\'à la fin de la période en cours.')) return;
+      API.post('/api/subscription/cancel', {}).then(function(data) {
+        toast(data.message || 'Abonnement annulé.', 'success');
+        setTimeout(function() { window.location.reload(); }, 1500);
+      }).catch(function(err) {
+        toast(err.message, 'danger');
       });
-    }
+    });
 
-    // Soumission du formulaire
-    var form = document.getElementById('params-form');
-    if (form) {
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        hideAlert(alertId);
-        var btn = document.getElementById('btn-save');
-        btnLoading(btn, true);
+    // ─── 6. Suppression de compte ──────────────────────────────
+    document.getElementById('delete-account').addEventListener('click', function(e) {
+      e.preventDefault();
+      if (!confirm('⚠️ Supprimer définitivement votre compte BâtiSwift ? Cette action est irréversible.')) return;
+      var code = prompt('Tapez "SUPPRIMER" pour confirmer :');
+      if (code === 'SUPPRIMER') {
+        toast('Fonctionnalité en cours de déploiement. Contactez contact@batiswift.com', 'info', 6000);
+      }
+    });
 
-        var pwNew = document.getElementById('password-new').value;
-        var pwConfirm = document.getElementById('password-confirm').value;
-        if (pwNew && pwNew !== pwConfirm) {
-          showAlert(alertId, 'Les mots de passe ne correspondent pas.', 'danger');
-          btnLoading(btn, false);
-          return;
+    // ─── 7. Soumission du formulaire (LE CŒUR DU FIX) ──────────
+    document.getElementById('params-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      hideAlert(alertId);
+      var btn = document.getElementById('btn-save');
+      btnLoading(btn, true);
+
+      // Vérification mot de passe
+      var pwNew = document.getElementById('password-new').value;
+      var pwConfirm = document.getElementById('password-confirm').value;
+      if (pwNew && pwNew !== pwConfirm) {
+        showAlert(alertId, 'Les mots de passe ne correspondent pas.', 'danger');
+        btnLoading(btn, false);
+        return;
+      }
+
+      // ── Payload PROFIL (updateProfile) ──────────────────────
+      var profilePayload = {
+        nom:            val('nom'),
+        telephone:      val('telephone'),
+        adresse:        val('adresse'),
+        siret:          val('siret'),
+        tva_number:     val('tva'),          // ← CORRECTION
+        ville:          val('ville'),
+        rayon:          parseInt(val('rayon')) || 30,
+        budget_minimum: parseInt(val('budget_min')) || 0,  // ← CORRECTION
+        specialite:     val('specialite'),
+        agent_tone:     val('ton_agent'),    // ← CORRECTION
+      };
+
+      // zones → departements (array)  // ← CORRECTION
+      var zonesRaw = val('zones');
+      var departements = zonesRaw ? zonesRaw.split(',').map(function(s) { return s.trim(); }).filter(Boolean) : [];
+      profilePayload.departements = departements;
+
+      if (pwNew) profilePayload.password = pwNew;
+
+      // ── Payload NOTIFICATIONS (updateNotifs) ─────────────────
+      var notifPayload = {
+        notif_sms:      getChecked('push_sms'),      // ← CORRECTION
+        notif_whatsapp: getChecked('push_whatsapp'), // ← CORRECTION
+        notif_email:    getChecked('push_email'),
+        deepl_enabled:  getChecked('deep_actif'),    // ← CORRECTION
+        horaires_debut: val('horaires_debut'),
+        horaires_fin:   val('horaires_fin'),
+      };
+
+      // Langues (array)
+      var langues = ['fr'];
+      document.querySelectorAll('.lang-check:checked').forEach(function(cb) {
+        langues.push(cb.value);
+      });
+      notifPayload.langues = langues;                // ← CORRECTION
+
+      // ── Envoi simultané ─────────────────────────────────────
+      Promise.all([
+        API.updateProfile(profilePayload),
+        API.updateNotifs(notifPayload)
+      ]).then(function(results) {
+        var profileResult = results[0];
+        if (profileResult.token) {
+          Session.save(profileResult.token, profileResult.artisan);
         }
-
-        var payload = {
-          nom: document.getElementById('nom').value.trim(),
-          telephone: document.getElementById('telephone').value.trim(),
-          adresse: document.getElementById('adresse').value.trim(),
-          siret: document.getElementById('siret').value.trim(),
-          tva: document.getElementById('tva').value.trim(),
-          ville: document.getElementById('ville').value.trim(),
-          rayon: parseInt(document.getElementById('rayon').value),
-          zones: document.getElementById('zones').value.split(',').map(function(s) { return s.trim(); }).filter(Boolean),
-          budget_min: parseInt(document.getElementById('budget_min').value) || null,
-          specialite: document.getElementById('specialite').value.trim(),
-          push_sms: document.getElementById('push_sms').checked,
-          push_whatsapp: document.getElementById('push_whatsapp').checked,
-          auto_relance: document.getElementById('auto_relance').checked,
-          horaires_debut: document.getElementById('horaires_debut').value,
-          horaires_fin: document.getElementById('horaires_fin').value,
-          ton_agent: document.getElementById('ton_agent').value,
-          deep_actif: document.getElementById('deep_actif').checked,
-          langue_par_defaut: document.getElementById('langue_par_defaut').value,
-        };
-        if (pwNew) payload.password = pwNew;
-
-        API.updateProfile(payload).then(function() {
-          showAlert(alertId, '✅ Tous les paramètres ont été enregistrés.', 'success');
-          setTimeout(function() { hideAlert(alertId); }, 4000);
-          btnLoading(btn, false);
-        }).catch(function(err) {
-          showAlert(alertId, '❌ ' + err.message, 'danger');
-          btnLoading(btn, false);
-        });
+        showAlert(alertId, '✅ Tous les paramètres ont été enregistrés.', 'success');
+        setTimeout(function() { hideAlert(alertId); }, 4000);
+        btnLoading(btn, false);
+        // Recharger les données pour refléter les changements
+        loadSettings();
+        loadBillingInfo();
+      }).catch(function(err) {
+        showAlert(alertId, '❌ ' + err.message, 'danger');
+        btnLoading(btn, false);
       });
-    }
+    });
 
-    // Suppression de compte
-    var deleteLink = document.getElementById('delete-account');
-    if (deleteLink) {
-      deleteLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        if (confirm('Voulez-vous vraiment supprimer votre compte ? Cette action est irréversible.')) {
-          alert('Fonctionnalité en cours de développement. Contactez le support.');
-        }
-      });
-    }
   }).catch(function(err) {
-    console.error('Erreur auth:', err);
+    console.error('Auth error:', err);
   });
 
-  // ─── Chargement des paramètres ──────────────────────────
+  // ─── 8. Chargement des paramètres ──────────────────────────
   function loadSettings() {
     API.me().then(function(resp) {
       if (!resp.artisan) return;
       var a = resp.artisan;
-      document.getElementById('nom').value = a.nom || '';
-      document.getElementById('email').value = a.email || '';
-      document.getElementById('telephone').value = a.telephone || '';
-      document.getElementById('adresse').value = a.adresse || '';
-      document.getElementById('siret').value = a.siret || '';
-      document.getElementById('tva').value = a.tva || '';
-      document.getElementById('ville').value = a.ville || '';
-      document.getElementById('rayon').value = a.rayon || 30;
-      document.getElementById('zones').value = (a.zones || []).join(', ');
-      document.getElementById('budget_min').value = a.budget_min || '';
-      document.getElementById('specialite').value = a.specialite || '';
-      document.getElementById('push_sms').checked = a.push_sms !== false;
-      document.getElementById('push_whatsapp').checked = a.push_whatsapp !== false;
-      document.getElementById('auto_relance').checked = a.auto_relance || false;
-      document.getElementById('horaires_debut').value = a.horaires_debut || '08:00';
-      document.getElementById('horaires_fin').value = a.horaires_fin || '19:00';
-      document.getElementById('ton_agent').value = a.ton_agent || 'pro';
-      document.getElementById('deep_actif').checked = a.deep_actif || false;
-      document.getElementById('langue_par_defaut').value = a.langue_par_defaut || 'fr';
-      document.getElementById('plan-badge').textContent = a.plan === 'pro' ? 'Pro' : 'Standard';
-      var langueGroup = document.getElementById('langue-group');
-      if (langueGroup) langueGroup.style.display = a.deep_actif ? 'block' : 'none';
-    }).catch(function(e) {
-      console.error('Erreur chargement paramètres:', e);
+
+      // Entreprise
+      setVal('nom', a.nom);
+      setVal('email', a.email);
+      setVal('telephone', a.telephone);
+      setVal('adresse', a.adresse);
+      setVal('siret', a.siret);
+      setVal('tva', a.tva_number);             // ← CORRECTION
+
+      // Zone & Leads
+      setVal('ville', a.ville);
+      setVal('rayon', a.rayon || 30);
+      var deps = Array.isArray(a.departements) ? a.departements : [];
+      setVal('zones', deps.join(', '));        // ← CORRECTION
+      setVal('budget_min', a.budget_minimum || '');  // ← CORRECTION
+      setVal('specialite', a.specialite);
+
+      // Notifications
+      setChecked('push_sms', a.notif_sms !== false);     // ← CORRECTION
+      setChecked('push_whatsapp', a.notif_whatsapp !== false); // ← CORRECTION
+      setChecked('push_email', a.notif_email || false);
+      setVal('horaires_debut', a.horaires_debut || '08:00');
+      setVal('horaires_fin', a.horaires_fin || '19:00');
+
+      // Agent IA
+      setVal('ton_agent', a.agent_tone || 'chaleureux'); // ← CORRECTION
+      setChecked('deep_actif', a.deepl_enabled || false); // ← CORRECTION
+      var langGroup = document.getElementById('langue-group');
+      if (langGroup) langGroup.style.display = a.deepl_enabled ? 'block' : 'none';
+      var langues = Array.isArray(a.langues) ? a.langues : ['fr'];
+      document.querySelectorAll('.lang-check').forEach(function(cb) {
+        cb.checked = langues.includes(cb.value);
+      });
+
+      // Abonnement
+      var isPro = a.is_pro;                    // ← CORRECTION
+      var badge = document.getElementById('plan-badge');
+      var detail = document.getElementById('plan-detail');
+      var upgradeBtn = document.getElementById('btn-upgrade');
+      var cancelBtn = document.getElementById('btn-cancel-sub');
+      if (isPro) {
+        badge.textContent = '⭐ Pro';
+        badge.className = 'badge-plan';
+        detail.textContent = '19€/mois · Agent IA 24h/24';
+        if (upgradeBtn) upgradeBtn.style.display = 'none';
+        if (cancelBtn) cancelBtn.style.display = 'inline-flex';
+      } else {
+        badge.textContent = 'Standard';
+        badge.className = 'badge-plan standard';
+        detail.textContent = '10€ / lead acheté · Aucun abonnement mensuel';
+        if (upgradeBtn) upgradeBtn.style.display = 'inline-flex';
+        if (cancelBtn) cancelBtn.style.display = 'none';
+      }
+    }).catch(function(err) {
+      console.error('Erreur chargement paramètres:', err);
+      showAlert(alertId, '❌ Erreur de chargement des données.', 'danger');
     });
   }
 
-  // ─── Chargement infos bancaires & factures ──────────────
+  // ─── 9. Chargement des infos bancaires & factures ──────────
   function loadBillingInfo() {
-    // Récupère le moyen de paiement et les factures depuis le backend
     API.get('/api/artisan/billing').then(function(data) {
       // Moyen de paiement
       var pmDiv = document.getElementById('payment-method');
-      if (pmDiv && data.payment_method) {
-        pmDiv.innerHTML = `
-          <div style="display:flex;align-items:center;gap:12px;">
-            <span style="font-size:1.2rem;">💳</span>
-            <span>${data.payment_method.brand} •••• ${data.payment_method.last4} — Expire le ${data.payment_method.exp_month}/${data.payment_method.exp_year}</span>
-          </div>`;
-      } else if (pmDiv) {
-        pmDiv.innerHTML = '<p style="color:var(--gris);">Aucune carte enregistrée.</p>';
+      if (pmDiv) {
+        if (data.payment_method) {
+          var pm = data.payment_method;
+          pmDiv.innerHTML = '<div style="display:flex;align-items:center;gap:12px;">' +
+            '<span style="font-size:1.2rem;">💳</span>' +
+            '<span>' + pm.brand + ' •••• ' + pm.last4 + ' — Expire le ' + pm.exp_month + '/' + pm.exp_year + '</span>' +
+            '</div>';
+        } else {
+          pmDiv.innerHTML = '<p style="color:var(--gris);">Aucune carte enregistrée.</p>';
+        }
       }
 
-      // Historique des factures
+      // Factures
       var invDiv = document.getElementById('invoices-table');
-      if (invDiv && data.invoices && data.invoices.length) {
-        var html = '<table style="width:100%;font-size:.85rem;border-collapse:collapse;">';
-        html += '<thead><tr style="border-bottom:1px solid var(--beige-dark);">';
-        html += '<th style="text-align:left;padding:8px;">Date</th>';
-        html += '<th style="text-align:left;padding:8px;">Description</th>';
-        html += '<th style="text-align:right;padding:8px;">Montant</th>';
-        html += '<th style="text-align:right;padding:8px;"></th>';
-        html += '</tr></thead><tbody>';
-
-        data.invoices.forEach(function(inv) {
-          html += '<tr style="border-bottom:1px solid var(--beige-dark);">';
-          html += '<td style="padding:8px;">' + inv.date + '</td>';
-          html += '<td style="padding:8px;">' + inv.description + '</td>';
-          html += '<td style="text-align:right;padding:8px;">' + inv.amount + ' €</td>';
-          html += '<td style="text-align:right;padding:8px;"><a href="' + inv.pdf_url + '" target="_blank" style="color:var(--anthracite);text-decoration:underline;">PDF</a></td>';
-          html += '</tr>';
-        });
-
-        html += '</tbody></table>';
-        invDiv.innerHTML = html;
-      } else if (invDiv) {
-        invDiv.innerHTML = '<p style="color:var(--gris);">Aucune facture pour le moment.</p>';
+      if (invDiv) {
+        if (data.invoices && data.invoices.length) {
+          var html = '<table style="width:100%;font-size:.85rem;border-collapse:collapse;">' +
+            '<thead><tr style="border-bottom:1px solid var(--beige-dark);">' +
+            '<th style="text-align:left;padding:8px;">Date</th>' +
+            '<th style="text-align:left;padding:8px;">Description</th>' +
+            '<th style="text-align:right;padding:8px;">Montant</th>' +
+            '<th style="text-align:right;padding:8px;"></th>' +
+            '</tr></thead><tbody>';
+          data.invoices.forEach(function(inv) {
+            html += '<tr style="border-bottom:1px solid var(--beige-dark);">' +
+              '<td style="padding:8px;">' + inv.date + '</td>' +
+              '<td style="padding:8px;">' + inv.description + '</td>' +
+              '<td style="text-align:right;padding:8px;">' + inv.amount + ' €</td>' +
+              '<td style="text-align:right;padding:8px;">' +
+              (inv.pdf_url ? '<a href="' + inv.pdf_url + '" target="_blank" style="color:var(--anthracite);text-decoration:underline;">PDF</a>' : '—') +
+              '</td></tr>';
+          });
+          html += '</tbody></table>';
+          invDiv.innerHTML = html;
+        } else {
+          invDiv.innerHTML = '<p style="color:var(--gris);">Aucune facture pour le moment.</p>';
+        }
       }
-    }).catch(function(e) {
-      console.error('Erreur chargement billing:', e);
+    }).catch(function(err) {
+      console.error('Erreur billing:', err);
       var pmDiv = document.getElementById('payment-method');
       if (pmDiv) pmDiv.innerHTML = '<p style="color:var(--gris);">Impossible de charger les informations bancaires.</p>';
       var invDiv = document.getElementById('invoices-table');
