@@ -1,30 +1,20 @@
-<!-- header.html – avec sidebar mobile (côté droit) -->
-<header class="site-header">
-  <div class="container">
+<!-- header.html – Version mobile corrigée -->
+<header class="site-header" id="main-header">
+  <div class="container header-container">
     <!-- Logo -->
     <a href="/index.html" class="nav-logo">
       <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
-      BâtiSwift
+      <span>BâtiSwift</span>
     </a>
 
-    <!-- Navigation Desktop -->
-    <nav aria-label="Navigation principale">
-      <ul class="nav-links" id="nav-links-list">
-        <li><a href="/index.html" class="nav-link">Accueil</a></li>
-        <li><a href="/client.html" class="nav-link nav-guest">Déposer une demande</a></li>
-        <li><a href="/tarifs.html" class="nav-link nav-guest">Tarifs</a></li>
-        <li><a href="/aide.html" class="nav-link nav-guest">Aide</a></li>
-      </ul>
-    </nav>
-
-    <!-- Actions Desktop + Mobile -->
-    <div class="nav-actions">
-      <!-- INVITÉ : Connexion / Inscription (toujours visibles) -->
+    <!-- Actions (Connexion / Inscription) – TOUJOURS VISIBLES sur desktop, MASQUÉES sur mobile -->
+    <div class="nav-actions" id="nav-actions">
+      <!-- Version desktop + mobile (masquée sur mobile via CSS) -->
       <div class="nav-guest">
         <a href="/connexion.html" class="btn btn-secondary btn-sm">Connexion</a>
         <a href="/inscription.html" class="btn btn-primary btn-sm">S'inscrire</a>
       </div>
-      <!-- CONNECTÉ : User info + Dashboard + Paramètres + Déconnexion -->
+      <!-- Version connecté (masquée par défaut) -->
       <div class="nav-user" style="display:none;">
         <span id="nav-user-greeting"></span>
         <a href="/dashboard.html" class="btn btn-secondary btn-sm">Mon Espace</a>
@@ -42,13 +32,13 @@
   </div>
 </header>
 
-<!-- SIDEBAR MOBILE (s'ouvre à droite, du côté du burger) -->
+<!-- OVERLAY + SIDEBAR MOBILE -->
 <div id="sidebar-overlay" class="sidebar-overlay"></div>
 <div id="mobile-sidebar" class="mobile-sidebar">
   <div class="sidebar-header">
     <a href="/index.html" class="nav-logo">
       <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
-      BâtiSwift
+      <span>BâtiSwift</span>
     </a>
     <button id="sidebar-close" class="sidebar-close" aria-label="Fermer le menu">✕</button>
   </div>
@@ -64,8 +54,103 @@
   </div>
 </div>
 
+<!-- ============================================================
+     STYLES CRITIQUES (intégrés directement pour être sûrs)
+     ============================================================ -->
 <style>
-/* ── SIDEBAR MOBILE (côté droit) ── */
+/* ---- Reset local pour le header ---- */
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+/* ---- Logo ---- */
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display, 'Cormorant Garamond', serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--anthracite, #2B2B2B);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.logo-svg {
+  width: 36px;
+  height: auto;
+  display: block;
+}
+
+/* ---- Actions (Connexion / Inscription) ---- */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.nav-guest {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+.nav-guest .btn {
+  white-space: nowrap;
+  font-size: 0.8rem;
+  padding: 6px 12px;
+}
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+.nav-user .btn {
+  white-space: nowrap;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+}
+#nav-user-greeting {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--anthracite, #2B2B2B);
+  white-space: nowrap;
+}
+
+/* ---- Burger ---- */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  flex-shrink: 0;
+}
+.nav-hamburger .bar {
+  width: 24px;
+  height: 2.5px;
+  background: var(--anthracite, #2B2B2B);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+.nav-hamburger.open .bar:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.nav-hamburger.open .bar:nth-child(2) {
+  opacity: 0;
+}
+.nav-hamburger.open .bar:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* ---- Overlay ---- */
 .sidebar-overlay {
   position: fixed;
   inset: 0;
@@ -80,17 +165,18 @@
   pointer-events: auto;
 }
 
+/* ---- Sidebar mobile ---- */
 .mobile-sidebar {
   position: fixed;
   top: 0;
-  right: -320px;           /* ← OUVRE À DROITE */
+  right: -320px;
   width: 300px;
   max-width: 80vw;
   height: 100vh;
-  background: var(--blanc, #fff);
+  background: #FFFFFF;
   z-index: 300;
   padding: 1.5rem;
-  box-shadow: -4px 0 32px rgba(0,0,0,0.12);  /* ← ombre à gauche */
+  box-shadow: -4px 0 32px rgba(0,0,0,0.12);
   transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
@@ -98,25 +184,25 @@
   overflow-y: auto;
 }
 .mobile-sidebar.active {
-  right: 0;               /* ← GLISSE DEPUIS LA DROITE */
+  right: 0;
 }
 .sidebar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-bottom: 1rem;
-  border-bottom: 1px solid var(--beige-dark, #ede6dd);
+  border-bottom: 1px solid #EDE6DD;
 }
 .sidebar-close {
   background: none;
   border: none;
   font-size: 1.6rem;
-  color: var(--gris, #8b8b8b);
+  color: #8B8B8B;
   cursor: pointer;
   padding: 0 0.5rem;
 }
 .sidebar-close:hover {
-  color: var(--anthracite, #2b2b2b);
+  color: #2B2B2B;
 }
 .sidebar-nav {
   display: flex;
@@ -125,15 +211,15 @@
 }
 .sidebar-nav a {
   padding: 0.8rem 1rem;
-  border-radius: var(--radius, 14px);
+  border-radius: 14px;
   font-size: 1rem;
   font-weight: 500;
-  color: var(--anthracite, #2b2b2b);
+  color: #2B2B2B;
   transition: background 0.2s;
   text-decoration: none;
 }
 .sidebar-nav a:hover {
-  background: var(--beige, #f5f0eb);
+  background: #F5F0EB;
 }
 .sidebar-actions {
   margin-top: auto;
@@ -141,69 +227,50 @@
   flex-direction: column;
   gap: 0.8rem;
   padding-top: 1rem;
-  border-top: 1px solid var(--beige-dark, #ede6dd);
+  border-top: 1px solid #EDE6DD;
 }
 .sidebar-actions .btn {
   text-align: center;
+  display: block;
+  width: 100%;
 }
 
-/* ── BURGER ANIMATION (X) ── */
-.nav-hamburger.open .bar:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-.nav-hamburger.open .bar:nth-child(2) {
-  opacity: 0;
-}
-.nav-hamburger.open .bar:nth-child(3) {
-  transform: rotate(-45deg) translate(5px, -5px);
-}
-
-/* ── RESPONSIVE ── */
-@media (min-width: 769px) {
-  .sidebar-overlay,
-  .mobile-sidebar,
-  .nav-hamburger {
-    display: none !important;
-  }
-}
-
+/* ============================================================
+   RESPONSIVE : CE QUI CHANGE SUR MOBILE
+   ============================================================ */
 @media (max-width: 768px) {
-  /* Cacher la navigation desktop */
-  .nav-links {
-    display: none !important;
-  }
-
-  /* Afficher le burger */
+  /* 1. Le burger apparaît */
   .nav-hamburger {
-    display: flex !important;
+    display: flex;
   }
 
-  /* ── BOUTONS CONNEXION / INSCRIPTION : TOUJOURS VISIBLES ── */
-  .nav-actions .nav-guest {
-    display: flex !important;
-    gap: 4px;
-    align-items: center;
+  /* 2. Les boutons Connexion / Inscription sont RÉDUITS mais RESTENT VISIBLES */
+  .nav-guest .btn {
+    font-size: 0.65rem !important;
+    padding: 4px 8px !important;
   }
-  .nav-actions .nav-guest .btn {
-    font-size: 0.65rem;
-    padding: 4px 8px;
-    white-space: nowrap;
-  }
-
-  /* Mode connecté : réduction des boutons */
-  .nav-actions .nav-user {
-    display: flex !important;
-    gap: 4px;
-    align-items: center;
-  }
-  .nav-actions .nav-user .btn {
-    font-size: 0.6rem;
-    padding: 3px 6px;
-    white-space: nowrap;
+  .nav-user .btn {
+    font-size: 0.6rem !important;
+    padding: 3px 6px !important;
   }
   #nav-user-greeting {
-    font-size: 0.7rem;
-    white-space: nowrap;
+    font-size: 0.7rem !important;
+  }
+
+  /* 3. Le logo se réduit un peu */
+  .nav-logo {
+    font-size: 1.1rem;
+  }
+  .logo-svg {
+    width: 28px;
+  }
+}
+
+@media (min-width: 769px) {
+  /* Sur desktop, la sidebar et l'overlay disparaissent */
+  .sidebar-overlay,
+  .mobile-sidebar {
+    display: none !important;
   }
 }
 </style>
