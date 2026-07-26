@@ -41,6 +41,20 @@
     }
     .auth-link { text-align: center; margin-top: var(--space-lg); font-size: .88rem; color: var(--gris); }
     .auth-link a { color: var(--anthracite); font-weight: 600; }
+    .forgot-link {
+      text-align: center;
+      margin-top: 12px;
+    }
+    .forgot-link a {
+      color: var(--gris);
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .forgot-link a:hover {
+      color: var(--anthracite);
+      text-decoration: underline;
+    }
     @media (max-width: 768px) {
       .auth-wrapper { grid-template-columns: 1fr; }
       .auth-visual  { display: none; }
@@ -102,6 +116,12 @@
             <button type="button" class="pass-toggle" id="toggle-pw">👁</button>
           </div>
         </div>
+
+        <!-- 🔥 Lien "Mot de passe oublié" ajouté ici -->
+        <div class="forgot-link">
+          <a href="/forgot-password.html">Mot de passe oublié ?</a>
+        </div>
+
         <button type="submit" id="btn-login" class="btn btn-primary btn-block btn-lg" style="margin-top:8px">
           Se connecter
         </button>
