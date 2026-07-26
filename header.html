@@ -1,13 +1,10 @@
-<!-- header.html – Fusionné : logo + burger + sidebar universelle -->
+<!-- header.html – Version corrigée (burger + sidebar) -->
 <header class="site-header">
   <div class="container">
-    <!-- Logo (lien vers l'accueil) -->
     <a href="/index.html" class="nav-logo">
       <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
       BâtiSwift
     </a>
-
-    <!-- Bouton menu (3 barres) -->
     <button class="menu-toggle" id="menu-toggle" aria-label="Ouvrir le menu">
       <span class="bar"></span>
       <span class="bar"></span>
@@ -16,10 +13,7 @@
   </div>
 </header>
 
-<!-- Overlay -->
 <div id="sidebar-overlay" class="sidebar-overlay"></div>
-
-<!-- Sidebar -->
 <div id="sidebar" class="sidebar">
   <div class="sidebar-header">
     <a href="/index.html" class="nav-logo">
@@ -28,21 +22,17 @@
     </a>
     <button id="sidebar-close" class="sidebar-close">✕</button>
   </div>
-
   <nav class="sidebar-nav">
     <a href="/index.html">🏠 Accueil</a>
     <a href="/client.html">💬 Déposer une demande</a>
     <a href="/tarifs.html">💰 Tarifs</a>
     <a href="/aide.html">❓ Aide</a>
   </nav>
-
   <div class="sidebar-actions">
-    <!-- Invité -->
     <div class="sidebar-guest">
       <a href="/connexion.html" class="btn btn-secondary btn-block">Connexion</a>
       <a href="/inscription.html" class="btn btn-primary btn-block">S'inscrire</a>
     </div>
-    <!-- Connecté -->
     <div class="sidebar-user" style="display:none;">
       <span id="sidebar-user-name" style="font-weight:600;display:block;padding:0.5rem 0;">👋 <span id="sidebar-user-nom"></span></span>
       <a href="/dashboard.html" class="btn btn-secondary btn-block">📊 Mon Dashboard</a>
@@ -54,7 +44,7 @@
 
 <style>
 /* ============================================================
-   HEADER
+   STYLES CRITIQUES (version courte)
    ============================================================ */
 .site-header {
   position: fixed;
@@ -92,8 +82,6 @@
   width: 40px;
   height: auto;
 }
-
-/* ---- Bouton menu ---- */
 .menu-toggle {
   display: flex;
   flex-direction: column;
@@ -114,9 +102,6 @@
 .menu-toggle.open .bar:nth-child(2) { opacity: 0; }
 .menu-toggle.open .bar:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
 
-/* ============================================================
-   OVERLAY
-   ============================================================ */
 .sidebar-overlay {
   position: fixed;
   inset: 0;
@@ -131,9 +116,6 @@
   pointer-events: auto;
 }
 
-/* ============================================================
-   SIDEBAR UNIVERSELLE
-   ============================================================ */
 .sidebar {
   position: fixed;
   top: 0;
@@ -154,7 +136,6 @@
 .sidebar.active {
   right: 0;
 }
-
 .sidebar-header {
   display: flex;
   justify-content: space-between;
@@ -173,7 +154,6 @@
 .sidebar-close:hover {
   color: #2B2B2B;
 }
-
 .sidebar-nav {
   display: flex;
   flex-direction: column;
@@ -191,7 +171,6 @@
 .sidebar-nav a:hover {
   background: #F5F0EB;
 }
-
 .sidebar-actions {
   margin-top: auto;
   display: flex;
@@ -233,19 +212,33 @@
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  // ─── SIDEBAR ──────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════
+// SCRIPT RÉSILIENT (s'exécute même si chargé dynamiquement)
+// ════════════════════════════════════════════════════════════════
+(function initHeader() {
+  console.log('🔍 Header : initialisation...');
+
+  // ---- 1. Récupérer les éléments ----
   var toggle = document.getElementById('menu-toggle');
   var overlay = document.getElementById('sidebar-overlay');
   var sidebar = document.getElementById('sidebar');
   var closeBtn = document.getElementById('sidebar-close');
   var allLinks = sidebar ? sidebar.querySelectorAll('a') : [];
 
+  if (!toggle || !sidebar || !overlay) {
+    console.warn('⚠️ Header : éléments manquants (ids incorrects ?)');
+    return;
+  }
+
+  console.log('✅ Header : éléments trouvés');
+
+  // ---- 2. Fonctions d’ouverture / fermeture ----
   function openSidebar() {
     toggle.classList.add('open');
     overlay.classList.add('active');
     sidebar.classList.add('active');
     document.body.style.overflow = 'hidden';
+    console.log('📂 Sidebar ouverte');
   }
 
   function closeSidebar() {
@@ -253,9 +246,19 @@ document.addEventListener('DOMContentLoaded', function() {
     overlay.classList.remove('active');
     sidebar.classList.remove('active');
     document.body.style.overflow = '';
+    console.log('📂 Sidebar fermée');
   }
 
-  if (toggle) toggle.addEventListener('click', openSidebar);
+  // ---- 3. Écouteurs d’événements ----
+  toggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (sidebar.classList.contains('active')) {
+      closeSidebar();
+    } else {
+      openSidebar();
+    }
+  });
+
   if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
   if (overlay) overlay.addEventListener('click', closeSidebar);
 
@@ -263,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function() {
     link.addEventListener('click', closeSidebar);
   });
 
-  // ─── GESTION DE SESSION ──────────────────────────────────
+  // ---- 4. Gestion de session (Connexion / Inscription) ----
   var user = JSON.parse(localStorage.getItem('batiswift_user') || 'null');
   var guestDiv = document.querySelector('.sidebar-guest');
   var userDiv = document.querySelector('.sidebar-user');
@@ -275,13 +278,18 @@ document.addEventListener('DOMContentLoaded', function() {
     userDiv.style.flexDirection = 'column';
     userDiv.style.gap = '0.8rem';
     if (userNameSpan) userNameSpan.textContent = user.nom || 'Artisan';
+    console.log('👤 Utilisateur connecté :', user.nom);
+  } else {
+    console.log('👤 Utilisateur invité');
   }
 
-  // ─── DÉCONNEXION ─────────────────────────────────────────
+  // ---- 5. Déconnexion ----
   document.getElementById('sidebar-logout')?.addEventListener('click', function() {
     localStorage.removeItem('batiswift_token');
     localStorage.removeItem('batiswift_user');
     window.location.href = '/index.html';
   });
-});
+
+  console.log('✅ Header initialisé avec succès');
+})();
 </script>
