@@ -171,12 +171,14 @@
 .sidebar-nav a:hover {
   background: #F5F0EB;
 }
+
+/* ---- Correction : boutons remontés ---- */
 .sidebar-actions {
-  margin-top: auto;
+  margin-top: 0;              /* ← au lieu de auto */
+  padding-top: 0.5rem;        /* ← réduit de 1rem à 0.5rem */
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-  padding-top: 1rem;
   border-top: 1px solid #EDE6DD;
 }
 .sidebar-actions .btn {
