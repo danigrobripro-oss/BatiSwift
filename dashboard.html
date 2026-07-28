@@ -82,6 +82,40 @@
       font-size: 3rem;
       margin-bottom: var(--space-md);
     }
+
+    /* ── SECTION AVIS ── */
+    .avis-section {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 2px solid var(--beige-dark);
+    }
+    .avis-section h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+    }
+    .avis-card {
+      background: var(--beige);
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-bottom: 0.8rem;
+    }
+    .avis-card .stars {
+      color: var(--or);
+      font-size: 1rem;
+    }
+    .avis-card .client {
+      font-weight: 600;
+      color: var(--anthracite);
+    }
+    .avis-card .comment {
+      font-size: 0.9rem;
+      color: var(--gris);
+      margin-top: 4px;
+    }
+    .avis-card .date {
+      font-size: 0.7rem;
+      color: var(--gris-light);
+    }
     
     @media (max-width: 768px) {
       .dashboard-hero h1 {
@@ -136,6 +170,14 @@
       
       <h2 class="mt-xl reveal" style="font-size:1.4rem;">✅ Mes leads achetés</h2>
       <div id="purchased-leads" class="lead-grid mt-md"></div>
+
+      <!-- ─── SECTION AVIS (NOUVEAU) ─── -->
+      <div class="avis-section" id="avis-section">
+        <h3>⭐ Mes avis</h3>
+        <div id="avis-container">
+          <p style="color:var(--gris);">Chargement des avis…</p>
+        </div>
+      </div>
     </div>
   </section>
 </main>
@@ -150,22 +192,63 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // Initialiser la session
+  // ─── AUTH ──────────────────────────────────────────────────
   if (typeof requireAuth === 'function') {
     requireAuth();
   }
   
-  // Afficher le nom de l'utilisateur
   const user = JSON.parse(localStorage.getItem(CONFIG.USER_KEY) || 'null');
   const usernameEl = document.getElementById('nav-username');
   if (user && usernameEl) {
     usernameEl.textContent = user.nom || 'Artisan';
   }
   
-  // Charger les leads
+  // ─── LEADS ─────────────────────────────────────────────────
   if (typeof loadArtisanLeads === 'function') {
     loadArtisanLeads();
   }
+
+  // ─── AVIS ──────────────────────────────────────────────────
+  function loadAvis() {
+    const container = document.getElementById('avis-container');
+    const token = localStorage.getItem(CONFIG.TOKEN_KEY);
+    if (!token) {
+      container.innerHTML = '<p style="color:var(--gris);">Connectez-vous pour voir vos avis.</p>';
+      return;
+    }
+
+    fetch(`${CONFIG.API_URL}/api/artisan/avis`, {
+      headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (!data.avis || data.avis.length === 0) {
+        container.innerHTML = '<p style="color:var(--gris);">Aucun avis pour le moment.</p>';
+        return;
+      }
+      let html = `<p style="font-weight:600;">⭐ Note moyenne : ${data.moyenne || '—'} / 5 (${data.total} avis)</p>`;
+      html += '<div style="display:flex;flex-direction:column;gap:0.8rem;margin-top:0.8rem;">';
+      data.avis.forEach(a => {
+        const stars = '⭐'.repeat(a.note) + '☆'.repeat(5 - a.note);
+        html += `<div class="avis-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="client">${a.client_nom || 'Anonyme'}</span>
+            <span class="stars">${stars}</span>
+          </div>
+          ${a.commentaire ? `<p class="comment">${a.commentaire}</p>` : ''}
+          <small class="date">${new Date(a.date).toLocaleDateString()}</small>
+        </div>`;
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    })
+    .catch(() => {
+      container.innerHTML = '<p style="color:var(--gris);">Erreur chargement des avis.</p>';
+    });
+  }
+
+  // Charger les avis après un court délai (attendre que le dashboard soit prêt)
+  setTimeout(loadAvis, 500);
 });
 </script>
 
