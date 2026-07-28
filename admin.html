@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin – BâtiSwift</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .admin-page {
+      padding: calc(var(--header-h) + 40px) 5vw 60px;
+    }
+    .admin-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .stat-box {
+      background: var(--blanc);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      text-align: center;
+      border: 1.5px solid var(--beige-dark);
+    }
+    .stat-box .number {
+      font-family: var(--font-display);
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--anthracite);
+    }
+    .stat-box .label {
+      font-size: 0.8rem;
+      color: var(--gris);
+      margin-top: 4px;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--blanc);
+      border-radius: var(--radius-lg);
+      border: 1.5px solid var(--beige-dark);
+      padding: 1rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    th {
+      text-align: left;
+      padding: 0.8rem 0.5rem;
+      border-bottom: 2px solid var(--beige-dark);
+      color: var(--anthracite);
+    }
+    td {
+      padding: 0.6rem 0.5rem;
+      border-bottom: 1px solid var(--beige-dark);
+      color: var(--gris);
+    }
+    tr:hover td {
+      background: var(--gris-ultra);
+    }
+    .badge-admin {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 50px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    .badge-admin.success { background: rgba(16,185,129,0.12); color: #065f46; }
+    .badge-admin.danger { background: rgba(239,68,68,0.12); color: #7f1d1d; }
+  </style>
+</head>
+<body>
+  <div id="header-container"></div>
+
+  <main class="admin-page">
+    <div class="container">
+      <h1 class="text-center" style="font-family:var(--font-display);font-size:2rem;">📊 Dashboard Admin</h1>
+      <p class="text-center" style="color:var(--gris);margin-bottom:2rem;">Vue d’ensemble de la plateforme BâtiSwift</p>
+
+      <div class="admin-stats" id="admin-stats">
+        <div class="stat-box"><div class="number" id="stat-artisans">—</div><div class="label">Artisans inscrits</div></div>
+        <div class="stat-box"><div class="number" id="stat-leads-total">—</div><div class="label">Total des leads</div></div>
+        <div class="stat-box"><div class="number" id="stat-leads-dispo">—</div><div class="label">Leads disponibles</div></div>
+        <div class="stat-box"><div class="number" id="stat-leads-vendus">—</div><div class="label">Leads vendus</div></div>
+      </div>
+
+      <h2 style="font-family:var(--font-display);font-size:1.4rem;margin-top:2rem;">📋 Derniers leads</h2>
+      <div class="table-wrap" id="leads-table">Chargement…</div>
+
+      <h2 style="font-family:var(--font-display);font-size:1.4rem;margin-top:2rem;">👥 Derniers artisans</h2>
+      <div class="table-wrap" id="artisans-table">Chargement…</div>
+    </div>
+  </main>
+
+  <div id="footer-container"></div>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/session.js"></script>
+  <script src="/js/main.js"></script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Charger les statistiques
+    fetch(`${CONFIG.API_URL}/api/admin/stats`)
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById('stat-artisans').textContent = data.total_artisans || 0;
+        document.getElementById('stat-leads-total').textContent = data.total_leads || 0;
+        document.getElementById('stat-leads-dispo').textContent = data.leads_disponibles || 0;
+        document.getElementById('stat-leads-vendus').textContent = data.leads_vendus || 0;
+      })
+      .catch(() => console.error('Erreur chargement stats'));
+
+    // Charger les leads
+    fetch(`${CONFIG.API_URL}/api/admin/leads`)
+      .then(r => r.json())
+      .then(data => {
+        if (!data.length) {
+          document.getElementById('leads-table').innerHTML = '<p style="color:var(--gris);">Aucun lead pour le moment.</p>';
+          return;
+        }
+        let html = `<table><thead><tr>
+          <th>ID</th><th>Client</th><th>Ville</th><th>Travaux</th><th>Statut</th><th>Date</th>
+        </tr></thead><tbody>`;
+        data.slice(0, 20).forEach(l => {
+          html += `<tr>
+            <td>#${l.id}</td>
+            <td>${l.client_nom || 'Anonyme'}</td>
+            <td>${l.client_ville || '—'}</td>
+            <td>${l.type_travaux || 'autre'}</td>
+            <td><span class="badge-admin ${l.statut === 'disponible' ? 'success' : 'danger'}">${l.statut}</span></td>
+            <td>${new Date(l.date_creation).toLocaleDateString()}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+        document.getElementById('leads-table').innerHTML = html;
+      })
+      .catch(() => {
+        document.getElementById('leads-table').innerHTML = '<p style="color:var(--gris);">Erreur chargement des leads.</p>';
+      });
+
+    // Charger les artisans
+    fetch(`${CONFIG.API_URL}/api/admin/artisans`)
+      .then(r => r.json())
+      .then(data => {
+        if (!data.length) {
+          document.getElementById('artisans-table').innerHTML = '<p style="color:var(--gris);">Aucun artisan pour le moment.</p>';
+          return;
+        }
+        let html = `<table><thead><tr>
+          <th>ID</th><th>Nom</th><th>Email</th><th>Ville</th><th>Spécialité</th><th>Inscription</th>
+        </tr></thead><tbody>`;
+        data.slice(0, 20).forEach(a => {
+          html += `<tr>
+            <td>#${a.id}</td>
+            <td>${a.nom || '—'}</td>
+            <td>${a.email || '—'}</td>
+            <td>${a.ville || '—'}</td>
+            <td>${a.specialite || '—'}</td>
+            <td>${new Date(a.date_inscription).toLocaleDateString()}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+        document.getElementById('artisans-table').innerHTML = html;
+      })
+      .catch(() => {
+        document.getElementById('artisans-table').innerHTML = '<p style="color:var(--gris);">Erreur chargement des artisans.</p>';
+      });
+  });
+  </script>
+</body>
+</html>
