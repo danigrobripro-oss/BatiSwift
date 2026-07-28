@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🗺️ Carte des artisans – BâtiSwift</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    .carte-page {
+      padding: calc(var(--header-h) + 20px) 5vw 60px;
+      background: var(--beige);
+      min-height: 100vh;
+    }
+    .carte-header h1 {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .carte-header p {
+      color: var(--gris);
+      margin-bottom: 1.5rem;
+    }
+    .stats-bar {
+      background: var(--blanc);
+      border-radius: var(--radius-lg);
+      padding: 1.2rem 1.5rem;
+      border: 1.5px solid var(--beige-dark);
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .stat-item .icon {
+      font-size: 1.8rem;
+    }
+    .stat-item .label {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gris-light);
+      font-weight: 600;
+    }
+    .stat-item .value {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--anthracite);
+      line-height: 1.2;
+    }
+    #map {
+      height: 550px;
+      border-radius: var(--radius-xl);
+      border: 1.5px solid var(--beige-dark);
+      overflow: hidden;
+      background: var(--blanc);
+      box-shadow: 0 4px 24px rgba(43,43,43,0.06);
+    }
+    .map-legend {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: var(--gris);
+    }
+    .map-legend .legend-items {
+      display: flex;
+      gap: 1.2rem;
+    }
+    .map-legend .legend-items span {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .map-legend .legend-items .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .dot-or { background: var(--or); }
+    .dot-circle { border: 2px solid var(--or); background: transparent; width: 14px; height: 14px; border-radius: 50%; }
+    .btn-reset {
+      background: var(--blanc);
+      border: 1px solid var(--beige-dark);
+      padding: 0.3rem 1rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-reset:hover {
+      background: var(--beige);
+    }
+    .footer-stats {
+      text-align: center;
+      border-top: 1px solid var(--beige-dark);
+      padding-top: 2rem;
+      margin-top: 2.5rem;
+      font-size: 0.9rem;
+      color: var(--gris);
+    }
+    .footer-stats strong {
+      color: var(--anthracite);
+    }
+    @media (min-width: 768px) {
+      .stats-bar {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .stat-item .value {
+        font-size: 1.6rem;
+      }
+    }
+    @media (max-width: 480px) {
+      .carte-header h1 { font-size: 1.6rem; }
+      .stat-item .icon { font-size: 1.3rem; }
+      .stat-item .value { font-size: 1.1rem; }
+      #map { height: 400px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
+<div id="header-container"></div>
+
+<main class="carte-page">
+  <div class="container">
+    <div class="carte-header">
+      <h1>🗺️ Carte des artisans BâtiSwift</h1>
+      <p>Déplacez le cercle pour explorer la densité d’artisans et de demandes dans chaque zone.</p>
+    </div>
+
+    <!-- Barre de statistiques -->
+    <div class="stats-bar" id="stats-bar">
+      <div class="stat-item">
+        <span class="icon">👥</span>
+        <div>
+          <div class="label">Artisans</div>
+          <div class="value" id="stat-artisans">—</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <span class="icon">📋</span>
+        <div>
+          <div class="label">Demandes</div>
+          <div class="value" id="stat-demandes">—</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <span class="icon">📍</span>
+        <div>
+          <div class="label">Leads dans la zone</div>
+          <div class="value" id="stat-leads-zone">—</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <span class="icon">📏</span>
+        <div>
+          <div class="label">Rayon</div>
+          <div class="value" id="stat-rayon">50 km</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carte -->
+    <div id="map"></div>
+
+    <!-- Légende + bouton réinitialiser -->
+    <div class="map-legend">
+      <div class="legend-items">
+        <span><span class="dot dot-circle"></span> Rayon de recherche</span>
+        <span><span class="dot dot-or"></span> Leads disponibles</span>
+      </div>
+      <button class="btn-reset" id="btn-reset-view">Réinitialiser la vue</button>
+    </div>
+
+    <!-- Bas de page -->
+    <div class="footer-stats">
+      <span id="footer-demandes">—</span> demandes disponibles en ce moment
+    </div>
+  </div>
+</main>
+
+<div id="footer-container"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Configuration et API -->
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/session.js"></script>
+<script src="/js/main.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  // ─── 1. Initialisation de la carte ──────────────────────
+  const center = [46.603, 2.5];
+  const defaultRadius = 50000;
+
+  let map = L.map('map').setView(center, 6);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+
+  // Cercle
+  let circle = L.circle(center, {
+    radius: defaultRadius,
+    color: '#C9A84C',
+    fillColor: '#C9A84C',
+    fillOpacity: 0.15,
+    weight: 3,
+    draggable: true,
+  }).addTo(map);
+
+  let marker = L.marker(center).addTo(map);
+  marker.bindPopup('🎯 Centre de la zone');
+
+  // ─── 2. Variables pour les marqueurs ─────────────────────
+  let leadMarkers = [];
+
+  // ─── 3. Fonction pour récupérer les données ──────────────
+  async function fetchMapData(lat, lng, radius) {
+    const statsUrl = `${CONFIG.API_URL}/api/map/stats`;
+    const leadsUrl = `${CONFIG.API_URL}/api/leads/map?lat=${lat}&lon=${lng}&rayon=${radius/1000}`;
+
+    try {
+      // Statistiques globales
+      const statsResp = await fetch(statsUrl);
+      const statsData = await statsResp.json();
+
+      document.getElementById('stat-artisans').textContent = statsData.total_artisans || 0;
+      document.getElementById('stat-demandes').textContent = statsData.total_leads || 0;
+      document.getElementById('footer-demandes').textContent = statsData.total_leads || 0;
+      document.getElementById('stat-rayon').textContent = (radius / 1000) + ' km';
+
+      // Leads dans la zone
+      const leadsResp = await fetch(leadsUrl);
+      const leadsData = await leadsResp.json();
+
+      // Calcul du nombre total de leads dans la zone
+      const totalInZone = Object.values(leadsData.zones || {}).reduce((sum, z) => sum + z.count, 0);
+      document.getElementById('stat-leads-zone').textContent = totalInZone;
+
+      // Mettre à jour les marqueurs
+      updateMarkers(leadsData.zones);
+
+    } catch (err) {
+      console.error('Erreur chargement données carte:', err);
+    }
+  }
+
+  // ─── 4. Fonction pour mettre à jour les marqueurs ─────────
+  function updateMarkers(zones) {
+    // Supprimer les anciens marqueurs
+    leadMarkers.forEach(m => map.removeLayer(m));
+    leadMarkers = [];
+
+    if (!zones) return;
+
+    Object.entries(zones).forEach(([ville, data]) => {
+      if (!data.lat || !data.lon) return;
+
+      const popupContent = `
+        <div style="font-size:0.85rem;padding:4px 0;">
+          <strong>${ville}</strong><br>
+          📍 ${data.count} lead${data.count > 1 ? 's' : ''} disponible${data.count > 1 ? 's' : ''}
+          ${data.type_travaux && data.type_travaux.length ? '<br>🔧 ' + data.type_travaux.join(', ') : ''}
+        </div>
+      `;
+
+      const marker = L.circleMarker([data.lat, data.lon], {
+        radius: Math.max(8, Math.min(18, data.count * 2)),
+        color: '#C9A84C',
+        fillColor: '#C9A84C',
+        fillOpacity: 0.7,
+        weight: 2,
+      }).addTo(map);
+
+      marker.bindPopup(popupContent);
+      leadMarkers.push(marker);
+    });
+  }
+
+  // ─── 5. Écouter le déplacement du cercle ──────────────────
+  circle.on('drag', function(e) {
+    const latlng = e.target.getLatLng();
+    const newCenter = [latlng.lat, latlng.lng];
+    marker.setLatLng(newCenter);
+    fetchMapData(newCenter[0], newCenter[1], circle.getRadius());
+  });
+
+  // ─── 6. Réinitialiser la vue ─────────────────────────────
+  document.getElementById('btn-reset-view').addEventListener('click', function() {
+    map.setView(center, 6);
+    circle.setLatLng(center);
+    marker.setLatLng(center);
+    fetchMapData(center[0], center[1], defaultRadius);
+  });
+
+  // ─── 7. Chargement initial ──────────────────────────────
+  fetchMapData(center[0], center[1], defaultRadius);
+
+  console.log('🗺️ Carte initialisée avec succès.');
+});
+</script>
+</body>
+</html>
