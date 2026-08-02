@@ -9,8 +9,12 @@ services:
         value: production
       - key: SECRET_KEY
         generateValue: true
-      - key: CLAUDE_API_KEY
-        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false                  # À définir avec l’URL PostgreSQL Render
+      - key: GEMINI_API_KEY
+        sync: false                  # Google AI Studio
       - key: STRIPE_SECRET_KEY
         sync: false
       - key: STRIPE_PUBLISHABLE_KEY
@@ -21,5 +25,13 @@ services:
         sync: false
       - key: INFOBIP_BASE_URL
         value: https://api.infobip.com
+      - key: BREVO_API_KEY
+        sync: false                  # Brevo (Sendinblue)
+      - key: BREVO_SENDER_EMAIL
+        sync: false                  # contact@batiswift.com
+      - key: BREVO_SENDER_NAME
+        value: BâtiSwift
+      - key: DEEPL_API_KEY
+        sync: false                  # DeepL (optionnel pour Pro)
       - key: FRONTEND_URL
-        sync: false
+        sync: false                  # https://batiswift.onrender.com

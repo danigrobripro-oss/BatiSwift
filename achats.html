@@ -4,147 +4,236 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex" />
-  <title>Mes achats — BâtiSwift</title>
+  <title>Mes achats – BâtiSwift</title>
+
+  <!-- ─── FAVICON ─── -->
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+  <link rel="manifest" href="/assets/site.webmanifest" />
+  <meta name="theme-color" content="#F5F0EB" />
+
+  <!-- Design System Global -->
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <!-- Google Fonts (déjà dans style.css, mais on garde pour être sûr) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+
   <style>
+    /* ── OVERRIDE POUR LE DASHBOARD ── */
     .dashboard-sidebar {
       width: 220px;
       flex-shrink: 0;
-      background: var(--bg-glass);
+      background: var(--glass-bg);
       backdrop-filter: blur(16px);
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--beige-dark);
       border-radius: var(--radius-lg);
       padding: 1.5rem;
+      align-self: flex-start;
+      position: sticky;
+      top: calc(var(--header-h) + 20px);
+    }
+    .dashboard-sidebar h3 {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      color: var(--gris);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
     .dashboard-sidebar a {
       display: block;
       padding: 0.6rem 0.8rem;
-      border-radius: 10px;
-      color: var(--text-muted);
+      border-radius: var(--radius);
+      color: var(--gris);
       text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all var(--transition);
       margin-bottom: 0.3rem;
     }
-    .dashboard-sidebar a:hover,
-    .dashboard-sidebar a.active {
-      background: rgba(255, 0, 127, 0.08);
-      color: var(--accent);
+    .dashboard-sidebar a:hover {
+      background: rgba(201, 168, 76, 0.08);
+      color: var(--anthracite);
     }
-    .dashboard-layout { display: flex; gap: 1.5rem; padding: 2rem 0; flex-wrap: wrap; }
-    .dashboard-main { flex: 1; }
+    .dashboard-sidebar a.active {
+      background: rgba(201, 168, 76, 0.12);
+      color: var(--or);
+      font-weight: 600;
+    }
+    .dashboard-layout {
+      display: flex;
+      gap: 1.5rem;
+      padding: 2rem 0;
+      flex-wrap: wrap;
+    }
+    .dashboard-main {
+      flex: 1;
+      min-width: 280px;
+    }
+    .dashboard-main h2 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
     .lead-item {
-      background: var(--bg-glass);
-      border: 1px solid var(--border);
+      background: var(--blanc);
+      border: 1.5px solid var(--beige-dark);
       border-radius: var(--radius);
-      padding: 1.2rem;
+      padding: 1.2rem 1.5rem;
       margin-bottom: 1rem;
-      backdrop-filter: blur(8px);
+      transition: all var(--transition);
+    }
+    .lead-item:hover {
+      border-color: var(--gris-light);
+      box-shadow: 0 4px 16px rgba(43, 43, 43, 0.06);
+    }
+    .lead-item strong {
+      font-weight: 600;
+      color: var(--anthracite);
+    }
+    .lead-item .meta {
+      color: var(--gris);
+      font-size: 0.9rem;
+    }
+    .lead-item .client {
+      color: var(--anthracite);
+      font-weight: 500;
+    }
+    @media (max-width: 768px) {
+      .dashboard-layout {
+        flex-direction: column;
+      }
+      .dashboard-sidebar {
+        position: relative;
+        top: 0;
+        width: 100%;
+      }
+      .dashboard-sidebar a {
+        display: inline-block;
+        margin-right: 0.5rem;
+      }
     }
   </style>
+
   <script>
-    (function () {
-      var t = localStorage.getItem("batiswift-theme");
-      if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches)) {
-        document.documentElement.setAttribute("data-theme", "dark");
+    (function() {
+      var theme = localStorage.getItem('batiswift-theme');
+      if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
       }
     })();
   </script>
 </head>
 <body>
+
+  <!-- HEADER -->
   <div id="header-placeholder"></div>
 
+  <!-- MAIN -->
   <main class="container">
     <div class="dashboard-layout">
+      <!-- Sidebar -->
       <aside class="dashboard-sidebar">
-        <h3 style="margin-bottom:1.5rem;font-size:0.9rem;color:var(--text-muted);">📋 Menu</h3>
+        <h3>📋 Menu</h3>
         <a href="leads.html">🔥 Leads disponibles</a>
         <a href="achats.html" class="active">📦 Mes achats</a>
         <a href="parametres.html">⚙️ Paramètres</a>
-        <a href="artisan-home.html" style="margin-top:1rem;border-top:1px solid var(--border);padding-top:1rem;">🚪 Retour espace pro</a>
+        <a href="index.html" style="margin-top:1rem;border-top:1.5px solid var(--beige-dark);padding-top:1rem;">🚪 Retour accueil</a>
       </aside>
 
+      <!-- Contenu principal -->
       <div class="dashboard-main">
-        <h2 style="font-size:1.4rem;margin-bottom:1rem;">📦 Mes achats</h2>
-        <p style="color:var(--text-muted);margin-bottom:1rem;">Historique de vos achats de leads.</p>
-        <div id="achats-list"><p style="color:var(--text-muted);">Chargement...</p></div>
+        <h2>📦 Mes achats</h2>
+        <p style="color:var(--gris);margin-bottom:1.5rem;">Historique de vos achats de leads.</p>
+        <div id="achats-list"><p style="color:var(--gris);">Chargement...</p></div>
       </div>
     </div>
   </main>
 
+  <!-- FOOTER -->
   <div id="footer-placeholder"></div>
 
+  <!-- ============================================================
+       SCRIPTS
+       ============================================================ -->
+
+  <!-- Configuration et API -->
+  <script src="/js/config.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/session.js"></script>
+  <script src="/js/main.js"></script>
+
   <script>
-    const API_BASE = "https://agent-btp.onrender.com";
-    const TOKEN_KEY = "batiswift-artisan-token";
-    const params = new URLSearchParams(window.location.search);
-    let token = params.get("token") || localStorage.getItem(TOKEN_KEY);
-
-    if (!token) {
-      window.location.href = "inscription.html";
-    } else {
-      localStorage.setItem(TOKEN_KEY, token);
-    }
-
-    function api(path, options = {}) {
-      var url = API_BASE + path;
-      if (token) {
-        var sep = url.indexOf('?') === -1 ? '?' : '&';
-        url += sep + 'token=' + encodeURIComponent(token);
-      }
-      return fetch(url, {
-        method: options.method || 'GET',
-        headers: { "Content-Type": "application/json" },
-        body: options.body || null
-      }).then(async function (r) {
-        var data = await r.json().catch(function () { return {}; });
-        if (!r.ok) throw new Error(data.error || "Erreur serveur");
-        return data;
-      });
-    }
-
-    function escapeHtml(s) {
-      if (!s) return "";
-      var el = document.createElement("div");
-      el.textContent = String(s);
-      return el.innerHTML;
-    }
-
-    function renderPurchased(leads) {
-      var container = document.getElementById("achats-list");
-      if (!leads.length) {
-        container.innerHTML = '<p style="color:var(--text-muted);">Vous n\'avez pas encore acheté de lead.</p>';
+    (function() {
+      // ─── RÉCUPÉRATION DU TOKEN ────────────────────────────
+      const token = localStorage.getItem(CONFIG.TOKEN_KEY);
+      if (!token) {
+        window.location.href = '/connexion.html';
         return;
       }
-      var html = "";
-      leads.forEach(function (lead) {
-        html += '<div class="lead-item">';
-        html += '<strong>' + escapeHtml(lead.trade_type) + '</strong> — ' + escapeHtml(lead.location_city || "Non précisé") + ' — Acheté le ' + new Date(lead.sold_at).toLocaleDateString() + '<br>';
-        html += '<span style="color:var(--text-muted);">Client : ' + escapeHtml(lead.client_name || "—") + ' — ' + escapeHtml(lead.client_phone || "—") + '</span>';
-        html += '</div>';
-      });
-      container.innerHTML = html;
-    }
 
-    async function loadPurchased() {
-      try {
-        const purchased = await api("/api/leads/purchased");
-        renderPurchased(purchased);
-      } catch (e) {
-        console.error("Erreur achats", e);
-        document.getElementById("achats-list").innerHTML = '<p style="color:var(--accent);">Erreur de chargement.</p>';
+      // ─── CHARGEMENT DU HEADER / FOOTER ────────────────────
+      function loadFragment(id, url) {
+        fetch(url)
+          .then(r => r.text())
+          .then(html => {
+            document.getElementById(id).innerHTML = html;
+          })
+          .catch(() => {});
       }
-    }
+      loadFragment('header-placeholder', '/header.html');
+      loadFragment('footer-placeholder', '/footer.html');
 
-    loadPurchased();
+      // ─── CHARGEMENT DES ACHATS ─────────────────────────────
+      async function loadPurchased() {
+        const container = document.getElementById('achats-list');
+        try {
+          const data = await API.artisanLeads();
+          const purchased = data.purchased || [];
+          if (!purchased.length) {
+            container.innerHTML = '<p style="color:var(--gris);">Vous n\'avez pas encore acheté de lead.</p>';
+            return;
+          }
+          let html = '';
+          purchased.forEach(function(lead) {
+            html += `
+              <div class="lead-item">
+                <strong>${lead.type_travaux || 'Autre'}</strong>
+                <span class="meta">— ${lead.client_ville || 'Non précisé'}</span>
+                <span class="meta">— Acheté le ${new Date(lead.date_creation).toLocaleDateString()}</span>
+                <br>
+                <span class="client">👤 ${lead.client_nom || '—'}</span>
+                <span class="meta">📞 ${lead.client_telephone || '—'}</span>
+              </div>
+            `;
+          });
+          container.innerHTML = html;
+        } catch (err) {
+          console.error('Erreur chargement achats:', err);
+          container.innerHTML = '<p style="color:var(--danger);">Erreur de chargement des achats.</p>';
+        }
+      }
 
-    fetch('header.html').then(r => r.text()).then(html => {
-      document.getElementById('header-placeholder').innerHTML = html;
-    });
-    fetch('footer.html').then(r => r.text()).then(html => {
-      document.getElementById('footer-placeholder').innerHTML = html;
-    });
+      // ─── EXÉCUTION ──────────────────────────────────────────
+      // Vérifier que la session est prête
+      if (typeof Session !== 'undefined' && Session.requireAuth) {
+        Session.requireAuth().then(function(user) {
+          if (user) {
+            loadPurchased();
+          }
+        });
+      } else {
+        // Fallback : attendre que le DOM soit chargé
+        document.addEventListener('DOMContentLoaded', function() {
+          loadPurchased();
+        });
+      }
+    })();
   </script>
 </body>
 </html>
