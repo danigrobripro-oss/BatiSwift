@@ -187,14 +187,15 @@
       margin: 0;
     }
 
-    /* ─── LOADING / ERROR ─── */
-    .map-loading, .map-error {
+    /* ─── LOADING / ERROR / EMPTY ─── */
+    .map-loading, .map-error, .map-empty {
       text-align: center;
       padding: 1rem;
       font-size: 0.9rem;
       color: var(--gris);
     }
     .map-error { color: var(--danger); display: none; }
+    .map-empty { color: var(--gris-light); display: none; }
 
     /* ─── RESPONSIVE ─── */
     @media (max-width: 992px) {
@@ -260,6 +261,7 @@
       <div id="map"></div>
       <div class="map-loading" id="map-loading">⏳ Chargement des données…</div>
       <div class="map-error" id="map-error">⚠️ Impossible de charger les données. Veuillez réessayer.</div>
+      <div class="map-empty" id="map-empty">ℹ️ Aucun lead disponible dans cette zone pour le moment.</div>
       <div class="map-legend">
         <span><span class="legend-dot leads"></span> Zone avec leads (taille = nombre)</span>
         <span><span class="legend-dot center"></span> Centre de recherche</span>
@@ -311,6 +313,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const btnReset = $('btn-reset');
   const loadingEl = $('map-loading');
   const errorEl = $('map-error');
+  const emptyEl = $('map-empty');
 
   // ─── HELPERS ──────────────────────────────────────────────
   function formatNumber(n) {
@@ -332,10 +335,18 @@ document.addEventListener('DOMContentLoaded', function() {
       errorEl.textContent = msg || '⚠️ Impossible de charger les données. Veuillez réessayer.';
       errorEl.style.display = 'block';
     }
+    if (emptyEl) emptyEl.style.display = 'none';
   }
 
-  function hideError() {
+  function showEmpty() {
+    if (emptyEl) emptyEl.style.display = 'block';
     if (errorEl) errorEl.style.display = 'none';
+  }
+
+  function hideStatus() {
+    if (errorEl) errorEl.style.display = 'none';
+    if (emptyEl) emptyEl.style.display = 'none';
+    if (loadingEl) loadingEl.style.display = 'none';
   }
 
   // ─── API ──────────────────────────────────────────────────
@@ -346,24 +357,44 @@ document.addEventListener('DOMContentLoaded', function() {
       state.totalDemandes = data.total_leads || 0;
       return data;
     } catch (err) {
-      console.error('Erreur stats:', err);
-      showError('Erreur de chargement des statistiques.');
+      console.warn('⚠️ Erreur stats (non bloquante):', err);
+      // On laisse les valeurs par défaut (0)
       return null;
     }
   }
 
   async function fetchLeadsForZone() {
     showLoading(true);
-    hideError();
+    hideStatus();
+
     try {
       const url = `/api/leads/map?lat=${state.center.lat}&lon=${state.center.lon}&rayon=${state.radius}`;
+      console.log('📡 Appel API:', url);
+
       const data = await API.get(url);
+      console.log('📦 Données reçues:', data);
+
       state.leadsInZone = data.total || 0;
+      const zones = data.zones || {};
+
+      // Mise à jour des stats
       updateStats();
-      updateMarkers(data.zones || {});
+
+      // Si aucun lead dans la zone
+      if (Object.keys(zones).length === 0) {
+        showEmpty();
+        updateMarkers({});
+        return;
+      }
+
+      updateMarkers(zones);
     } catch (err) {
-      console.error('Erreur leads:', err);
-      showError('Erreur de chargement des leads.');
+      console.warn('⚠️ Erreur leads (non bloquante):', err);
+      // En cas d'erreur, on affiche un message mais on continue
+      state.leadsInZone = 0;
+      updateStats();
+      showEmpty(); // On affiche "aucun lead" plutôt qu'une erreur bloquante
+      updateMarkers({});
     } finally {
       showLoading(false);
     }
@@ -382,10 +413,18 @@ document.addEventListener('DOMContentLoaded', function() {
     leadMarkers.forEach(m => map.removeLayer(m));
     leadMarkers = [];
 
-    const counts = Object.values(zones).map(z => z.count || 0);
+    const entries = Object.entries(zones);
+    if (entries.length === 0) {
+      showEmpty();
+      return;
+    }
+
+    hideStatus();
+
+    const counts = entries.map(([_, data]) => data.count || 0);
     const maxCount = counts.length ? Math.max(...counts) : 1;
 
-    Object.entries(zones).forEach(([ville, data]) => {
+    entries.forEach(([ville, data]) => {
       if (typeof data.lat !== 'number' || typeof data.lon !== 'number') return;
 
       const count = data.count || 0;
@@ -508,19 +547,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
       console.log('🗺️ Carte initialisée avec succès.');
     } catch (err) {
-      console.error('Erreur d\'initialisation:', err);
+      console.error('❌ Erreur d\'initialisation:', err);
       showError('Erreur de chargement de la carte.');
     }
   }
 
   // ─── LANCEMENT ──────────────────────────────────────────────
-  // Attendre que le header soit chargé avant d'initialiser
-  if (document.getElementById('header-container')) {
-    // On attend un peu que le header se charge
-    setTimeout(init, 200);
-  } else {
-    init();
-  }
+  // On attend que le DOM soit prêt
+  setTimeout(init, 300);
 });
 </script>
 </body>
