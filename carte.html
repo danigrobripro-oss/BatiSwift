@@ -13,10 +13,13 @@
   <link rel="manifest" href="/assets/site.webmanifest" />
   <meta name="theme-color" content="#F5F0EB" />
 
-  <link rel="stylesheet" href="/css/style.css">
-  <!-- Leaflet CSS -->
+  <!-- ─── DESIGN SYSTEM ─── -->
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <!-- ─── LEAFET CSS ─── -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
+    /* ── PAGE CARTE ── */
     .carte-page {
       padding: calc(var(--header-h) + 20px) 5vw 60px;
       background: var(--beige);
@@ -32,108 +35,181 @@
       color: var(--gris);
       margin-bottom: 1.5rem;
     }
+
+    /* ── STATS BAR ── */
     .stats-bar {
-      background: var(--blanc);
-      border-radius: var(--radius-lg);
-      padding: 1.2rem 1.5rem;
-      border: 1.5px solid var(--beige-dark);
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
       margin-bottom: 1.5rem;
     }
-    .stat-item {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
+    .stat-card {
+      background: var(--blanc);
+      border-radius: var(--radius-lg);
+      padding: 1.2rem 1rem;
+      text-align: center;
+      border: 1.5px solid var(--beige-dark);
+      transition: all var(--transition);
     }
-    .stat-item .icon {
-      font-size: 1.8rem;
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(43,43,43,0.06);
     }
-    .stat-item .label {
-      font-size: 0.6rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--gris-light);
-      font-weight: 600;
-    }
-    .stat-item .value {
-      font-size: 1.4rem;
+    .stat-card .stat-value {
+      font-family: var(--font-display);
+      font-size: 2rem;
       font-weight: 700;
       color: var(--anthracite);
       line-height: 1.2;
     }
-    #map {
-      height: 550px;
+    .stat-card .stat-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gris);
+      margin-top: 4px;
+    }
+    .stat-card.highlight .stat-value {
+      color: var(--or);
+    }
+
+    /* ── CONTROLS ── */
+    .controls-panel {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+      background: var(--blanc);
+      border-radius: var(--radius-lg);
+      padding: 0.8rem 1.5rem;
+      border: 1.5px solid var(--beige-dark);
+      margin-bottom: 1.5rem;
+    }
+    .radius-control {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex: 1;
+      min-width: 200px;
+    }
+    .radius-control label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--anthracite);
+      white-space: nowrap;
+    }
+    .radius-control input[type="range"] {
+      flex: 1;
+      height: 4px;
+      accent-color: var(--or);
+      cursor: pointer;
+    }
+    .radius-control .radius-value {
+      font-weight: 700;
+      color: var(--or);
+      min-width: 50px;
+      text-align: right;
+      font-size: 0.9rem;
+    }
+    .btn-reset {
+      background: var(--anthracite);
+      color: var(--blanc);
+      border: none;
+      border-radius: 50px;
+      padding: 0.5rem 1.5rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+    .btn-reset:hover {
+      background: var(--or);
+    }
+
+    /* ── MAP ── */
+    .map-wrapper {
+      background: var(--blanc);
       border-radius: var(--radius-xl);
       border: 1.5px solid var(--beige-dark);
       overflow: hidden;
-      background: var(--blanc);
       box-shadow: 0 4px 24px rgba(43,43,43,0.06);
+    }
+    #map {
+      height: 550px;
+      width: 100%;
     }
     .map-legend {
       display: flex;
       flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      margin-top: 1rem;
+      gap: 1.2rem;
+      padding: 0.8rem 1.5rem;
+      border-top: 1px solid var(--beige-dark);
       font-size: 0.8rem;
       color: var(--gris);
     }
-    .map-legend .legend-items {
-      display: flex;
-      gap: 1.2rem;
-    }
-    .map-legend .legend-items span {
+    .map-legend span {
       display: flex;
       align-items: center;
       gap: 0.4rem;
     }
-    .map-legend .legend-items .dot {
+    .legend-dot {
       width: 12px;
       height: 12px;
       border-radius: 50%;
       display: inline-block;
+      flex-shrink: 0;
     }
-    .dot-or { background: var(--or); }
-    .dot-circle { border: 2px solid var(--or); background: transparent; width: 14px; height: 14px; border-radius: 50%; }
-    .btn-reset {
-      background: var(--blanc);
-      border: 1px solid var(--beige-dark);
-      padding: 0.3rem 1rem;
-      border-radius: 50px;
+    .legend-dot.leads { background: var(--or); opacity: 0.75; }
+    .legend-dot.center { background: var(--anthracite); }
+    .legend-dot.zone { border: 2px solid var(--or); background: transparent; }
+
+    /* ─── POPUP LEAFET ─── */
+    .leaflet-popup-content-wrapper {
+      border-radius: var(--radius);
+      box-shadow: 0 8px 32px rgba(43,43,43,0.12);
+    }
+    .popup-ville {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--anthracite);
+      margin: 0 0 4px;
+    }
+    .popup-leads {
+      font-weight: 600;
+      color: var(--or);
+      margin: 0 0 2px;
+    }
+    .popup-travaux {
       font-size: 0.8rem;
-      cursor: pointer;
-      transition: all 0.2s;
+      color: var(--gris);
+      margin: 0;
     }
-    .btn-reset:hover {
-      background: var(--beige);
-    }
-    .footer-stats {
+
+    /* ─── LOADING / ERROR ─── */
+    .map-loading, .map-error {
       text-align: center;
-      border-top: 1px solid var(--beige-dark);
-      padding-top: 2rem;
-      margin-top: 2.5rem;
+      padding: 1rem;
       font-size: 0.9rem;
       color: var(--gris);
     }
-    .footer-stats strong {
-      color: var(--anthracite);
+    .map-error { color: var(--danger); display: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 992px) {
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+      #map { height: 450px; }
     }
-    @media (min-width: 768px) {
-      .stats-bar {
-        grid-template-columns: repeat(4, 1fr);
-      }
-      .stat-item .value {
-        font-size: 1.6rem;
-      }
-    }
-    @media (max-width: 480px) {
+    @media (max-width: 640px) {
       .carte-header h1 { font-size: 1.6rem; }
-      .stat-item .icon { font-size: 1.3rem; }
-      .stat-item .value { font-size: 1.1rem; }
-      #map { height: 400px; }
+      .stats-bar { grid-template-columns: 1fr; }
+      .controls-panel { flex-direction: column; align-items: stretch; }
+      .radius-control { flex-wrap: wrap; }
+      .radius-control input[type="range"] { flex: 1; min-width: 120px; }
+      .btn-reset { width: 100%; text-align: center; }
+      #map { height: 380px; }
+      .map-legend { justify-content: center; }
     }
   </style>
 </head>
@@ -145,67 +221,60 @@
 <main class="carte-page">
   <div class="container">
     <div class="carte-header">
-      <h1>🗺️ Carte des artisans BâtiSwift</h1>
-      <p>Déplacez le cercle pour explorer la densité d’artisans et de demandes dans chaque zone.</p>
+      <h1>🗺️ Carte des artisans</h1>
+      <p>Visualisez la répartition des artisans et des demandes de travaux disponibles sur le territoire.</p>
     </div>
 
-    <!-- Barre de statistiques -->
+    <!-- ─── STATS ─── -->
     <div class="stats-bar" id="stats-bar">
-      <div class="stat-item">
-        <span class="icon">👥</span>
-        <div>
-          <div class="label">Artisans</div>
-          <div class="value" id="stat-artisans">—</div>
-        </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-artisans">—</div>
+        <div class="stat-label">Artisans inscrits</div>
       </div>
-      <div class="stat-item">
-        <span class="icon">📋</span>
-        <div>
-          <div class="label">Demandes</div>
-          <div class="value" id="stat-demandes">—</div>
-        </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-demandes">—</div>
+        <div class="stat-label">Demandes disponibles</div>
       </div>
-      <div class="stat-item">
-        <span class="icon">📍</span>
-        <div>
-          <div class="label">Leads dans la zone</div>
-          <div class="value" id="stat-leads-zone">—</div>
-        </div>
+      <div class="stat-card highlight">
+        <div class="stat-value" id="stat-leads-zone">—</div>
+        <div class="stat-label">Leads dans la zone</div>
       </div>
-      <div class="stat-item">
-        <span class="icon">📏</span>
-        <div>
-          <div class="label">Rayon</div>
-          <div class="value" id="stat-rayon">50 km</div>
-        </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-rayon">50 km</div>
+        <div class="stat-label">Rayon de recherche</div>
       </div>
     </div>
 
-    <!-- Carte -->
-    <div id="map"></div>
-
-    <!-- Légende + bouton réinitialiser -->
-    <div class="map-legend">
-      <div class="legend-items">
-        <span><span class="dot dot-circle"></span> Rayon de recherche</span>
-        <span><span class="dot dot-or"></span> Leads disponibles</span>
+    <!-- ─── CONTROLS ─── -->
+    <div class="controls-panel">
+      <div class="radius-control">
+        <label for="radius-slider">📏 Rayon</label>
+        <input type="range" id="radius-slider" min="10" max="100" value="50" step="5">
+        <span class="radius-value" id="radius-display">50 km</span>
       </div>
-      <button class="btn-reset" id="btn-reset-view">Réinitialiser la vue</button>
+      <button class="btn-reset" id="btn-reset">Réinitialiser</button>
     </div>
 
-    <!-- Bas de page -->
-    <div class="footer-stats">
-      <span id="footer-demandes">—</span> demandes disponibles en ce moment
+    <!-- ─── MAP ─── -->
+    <div class="map-wrapper">
+      <div id="map"></div>
+      <div class="map-loading" id="map-loading">⏳ Chargement des données…</div>
+      <div class="map-error" id="map-error">⚠️ Impossible de charger les données. Veuillez réessayer.</div>
+      <div class="map-legend">
+        <span><span class="legend-dot leads"></span> Zone avec leads (taille = nombre)</span>
+        <span><span class="legend-dot center"></span> Centre de recherche</span>
+        <span><span class="legend-dot zone"></span> Périmètre de recherche</span>
+      </div>
     </div>
   </div>
 </main>
 
 <div id="footer-container"></div>
 
-<!-- Leaflet JS -->
+<!-- ─── LEAFET JS ─── -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<!-- Configuration et API -->
+<!-- ─── SCRIPTS PARTAGÉS ─── -->
 <script src="/js/config.js"></script>
 <script src="/js/api.js"></script>
 <script src="/js/session.js"></script>
@@ -213,115 +282,245 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  'use strict';
 
-  // ─── 1. Initialisation de la carte ──────────────────────
-  const center = [46.603, 2.5];
-  const defaultRadius = 50000;
+  // ─── CONSTANTES ──────────────────────────────────────────────
+  const DEFAULT_CENTER = [46.603, 2.5];
+  const DEFAULT_RADIUS = 50; // km
 
-  let map = L.map('map').setView(center, 6);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-  }).addTo(map);
+  // ─── ÉTAT ──────────────────────────────────────────────────
+  const state = {
+    center: { lat: DEFAULT_CENTER[0], lon: DEFAULT_CENTER[1] },
+    radius: DEFAULT_RADIUS,
+    totalArtisans: 0,
+    totalDemandes: 0,
+    leadsInZone: 0,
+  };
 
-  // Cercle
-  let circle = L.circle(center, {
-    radius: defaultRadius,
-    color: '#C9A84C',
-    fillColor: '#C9A84C',
-    fillOpacity: 0.15,
-    weight: 3,
-    draggable: true,
-  }).addTo(map);
+  let map, circle, marker, leadMarkers = [];
+  let debounceTimer = null;
 
-  let marker = L.marker(center).addTo(map);
-  marker.bindPopup('🎯 Centre de la zone');
+  // ─── DOM REFS ─────────────────────────────────────────────
+  const $ = (id) => document.getElementById(id);
+  const elArtisans = $('stat-artisans');
+  const elDemandes = $('stat-demandes');
+  const elLeadsZone = $('stat-leads-zone');
+  const elRayon = $('stat-rayon');
+  const slider = $('radius-slider');
+  const radiusDisplay = $('radius-display');
+  const btnReset = $('btn-reset');
+  const loadingEl = $('map-loading');
+  const errorEl = $('map-error');
 
-  // ─── 2. Variables pour les marqueurs ─────────────────────
-  let leadMarkers = [];
+  // ─── HELPERS ──────────────────────────────────────────────
+  function formatNumber(n) {
+    return new Intl.NumberFormat('fr-FR').format(n || 0);
+  }
 
-  // ─── 3. Fonction pour récupérer les données ──────────────
-  async function fetchMapData(lat, lng, radius) {
-    const statsUrl = `${CONFIG.API_URL}/api/map/stats`;
-    const leadsUrl = `${CONFIG.API_URL}/api/leads/map?lat=${lat}&lon=${lng}&rayon=${radius/1000}`;
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = String(str);
+    return div.innerHTML;
+  }
 
-    try {
-      // Statistiques globales
-      const statsResp = await fetch(statsUrl);
-      const statsData = await statsResp.json();
+  function showLoading(show) {
+    if (loadingEl) loadingEl.style.display = show ? 'block' : 'none';
+  }
 
-      document.getElementById('stat-artisans').textContent = statsData.total_artisans || 0;
-      document.getElementById('stat-demandes').textContent = statsData.total_leads || 0;
-      document.getElementById('footer-demandes').textContent = statsData.total_leads || 0;
-      document.getElementById('stat-rayon').textContent = (radius / 1000) + ' km';
-
-      // Leads dans la zone
-      const leadsResp = await fetch(leadsUrl);
-      const leadsData = await leadsResp.json();
-
-      // Calcul du nombre total de leads dans la zone
-      const totalInZone = Object.values(leadsData.zones || {}).reduce((sum, z) => sum + z.count, 0);
-      document.getElementById('stat-leads-zone').textContent = totalInZone;
-
-      // Mettre à jour les marqueurs
-      updateMarkers(leadsData.zones);
-
-    } catch (err) {
-      console.error('Erreur chargement données carte:', err);
+  function showError(msg) {
+    if (errorEl) {
+      errorEl.textContent = msg || '⚠️ Impossible de charger les données. Veuillez réessayer.';
+      errorEl.style.display = 'block';
     }
   }
 
-  // ─── 4. Fonction pour mettre à jour les marqueurs ─────────
+  function hideError() {
+    if (errorEl) errorEl.style.display = 'none';
+  }
+
+  // ─── API ──────────────────────────────────────────────────
+  async function fetchMapStats() {
+    try {
+      const data = await API.get('/api/map/stats');
+      state.totalArtisans = data.total_artisans || 0;
+      state.totalDemandes = data.total_leads || 0;
+      return data;
+    } catch (err) {
+      console.error('Erreur stats:', err);
+      showError('Erreur de chargement des statistiques.');
+      return null;
+    }
+  }
+
+  async function fetchLeadsForZone() {
+    showLoading(true);
+    hideError();
+    try {
+      const url = `/api/leads/map?lat=${state.center.lat}&lon=${state.center.lon}&rayon=${state.radius}`;
+      const data = await API.get(url);
+      state.leadsInZone = data.total || 0;
+      updateStats();
+      updateMarkers(data.zones || {});
+    } catch (err) {
+      console.error('Erreur leads:', err);
+      showError('Erreur de chargement des leads.');
+    } finally {
+      showLoading(false);
+    }
+  }
+
+  // ─── RENDU ──────────────────────────────────────────────────
+  function updateStats() {
+    elArtisans.textContent = formatNumber(state.totalArtisans);
+    elDemandes.textContent = formatNumber(state.totalDemandes);
+    elLeadsZone.textContent = formatNumber(state.leadsInZone);
+    elRayon.textContent = state.radius + ' km';
+  }
+
   function updateMarkers(zones) {
-    // Supprimer les anciens marqueurs
+    // Nettoyer les anciens marqueurs
     leadMarkers.forEach(m => map.removeLayer(m));
     leadMarkers = [];
 
-    if (!zones) return;
+    const counts = Object.values(zones).map(z => z.count || 0);
+    const maxCount = counts.length ? Math.max(...counts) : 1;
 
     Object.entries(zones).forEach(([ville, data]) => {
-      if (!data.lat || !data.lon) return;
+      if (typeof data.lat !== 'number' || typeof data.lon !== 'number') return;
 
-      const popupContent = `
-        <div style="font-size:0.85rem;padding:4px 0;">
-          <strong>${ville}</strong><br>
-          📍 ${data.count} lead${data.count > 1 ? 's' : ''} disponible${data.count > 1 ? 's' : ''}
-          ${data.type_travaux && data.type_travaux.length ? '<br>🔧 ' + data.type_travaux.join(', ') : ''}
-        </div>
-      `;
+      const count = data.count || 0;
+      const radiusPx = Math.max(6, Math.min(28, 6 + Math.sqrt(count / maxCount) * 22));
 
       const marker = L.circleMarker([data.lat, data.lon], {
-        radius: Math.max(8, Math.min(18, data.count * 2)),
+        radius: radiusPx,
         color: '#C9A84C',
+        weight: 1.5,
         fillColor: '#C9A84C',
-        fillOpacity: 0.7,
-        weight: 2,
+        fillOpacity: 0.65,
       }).addTo(map);
 
-      marker.bindPopup(popupContent);
+      const travaux = Array.isArray(data.type_travaux)
+        ? data.type_travaux.join(', ')
+        : (data.type_travaux || 'Non précisé');
+
+      marker.bindPopup(`
+        <div class="popup-ville">${escapeHtml(ville)}</div>
+        <div class="popup-leads">${count} demande${count > 1 ? 's' : ''}</div>
+        <div class="popup-travaux">🔧 ${escapeHtml(travaux)}</div>
+      `);
+
       leadMarkers.push(marker);
     });
   }
 
-  // ─── 5. Écouter le déplacement du cercle ──────────────────
-  circle.on('drag', function(e) {
-    const latlng = e.target.getLatLng();
-    const newCenter = [latlng.lat, latlng.lng];
-    marker.setLatLng(newCenter);
-    fetchMapData(newCenter[0], newCenter[1], circle.getRadius());
-  });
+  // ─── INIT MAP ──────────────────────────────────────────────
+  function initMap() {
+    map = L.map('map', {
+      center: [state.center.lat, state.center.lon],
+      zoom: 6,
+      scrollWheelZoom: true,
+    });
 
-  // ─── 6. Réinitialiser la vue ─────────────────────────────
-  document.getElementById('btn-reset-view').addEventListener('click', function() {
-    map.setView(center, 6);
-    circle.setLatLng(center);
-    marker.setLatLng(center);
-    fetchMapData(center[0], center[1], defaultRadius);
-  });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
 
-  // ─── 7. Chargement initial ──────────────────────────────
-  fetchMapData(center[0], center[1], defaultRadius);
+    // Cercle
+    circle = L.circle([state.center.lat, state.center.lon], {
+      radius: state.radius * 1000,
+      color: '#C9A84C',
+      weight: 2,
+      fillColor: '#C9A84C',
+      fillOpacity: 0.08,
+    }).addTo(map);
 
-  console.log('🗺️ Carte initialisée avec succès.');
+    // Marqueur central (déplaçable)
+    const icon = L.divIcon({
+      className: '',
+      html: `<div style="width:16px;height:16px;border-radius:50%;background:#2B2B2B;border:3px solid #fff;box-shadow:0 0 0 2px rgba(0,0,0,0.15);"></div>`,
+      iconSize: [16, 16],
+      iconAnchor: [8, 8],
+    });
+
+    marker = L.marker([state.center.lat, state.center.lon], {
+      icon: icon,
+      draggable: true,
+    }).addTo(map);
+
+    // Drag du marqueur
+    marker.on('dragend', function(e) {
+      const pos = e.target.getLatLng();
+      state.center.lat = pos.lat;
+      state.center.lon = pos.lng;
+      circle.setLatLng(pos);
+      fetchLeadsForZone();
+    });
+
+    // Clic sur la carte
+    map.on('click', function(e) {
+      state.center.lat = e.latlng.lat;
+      state.center.lon = e.latlng.lng;
+      marker.setLatLng(e.latlng);
+      circle.setLatLng(e.latlng);
+      fetchLeadsForZone();
+    });
+  }
+
+  // ─── CONTROLS ──────────────────────────────────────────────
+  function bindControls() {
+    slider.addEventListener('input', function() {
+      const km = parseInt(this.value);
+      state.radius = km;
+      radiusDisplay.textContent = km + ' km';
+      circle.setRadius(km * 1000);
+      elRayon.textContent = km + ' km';
+
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(fetchLeadsForZone, 300);
+    });
+
+    btnReset.addEventListener('click', function() {
+      state.center.lat = DEFAULT_CENTER[0];
+      state.center.lon = DEFAULT_CENTER[1];
+      state.radius = DEFAULT_RADIUS;
+
+      const latlng = L.latLng(DEFAULT_CENTER[0], DEFAULT_CENTER[1]);
+      marker.setLatLng(latlng);
+      circle.setLatLng(latlng);
+      circle.setRadius(DEFAULT_RADIUS * 1000);
+      map.setView(latlng, 6);
+
+      slider.value = DEFAULT_RADIUS;
+      radiusDisplay.textContent = DEFAULT_RADIUS + ' km';
+
+      fetchLeadsForZone();
+    });
+  }
+
+  // ─── INIT ──────────────────────────────────────────────────
+  async function init() {
+    try {
+      initMap();
+      bindControls();
+
+      await fetchMapStats();
+      await fetchLeadsForZone();
+
+      console.log('🗺️ Carte initialisée avec succès.');
+    } catch (err) {
+      console.error('Erreur d\'initialisation:', err);
+      showError('Erreur de chargement de la carte.');
+    }
+  }
+
+  // ─── LANCEMENT ──────────────────────────────────────────────
+  // Attendre que le header soit chargé avant d'initialiser
+  if (document.getElementById('header-container')) {
+    // On attend un peu que le header se charge
+    setTimeout(init, 200);
+  } else {
+    init();
+  }
 });
 </script>
 </body>
