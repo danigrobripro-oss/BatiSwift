@@ -6,15 +6,15 @@
 
    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
 
-   /* ---- VARIABLES (Palette Bleu nuit & Or cuivré) ---- */
+   /* ---- VARIABLES (Palette Vert forêt & Or cuivré) ---- */
    :root {
-     --beige:       #F0F4F8;
-     --beige-dark:  #E2E8F0;
-     --anthracite:  #1A2A3A;
-     --anthracite2: #0D1A2B;
+     --beige:       #F5F2EB;
+     --beige-dark:  #E8E0D4;
+     --anthracite:  #1E2A1E;
+     --anthracite2: #121A12;
      --blanc:       #FFFFFF;
-     --or:          #D4A84C;
-     --or-light:    #F0D78A;
+     --or:          #B8943C;
+     --or-light:    #E6CC88;
      --success:     #10B981;
      --danger:      #EF4444;
      --warning:     #F59E0B;
@@ -259,7 +259,7 @@
      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
      height: var(--header-h);
      display: flex; align-items: center;
-     background: rgba(240,244,248,0.9);
+     background: rgba(245,242,235,0.9);
      backdrop-filter: blur(16px);
      -webkit-backdrop-filter: blur(16px);
      border-bottom: 1px solid var(--beige-dark);
