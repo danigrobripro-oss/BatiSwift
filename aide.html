@@ -261,52 +261,7 @@
 <body class="minimal-layout">
 
 <div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
-
-<!-- ============================================================
-     HEADER INTÉGRÉ (correction)
-     ============================================================ -->
-<header class="site-header">
-  <div class="container">
-    <a href="/index.html" class="nav-logo">
-      <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
-      BâtiSwift
-    </a>
-    <button class="menu-toggle" id="menu-toggle" aria-label="Ouvrir le menu">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
-    </button>
-  </div>
-</header>
-
-<div id="sidebar-overlay" class="sidebar-overlay"></div>
-<div id="sidebar" class="sidebar">
-  <div class="sidebar-header">
-    <a href="/index.html" class="nav-logo">
-      <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
-      BâtiSwift
-    </a>
-    <button id="sidebar-close" class="sidebar-close">✕</button>
-  </div>
-  <nav class="sidebar-nav">
-    <a href="/index.html">🏠 Accueil</a>
-    <a href="/client.html">💬 Déposer une demande</a>
-    <a href="/tarifs.html">💰 Tarifs</a>
-    <a href="/aide.html">❓ Aide</a>
-  </nav>
-  <div class="sidebar-actions">
-    <div class="sidebar-guest">
-      <a href="/connexion.html" class="btn btn-secondary btn-block">Connexion</a>
-      <a href="/inscription.html" class="btn btn-primary btn-block">S'inscrire</a>
-    </div>
-    <div class="sidebar-user" style="display:none;">
-      <span id="sidebar-user-name" style="font-weight:600;display:block;padding:0.5rem 0;">👋 <span id="sidebar-user-nom"></span></span>
-      <a href="/dashboard.html" class="btn btn-secondary btn-block">📊 Mon Dashboard</a>
-      <a href="/parametres.html" class="btn btn-secondary btn-block">⚙ Paramètres</a>
-      <button id="sidebar-logout" class="btn btn-danger btn-block">Déconnexion</button>
-    </div>
-  </div>
-</div>
+<div id="header-container"></div>
 
 <!-- ============================================================
      HERO AVEC ASSISTANT IA
@@ -375,77 +330,17 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
-  // ─── GESTION DE LA SIDEBAR ──────────────────────────────
-  var toggle = document.getElementById('menu-toggle');
-  var overlay = document.getElementById('sidebar-overlay');
-  var sidebar = document.getElementById('sidebar');
-  var closeBtn = document.getElementById('sidebar-close');
-  var allLinks = sidebar ? sidebar.querySelectorAll('a') : [];
-
-  if (toggle && sidebar && overlay) {
-    toggle.addEventListener('click', function(e) {
-      e.stopPropagation();
-      if (sidebar.classList.contains('active')) {
-        toggle.classList.remove('open');
-        overlay.classList.remove('active');
-        sidebar.classList.remove('active');
-        document.body.style.overflow = '';
-      } else {
-        toggle.classList.add('open');
-        overlay.classList.add('active');
-        sidebar.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      }
-    });
-
-    if (closeBtn) {
-      closeBtn.addEventListener('click', function() {
-        toggle.classList.remove('open');
-        overlay.classList.remove('active');
-        sidebar.classList.remove('active');
-        document.body.style.overflow = '';
-      });
-    }
-
-    if (overlay) {
-      overlay.addEventListener('click', function() {
-        toggle.classList.remove('open');
-        overlay.classList.remove('active');
-        sidebar.classList.remove('active');
-        document.body.style.overflow = '';
-      });
-    }
-
-    allLinks.forEach(function(link) {
-      link.addEventListener('click', function() {
-        toggle.classList.remove('open');
-        overlay.classList.remove('active');
-        sidebar.classList.remove('active');
-        document.body.style.overflow = '';
-      });
-    });
+  // ─── CHARGEMENT DU HEADER ET FOOTER ──────────────────────
+  function loadFragment(id, url) {
+    fetch(url)
+      .then(r => r.text())
+      .then(html => {
+        document.getElementById(id).innerHTML = html;
+      })
+      .catch(() => {});
   }
-
-  // ─── GESTION DE SESSION ──────────────────────────────────
-  var user = JSON.parse(localStorage.getItem('batiswift_user') || 'null');
-  var guestDiv = document.querySelector('.sidebar-guest');
-  var userDiv = document.querySelector('.sidebar-user');
-  var userNameSpan = document.getElementById('sidebar-user-nom');
-
-  if (user && userDiv && guestDiv) {
-    guestDiv.style.display = 'none';
-    userDiv.style.display = 'flex';
-    userDiv.style.flexDirection = 'column';
-    userDiv.style.gap = '0.8rem';
-    if (userNameSpan) userNameSpan.textContent = user.nom || 'Artisan';
-  }
-
-  // ─── DÉCONNEXION ──────────────────────────────────────────
-  document.getElementById('sidebar-logout')?.addEventListener('click', function() {
-    localStorage.removeItem('batiswift_token');
-    localStorage.removeItem('batiswift_user');
-    window.location.href = '/index.html';
-  });
+  loadFragment('header-container', '/header.html');
+  loadFragment('footer-container', '/footer.html');
 
   // ─── FAQ ──────────────────────────────────────────────────
   var faqData = [
