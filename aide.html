@@ -330,17 +330,105 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
-  // ─── CHARGEMENT DU HEADER ET FOOTER ──────────────────────
-  function loadFragment(id, url) {
+  // ─── CHARGEMENT DU HEADER ET INITIALISATION DE LA SIDEBAR ──
+  function loadFragmentAndInit(id, url) {
     fetch(url)
       .then(r => r.text())
       .then(html => {
         document.getElementById(id).innerHTML = html;
+        // Une fois le header chargé, on initialise la sidebar
+        initSidebar();
       })
       .catch(() => {});
   }
-  loadFragment('header-container', '/header.html');
-  loadFragment('footer-container', '/footer.html');
+
+  function initSidebar() {
+    var toggle = document.getElementById('menu-toggle');
+    var overlay = document.getElementById('sidebar-overlay');
+    var sidebar = document.getElementById('sidebar');
+    var closeBtn = document.getElementById('sidebar-close');
+    var allLinks = sidebar ? sidebar.querySelectorAll('a') : [];
+
+    if (!toggle || !sidebar || !overlay) {
+      console.warn('Sidebar elements not found');
+      return;
+    }
+
+    // Retirer les anciens écouteurs pour éviter les doublons
+    var newToggle = toggle.cloneNode(true);
+    toggle.parentNode.replaceChild(newToggle, toggle);
+    toggle = newToggle;
+
+    function openSidebar() {
+      toggle.classList.add('open');
+      overlay.classList.add('active');
+      sidebar.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSidebar() {
+      toggle.classList.remove('open');
+      overlay.classList.remove('active');
+      sidebar.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (sidebar.classList.contains('active')) {
+        closeSidebar();
+      } else {
+        openSidebar();
+      }
+    });
+
+    if (closeBtn) {
+      var newClose = closeBtn.cloneNode(true);
+      closeBtn.parentNode.replaceChild(newClose, closeBtn);
+      closeBtn = newClose;
+      closeBtn.addEventListener('click', closeSidebar);
+    }
+
+    if (overlay) {
+      var newOverlay = overlay.cloneNode(true);
+      overlay.parentNode.replaceChild(newOverlay, overlay);
+      overlay = newOverlay;
+      overlay.addEventListener('click', closeSidebar);
+    }
+
+    allLinks.forEach(function(link) {
+      link.addEventListener('click', closeSidebar);
+    });
+  }
+
+  // ─── GESTION DE SESSION (affichage des boutons connecté / invité) ──
+  function updateSessionUI() {
+    var user = JSON.parse(localStorage.getItem('batiswift_user') || 'null');
+    var guestDiv = document.querySelector('.sidebar-guest');
+    var userDiv = document.querySelector('.sidebar-user');
+    var userNameSpan = document.getElementById('sidebar-user-nom');
+
+    if (user && userDiv && guestDiv) {
+      guestDiv.style.display = 'none';
+      userDiv.style.display = 'flex';
+      userDiv.style.flexDirection = 'column';
+      userDiv.style.gap = '0.8rem';
+      if (userNameSpan) userNameSpan.textContent = user.nom || 'Artisan';
+    }
+  }
+
+  // ─── DÉCONNEXION ──────────────────────────────────────────
+  document.addEventListener('click', function(e) {
+    if (e.target.id === 'sidebar-logout' || e.target.closest('#sidebar-logout')) {
+      localStorage.removeItem('batiswift_token');
+      localStorage.removeItem('batiswift_user');
+      window.location.href = '/index.html';
+    }
+  });
+
+  // ─── CHARGEMENT ────────────────────────────────────────────
+  loadFragmentAndInit('header-container', '/header.html');
+  loadFragmentAndInit('footer-container', '/footer.html');
 
   // ─── FAQ ──────────────────────────────────────────────────
   var faqData = [
@@ -393,7 +481,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Filtres par catégorie
   document.querySelectorAll('.cat-card').forEach(function(card) {
     card.addEventListener('click', function() {
       document.querySelectorAll('.cat-card').forEach(function(c) { c.classList.remove('active'); });
