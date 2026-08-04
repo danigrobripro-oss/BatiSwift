@@ -2,20 +2,20 @@
    BâtiSwift — Design System Global
    Luxury Minimalist + Glassmorphism
    Fonts: Cormorant Garamond (titres) + DM Sans (corps)
-   Palette : Ardoise & Ambre (Minéral & Énergie)
+   Palette : Violet Profond & Or (Créativité & Audace)
    ============================================================ */
 
    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
 
-   /* ---- VARIABLES (Palette Ardoise & Ambre) ---- */
+   /* ---- VARIABLES (Palette Violet & Or) ---- */
    :root {
-     --beige:       #EAE7E0;
-     --beige-dark:  #D5D1C8;
-     --anthracite:  #2F3A3F;
-     --anthracite2: #1A2226;
+     --beige:       #F5EDE8;
+     --beige-dark:  #E8DCD4;
+     --anthracite:  #3A1E4A;
+     --anthracite2: #1E0F2A;
      --blanc:       #FFFFFF;
-     --or:          #E8A84C;
-     --or-light:    #F0CD8A;
+     --or:          #D4A84C;
+     --or-light:    #F0D78A;
      --success:     #10B981;
      --danger:      #EF4444;
      --warning:     #F59E0B;
@@ -260,7 +260,7 @@
      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
      height: var(--header-h);
      display: flex; align-items: center;
-     background: rgba(234,231,224,0.9);
+     background: rgba(245,237,232,0.9);
      backdrop-filter: blur(16px);
      -webkit-backdrop-filter: blur(16px);
      border-bottom: 1px solid var(--beige-dark);
