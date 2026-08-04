@@ -9,13 +9,13 @@
 
    /* ---- VARIABLES (Palette Violet & Or) ---- */
    :root {
-     --beige:       #F5EDE8;
-     --beige-dark:  #E8DCD4;
-     --anthracite:  #3A1E4A;
-     --anthracite2: #1E0F2A;
+     --beige:       #F5F0EB;
+     --beige-dark:  #E8E0D4;
+     --anthracite:  #2F1A3A;
+     --anthracite2: #1A0F23;
      --blanc:       #FFFFFF;
-     --or:          #D4A84C;
-     --or-light:    #F0D78A;
+     --or:          #C99A4C;
+     --or-light:    #EDD88A;
      --success:     #10B981;
      --danger:      #EF4444;
      --warning:     #F59E0B;
