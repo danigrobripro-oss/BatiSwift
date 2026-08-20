@@ -101,9 +101,25 @@
 
     #lead-confirmation { margin-top: var(--space-md); }
 
+    /* Bandeau utilisateur connecté */
+    .user-banner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 12px 5vw;
+      background: var(--anthracite);
+      color: var(--blanc);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+      font-size: .9rem;
+    }
+    .user-banner .banner-name { font-weight: 600; }
+    .user-banner .btn { background: var(--or); color: var(--blanc); padding: 6px 18px; font-size: .85rem; border-radius: 50px; text-decoration: none; }
+    .user-banner .btn:hover { background: #b8952e; }
+
     @media (max-width: 900px) {
       .client-layout { grid-template-columns: 1fr; }
       .info-pane { order: -1; padding: var(--space-lg); }
+      .user-banner { justify-content: center; text-align: center; }
     }
   </style>
 </head>
@@ -111,6 +127,12 @@
 
 <div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
 <div id="header-container"></div>
+
+<!-- Bandeau conditionnel (masqué par défaut) -->
+<div id="user-banner" class="user-banner" style="display:none;">
+  <span class="banner-name" id="banner-text"></span>
+  <a href="#" id="banner-action" class="btn">Mon espace</a>
+</div>
 
 <main class="main-content">
   <div class="client-layout">
@@ -195,6 +217,30 @@ document.addEventListener('DOMContentLoaded', () => {
   const msgs   = document.getElementById('chat-messages');
   const input  = document.getElementById('chat-input');
   const btn    = document.getElementById('btn-send');
+
+  // ─── Bandeau utilisateur connecté ─────────────────────
+  function checkUserBanner() {
+    const user = JSON.parse(localStorage.getItem(CONFIG.USER_KEY) || 'null');
+    if (!user) return; // pas connecté → bandeau caché
+
+    const banner = document.getElementById('user-banner');
+    const textEl = document.getElementById('banner-text');
+    const actionBtn = document.getElementById('banner-action');
+
+    if (user.role === 'artisan') {
+      textEl.textContent = `🛠️ Bonjour ${user.nom || 'Artisan'} — vous êtes en mode Artisan.`;
+      actionBtn.textContent = 'Retour au dashboard';
+      actionBtn.href = '/dashboard.html';
+    } else if (user.role === 'client') {
+      textEl.textContent = `🏠 Bonjour ${user.nom || 'Client'} — vous êtes en mode Client.`;
+      actionBtn.textContent = 'Mon espace';
+      actionBtn.href = '/client.html';
+    } else {
+      return; // rôle inconnu → pas de bandeau
+    }
+    banner.style.display = 'flex';
+  }
+  checkUserBanner();
 
   function addMsg(role, content) {
     const d = document.createElement('div');

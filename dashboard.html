@@ -129,6 +129,16 @@
       color: var(--gris-light);
     }
     
+    /* ── Mode mixte : boutons de dépot ── */
+    .mixed-actions {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+    .mixed-actions .btn {
+      white-space: nowrap;
+    }
+    
     @media (max-width: 768px) {
       .dashboard-hero h1 {
         font-size: 1.6rem;
@@ -138,6 +148,9 @@
       }
       .lead-card {
         padding: var(--space-md);
+      }
+      .mixed-actions {
+        flex-direction: column;
       }
     }
     
@@ -164,12 +177,18 @@
   <!-- ── HERO DASHBOARD ── -->
   <section class="dashboard-hero">
     <div class="container">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:15px;">
         <div>
           <h1>👋 Tableau de bord</h1>
           <p class="sub">Bienvenue, <span id="nav-username" style="font-weight:600;color:var(--anthracite);">—</span></p>
+          <p style="margin-top:6px;font-size:0.85rem;color:var(--gris);">
+            🔨 Espace artisan · Vous pouvez aussi <strong>déposer une demande</strong> (chantier, recherche de sous-traitant) ci-dessous.
+          </p>
         </div>
-        <a href="/parametres.html" class="btn btn-secondary btn-sm">⚙ Paramètres</a>
+        <div class="mixed-actions">
+          <a href="/client.html" class="btn btn-gold btn-sm">✍️ Déposer une demande</a>
+          <a href="/parametres.html" class="btn btn-secondary btn-sm">⚙ Paramètres</a>
+        </div>
       </div>
     </div>
   </section>

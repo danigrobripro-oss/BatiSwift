@@ -109,7 +109,7 @@
     <div class="auth-card">
 
       <div class="auth-title">Connexion</div>
-      <div class="auth-subtitle">Accédez à votre espace artisan</div>
+      <div class="auth-subtitle">Accédez à votre espace</div>
 
       <div id="alert-expired" class="alert alert-warning" style="display:none">
         ⏰ Votre session a expiré. Reconnectez-vous.
@@ -129,7 +129,6 @@
           </div>
         </div>
 
-        <!-- 🔥 Lien "Mot de passe oublié" ajouté ici -->
         <div class="forgot-link">
           <a href="/forgot-password.html">Mot de passe oublié ?</a>
         </div>
@@ -191,9 +190,26 @@ document.addEventListener('DOMContentLoaded', async function() {
     try {
       var data = await API.login(email, pass);
       Session.save(data.token, data.artisan);
+
       toast('Connexion réussie !', 'success');
-      var redirect = new URLSearchParams(window.location.search).get('redirect') || '/dashboard.html';
-      setTimeout(function() { window.location.href = redirect; }, 600);
+
+      var user = data.artisan;
+      var redirect = new URLSearchParams(window.location.search).get('redirect');
+
+      if (redirect) {
+        // Redirection explicite (ex: depuis une page protégée)
+        setTimeout(function() { window.location.href = redirect; }, 600);
+      } else {
+        // Redirection automatique selon le rôle
+        if (user && user.role === 'artisan') {
+          setTimeout(function() { window.location.href = '/dashboard.html'; }, 600);
+        } else if (user && user.role === 'client') {
+          setTimeout(function() { window.location.href = '/client.html'; }, 600);
+        } else {
+          // Fallback
+          setTimeout(function() { window.location.href = '/dashboard.html'; }, 600);
+        }
+      }
     } catch(err) {
       showAlert(alertId, err.message, 'danger');
       btnLoading(btn, false);

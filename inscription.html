@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inscription artisan – BâtiSwift</title>
+  <title>Inscription – BâtiSwift</title>
 
   <!-- ─── FAVICON ─── -->
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
@@ -58,6 +58,30 @@
     .auth-link a { color: var(--anthracite); font-weight: 600; }
     .spec-input-autre { margin-top: 6px; display: none; }
 
+    /* NOUVEAU : Choix de rôle */
+    .role-selector {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: var(--space-lg);
+    }
+    .role-card {
+      border: 2px solid var(--beige-dark); border-radius: var(--radius-lg);
+      padding: 1.5rem; text-align: center; cursor: pointer; transition: all var(--transition);
+      background: var(--blanc);
+    }
+    .role-card:hover { border-color: var(--anthracite); }
+    .role-card.selected {
+      border-color: var(--anthracite); background: var(--anthracite); color: var(--blanc);
+    }
+    .role-card .role-icon { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+    .role-card .role-title { font-weight: 700; font-size: 1rem; }
+    .role-card .role-desc { font-size: 0.8rem; color: var(--gris); margin-top: 4px; }
+    .role-card.selected .role-desc { color: rgba(255,255,255,0.7); }
+
+    /* Sections conditionnelles */
+    .artisan-section { display: none; }
+    .artisan-section.visible { display: block; }
+    .client-section { display: none; }
+    .client-section.visible { display: block; }
+
     /* RESPONSIVE */
     @media (max-width: 768px) {
       .inscription-wrapper {
@@ -69,6 +93,7 @@
       }
       .specialites-grid { grid-template-columns: repeat(2, 1fr); }
       .form-row { grid-template-columns: 1fr; }
+      .role-selector { grid-template-columns: 1fr; }
       .inscription-title { font-size: 1.6rem; }
     }
     @media (max-width: 480px) {
@@ -89,12 +114,28 @@
   <div class="inscription-card">
 
     <div class="inscription-title">Rejoindre BâtiSwift</div>
-    <div class="inscription-sub">Créez votre compte et recevez vos premiers leads dès aujourd'hui.</div>
+    <div class="inscription-sub">Créez votre compte selon votre profil.</div>
 
     <div id="alert-register" class="alert" style="display:none"></div>
 
     <form id="form-register" novalidate autocomplete="off">
 
+      <!-- ─── CHOIX DU RÔLE ─────────────────────────────── -->
+      <div class="section-divider">Vous êtes ?</div>
+      <div class="role-selector">
+        <div class="role-card selected" id="role-artisan" data-role="artisan">
+          <span class="role-icon">🛠️</span>
+          <div class="role-title">Artisan / Professionnel</div>
+          <div class="role-desc">Je souhaite recevoir des leads et gérer mes chantiers</div>
+        </div>
+        <div class="role-card" id="role-client" data-role="client">
+          <span class="role-icon">🏠</span>
+          <div class="role-title">Client / Particulier</div>
+          <div class="role-desc">Je souhaite déposer une demande de travaux</div>
+        </div>
+      </div>
+
+      <!-- ─── INFORMATIONS PERSONNELLES ─────────────────── -->
       <div class="section-divider">Informations personnelles</div>
       <div class="form-row">
         <div class="form-group">
@@ -107,43 +148,99 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label" for="email">E-mail professionnel <span class="req">*</span></label>
+        <label class="form-label" for="email">E-mail <span class="req">*</span></label>
         <input id="email" type="email" class="form-control" placeholder="vous@exemple.fr" required>
       </div>
 
-      <div class="section-divider">Zone d'intervention</div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label" for="ville">Ville principale <span class="req">*</span></label>
-          <input id="ville" type="text" class="form-control" placeholder="Paris, Lyon, Luxembourg..." required>
+      <!-- ─── SECTION ARTISAN (conditionnelle) ───────────── -->
+      <div id="artisan-section" class="artisan-section visible">
+
+        <div class="section-divider">Zone d'intervention</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="ville">Ville principale <span class="req">*</span></label>
+            <input id="ville" type="text" class="form-control" placeholder="Paris, Lyon, Luxembourg..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="rayon">Rayon (km)</label>
+            <select id="rayon" class="form-control">
+              <option value="10">10 km</option>
+              <option value="20">20 km</option>
+              <option value="30" selected>30 km</option>
+              <option value="50">50 km</option>
+              <option value="100">100 km</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-divider">Vos spécialités</div>
+        <div class="specialites-grid" id="specialites-grid">
+          <div class="spec-chip" data-value="plomberie">🔧 Plomberie</div>
+          <div class="spec-chip" data-value="electricite">⚡ Électricité</div>
+          <div class="spec-chip" data-value="peinture">🎨 Peinture</div>
+          <div class="spec-chip" data-value="maconnerie">🧱 Maçonnerie</div>
+          <div class="spec-chip" data-value="chauffage">🔥 Chauffage</div>
+          <div class="spec-chip" data-value="serrurerie">🔐 Serrurerie</div>
+          <div class="spec-chip" id="spec-autre-chip" data-value="__autre__">➕ Autre</div>
+        </div>
+        <div class="form-group spec-input-autre" id="spec-autre-input">
+          <label class="form-label" for="spec-autre-text">Précisez votre spécialité</label>
+          <input type="text" id="spec-autre-text" class="form-control" placeholder="Ex: carreleur, menuisier...">
+        </div>
+
+        <!-- NOUVEAU : IMMATRICULATION INTERNATIONALE -->
+        <div class="section-divider">Immatriculation d'entreprise</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="country">Pays <span class="req">*</span></label>
+            <select id="country" class="form-control" required>
+              <option value="">— Sélectionnez —</option>
+              <option value="FR">🇫🇷 France</option>
+              <option value="BE">🇧🇪 Belgique</option>
+              <option value="CH">🇨🇭 Suisse</option>
+              <option value="LU">🇱🇺 Luxembourg</option>
+              <option value="DE">🇩🇪 Allemagne</option>
+              <option value="ES">🇪🇸 Espagne</option>
+              <option value="IT">🇮🇹 Italie</option>
+              <option value="PT">🇵🇹 Portugal</option>
+              <option value="GB">🇬🇧 Royaume-Uni</option>
+              <option value="US">🇺🇸 États-Unis</option>
+              <option value="CA">🇨🇦 Canada</option>
+              <option value="MA">🇲🇦 Maroc</option>
+              <option value="DZ">🇩🇿 Algérie</option>
+              <option value="TN">🇹🇳 Tunisie</option>
+              <option value="SN">🇸🇳 Sénégal</option>
+              <option value="CI">🇨🇮 Côte d'Ivoire</option>
+              <option value="AE">🇦🇪 Émirats Arabes Unis</option>
+              <option value="OTHER">🌍 Autre</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="registration_type">Type de numéro <span class="req">*</span></label>
+            <select id="registration_type" class="form-control" required>
+              <option value="">— Sélectionnez —</option>
+              <option value="SIRET">SIRET (France)</option>
+              <option value="TVA">Numéro de TVA intracommunautaire (UE)</option>
+              <option value="FISCAL">Numéro d'immatriculation / Fiscal (Hors UE)</option>
+              <option value="AUTRE">Autre numéro d'identification</option>
+            </select>
+          </div>
         </div>
         <div class="form-group">
-          <label class="form-label" for="rayon">Rayon (km)</label>
-          <select id="rayon" class="form-control">
-            <option value="10">10 km</option>
-            <option value="20">20 km</option>
-            <option value="30" selected>30 km</option>
-            <option value="50">50 km</option>
-            <option value="100">100 km</option>
-          </select>
+          <label class="form-label" for="registration_number">Numéro d'immatriculation <span class="req">*</span></label>
+          <input id="registration_number" type="text" class="form-control" placeholder="Ex : 12345678900012" required>
         </div>
+
+      </div><!-- /artisan-section -->
+
+      <!-- ─── SECTION CLIENT (conditionnelle) ───────────── -->
+      <div id="client-section" class="client-section">
+        <p style="font-size: 0.9rem; color: var(--gris); margin: 1rem 0;">
+          En tant que client, vous pourrez déposer des demandes de travaux et être mis en relation avec des artisans qualifiés.
+        </p>
       </div>
 
-      <div class="section-divider">Vos spécialités</div>
-      <div class="specialites-grid" id="specialites-grid">
-        <div class="spec-chip" data-value="plomberie">🔧 Plomberie</div>
-        <div class="spec-chip" data-value="electricite">⚡ Électricité</div>
-        <div class="spec-chip" data-value="peinture">🎨 Peinture</div>
-        <div class="spec-chip" data-value="maconnerie">🧱 Maçonnerie</div>
-        <div class="spec-chip" data-value="chauffage">🔥 Chauffage</div>
-        <div class="spec-chip" data-value="serrurerie">🔐 Serrurerie</div>
-        <div class="spec-chip" id="spec-autre-chip" data-value="__autre__">➕ Autre</div>
-      </div>
-      <div class="form-group spec-input-autre" id="spec-autre-input">
-        <label class="form-label" for="spec-autre-text">Précisez votre spécialité</label>
-        <input type="text" id="spec-autre-text" class="form-control" placeholder="Ex: carreleur, menuisier...">
-      </div>
-
+      <!-- ─── SÉCURITÉ ───────────────────────────────────── -->
       <div class="section-divider">Sécurité</div>
       <div class="form-row">
         <div class="form-group">
@@ -185,7 +282,44 @@ document.addEventListener('DOMContentLoaded', async function() {
     await Session.redirectIfAuth('/dashboard.html');
   }
 
-  // Sélection des spécialités (toggle)
+  // ─── GESTION DU RÔLE ─────────────────────────────────
+  var roleArtisan = document.getElementById('role-artisan');
+  var roleClient  = document.getElementById('role-client');
+  var artisanSection = document.getElementById('artisan-section');
+  var clientSection  = document.getElementById('client-section');
+
+  function setRole(role) {
+    // Mise à jour visuelle
+    if (role === 'artisan') {
+      roleArtisan.classList.add('selected');
+      roleClient.classList.remove('selected');
+      artisanSection.classList.add('visible');
+      clientSection.classList.remove('visible');
+      // Champs artisan requis
+      document.getElementById('ville').required = true;
+      document.getElementById('country').required = true;
+      document.getElementById('registration_type').required = true;
+      document.getElementById('registration_number').required = true;
+    } else {
+      roleClient.classList.add('selected');
+      roleArtisan.classList.remove('selected');
+      artisanSection.classList.remove('visible');
+      clientSection.classList.add('visible');
+      // Champs client : ville reste requis pour le geocoding si besoin
+      document.getElementById('ville').required = true;
+      document.getElementById('country').required = false;
+      document.getElementById('registration_type').required = false;
+      document.getElementById('registration_number').required = false;
+    }
+  }
+
+  roleArtisan.addEventListener('click', function() { setRole('artisan'); });
+  roleClient.addEventListener('click', function() { setRole('client'); });
+
+  // Rôle par défaut : artisan (déjà sélectionné visuellement)
+  setRole('artisan');
+
+  // ─── SÉLECTION DES SPÉCIALITÉS ────────────────────────
   document.querySelectorAll('.spec-chip').forEach(function(chip) {
     chip.addEventListener('click', function() {
       this.classList.toggle('selected');
@@ -196,7 +330,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
   });
 
-  // Indicateur force mot de passe
+  // ─── INDICATEUR FORCE MOT DE PASSE ────────────────────
   var pwInput = document.getElementById('password');
   if (pwInput) {
     pwInput.addEventListener('input', function() {
@@ -210,13 +344,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
   }
 
-  // Soumission du formulaire
+  // ─── SOUMISSION DU FORMULAIRE ────────────────────────
   document.getElementById('form-register').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     var alertId = 'alert-register';
     if (typeof hideAlert === 'function') hideAlert(alertId);
 
+    var role = roleArtisan.classList.contains('selected') ? 'artisan' : 'client';
     var pw  = document.getElementById('password').value;
     var pw2 = document.getElementById('password-confirm').value;
 
@@ -228,45 +363,63 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (pw.length < 6)  { if (typeof showAlert === 'function') showAlert(alertId, 'Le mot de passe doit contenir au moins 6 caractères.', 'danger'); return; }
     if (pw !== pw2)     { if (typeof showAlert === 'function') showAlert(alertId, 'Les mots de passe ne correspondent pas.', 'danger'); return; }
 
-    // Récupère les spécialités sélectionnées
-    var specs = [];
-    var autreChecked = false;
-    document.querySelectorAll('.spec-chip.selected').forEach(function(c) {
-      if (c.dataset.value === '__autre__') {
-        autreChecked = true;
-      } else {
-        specs.push(c.dataset.value);
-      }
-    });
+    // Validations artisan
+    if (role === 'artisan') {
+      var country = document.getElementById('country').value;
+      var regType = document.getElementById('registration_type').value;
+      var regNum  = document.getElementById('registration_number').value.trim();
 
-    if (autreChecked) {
-      var custom = document.getElementById('spec-autre-text').value.trim();
-      if (custom) {
-        specs.push(custom);
-      } else {
-        if (typeof showAlert === 'function') showAlert(alertId, 'Veuillez saisir votre spécialité dans le champ "Autre".', 'danger');
-        return;
+      if (!country) { if (typeof showAlert === 'function') showAlert(alertId, 'Veuillez sélectionner votre pays.', 'danger'); return; }
+      if (!regType) { if (typeof showAlert === 'function') showAlert(alertId, 'Veuillez sélectionner le type de numéro.', 'danger'); return; }
+      if (!regNum)  { if (typeof showAlert === 'function') showAlert(alertId, 'Veuillez saisir votre numéro d\'immatriculation.', 'danger'); return; }
+    }
+
+    // Récupère les spécialités sélectionnées (artisan seulement)
+    var specs = [];
+    if (role === 'artisan') {
+      var autreChecked = false;
+      document.querySelectorAll('.spec-chip.selected').forEach(function(c) {
+        if (c.dataset.value === '__autre__') {
+          autreChecked = true;
+        } else {
+          specs.push(c.dataset.value);
+        }
+      });
+
+      if (autreChecked) {
+        var custom = document.getElementById('spec-autre-text').value.trim();
+        if (custom) {
+          specs.push(custom);
+        } else {
+          if (typeof showAlert === 'function') showAlert(alertId, 'Veuillez saisir votre spécialité dans le champ "Autre".', 'danger');
+          return;
+        }
       }
     }
 
-    if (specs.length === 0) {
-      if (typeof showAlert === 'function') showAlert(alertId, 'Veuillez sélectionner au moins une spécialité.', 'danger');
-      return;
+    // Construction du payload
+    var payload = {
+      nom:        document.getElementById('nom').value.trim(),
+      email:      document.getElementById('email').value.trim(),
+      password:   pw,
+      telephone:  document.getElementById('telephone').value.trim(),
+      ville:      document.getElementById('ville').value.trim(),
+      role:       role,
+    };
+
+    if (role === 'artisan') {
+      payload.rayon      = document.getElementById('rayon').value;
+      payload.specialite = specs.join(', ');
+      payload.country    = document.getElementById('country').value;
+      payload.registration_type = document.getElementById('registration_type').value;
+      payload.registration_number = document.getElementById('registration_number').value.trim();
     }
 
     var btn = document.getElementById('btn-register');
     if (typeof btnLoading === 'function') btnLoading(btn, true);
 
     try {
-      var data = await API.register({
-        nom:        document.getElementById('nom').value.trim(),
-        email:      document.getElementById('email').value.trim(),
-        password:   pw,
-        telephone:  document.getElementById('telephone').value.trim(),
-        ville:      document.getElementById('ville').value.trim(),
-        rayon:      document.getElementById('rayon').value,
-        specialite: specs.join(', '),
-      });
+      var data = await API.register(payload);
 
       if (typeof Session !== 'undefined' && Session.save) {
         Session.save(data.token, data.artisan);
