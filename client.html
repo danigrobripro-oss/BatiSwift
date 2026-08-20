@@ -173,8 +173,16 @@
           <input id="client-nom" type="text" class="form-control" placeholder="Marie">
         </div>
         <div class="form-group">
-          <label class="form-label" for="client-telephone">Téléphone</label>
-          <input id="client-telephone" type="tel" class="form-control" placeholder="06 12 34 56 78">
+          <label class="form-label" for="client-telephone">Téléphone <span class="req">*</span></label>
+          <input id="client-telephone" type="tel" class="form-control" placeholder="06 12 34 56 78" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="client-email">E-mail <span class="req">*</span></label>
+          <input id="client-email" type="email" class="form-control" placeholder="vous@exemple.fr" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="client-contact-pref">Préférence de contact / Application de messagerie (optionnel)</label>
+          <input id="client-contact-pref" type="text" class="form-control" placeholder="WhatsApp, Telegram, etc.">
         </div>
       </div>
 
@@ -259,12 +267,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function send(text) {
     if (!text.trim() || leadCreated) return;
+
+    // Validation des coordonnées obligatoires
+    const telephone = document.getElementById('client-telephone')?.value.trim() || '';
+    const email = document.getElementById('client-email')?.value.trim() || '';
+    if (!telephone) {
+      addMsg('assistant', '⚠️ Merci de renseigner votre numéro de téléphone pour qu’un artisan puisse vous rappeler.');
+      return;
+    }
+    if (!email) {
+      addMsg('assistant', '⚠️ Merci de renseigner votre e-mail pour recevoir les documents (devis, facture).');
+      return;
+    }
+
     addMsg('user', text); input.value = ''; btn.disabled = true;
     addTyping();
     try {
       const data = await API.ask(text, historique, {
         nom:       document.getElementById('client-nom')?.value.trim() || '',
-        telephone: document.getElementById('client-telephone')?.value.trim() || '',
+        telephone: telephone,
+        email:     email,
+        contact_pref: document.getElementById('client-contact-pref')?.value.trim() || '',
       });
       document.getElementById('typing')?.remove();
       historique = data.historique || historique;
