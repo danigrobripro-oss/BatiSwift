@@ -290,12 +290,13 @@ document.addEventListener('DOMContentLoaded', function() {
   'use strict';
 
   // ─── CONSTANTES ──────────────────────────────────────────────
-  const DEFAULT_CENTER = [46.603, 2.5];
+  const DEFAULT_CENTER = [46.603, 2.5];  // Fallback France
   const DEFAULT_RADIUS = 50; // km
 
   // ─── ÉTAT ──────────────────────────────────────────────────
   const state = {
     center: { lat: DEFAULT_CENTER[0], lon: DEFAULT_CENTER[1] },
+    userCenter: { lat: DEFAULT_CENTER[0], lon: DEFAULT_CENTER[1] }, // centre de l'utilisateur connecté
     radius: DEFAULT_RADIUS,
     totalArtisans: 0,
     totalDemandes: 0,
@@ -352,6 +353,21 @@ document.addEventListener('DOMContentLoaded', function() {
     if (loadingEl) loadingEl.style.display = 'none';
   }
 
+  // ─── INITIALISATION DU CENTRE UTILISATEUR ─────────────────
+  async function initUserCenter() {
+    try {
+      // Récupérer l'utilisateur connecté (vérifie le token et rafraîchit les infos)
+      const user = await Session.verify();
+      if (user && typeof user.latitude === 'number' && typeof user.longitude === 'number') {
+        state.userCenter = { lat: user.latitude, lon: user.longitude };
+        state.center = { lat: user.latitude, lon: user.longitude };
+      }
+      // Sinon on garde le centre par défaut (France)
+    } catch (err) {
+      console.warn('👤 Utilisateur non connecté ou coordonnées indisponibles, centre par défaut utilisé.', err);
+    }
+  }
+
   // ─── API ──────────────────────────────────────────────────
   async function fetchMapStats() {
     try {
@@ -361,7 +377,6 @@ document.addEventListener('DOMContentLoaded', function() {
       return data;
     } catch (err) {
       console.warn('⚠️ Erreur stats (non bloquante):', err);
-      // On laisse les valeurs par défaut (0)
       return null;
     }
   }
@@ -380,10 +395,8 @@ document.addEventListener('DOMContentLoaded', function() {
       state.leadsInZone = data.total || 0;
       const zones = data.zones || {};
 
-      // Mise à jour des stats
       updateStats();
 
-      // Si aucun lead dans la zone
       if (Object.keys(zones).length === 0) {
         showEmpty();
         updateMarkers({});
@@ -393,10 +406,9 @@ document.addEventListener('DOMContentLoaded', function() {
       updateMarkers(zones);
     } catch (err) {
       console.warn('⚠️ Erreur leads (non bloquante):', err);
-      // En cas d'erreur, on affiche un message mais on continue
       state.leadsInZone = 0;
       updateStats();
-      showEmpty(); // On affiche "aucun lead" plutôt qu'une erreur bloquante
+      showEmpty();
       updateMarkers({});
     } finally {
       showLoading(false);
@@ -412,7 +424,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function updateMarkers(zones) {
-    // Nettoyer les anciens marqueurs
     leadMarkers.forEach(m => map.removeLayer(m));
     leadMarkers = [];
 
@@ -459,7 +470,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function initMap() {
     map = L.map('map', {
       center: [state.center.lat, state.center.lon],
-      zoom: 6,
+      zoom: 10,  // zoom plus proche si centre utilisateur
       scrollWheelZoom: true,
     });
 
@@ -522,15 +533,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     btnReset.addEventListener('click', function() {
-      state.center.lat = DEFAULT_CENTER[0];
-      state.center.lon = DEFAULT_CENTER[1];
+      // Réinitialiser au centre de l'utilisateur (pas à la France entière)
+      state.center.lat = state.userCenter.lat;
+      state.center.lon = state.userCenter.lon;
       state.radius = DEFAULT_RADIUS;
 
-      const latlng = L.latLng(DEFAULT_CENTER[0], DEFAULT_CENTER[1]);
+      const latlng = L.latLng(state.userCenter.lat, state.userCenter.lon);
       marker.setLatLng(latlng);
       circle.setLatLng(latlng);
       circle.setRadius(DEFAULT_RADIUS * 1000);
-      map.setView(latlng, 6);
+      map.setView(latlng, 10);
 
       slider.value = DEFAULT_RADIUS;
       radiusDisplay.textContent = DEFAULT_RADIUS + ' km';
@@ -542,6 +554,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // ─── INIT ──────────────────────────────────────────────────
   async function init() {
     try {
+      // Récupérer le centre utilisateur AVANT d'initialiser la carte
+      await initUserCenter();
+
       initMap();
       bindControls();
 
@@ -556,7 +571,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // ─── LANCEMENT ──────────────────────────────────────────────
-  // On attend que le DOM soit prêt
   setTimeout(init, 300);
 });
 </script>
