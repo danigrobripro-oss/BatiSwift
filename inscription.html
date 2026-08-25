@@ -151,16 +151,17 @@
         <label class="form-label" for="email">E-mail <span class="req">*</span></label>
         <input id="email" type="email" class="form-control" placeholder="vous@exemple.fr" required>
       </div>
+      <!-- Champ Ville commun (toujours visible, obligatoire pour tous) -->
+      <div class="form-group" style="display:block;">
+        <label class="form-label" for="ville">Ville <span class="req">*</span></label>
+        <input id="ville" type="text" class="form-control" placeholder="Paris, Lyon, Luxembourg..." required>
+      </div>
 
       <!-- ─── SECTION ARTISAN (conditionnelle) ───────────── -->
       <div id="artisan-section" class="artisan-section visible">
 
         <div class="section-divider">Zone d'intervention</div>
         <div class="form-row">
-          <div class="form-group">
-            <label class="form-label" for="ville">Ville principale <span class="req">*</span></label>
-            <input id="ville" type="text" class="form-control" placeholder="Paris, Lyon, Luxembourg..." required>
-          </div>
           <div class="form-group">
             <label class="form-label" for="rayon">Rayon (km)</label>
             <select id="rayon" class="form-control">
@@ -289,14 +290,11 @@ document.addEventListener('DOMContentLoaded', async function() {
   var clientSection  = document.getElementById('client-section');
 
   function setRole(role) {
-    // Mise à jour visuelle
     if (role === 'artisan') {
       roleArtisan.classList.add('selected');
       roleClient.classList.remove('selected');
       artisanSection.classList.add('visible');
       clientSection.classList.remove('visible');
-      // Champs artisan requis
-      document.getElementById('ville').required = true;
       document.getElementById('country').required = true;
       document.getElementById('registration_type').required = true;
       document.getElementById('registration_number').required = true;
@@ -305,8 +303,6 @@ document.addEventListener('DOMContentLoaded', async function() {
       roleArtisan.classList.remove('selected');
       artisanSection.classList.remove('visible');
       clientSection.classList.add('visible');
-      // Champs client : la ville n'est PAS obligatoire
-      document.getElementById('ville').required = false;
       document.getElementById('country').required = false;
       document.getElementById('registration_type').required = false;
       document.getElementById('registration_number').required = false;
@@ -316,7 +312,6 @@ document.addEventListener('DOMContentLoaded', async function() {
   roleArtisan.addEventListener('click', function() { setRole('artisan'); });
   roleClient.addEventListener('click', function() { setRole('client'); });
 
-  // Rôle par défaut : artisan (déjà sélectionné visuellement)
   setRole('artisan');
 
   // ─── SÉLECTION DES SPÉCIALITÉS ────────────────────────
@@ -359,8 +354,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (!document.getElementById('nom').value.trim())       { if (typeof showAlert === 'function') showAlert(alertId, 'Le nom est obligatoire.', 'danger'); return; }
     if (!document.getElementById('email').value.trim())     { if (typeof showAlert === 'function') showAlert(alertId, 'L\'e-mail est obligatoire.', 'danger'); return; }
     if (!document.getElementById('telephone').value.trim()) { if (typeof showAlert === 'function') showAlert(alertId, 'Le téléphone est obligatoire.', 'danger'); return; }
-    // La ville n'est obligatoire que pour les artisans
-    if (role === 'artisan' && !document.getElementById('ville').value.trim()) { if (typeof showAlert === 'function') showAlert(alertId, 'La ville est obligatoire.', 'danger'); return; }
+    if (!document.getElementById('ville').value.trim())     { if (typeof showAlert === 'function') showAlert(alertId, 'La ville est obligatoire.', 'danger'); return; }
     if (pw.length < 6)  { if (typeof showAlert === 'function') showAlert(alertId, 'Le mot de passe doit contenir au moins 6 caractères.', 'danger'); return; }
     if (pw !== pw2)     { if (typeof showAlert === 'function') showAlert(alertId, 'Les mots de passe ne correspondent pas.', 'danger'); return; }
 
@@ -404,19 +398,16 @@ document.addEventListener('DOMContentLoaded', async function() {
       email:      document.getElementById('email').value.trim(),
       password:   pw,
       telephone:  document.getElementById('telephone').value.trim(),
+      ville:      document.getElementById('ville').value.trim(),
       role:       role,
     };
 
     if (role === 'artisan') {
-      payload.ville      = document.getElementById('ville').value.trim();
       payload.rayon      = document.getElementById('rayon').value;
       payload.specialite = specs.join(', ');
       payload.country    = document.getElementById('country').value;
       payload.registration_type = document.getElementById('registration_type').value;
       payload.registration_number = document.getElementById('registration_number').value.trim();
-    } else {
-      // Pour les clients, on n'envoie pas la ville (ou on envoie vide)
-      payload.ville = '';
     }
 
     var btn = document.getElementById('btn-register');
