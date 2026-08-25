@@ -26,7 +26,7 @@
     <a href="/index.html">🏠 Accueil</a>
     <a href="/client.html">💬 Déposer une demande</a>
     <a href="/tarifs.html">💰 Tarifs</a>
-    <a href="/carte.html">🗺️ Carte</a>   <!-- ← AJOUTE ICI -->
+    <a href="/carte.html">🗺️ Carte</a>
     <a href="/aide.html">❓ Aide</a>
   </nav>
   <div class="sidebar-actions">
@@ -45,14 +45,14 @@
 
 <style>
 /* ============================================================
-   STYLES CRITIQUES (version courte)
+   STYLES CRITIQUES (version corrigée pour z-index)
    ============================================================ */
 .site-header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 200;
+  z-index: 1000;                /* au-dessus du contenu normal, mais sous la sidebar */
   height: 72px;
   display: flex;
   align-items: center;
@@ -91,6 +91,7 @@
   border: none;
   cursor: pointer;
   padding: 8px;
+  z-index: 1001;                /* reste cliquable au-dessus du header */
 }
 .menu-toggle .bar {
   width: 28px;
@@ -103,11 +104,12 @@
 .menu-toggle.open .bar:nth-child(2) { opacity: 0; }
 .menu-toggle.open .bar:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
 
+/* Overlay semi-transparent – au-dessus de tout */
 .sidebar-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.4);
-  z-index: 299;
+  z-index: 9998;                /* très haut */
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -117,6 +119,7 @@
   pointer-events: auto;
 }
 
+/* Sidebar elle-même – au-dessus de l'overlay et de Leaflet */
 .sidebar {
   position: fixed;
   top: 0;
@@ -125,7 +128,7 @@
   max-width: 85vw;
   height: 100vh;
   background: #FFFFFF;
-  z-index: 300;
+  z-index: 9999;                /* au-dessus de tout */
   padding: 1.8rem;
   box-shadow: -4px 0 40px rgba(0,0,0,0.15);
   transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -133,6 +136,7 @@
   flex-direction: column;
   gap: 1.5rem;
   overflow-y: auto;
+  box-sizing: border-box;
 }
 .sidebar.active {
   right: 0;
@@ -173,10 +177,10 @@
   background: #F5F0EB;
 }
 
-/* ---- Correction : boutons remontés ---- */
+/* Boutons d'action */
 .sidebar-actions {
-  margin-top: 0;              /* ← au lieu de auto */
-  padding-top: 0.5rem;        /* ← réduit de 1rem à 0.5rem */
+  margin-top: 0;
+  padding-top: 0.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.8rem;

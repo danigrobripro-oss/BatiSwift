@@ -305,8 +305,8 @@ document.addEventListener('DOMContentLoaded', async function() {
       roleArtisan.classList.remove('selected');
       artisanSection.classList.remove('visible');
       clientSection.classList.add('visible');
-      // Champs client : ville reste requis pour le geocoding si besoin
-      document.getElementById('ville').required = true;
+      // Champs client : la ville n'est PAS obligatoire
+      document.getElementById('ville').required = false;
       document.getElementById('country').required = false;
       document.getElementById('registration_type').required = false;
       document.getElementById('registration_number').required = false;
@@ -359,7 +359,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (!document.getElementById('nom').value.trim())       { if (typeof showAlert === 'function') showAlert(alertId, 'Le nom est obligatoire.', 'danger'); return; }
     if (!document.getElementById('email').value.trim())     { if (typeof showAlert === 'function') showAlert(alertId, 'L\'e-mail est obligatoire.', 'danger'); return; }
     if (!document.getElementById('telephone').value.trim()) { if (typeof showAlert === 'function') showAlert(alertId, 'Le téléphone est obligatoire.', 'danger'); return; }
-    if (!document.getElementById('ville').value.trim())     { if (typeof showAlert === 'function') showAlert(alertId, 'La ville est obligatoire.', 'danger'); return; }
+    // La ville n'est obligatoire que pour les artisans
+    if (role === 'artisan' && !document.getElementById('ville').value.trim()) { if (typeof showAlert === 'function') showAlert(alertId, 'La ville est obligatoire.', 'danger'); return; }
     if (pw.length < 6)  { if (typeof showAlert === 'function') showAlert(alertId, 'Le mot de passe doit contenir au moins 6 caractères.', 'danger'); return; }
     if (pw !== pw2)     { if (typeof showAlert === 'function') showAlert(alertId, 'Les mots de passe ne correspondent pas.', 'danger'); return; }
 
@@ -403,16 +404,19 @@ document.addEventListener('DOMContentLoaded', async function() {
       email:      document.getElementById('email').value.trim(),
       password:   pw,
       telephone:  document.getElementById('telephone').value.trim(),
-      ville:      document.getElementById('ville').value.trim(),
       role:       role,
     };
 
     if (role === 'artisan') {
+      payload.ville      = document.getElementById('ville').value.trim();
       payload.rayon      = document.getElementById('rayon').value;
       payload.specialite = specs.join(', ');
       payload.country    = document.getElementById('country').value;
       payload.registration_type = document.getElementById('registration_type').value;
       payload.registration_number = document.getElementById('registration_number').value.trim();
+    } else {
+      // Pour les clients, on n'envoie pas la ville (ou on envoie vide)
+      payload.ville = '';
     }
 
     var btn = document.getElementById('btn-register');
