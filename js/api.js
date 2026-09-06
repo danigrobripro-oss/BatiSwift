@@ -63,10 +63,24 @@ const API = {
     return apiFetch('/api/artisan/logout', { method: 'POST' });
   },
   updateProfile: function(body) {
-    return apiFetch('/api/artisan/profile', { method: 'PUT', body: JSON.stringify(body) });
+    return apiFetch('/api/artisan/profile', {
+      method: 'PUT',
+      body: JSON.stringify(body)
+    });
   },
+  
   updateNotifs: function(body) {
-    return apiFetch('/api/artisan/notifications', { method: 'PUT', body: JSON.stringify(body) });
+    return apiFetch('/api/artisan/notifications', {
+      method: 'PUT',
+      body: JSON.stringify(body)
+    });
+  },
+  
+  updateSettings: function(body) {
+    return apiFetch('/api/artisan/settings', {
+      method: 'PUT',
+      body: JSON.stringify(body)
+    });
   },
 
   // ─── Agent IA (CORRIGÉ : utilise /api/client/request) ──────
