@@ -419,84 +419,119 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
 
-    // ─── 7. Soumission du formulaire (LE CŒUR DU FIX) ──────────
-    document.getElementById('params-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      hideAlert(alertId);
-      var btn = document.getElementById('btn-save');
-      btnLoading(btn, true);
+// ─── 7. Soumission du formulaire ────────────────────────────
+document.getElementById('params-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  hideAlert(alertId);
 
-      // Vérification mot de passe
-      var pwNew = document.getElementById('password-new').value;
-      var pwConfirm = document.getElementById('password-confirm').value;
-      if (pwNew && pwNew !== pwConfirm) {
-        showAlert(alertId, 'Les mots de passe ne correspondent pas.', 'danger');
-        btnLoading(btn, false);
-        return;
+  var btn = document.getElementById('btn-save');
+  btnLoading(btn, true);
+
+  // Vérification mot de passe
+  var pwNew = document.getElementById('password-new').value;
+  var pwConfirm = document.getElementById('password-confirm').value;
+
+  if (pwNew && pwNew !== pwConfirm) {
+    showAlert(alertId, 'Les mots de passe ne correspondent pas.', 'danger');
+    btnLoading(btn, false);
+    return;
+  }
+
+  // Zones supplémentaires → tableau
+  var zonesRaw = val('zones');
+  var departements = zonesRaw
+    ? zonesRaw.split(',')
+        .map(function(s) { return s.trim(); })
+        .filter(Boolean)
+    : [];
+
+  // Langues autorisées
+  var langues = ['fr'];
+
+  document.querySelectorAll('.lang-check:checked').forEach(function(cb) {
+    if (cb.value && langues.indexOf(cb.value) === -1) {
+      langues.push(cb.value);
+    }
+  });
+
+  // ─── UN SEUL PAYLOAD POUR TOUS LES PARAMÈTRES ────────────
+  var settingsPayload = {
+    // Entreprise
+    nom: val('nom'),
+    telephone: val('telephone'),
+    adresse: val('adresse'),
+    siret: val('siret'),
+    tva_number: val('tva'),
+
+    // Zone & Leads
+    ville: val('ville'),
+    rayon: parseInt(val('rayon'), 10) || 30,
+    departements: departements,
+    budget_minimum: parseInt(val('budget_min'), 10) || 0,
+    specialite: val('specialite'),
+
+    // Agent IA
+    agent_tone: val('ton_agent'),
+    deepl_enabled: getChecked('deep_actif'),
+    langues: langues,
+
+    // Notifications
+    notif_sms: getChecked('push_sms'),
+    notif_whatsapp: getChecked('push_whatsapp'),
+    notif_email: getChecked('push_email'),
+
+    // Horaires
+    horaires_debut: val('horaires_debut'),
+    horaires_fin: val('horaires_fin')
+  };
+
+  // Mot de passe uniquement s'il est renseigné
+  if (pwNew) {
+    settingsPayload.password = pwNew;
+  }
+
+  // ─── UNE SEULE REQUÊTE ────────────────────────────────────
+  API.updateSettings(settingsPayload)
+    .then(function(result) {
+
+      // Le backend renvoie l'artisan réellement enregistré.
+      // On met à jour la session locale sans refaire immédiatement
+      // un appel /api/me qui pourrait écraser l'affichage.
+      if (result && result.artisan) {
+        localStorage.setItem(
+          CONFIG.USER_KEY,
+          JSON.stringify(result.artisan)
+        );
       }
 
-      // ── Payload PROFIL (updateProfile) ──────────────────────
-      var profilePayload = {
-        nom:            val('nom'),
-        telephone:      val('telephone'),
-        adresse:        val('adresse'),
-        siret:          val('siret'),
-        tva_number:     val('tva'),          // ← CORRECTION
-        ville:          val('ville'),
-        rayon:          parseInt(val('rayon')) || 30,
-        budget_minimum: parseInt(val('budget_min')) || 0,  // ← CORRECTION
-        specialite:     val('specialite'),
-        agent_tone:     val('ton_agent'),    // ← CORRECTION
-      };
+      // Vider les champs de mot de passe après sauvegarde
+      document.getElementById('password-new').value = '';
+      document.getElementById('password-confirm').value = '';
 
-      // zones → departements (array)  // ← CORRECTION
-      var zonesRaw = val('zones');
-      var departements = zonesRaw ? zonesRaw.split(',').map(function(s) { return s.trim(); }).filter(Boolean) : [];
-      profilePayload.departements = departements;
+      showAlert(
+        alertId,
+        '✅ Tous les paramètres ont été enregistrés.',
+        'success'
+      );
 
-      if (pwNew) profilePayload.password = pwNew;
+      btnLoading(btn, false);
 
-      // ── Payload NOTIFICATIONS (updateNotifs) ─────────────────
-      var notifPayload = {
-        notif_sms:      getChecked('push_sms'),      // ← CORRECTION
-        notif_whatsapp: getChecked('push_whatsapp'), // ← CORRECTION
-        notif_email:    getChecked('push_email'),
-        deepl_enabled:  getChecked('deep_actif'),    // ← CORRECTION
-        horaires_debut: val('horaires_debut'),
-        horaires_fin:   val('horaires_fin'),
-      };
+      // IMPORTANT :
+      // Pas de loadSettings() ici.
+      // Les données viennent déjà d'être enregistrées par le backend.
+    })
+    .catch(function(err) {
+      console.error('Erreur sauvegarde paramètres:', err);
 
-      // Langues (array)
-      var langues = ['fr'];
-      document.querySelectorAll('.lang-check:checked').forEach(function(cb) {
-        langues.push(cb.value);
-      });
-      notifPayload.langues = langues;                // ← CORRECTION
+      showAlert(
+        alertId,
+        '❌ ' + (err.message || 'Impossible d’enregistrer les paramètres.'),
+        'danger'
+      );
 
-      // ── Envoi simultané ─────────────────────────────────────
-      Promise.all([
-        API.updateProfile(profilePayload),
-        API.updateNotifs(notifPayload)
-      ]).then(function(results) {
-        var profileResult = results[0];
-        if (profileResult.token) {
-          Session.save(profileResult.token, profileResult.artisan);
-        }
-        showAlert(alertId, '✅ Tous les paramètres ont été enregistrés.', 'success');
-        setTimeout(function() { hideAlert(alertId); }, 4000);
-        btnLoading(btn, false);
-        // Recharger les données pour refléter les changements
-        loadSettings();
-        loadBillingInfo();
-      }).catch(function(err) {
-        showAlert(alertId, '❌ ' + err.message, 'danger');
-        btnLoading(btn, false);
-      });
+      btnLoading(btn, false);
     });
-
-  }).catch(function(err) {
-    console.error('Auth error:', err);
-  });
+});
 
   // ─── 8. Chargement des paramètres ──────────────────────────
   function loadSettings() {
