@@ -126,6 +126,10 @@
         </div>
         <div class="form-row">
           <div class="form-group">
+            <label class="form-label" for="nom_entreprise">Nom de l'entreprise</label>
+            <input type="text" id="nom_entreprise" class="form-control" placeholder="Ex. Dupont Bâtiment">
+          </div>
+          <div class="form-group">
             <label class="form-label" for="telephone">Téléphone professionnel</label>
             <input type="tel" id="telephone" class="form-control">
           </div>
@@ -339,315 +343,401 @@
 <script src="/js/main.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+  'use strict';
 
-  // ─── Helpers ──────────────────────────────────────────────────
+  var form = document.getElementById('params-form');
+  var saveBtn = document.getElementById('btn-save');
+  var alertBox = document.getElementById('alert-params');
+
+  function token() {
+    return localStorage.getItem(CONFIG.TOKEN_KEY) || '';
+  }
+
+  function message(text, type) {
+    if (!alertBox) return;
+    alertBox.textContent = text;
+    alertBox.className = 'alert ' + (type || 'info');
+    alertBox.style.display = 'block';
+  }
+
+  function hideMessage() {
+    if (alertBox) alertBox.style.display = 'none';
+  }
+
   function val(id) {
     var el = document.getElementById(id);
-    return el ? el.value.trim() : '';
+    return el ? String(el.value || '').trim() : '';
   }
+
   function setVal(id, value) {
     var el = document.getElementById(id);
     if (el && value !== undefined && value !== null) el.value = value;
   }
-  function setChecked(id, bool) {
+
+  function isChecked(id) {
     var el = document.getElementById(id);
-    if (el) el.checked = !!bool;
+    return !!(el && el.checked);
   }
-  function getChecked(id) {
+
+  function setChecked(id, value) {
     var el = document.getElementById(id);
-    return el ? el.checked : false;
+    if (el) el.checked = !!value;
   }
 
-  var alertId = 'alert-params';
-
-  // ─── 1. Onglets ──────────────────────────────────────────────
-  document.querySelectorAll('.tab-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-      document.querySelectorAll('.tab-pane').forEach(function(p) { p.classList.remove('active'); });
-      this.classList.add('active');
-      var target = document.getElementById(this.getAttribute('data-tab'));
-      if (target) target.classList.add('active');
-    });
-  });
-
-  // ─── 2. Toggle DeepL → afficher les langues ────────────────
-  var deepCheck = document.getElementById('deep_actif');
-  if (deepCheck) {
-    deepCheck.addEventListener('change', function() {
-      var langGroup = document.getElementById('langue-group');
-      if (langGroup) langGroup.style.display = this.checked ? 'block' : 'none';
-    });
-  }
-
-  // ─── 3. Auth guard + chargement initial ─────────────────────
-  Session.requireAuth().then(function(user) {
-    if (!user) return;
-
-    // Chargement des paramètres
-    loadSettings();
-    loadBillingInfo();
-
-    // ─── 4. Bouton Stripe Customer Portal ──────────────────────
-    document.getElementById('btn-update-card').addEventListener('click', function() {
-      API.post('/api/create-customer-portal-session', {}).then(function(data) {
-        if (data.url) window.location.href = data.url;
-      }).catch(function(err) {
-        showAlert(alertId, 'Erreur : ' + err.message, 'danger');
-      });
-    });
-
-    // ─── 5. Annulation abonnement ──────────────────────────────
-    document.getElementById('btn-cancel-sub').addEventListener('click', function() {
-      if (!confirm('Annuler votre abonnement Pro ? Vous garderez l\'accès jusqu\'à la fin de la période en cours.')) return;
-      API.post('/api/subscription/cancel', {}).then(function(data) {
-        toast(data.message || 'Abonnement annulé.', 'success');
-        setTimeout(function() { window.location.reload(); }, 1500);
-      }).catch(function(err) {
-        toast(err.message, 'danger');
-      });
-    });
-
-    // ─── 6. Suppression de compte ──────────────────────────────
-    document.getElementById('delete-account').addEventListener('click', function(e) {
-      e.preventDefault();
-      if (!confirm('⚠️ Supprimer définitivement votre compte BâtiSwift ? Cette action est irréversible.')) return;
-      var code = prompt('Tapez "SUPPRIMER" pour confirmer :');
-      if (code === 'SUPPRIMER') {
-        toast('Fonctionnalité en cours de déploiement. Contactez contact@batiswift.com', 'info', 6000);
-      }
-    });
-
-// ─── 7. Soumission du formulaire ────────────────────────────
-document.getElementById('params-form').addEventListener('submit', function(e) {
-  e.preventDefault();
-  hideAlert(alertId);
-
-  var btn = document.getElementById('btn-save');
-  btnLoading(btn, true);
-
-  // Vérification mot de passe
-  var pwNew = document.getElementById('password-new').value;
-  var pwConfirm = document.getElementById('password-confirm').value;
-
-  if (pwNew && pwNew !== pwConfirm) {
-    showAlert(alertId, 'Les mots de passe ne correspondent pas.', 'danger');
-    btnLoading(btn, false);
-    return;
-  }
-
-  // Zones supplémentaires → tableau
-  var zonesRaw = val('zones');
-  var departements = zonesRaw
-    ? zonesRaw.split(',')
-        .map(function(s) { return s.trim(); })
-        .filter(Boolean)
-    : [];
-
-  // Langues autorisées
-  var langues = ['fr'];
-
-  document.querySelectorAll('.lang-check:checked').forEach(function(cb) {
-    if (cb.value && langues.indexOf(cb.value) === -1) {
-      langues.push(cb.value);
+  function parseArray(value, fallback) {
+    if (Array.isArray(value)) return value;
+    if (!value) return fallback || [];
+    try {
+      var parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : (fallback || []);
+    } catch (e) {
+      return fallback || [];
     }
-  });
-
-  // ─── UN SEUL PAYLOAD POUR TOUS LES PARAMÈTRES ────────────
-  var settingsPayload = {
-    // Entreprise
-    nom: val('nom'),
-    telephone: val('telephone'),
-    adresse: val('adresse'),
-    siret: val('siret'),
-    tva_number: val('tva'),
-
-    // Zone & Leads
-    ville: val('ville'),
-    rayon: parseInt(val('rayon'), 10) || 30,
-    departements: departements,
-    budget_minimum: parseInt(val('budget_min'), 10) || 0,
-    specialite: val('specialite'),
-
-    // Agent IA
-    agent_tone: val('ton_agent'),
-    deepl_enabled: getChecked('deep_actif'),
-    langues: langues,
-
-    // Notifications
-    notif_sms: getChecked('push_sms'),
-    notif_whatsapp: getChecked('push_whatsapp'),
-    notif_email: getChecked('push_email'),
-
-    // Horaires
-    horaires_debut: val('horaires_debut'),
-    horaires_fin: val('horaires_fin')
-  };
-
-  // Mot de passe uniquement s'il est renseigné
-  if (pwNew) {
-    settingsPayload.password = pwNew;
   }
 
-  // ─── UNE SEULE REQUÊTE ────────────────────────────────────
-  API.updateSettings(settingsPayload)
-    .then(function(result) {
+  function api(path, options) {
+    options = options || {};
+    var jwt = token();
 
-      // Le backend renvoie l'artisan réellement enregistré.
-      // On met à jour la session locale sans refaire immédiatement
-      // un appel /api/me qui pourrait écraser l'affichage.
-      if (result && result.artisan) {
-        localStorage.setItem(
-          CONFIG.USER_KEY,
-          JSON.stringify(result.artisan)
-        );
-      }
+    if (!jwt) {
+      return Promise.reject(new Error('Session expirée. Veuillez vous reconnecter.'));
+    }
 
-      // Vider les champs de mot de passe après sauvegarde
-      document.getElementById('password-new').value = '';
-      document.getElementById('password-confirm').value = '';
+    var headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + jwt
+    };
 
-      showAlert(
-        alertId,
-        '✅ Tous les paramètres ont été enregistrés.',
-        'success'
-      );
+    console.log('[BâtiSwift] →', options.method || 'GET', path);
 
-      btnLoading(btn, false);
+    return fetch(CONFIG.API_URL + path, Object.assign({}, options, { headers: headers }))
+      .then(function (response) {
+        return response.text().then(function (text) {
+          var data = {};
+          try { data = text ? JSON.parse(text) : {}; } catch (e) { data = {}; }
 
-      // IMPORTANT :
-      // Pas de loadSettings() ici.
-      // Les données viennent déjà d'être enregistrées par le backend.
-    })
-    .catch(function(err) {
-      console.error('Erreur sauvegarde paramètres:', err);
+          console.log('[BâtiSwift] ←', response.status, path, data);
 
-      showAlert(
-        alertId,
-        '❌ ' + (err.message || 'Impossible d’enregistrer les paramètres.'),
-        'danger'
-      );
+          if (!response.ok) {
+            throw new Error(data.error || data.message || ('Erreur serveur (' + response.status + ')'));
+          }
+          return data;
+        });
+      });
+  }
 
-      btnLoading(btn, false);
-    });
-});
+  function saveUser(artisan) {
+    if (!artisan) return;
+    localStorage.setItem(CONFIG.USER_KEY, JSON.stringify(artisan));
+  }
 
-  // ─── 8. Chargement des paramètres ──────────────────────────
+  function updatePlan(a) {
+    var badge = document.getElementById('plan-badge');
+    var detail = document.getElementById('plan-detail');
+    var upgrade = document.getElementById('btn-upgrade');
+    var cancel = document.getElementById('btn-cancel-sub');
+    var pro = !!(a && a.is_pro);
+
+    if (pro) {
+      if (badge) { badge.textContent = '⭐ Pro'; badge.className = 'badge-plan'; }
+      if (detail) detail.textContent = '19€/mois · Agent IA 24h/24';
+      if (upgrade) upgrade.style.display = 'none';
+      if (cancel) cancel.style.display = 'inline-flex';
+    } else {
+      if (badge) { badge.textContent = 'Standard'; badge.className = 'badge-plan standard'; }
+      if (detail) detail.textContent = '10€ / lead acheté · Aucun abonnement mensuel';
+      if (upgrade) upgrade.style.display = 'inline-flex';
+      if (cancel) cancel.style.display = 'none';
+    }
+  }
+
   function loadSettings() {
-    API.me().then(function(resp) {
-      if (!resp.artisan) return;
-      var a = resp.artisan;
+    return api('/api/me', { method: 'GET' }).then(function (data) {
+      var a = data.artisan;
+      if (!a) throw new Error('Compte introuvable.');
 
-      // Entreprise
-      setVal('nom', a.nom);
-      setVal('email', a.email);
-      setVal('telephone', a.telephone);
-      setVal('adresse', a.adresse);
-      setVal('siret', a.siret);
-      setVal('tva', a.tva_number);             // ← CORRECTION
+      setVal('nom', a.nom || '');
+      setVal('nom_entreprise', a.nom_entreprise || '');
+      setVal('email', a.email || '');
+      setVal('telephone', a.telephone || '');
+      setVal('adresse', a.adresse || '');
+      setVal('siret', a.siret || '');
+      setVal('tva', a.tva_number || '');
 
-      // Zone & Leads
-      setVal('ville', a.ville);
+      setVal('ville', a.ville || '');
       setVal('rayon', a.rayon || 30);
-      var deps = Array.isArray(a.departements) ? a.departements : [];
-      setVal('zones', deps.join(', '));        // ← CORRECTION
-      setVal('budget_min', a.budget_minimum || '');  // ← CORRECTION
-      setVal('specialite', a.specialite);
+      setVal('zones', parseArray(a.departements, []).join(', '));
+      setVal('budget_min', a.budget_minimum == null ? '' : a.budget_minimum);
+      setVal('specialite', a.specialite || '');
 
-      // Notifications
-      setChecked('push_sms', a.notif_sms !== false);     // ← CORRECTION
-      setChecked('push_whatsapp', a.notif_whatsapp !== false); // ← CORRECTION
-      setChecked('push_email', a.notif_email || false);
+      setChecked('push_sms', a.notif_sms !== false);
+      setChecked('push_whatsapp', a.notif_whatsapp !== false);
+      setChecked('push_email', a.notif_email === true);
       setVal('horaires_debut', a.horaires_debut || '08:00');
       setVal('horaires_fin', a.horaires_fin || '19:00');
 
-      // Agent IA
-      setVal('ton_agent', a.agent_tone || 'chaleureux'); // ← CORRECTION
-      setChecked('deep_actif', a.deepl_enabled || false); // ← CORRECTION
-      var langGroup = document.getElementById('langue-group');
-      if (langGroup) langGroup.style.display = a.deepl_enabled ? 'block' : 'none';
-      var langues = Array.isArray(a.langues) ? a.langues : ['fr'];
-      document.querySelectorAll('.lang-check').forEach(function(cb) {
-        cb.checked = langues.includes(cb.value);
+      setVal('ton_agent', a.agent_tone || 'chaleureux');
+      setChecked('deep_actif', a.deepl_enabled === true);
+
+      var languages = parseArray(a.langues, ['fr']);
+      document.querySelectorAll('.lang-check').forEach(function (cb) {
+        cb.checked = languages.indexOf(cb.value) !== -1;
       });
 
-      // Abonnement
-      var isPro = a.is_pro;                    // ← CORRECTION
-      var badge = document.getElementById('plan-badge');
-      var detail = document.getElementById('plan-detail');
-      var upgradeBtn = document.getElementById('btn-upgrade');
-      var cancelBtn = document.getElementById('btn-cancel-sub');
-      if (isPro) {
-        badge.textContent = '⭐ Pro';
-        badge.className = 'badge-plan';
-        detail.textContent = '19€/mois · Agent IA 24h/24';
-        if (upgradeBtn) upgradeBtn.style.display = 'none';
-        if (cancelBtn) cancelBtn.style.display = 'inline-flex';
-      } else {
-        badge.textContent = 'Standard';
-        badge.className = 'badge-plan standard';
-        detail.textContent = '10€ / lead acheté · Aucun abonnement mensuel';
-        if (upgradeBtn) upgradeBtn.style.display = 'inline-flex';
-        if (cancelBtn) cancelBtn.style.display = 'none';
-      }
-    }).catch(function(err) {
-      console.error('Erreur chargement paramètres:', err);
-      showAlert(alertId, '❌ Erreur de chargement des données.', 'danger');
+      var group = document.getElementById('langue-group');
+      if (group) group.style.display = isChecked('deep_actif') ? 'block' : 'none';
+
+      updatePlan(a);
+      saveUser(a);
     });
   }
 
-  // ─── 9. Chargement des infos bancaires & factures ──────────
-  function loadBillingInfo() {
-    API.get('/api/artisan/billing').then(function(data) {
-      // Moyen de paiement
-      var pmDiv = document.getElementById('payment-method');
-      if (pmDiv) {
-        if (data.payment_method) {
-          var pm = data.payment_method;
-          pmDiv.innerHTML = '<div style="display:flex;align-items:center;gap:12px;">' +
-            '<span style="font-size:1.2rem;">💳</span>' +
-            '<span>' + pm.brand + ' •••• ' + pm.last4 + ' — Expire le ' + pm.exp_month + '/' + pm.exp_year + '</span>' +
-            '</div>';
-        } else {
-          pmDiv.innerHTML = '<p style="color:var(--gris);">Aucune carte enregistrée.</p>';
-        }
+  function escapeHtml(value) {
+    return String(value == null ? '' : value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function loadBilling() {
+    var payment = document.getElementById('payment-method');
+    var invoices = document.getElementById('invoices-table');
+
+    return api('/api/artisan/billing', { method: 'GET' }).then(function (data) {
+      var card = data.card || null;
+      var list = Array.isArray(data.invoices) ? data.invoices : [];
+
+      if (payment) {
+        payment.innerHTML = card
+          ? '<div style="display:flex;align-items:center;gap:12px;"><span style="font-size:1.2rem;">💳</span><span>' +
+            escapeHtml(card.brand || 'Carte') + ' •••• ' + escapeHtml(card.last4 || '') +
+            ' — Expire le ' + escapeHtml(String(card.exp_month || '')) + '/' +
+            escapeHtml(String(card.exp_year || '')) + '</span></div>'
+          : '<p style="color:var(--gris);">Aucune carte enregistrée.</p>';
       }
 
-      // Factures
-      var invDiv = document.getElementById('invoices-table');
-      if (invDiv) {
-        if (data.invoices && data.invoices.length) {
-          var html = '<table style="width:100%;font-size:.85rem;border-collapse:collapse;">' +
-            '<thead><tr style="border-bottom:1px solid var(--beige-dark);">' +
-            '<th style="text-align:left;padding:8px;">Date</th>' +
-            '<th style="text-align:left;padding:8px;">Description</th>' +
-            '<th style="text-align:right;padding:8px;">Montant</th>' +
-            '<th style="text-align:right;padding:8px;"></th>' +
-            '</tr></thead><tbody>';
-          data.invoices.forEach(function(inv) {
-            html += '<tr style="border-bottom:1px solid var(--beige-dark);">' +
-              '<td style="padding:8px;">' + inv.date + '</td>' +
-              '<td style="padding:8px;">' + inv.description + '</td>' +
-              '<td style="text-align:right;padding:8px;">' + inv.amount + ' €</td>' +
-              '<td style="text-align:right;padding:8px;">' +
-              (inv.pdf_url ? '<a href="' + inv.pdf_url + '" target="_blank" style="color:var(--anthracite);text-decoration:underline;">PDF</a>' : '—') +
-              '</td></tr>';
-          });
-          html += '</tbody></table>';
-          invDiv.innerHTML = html;
-        } else {
-          invDiv.innerHTML = '<p style="color:var(--gris);">Aucune facture pour le moment.</p>';
+      if (invoices) {
+        if (!list.length) {
+          invoices.innerHTML = '<p style="color:var(--gris);">Aucune facture pour le moment.</p>';
+          return;
         }
+
+        var rows = list.map(function (inv) {
+          var amount = inv.amount_paid != null ? inv.amount_paid : (inv.amount != null ? inv.amount : '');
+          var pdf = inv.invoice_pdf || inv.pdf_url || '';
+          return '<tr style="border-bottom:1px solid var(--beige-dark);">' +
+            '<td style="padding:8px;">' + escapeHtml(inv.date || '—') + '</td>' +
+            '<td style="padding:8px;">' + escapeHtml(inv.description || 'Facture BâtiSwift') + '</td>' +
+            '<td style="text-align:right;padding:8px;">' + escapeHtml(String(amount)) + ' ' +
+              escapeHtml(String(inv.currency || 'EUR')).toUpperCase() + '</td>' +
+            '<td style="text-align:right;padding:8px;">' +
+              (pdf ? '<a href="' + escapeHtml(pdf) + '" target="_blank" rel="noopener">PDF</a>' : '—') +
+            '</td></tr>';
+        }).join('');
+
+        invoices.innerHTML =
+          '<div style="overflow-x:auto;"><table style="width:100%;font-size:.85rem;border-collapse:collapse;">' +
+          '<thead><tr style="border-bottom:1px solid var(--beige-dark);">' +
+          '<th style="text-align:left;padding:8px;">Date</th>' +
+          '<th style="text-align:left;padding:8px;">Description</th>' +
+          '<th style="text-align:right;padding:8px;">Montant</th>' +
+          '<th style="text-align:right;padding:8px;"></th>' +
+          '</tr></thead><tbody>' + rows + '</tbody></table></div>';
       }
-    }).catch(function(err) {
-      console.error('Erreur billing:', err);
-      var pmDiv = document.getElementById('payment-method');
-      if (pmDiv) pmDiv.innerHTML = '<p style="color:var(--gris);">Impossible de charger les informations bancaires.</p>';
-      var invDiv = document.getElementById('invoices-table');
-      if (invDiv) invDiv.innerHTML = '<p style="color:var(--gris);">Impossible de charger les factures.</p>';
+    }).catch(function (err) {
+      console.warn('[BâtiSwift] Stripe indisponible :', err.message);
+      if (payment) payment.innerHTML = '<p style="color:var(--gris);">Informations bancaires indisponibles.</p>';
+      if (invoices) invoices.innerHTML = '<p style="color:var(--gris);">Factures indisponibles.</p>';
     });
   }
+
+  // Onglets : totalement indépendants de l'API et de Stripe.
+  document.querySelectorAll('.tab-btn').forEach(function (button) {
+    button.addEventListener('click', function () {
+      document.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+      document.querySelectorAll('.tab-pane').forEach(function (p) { p.classList.remove('active'); });
+
+      this.classList.add('active');
+      var pane = document.getElementById(this.getAttribute('data-tab'));
+      if (pane) pane.classList.add('active');
+
+      history.replaceState(null, '', '#' + this.getAttribute('data-tab'));
+    });
+  });
+
+  if (location.hash) {
+    var hash = location.hash.substring(1);
+    var hashButton = document.querySelector('.tab-btn[data-tab="' + hash + '"]');
+    if (hashButton) hashButton.click();
+  }
+
+  var deep = document.getElementById('deep_actif');
+  if (deep) {
+    deep.addEventListener('change', function () {
+      var group = document.getElementById('langue-group');
+      if (group) group.style.display = this.checked ? 'block' : 'none';
+    });
+  }
+
+  // UNE SEULE requête PUT pour toute la page.
+  if (form) {
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      var password = val('password-new');
+      var confirmPassword = val('password-confirm');
+
+      if (!val('nom')) {
+        message('❌ Le nom complet est obligatoire.', 'danger');
+        document.getElementById('nom').focus();
+        return;
+      }
+
+      if (!val('ville')) {
+        message('❌ La ville principale est obligatoire.', 'danger');
+        document.getElementById('ville').focus();
+        return;
+      }
+
+      if (password && password.length < 6) {
+        message('❌ Le mot de passe doit contenir au moins 6 caractères.', 'danger');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        message('❌ Les mots de passe ne correspondent pas.', 'danger');
+        return;
+      }
+
+      var zones = val('zones')
+        ? val('zones').split(',').map(function (x) { return x.trim(); }).filter(Boolean)
+        : [];
+
+      var languages = ['fr'];
+      document.querySelectorAll('.lang-check:checked').forEach(function (cb) {
+        if (languages.indexOf(cb.value) === -1) languages.push(cb.value);
+      });
+
+      var payload = {
+        nom: val('nom'),
+        nom_entreprise: val('nom_entreprise'),
+        telephone: val('telephone'),
+        adresse: val('adresse'),
+        siret: val('siret'),
+        tva_number: val('tva'),
+        ville: val('ville'),
+        rayon: parseInt(val('rayon'), 10) || 30,
+        departements: zones,
+        budget_minimum: parseInt(val('budget_min'), 10) || 0,
+        specialite: val('specialite'),
+        agent_tone: val('ton_agent') || 'chaleureux',
+        deepl_enabled: isChecked('deep_actif'),
+        langues: languages,
+        notif_sms: isChecked('push_sms'),
+        notif_whatsapp: isChecked('push_whatsapp'),
+        notif_email: isChecked('push_email'),
+        horaires_debut: val('horaires_debut') || '08:00',
+        horaires_fin: val('horaires_fin') || '19:00'
+      };
+
+      if (password) payload.password = password;
+
+      hideMessage();
+      saveBtn.disabled = true;
+      saveBtn.textContent = '⏳ Enregistrement…';
+
+      console.log('[BâtiSwift] PAYLOAD PARAMÈTRES =', payload);
+
+      api('/api/artisan/settings', {
+        method: 'PUT',
+        body: JSON.stringify(payload)
+      })
+      .then(function (result) {
+        if (result.artisan) {
+          saveUser(result.artisan);
+          updatePlan(result.artisan);
+        }
+
+        document.getElementById('password-new').value = '';
+        document.getElementById('password-confirm').value = '';
+
+        message('✅ Tous les paramètres ont été enregistrés avec succès.', 'success');
+        console.log('[BâtiSwift] PARAMÈTRES ENREGISTRÉS.');
+      })
+      .catch(function (err) {
+        console.error('[BâtiSwift] ERREUR SAUVEGARDE =', err);
+        message('❌ ' + err.message, 'danger');
+      })
+      .finally(function () {
+        saveBtn.disabled = false;
+        saveBtn.textContent = '💾 Enregistrer tous les paramètres';
+      });
+    });
+  }
+
+  // Stripe : le backend actuel expose /api/artisan/portal.
+  function openStripePortal() {
+    return api('/api/artisan/portal', {
+      method: 'POST',
+      body: JSON.stringify({})
+    }).then(function (data) {
+      if (!data.portal_url) throw new Error('Lien Stripe indisponible.');
+      window.location.href = data.portal_url;
+    });
+  }
+
+  var cardButton = document.getElementById('btn-update-card');
+  if (cardButton) {
+    cardButton.addEventListener('click', function () {
+      cardButton.disabled = true;
+      cardButton.textContent = '⏳ Ouverture de Stripe…';
+      openStripePortal().catch(function (err) {
+        message('❌ ' + err.message, 'danger');
+        cardButton.disabled = false;
+        cardButton.textContent = 'Mettre à jour ma carte';
+      });
+    });
+  }
+
+  var cancelButton = document.getElementById('btn-cancel-sub');
+  if (cancelButton) {
+    cancelButton.addEventListener('click', function () {
+      if (!confirm('Ouvrir Stripe pour gérer ou annuler votre abonnement ?')) return;
+      openStripePortal().catch(function (err) {
+        message('❌ ' + err.message, 'danger');
+      });
+    });
+  }
+
+  // Le backend actuel n'expose pas encore de route de suppression.
+  var deleteLink = document.getElementById('delete-account');
+  if (deleteLink) {
+    deleteLink.addEventListener('click', function (event) {
+      event.preventDefault();
+      alert('La suppression définitive du compte n’est pas encore disponible dans le backend. Aucun compte ne sera supprimé.');
+    });
+  }
+
+  // Initialisation : le chargement des paramètres ne dépend pas de Stripe.
+  if (!token()) {
+    window.location.href = '/connexion.html';
+    return;
+  }
+
+  console.log('[BâtiSwift] parametres.html chargé.');
+
+  loadSettings()
+    .then(function () {
+      return loadBilling();
+    })
+    .catch(function (err) {
+      console.error('[BâtiSwift] Erreur chargement paramètres :', err);
+      message('❌ Impossible de charger les paramètres : ' + err.message, 'danger');
+    });
 });
 </script>
 </body>
