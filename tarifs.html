@@ -59,16 +59,16 @@
     }
     .pricing-column:first-child {
       border-radius: var(--radius-xl) 0 0 var(--radius-xl);
-      border: 1px solid var(--beige-dark);
-      border-right: 0;
-    }
-    .pricing-column:last-child {
-      border-radius: 0 var(--radius-xl) var(--radius-xl) 0;
       background: linear-gradient(180deg, #FFFFFF 0%, #FFFDF5 100%);
       border: 2px solid var(--or);
       box-shadow: 0 20px 60px rgba(201,168,76,0.15);
       position: relative;
       z-index: 1;
+    }
+    .pricing-column:last-child {
+      border-radius: 0 var(--radius-xl) var(--radius-xl) 0;
+      border: 1px solid var(--beige-dark);
+      border-left: 0;
     }
     .popular-badge {
       position: absolute;
@@ -197,8 +197,8 @@
         border-radius: var(--radius-xl);
         border: 1px solid var(--beige-dark);
       }
-      .pricing-column:last-child {
-        border-color: var(--or);
+      .pricing-column:first-child {
+        border: 2px solid var(--or);
       }
       .rentability-box {
         flex-direction: column;
@@ -231,33 +231,6 @@
 <div class="container">
   <div class="pricing-grid">
 
-    <!-- Colonne 1 : Offre découverte / à l'acte -->
-    <div class="pricing-column">
-      <div class="plan-name">🔍 Découverte & À l'acte</div>
-      <div class="plan-price">0€ <small>/ mois</small></div>
-      <p class="plan-desc">Pour les artisans qui veulent tester la plateforme ou acheter des chantiers au coup par coup.</p>
-
-      <ul class="feature-list">
-        <li><span class="feature-icon check">✅</span> Traduction de l'interface du site</li>
-        <li><span class="feature-icon check">✅</span> Catalogue des leads géolocalisés</li>
-        <li><span class="feature-icon check">✅</span> Visualisation : type, urgence, distance</li>
-        <li><span class="feature-icon cross">🔒</span> Coordonnées masquées avant achat</li>
-        <li><span class="feature-icon cross">—</span> Agent IA et réponses automatiques</li>
-        <li><span class="feature-icon cross">—</span> Notifications WhatsApp</li>
-        <li><span class="feature-icon cross">—</span> Relances automatiques</li>
-        <li><span class="feature-icon cross">—</span> Dashboard de suivi avancé</li>
-        <li><span class="feature-icon cross">—</span> Traduction des conversations</li>
-      </ul>
-
-      <p class="plan-desc" style="margin-bottom:1rem;">
-        <strong>Achat de lead unitaire : 10 €</strong> par lead (paiement sécurisé Stripe).
-      </p>
-
-      <div class="plan-cta">
-        <a href="/dashboard.html" class="btn btn-primary btn-block btn-lg">Explorer les chantiers disponibles</a>
-      </div>
-    </div>
-
     <!-- Colonne 2 : Offre Pro (mise en avant) -->
     <div class="pricing-column" style="position:relative;">
       <div class="popular-badge">⭐ Le plus populaire</div>
@@ -282,6 +255,35 @@
         </button>
       </div>
     </div>
+
+
+    <!-- Colonne 1 : Offre découverte / à l'acte -->
+    <div class="pricing-column">
+      <div class="plan-name">🔍 Découverte & À l'acte</div>
+      <div class="plan-price">0€ <small>/ mois</small></div>
+      <p class="plan-desc">Pour les artisans qui veulent tester la plateforme ou acheter des chantiers au coup par coup.</p>
+
+      <ul class="feature-list">
+        <li><span class="feature-icon check">✅</span> Traduction de l'interface du site</li>
+        <li><span class="feature-icon check">✅</span> Catalogue des leads géolocalisés</li>
+        <li><span class="feature-icon check">✅</span> Visualisation : type, urgence, distance</li>
+        <li><span class="feature-icon cross">🔒</span> Coordonnées masquées avant achat</li>
+        <li><span class="feature-icon cross">—</span> Agent IA et réponses automatiques</li>
+        <li><span class="feature-icon cross">—</span> Notifications WhatsApp</li>
+        <li><span class="feature-icon cross">—</span> Relances automatiques</li>
+        <li><span class="feature-icon cross">—</span> Dashboard de suivi avancé</li>
+        <li><span class="feature-icon cross">—</span> Traduction des conversations</li>
+      </ul>
+
+      <p class="plan-desc" style="margin-bottom:1rem;">
+        <strong>Achat de lead unitaire : 10 €</strong> par lead (paiement sécurisé Stripe).
+      </p>
+
+      <div class="plan-cta">
+        <a href="/marketplace.html" class="btn btn-primary btn-block btn-lg">Explorer les chantiers disponibles</a>
+      </div>
+    </div>
+
 
   </div>
 

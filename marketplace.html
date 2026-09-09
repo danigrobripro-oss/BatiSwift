@@ -7,7 +7,7 @@
 <title>Marketplace — BâtiSwift</title>
 <link rel="icon" href="/assets/favicon.ico">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
-<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/css/style.css">
 <style>
 .market-page{padding:2rem 0 4rem;min-height:70vh}
 .market-head{display:flex;justify-content:space-between;gap:1rem;align-items:end;margin-bottom:1.5rem}
@@ -95,6 +95,7 @@
 <script src="/js/config.js"></script>
 <script src="/js/api.js"></script>
 <script src="/js/session.js"></script>
+<script src="/js/main.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded',function(){
 'use strict';
@@ -208,7 +209,61 @@ document.getElementById('cancel-buy').onclick=closeModal;
 modal.onclick=e=>{if(e.target===modal)closeModal()};
 document.getElementById('refresh').onclick=load;
 
-function fragment(id,url){fetch(url).then(r=>r.text()).then(h=>document.getElementById(id).innerHTML=h).catch(e=>console.warn(e))}
+function initSidebar(){
+  const toggle=document.getElementById('menu-toggle');
+  const overlay=document.getElementById('sidebar-overlay');
+  const sidebar=document.getElementById('sidebar');
+  const closeBtn=document.getElementById('sidebar-close');
+  if(!toggle||!overlay||!sidebar)return;
+
+  function closeSidebar(){
+    toggle.classList.remove('open');
+    overlay.classList.remove('active');
+    sidebar.classList.remove('active');
+    document.body.style.overflow='';
+  }
+
+  toggle.addEventListener('click',function(e){
+    e.stopPropagation();
+    const open=sidebar.classList.toggle('active');
+    overlay.classList.toggle('active',open);
+    toggle.classList.toggle('open',open);
+    document.body.style.overflow=open?'hidden':'';
+  });
+
+  if(closeBtn)closeBtn.addEventListener('click',closeSidebar);
+  overlay.addEventListener('click',closeSidebar);
+  sidebar.querySelectorAll('a').forEach(link=>link.addEventListener('click',closeSidebar));
+
+  const user=JSON.parse(localStorage.getItem('batiswift_user')||'null');
+  const guest=document.querySelector('.sidebar-guest');
+  const userDiv=document.querySelector('.sidebar-user');
+  const name=document.getElementById('sidebar-user-nom');
+
+  if(user&&guest&&userDiv){
+    guest.style.display='none';
+    userDiv.style.display='flex';
+    userDiv.style.flexDirection='column';
+    userDiv.style.gap='.8rem';
+    if(name)name.textContent=user.nom||'Artisan';
+  }
+
+  const logout=document.getElementById('sidebar-logout');
+  if(logout)logout.addEventListener('click',function(){
+    localStorage.removeItem('batiswift_token');
+    localStorage.removeItem('batiswift_user');
+    window.location.href='/index.html';
+  });
+}
+
+function fragment(id,url){
+  return fetch(url).then(r=>r.text()).then(h=>{
+    const el=document.getElementById(id);
+    if(el)el.innerHTML=h;
+    if(id==='header-container')initSidebar();
+  }).catch(e=>console.warn('[Marketplace] Fragment non chargé:',url,e));
+}
+
 if(!jwt()){location.href='/connexion.html';return}
 fragment('header-container','/header.html');
 fragment('footer-container','/footer.html');
