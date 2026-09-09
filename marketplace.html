@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Marketplace — BâtiSwift</title>
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
+<link rel="stylesheet" href="/style.css">
+<style>
+.market-page{padding:2rem 0 4rem;min-height:70vh}
+.market-head{display:flex;justify-content:space-between;gap:1rem;align-items:end;margin-bottom:1.5rem}
+.market-head h1{font-family:var(--font-display);margin:0 0 .4rem;color:var(--anthracite)}
+.market-head p{margin:0;color:var(--gris);max-width:700px}
+.market-actions{display:flex;gap:.6rem;flex-wrap:wrap}
+.market-bar{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem;margin-bottom:1rem;background:var(--blanc);border:1.5px solid var(--beige-dark);border-radius:var(--radius-lg)}
+.market-stats{display:flex;gap:1rem;flex-wrap:wrap;color:var(--gris);font-size:.9rem}
+.market-stats strong{color:var(--anthracite)}
+.market-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.market-card{background:var(--blanc);border:1.5px solid var(--beige-dark);border-radius:var(--radius-lg);padding:1.2rem;box-shadow:var(--shadow-sm)}
+.market-card:hover{border-color:var(--or);box-shadow:var(--shadow-md)}
+.market-top{display:flex;justify-content:space-between;gap:.7rem}
+.market-card h2{font-family:var(--font-display);font-size:1.15rem;margin:0;color:var(--anthracite)}
+.market-badge{padding:.25rem .6rem;border-radius:999px;background:rgba(201,154,76,.15);font-size:.72rem;font-weight:700}
+.market-meta{display:grid;gap:.4rem;margin:1rem 0;color:var(--gris);font-size:.86rem}
+.market-desc{color:var(--gris);line-height:1.5;font-size:.9rem;min-height:4.2em}
+.market-foot{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--beige-dark)}
+.market-price{font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:var(--anthracite)}
+.market-price small{display:block;font:normal .7rem var(--font-body);color:var(--gris)}
+.market-empty,.market-error,.market-loading{grid-column:1/-1;text-align:center;padding:2rem;background:var(--blanc);border:1.5px solid var(--beige-dark);border-radius:var(--radius-lg);color:var(--gris)}
+.modal{display:none;position:fixed;inset:0;background:rgba(26,15,35,.65);z-index:9999;align-items:center;justify-content:center;padding:1rem}
+.modal.open{display:flex}
+.modal-box{width:min(540px,100%);max-height:92vh;overflow:auto;background:var(--blanc);border-radius:var(--radius-lg);padding:1.4rem;border:1.5px solid var(--beige-dark);box-shadow:var(--shadow-lg)}
+.modal-head{display:flex;justify-content:space-between;align-items:start}
+.modal-head h2{font-family:var(--font-display);margin:0;color:var(--anthracite)}
+.modal-close{border:0;background:none;font-size:1.7rem;cursor:pointer}
+.summary{background:var(--gris-ultra);border:1px solid var(--beige-dark);border-radius:12px;padding:1rem;margin:1rem 0}
+.card-box{border:1.5px solid var(--beige-dark);border-radius:12px;padding:1rem}
+#card-errors{color:var(--danger,#b42318);font-size:.85rem;min-height:1.3em;margin:.5rem 0}
+.modal-actions{display:flex;justify-content:flex-end;gap:.6rem;margin-top:1rem}
+@media(max-width:760px){.market-head{flex-direction:column;align-items:flex-start}.market-grid{grid-template-columns:1fr}.market-bar{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<div id="header-container"></div>
+
+<main class="market-page">
+<div class="container">
+<section class="market-head">
+<div>
+<h1>🔥 Marketplace BâtiSwift</h1>
+<p>Les demandes de travaux disponibles dans votre zone. Les coordonnées du client sont révélées après achat.</p>
+</div>
+<div class="market-actions">
+<a href="/achats.html" class="btn btn-secondary btn-sm">📦 Mes achats</a>
+<a href="/parametres.html" class="btn btn-secondary btn-sm">⚙️ Paramètres</a>
+</div>
+</section>
+
+<section class="market-bar">
+<div class="market-stats">
+<span><strong id="count">—</strong> leads disponibles</span>
+<span>Rayon : <strong id="radius">—</strong></span>
+<span>Prix : <strong>10 € / lead</strong></span>
+</div>
+<button id="refresh" class="btn btn-secondary btn-sm" type="button">↻ Actualiser</button>
+</section>
+
+<section id="leads" class="market-grid">
+<div class="market-loading">⏳ Chargement des leads…</div>
+</section>
+</div>
+</main>
+
+<div id="footer-container"></div>
+
+<div id="buy-modal" class="modal" aria-hidden="true">
+<div class="modal-box">
+<div class="modal-head">
+<h2>Acheter ce lead</h2>
+<button id="close-modal" class="modal-close" type="button">×</button>
+</div>
+<div id="summary" class="summary"></div>
+<p style="color:var(--gris);font-size:.86rem">Paiement sécurisé Stripe — <strong>10,00 €</strong>.</p>
+<div class="card-box"><div id="card-element"></div></div>
+<div id="card-errors"></div>
+<div class="modal-actions">
+<button id="cancel-buy" class="btn btn-secondary" type="button">Annuler</button>
+<button id="pay" class="btn btn-gold" type="button">💳 Payer 10 €</button>
+</div>
+</div>
+</div>
+
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/session.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+'use strict';
+
+const leadsEl=document.getElementById('leads');
+const countEl=document.getElementById('count');
+const radiusEl=document.getElementById('radius');
+const modal=document.getElementById('buy-modal');
+const summary=document.getElementById('summary');
+const errors=document.getElementById('card-errors');
+const payBtn=document.getElementById('pay');
+let leads=[];
+let selected=null;
+let stripe=null;
+let card=null;
+let clientSecret=null;
+
+function jwt(){return localStorage.getItem(CONFIG.TOKEN_KEY)||''}
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]})}
+function api(path,opt){
+  opt=opt||{};
+  const t=jwt();
+  if(!t)return Promise.reject(new Error('Session expirée. Veuillez vous reconnecter.'));
+  const headers={'Accept':'application/json','Content-Type':'application/json','Authorization':'Bearer '+t};
+  console.log('[Marketplace] →',opt.method||'GET',path);
+  return fetch(CONFIG.API_URL+path,Object.assign({},opt,{headers:headers})).then(async r=>{
+    const d=await r.json().catch(()=>({}));
+    console.log('[Marketplace] ←',r.status,path,d);
+    if(!r.ok)throw new Error(d.error||d.message||('Erreur serveur ('+r.status+')'));
+    return d;
+  });
+}
+function load(){
+  leadsEl.innerHTML='<div class="market-loading">⏳ Recherche des demandes dans votre zone…</div>';
+  return api('/api/artisan/leads').then(d=>{
+    leads=Array.isArray(d.available)?d.available:[];
+    countEl.textContent=leads.length;
+    let u={};try{u=JSON.parse(localStorage.getItem(CONFIG.USER_KEY)||'{}')}catch(e){}
+    radiusEl.textContent=(u.rayon||30)+' km';
+    render();
+  }).catch(e=>{
+    console.error('[Marketplace]',e);
+    leadsEl.innerHTML='<div class="market-error"><strong>Impossible de charger les leads.</strong><p>'+esc(e.message)+'</p><button id="retry" class="btn btn-secondary btn-sm">Réessayer</button></div>';
+    document.getElementById('retry').onclick=load;
+  });
+}
+function render(){
+  if(!leads.length){
+    leadsEl.innerHTML='<div class="market-empty"><div style="font-size:2rem">📭</div><strong>Aucun lead disponible dans votre zone.</strong><p>Les nouvelles demandes apparaîtront ici automatiquement.</p></div>';
+    return;
+  }
+  leadsEl.innerHTML=leads.map(l=>{
+    const type=l.type_travaux||l.trade_type||'Travaux';
+    const city=l.client_ville||l.location_city||'Non précisée';
+    const urgency=l.urgence||l.urgency||'normal';
+    const u=urgency==='urgent'?'🚨 Urgent':urgency==='soon'?'⚡ Prochainement':'📅 Normal';
+    const distance=l.distance_km!=null?'📍 '+Number(l.distance_km).toFixed(1)+' km':'📍 Dans votre zone';
+    const desc=l.description||'Aucune description disponible.';
+    return '<article class="market-card">'+
+      '<div class="market-top"><div><h2>'+esc(type)+'</h2><small style="color:var(--gris)">Demande #'+esc(l.id)+'</small></div><span class="market-badge">Disponible</span></div>'+
+      '<div class="market-meta"><span>🏠 '+esc(city)+'</span><span>'+distance+'</span><span>'+u+'</span></div>'+
+      '<div class="market-desc">'+esc(desc.slice(0,300))+(desc.length>300?'…':'')+'</div>'+
+      '<div class="market-foot"><div class="market-price">10 €<small>par lead</small></div><button class="btn btn-gold btn-sm buy" data-id="'+esc(l.id)+'">Acheter le lead</button></div>'+
+      '</article>';
+  }).join('');
+  leadsEl.querySelectorAll('.buy').forEach(b=>b.onclick=()=>openModal(Number(b.dataset.id)));
+}
+function openModal(id){
+  selected=leads.find(l=>Number(l.id)===id);
+  if(!selected)return;
+  const desc=selected.description||'';
+  summary.innerHTML='<h3 style="font-family:var(--font-display);margin:0 0 .5rem">'+esc(selected.type_travaux||'Travaux')+'</h3>'+
+    '<p>📍 '+esc(selected.client_ville||'Non précisée')+'</p><p>💰 10 €</p><p>'+esc(desc.slice(0,250))+'</p>';
+  errors.textContent='';
+  modal.classList.add('open');modal.setAttribute('aria-hidden','false');
+  preparePayment();
+}
+function closeModal(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');selected=null;clientSecret=null;errors.textContent=''}
+function preparePayment(){
+  payBtn.disabled=true;payBtn.textContent='⏳ Préparation…';
+  const loadStripe=window.Stripe?Promise.resolve():new Promise((ok,no)=>{
+    const s=document.createElement('script');s.src='https://js.stripe.com/v3/';s.onload=ok;s.onerror=()=>no(new Error('Impossible de charger Stripe.'));document.head.appendChild(s);
+  });
+  loadStripe.then(()=>api('/api/create-payment-intent',{method:'POST',body:JSON.stringify({lead_id:selected.id})}))
+  .then(d=>{
+    if(!d.publishable_key||!d.client_secret)throw new Error('Stripe n’a pas fourni les informations de paiement.');
+    stripe=Stripe(d.publishable_key);
+    const elements=stripe.elements();
+    card=elements.create('card');
+    card.mount('#card-element');
+    card.on('change',e=>errors.textContent=e.error?e.error.message:'');
+    clientSecret=d.client_secret;
+    payBtn.disabled=false;payBtn.textContent='💳 Payer 10 €';
+  }).catch(e=>{errors.textContent=e.message;payBtn.disabled=true;payBtn.textContent='💳 Payer 10 €'});
+}
+payBtn.onclick=async function(){
+  if(!stripe||!card||!clientSecret)return;
+  payBtn.disabled=true;payBtn.textContent='⏳ Paiement…';errors.textContent='';
+  try{
+    const result=await stripe.confirmCardPayment(clientSecret,{payment_method:{card:card}});
+    if(result.error)throw new Error(result.error.message);
+    if(!result.paymentIntent||result.paymentIntent.status!=='succeeded')throw new Error('Le paiement n’a pas été confirmé.');
+    closeModal();
+    alert('✅ Paiement confirmé. Le lead sera attribué à votre compte après confirmation Stripe.');
+    setTimeout(load,1500);
+  }catch(e){errors.textContent=e.message}
+  finally{payBtn.disabled=false;payBtn.textContent='💳 Payer 10 €'}
+};
+document.getElementById('close-modal').onclick=closeModal;
+document.getElementById('cancel-buy').onclick=closeModal;
+modal.onclick=e=>{if(e.target===modal)closeModal()};
+document.getElementById('refresh').onclick=load;
+
+function fragment(id,url){fetch(url).then(r=>r.text()).then(h=>document.getElementById(id).innerHTML=h).catch(e=>console.warn(e))}
+if(!jwt()){location.href='/connexion.html';return}
+fragment('header-container','/header.html');
+fragment('footer-container','/footer.html');
+load();
+});
+</script>
+</body>
+</html>
