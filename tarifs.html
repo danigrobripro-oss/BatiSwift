@@ -334,7 +334,11 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(r => r.text())
       .then(html => {
         document.getElementById(id).innerHTML = html;
+        // Une fois le header chargé, on initialise la sidebar
         initSidebar();
+        // Puis on applique l'état de connexion (guest vs user)
+        // car les <script> du header ne s'exécutent pas via innerHTML.
+        updateSessionUI();
       })
       .catch(() => {});
   }
