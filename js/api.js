@@ -121,8 +121,16 @@ const API = {
     return apiFetch('/api/artisan/dashboard-stats');
   },
 
-  // Paiement
-  createPaymentIntent: function(leadId) {
-    return apiFetch('/api/create-payment-intent', { method: 'POST', body: JSON.stringify({ lead_id: leadId }) });
-  },
-};
+    // Paiement
+    createPaymentIntent: function(leadId) {
+      return apiFetch('/api/create-payment-intent', { method: 'POST', body: JSON.stringify({ lead_id: leadId }) });
+    },
+  
+    // Stripe Connect
+    stripeStatus: function() {
+      return apiFetch('/api/artisan/stripe/status');
+    },
+    stripeConnect: function() {
+      return apiFetch('/api/artisan/stripe/connect', { method: 'POST' });
+    },
+  };

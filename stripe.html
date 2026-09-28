@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion Stripe – BâtiSwift</title>
+
+  <!-- ─── FAVICON ─── -->
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+  <link rel="manifest" href="/assets/site.webmanifest" />
+  <meta name="theme-color" content="#F5F0EB" />
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  <style>
+    /* ── Page Connexion Stripe ── */
+    .stripe-page {
+      padding-top: calc(var(--header-h) + 40px);
+      padding-bottom: var(--space-xl);
+      min-height: 100vh;
+      background: var(--beige);
+    }
+
+    .stripe-container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .stripe-container h1 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--anthracite);
+      margin-bottom: 8px;
+    }
+
+    .stripe-subtitle {
+      color: var(--gris);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .stripe-card {
+      background: var(--blanc);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      border: 1.5px solid var(--beige-dark);
+      box-shadow: 0 8px 32px rgba(43,43,43,0.05);
+    }
+
+    .stripe-status-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .stripe-status-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .stripe-status-dot.gray   { background: #C4C4C4; }
+    .stripe-status-dot.orange { background: #E8A33D; }
+    .stripe-status-dot.green  { background: #0EA37D; }
+    .stripe-status-dot.red    { background: #DC3545; }
+
+    .stripe-status-label {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--anthracite);
+    }
+
+    .stripe-status-detail {
+      color: var(--gris);
+      font-size: 0.92rem;
+      line-height: 1.7;
+      margin-bottom: 26px;
+    }
+
+    .stripe-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .stripe-actions .btn {
+      width: 100%;
+      padding: 14px 24px;
+      font-size: 0.95rem;
+    }
+
+    .stripe-alert {
+      padding: 16px 20px;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      line-height: 1.55;
+      margin-bottom: 24px;
+    }
+    .stripe-alert.success {
+      background: rgba(14,163,125,0.10);
+      color: #0A7A5D;
+      border: 1px solid rgba(14,163,125,0.25);
+    }
+    .stripe-alert.error {
+      background: rgba(220,53,69,0.08);
+      color: #A02734;
+      border: 1px solid rgba(220,53,69,0.20);
+    }
+
+    .stripe-loading {
+      text-align: center;
+      color: var(--gris);
+      font-size: 0.9rem;
+      padding: 32px 0;
+    }
+
+    .stripe-info-box {
+      margin-top: 28px;
+      padding: 20px 22px;
+      border-radius: var(--radius);
+      background: rgba(201,154,76,0.06);
+      border: 1px solid rgba(201,154,76,0.18);
+      color: var(--gris);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+    .stripe-info-box strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--anthracite);
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 560px) {
+      .stripe-page { padding-top: calc(var(--header-h) + 20px); }
+      .stripe-container h1 { font-size: 1.5rem; }
+      .stripe-card { padding: 22px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="page-loader" class="page-loader"><div class="spinner spinner-dark" style="width:40px;height:40px;"></div></div>
+<div id="header-container"></div>
+
+<main>
+  <section class="stripe-page">
+    <div class="stripe-container">
+
+      <a href="/dashboard.html" style="display:inline-block;margin-bottom:20px;color:var(--gris);text-decoration:none;font-size:0.9rem;">← Retour au tableau de bord</a>
+
+      <h1>Connexion Stripe</h1>
+      <p class="stripe-subtitle">
+        Connectez votre compte Stripe pour recevoir les paiements de vos prestations via BâtiSwift.
+      </p>
+
+      <div id="alert-success" class="stripe-alert success hidden">
+        ✅ Votre compte Stripe a bien été connecté.
+      </div>
+      <div id="alert-error" class="stripe-alert error hidden"></div>
+
+      <div class="stripe-card">
+        <div id="loading" class="stripe-loading">Chargement du statut…</div>
+
+        <div id="content" class="hidden">
+          <div class="stripe-status-row">
+            <div id="status-dot" class="stripe-status-dot gray"></div>
+            <div id="status-label" class="stripe-status-label">—</div>
+          </div>
+
+          <div id="status-detail" class="stripe-status-detail"></div>
+
+          <div class="stripe-actions">
+            <button id="btn-action" class="btn btn-gold hidden"></button>
+            <button id="btn-refresh" class="btn btn-secondary">Actualiser le statut</button>
+          </div>
+        </div>
+
+        <div class="stripe-info-box">
+          <strong>🔒 Vos données sont protégées</strong>
+          BâtiSwift ne stocke jamais vos informations bancaires. Le formulaire de configuration
+          est entièrement hébergé par Stripe, leader mondial du paiement en ligne.
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<div id="footer-container"></div>
+
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/session.js"></script>
+<script src="/js/main.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', async function () {
+
+  // ─── AUTH : redirige vers connexion si non connecté ───────
+  const user = await Session.requireAuth();
+  if (!user) return;
+
+  const alertSuccess = document.getElementById('alert-success');
+  const alertError   = document.getElementById('alert-error');
+  const loading      = document.getElementById('loading');
+  const content      = document.getElementById('content');
+  const statusDot    = document.getElementById('status-dot');
+  const statusLabel  = document.getElementById('status-label');
+  const statusDetail = document.getElementById('status-detail');
+  const btnAction    = document.getElementById('btn-action');
+  const btnRefresh   = document.getElementById('btn-refresh');
+
+  function showError(msg) {
+    alertError.textContent = msg;
+    alertError.classList.remove('hidden');
+  }
+
+  function hideAlerts() {
+    alertError.classList.add('hidden');
+    alertSuccess.classList.add('hidden');
+  }
+
+  // Message de succès si retour de Stripe
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('stripe') === 'success') {
+    alertSuccess.classList.remove('hidden');
+    window.history.replaceState({}, '', '/stripe.html');
+  }
+
+  const STATUS_MAP = {
+    not_created: {
+      dot: 'gray',
+      label: 'Non connecté',
+      detail: "Vous n'avez pas encore connecté de compte Stripe. Cliquez ci-dessous pour commencer : vous serez redirigé vers un formulaire sécurisé hébergé par Stripe.",
+      buttonText: 'Connecter mon compte Stripe',
+      buttonAction: 'connect'
+    },
+    pending: {
+      dot: 'orange',
+      label: 'En cours de vérification',
+      detail: "Votre compte Stripe est en cours de configuration. Si vous n'avez pas terminé le formulaire, cliquez ci-dessous pour le reprendre.",
+      buttonText: 'Continuer la configuration',
+      buttonAction: 'connect'
+    },
+    verified: {
+      dot: 'green',
+      label: 'Compte vérifié',
+      detail: 'Votre compte Stripe est entièrement configuré. Vous pouvez recevoir des paiements de prestations via BâtiSwift.',
+      buttonText: null,
+      buttonAction: null
+    },
+    restricted: {
+      dot: 'red',
+      label: 'Compte restreint',
+      detail: "Stripe a besoin d'informations supplémentaires pour activer votre compte. Cliquez ci-dessous pour régulariser votre situation.",
+      buttonText: 'Régulariser mon compte',
+      buttonAction: 'connect'
+    }
+  };
+
+  function renderStatus(status) {
+    const cfg = STATUS_MAP[status] || STATUS_MAP.not_created;
+    statusDot.className = 'stripe-status-dot ' + cfg.dot;
+    statusLabel.textContent = cfg.label;
+    statusDetail.textContent = cfg.detail;
+
+    if (cfg.buttonText) {
+      btnAction.textContent = cfg.buttonText;
+      btnAction.dataset.action = cfg.buttonAction;
+      btnAction.classList.remove('hidden');
+      btnAction.disabled = false;
+    } else {
+      btnAction.classList.add('hidden');
+    }
+  }
+
+  async function loadStatus() {
+    hideAlerts();
+    loading.classList.remove('hidden');
+    content.classList.add('hidden');
+
+    try {
+      const data = await API.stripeStatus();
+      renderStatus(data.status);
+      loading.classList.add('hidden');
+      content.classList.remove('hidden');
+    } catch (err) {
+      loading.classList.add('hidden');
+      showError(err.message || 'Impossible de charger le statut.');
+      console.error(err);
+    }
+  }
+
+  async function startOnboarding() {
+    hideAlerts();
+    btnAction.disabled = true;
+    btnAction.textContent = 'Redirection vers Stripe…';
+
+    try {
+      const data = await API.stripeConnect();
+
+      if (!data.onboarding_url) {
+        showError(data.error || 'Impossible de créer le lien Stripe.');
+        btnAction.disabled = false;
+        loadStatus();
+        return;
+      }
+
+      window.location.href = data.onboarding_url;
+    } catch (err) {
+      showError(err.message || 'Erreur réseau. Réessayez dans un instant.');
+      btnAction.disabled = false;
+      console.error(err);
+    }
+  }
+
+  btnAction.addEventListener('click', () => {
+    if (btnAction.dataset.action === 'connect') {
+      startOnboarding();
+    }
+  });
+
+  btnRefresh.addEventListener('click', loadStatus);
+
+  loadStatus();
+});
+</script>
+
+</body>
+</html>
