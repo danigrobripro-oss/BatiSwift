@@ -5,7 +5,7 @@
  */
 
 // ─── FETCH DE BASE ───────────────────────────────────────────
-async function apiFetch(endpoint, options = {}) {
+async function apiFetch(endpoint, options = {}, _retry = true) {
   const token = localStorage.getItem(CONFIG.TOKEN_KEY);
   const url   = CONFIG.API_URL + endpoint;
 
@@ -13,11 +13,26 @@ async function apiFetch(endpoint, options = {}) {
   if (token) headers['Authorization'] = 'Bearer ' + token;
   if (options.headers) Object.assign(headers, options.headers);
 
+  // Timeout 60s (Render free tier peut mettre 30-60s à réveiller le service)
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 60000);
+
   let res;
   try {
-    res = await fetch(url, { ...options, headers });
+    res = await fetch(url, { ...options, headers, signal: controller.signal });
   } catch (e) {
-    throw new Error('Serveur inaccessible. Vérifiez que le backend tourne sur le port 8000.');
+    clearTimeout(timer);
+    // Si première tentative et erreur réseau → retry unique après 3s
+    if (_retry) {
+      await new Promise(r => setTimeout(r, 3000));
+      return apiFetch(endpoint, options, false);
+    }
+    if (e.name === 'AbortError') {
+      throw new Error('Le serveur met trop de temps à répondre. Réessayez dans un instant.');
+    }
+    throw new Error('Connexion au serveur impossible. Vérifiez votre réseau ou réessayez dans un instant.');
+  } finally {
+    clearTimeout(timer);
   }
 
   let data = {};
