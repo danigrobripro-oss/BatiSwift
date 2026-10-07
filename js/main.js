@@ -25,7 +25,11 @@ async function loadComponent(containerId, filePath) {
 
 async function initLayout() {
   var isMinimal = document.body.classList.contains('minimal-layout');
-  await loadComponent('header-container', isMinimal ? '/header-minimal.html' : '/header.html');
+  var isClient = document.body.classList.contains('client-layout');
+  var headerFile = '/header.html';
+  if (isMinimal) headerFile = '/header-minimal.html';
+  else if (isClient) headerFile = '/header-client.html';
+  await loadComponent('header-container', headerFile);
   document.dispatchEvent(new Event('header:loaded'));
   Session.updateNav();
   highlightActiveNav();

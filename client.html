@@ -123,7 +123,7 @@
     }
   </style>
 </head>
-<body>
+<body class="client-layout">
 
 <div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
 <div id="header-container"></div>
@@ -244,12 +244,10 @@ document.addEventListener('DOMContentLoaded', () => {
       textEl.textContent = `🛠️ Bonjour ${user.nom || 'Artisan'} — vous êtes en mode Artisan.`;
       actionBtn.textContent = 'Retour au dashboard';
       actionBtn.href = '/dashboard.html';
-    } else if (user.role === 'client') {
-      textEl.textContent = `🏠 Bonjour ${user.nom || 'Client'} — vous êtes en mode Client.`;
-      actionBtn.textContent = 'Mon espace';
-      actionBtn.href = '/client.html';
     } else {
-      return; // rôle inconnu → pas de bandeau
+      textEl.textContent = `🏠 Bonjour ${user.nom || 'Client'} — vous êtes en mode Client.`;
+      actionBtn.textContent = 'Mon Espace Client';
+      actionBtn.href = '/client-dashboard.html';
     }
     banner.style.display = 'flex';
   }
@@ -305,10 +303,26 @@ document.addEventListener('DOMContentLoaded', () => {
       addMsg('assistant', data.response);
       if (data.lead_created) {
         leadCreated = true;
+
+        // Enregistre la demande dans l'espace client local
+        try {
+          var clientLeads = JSON.parse(localStorage.getItem('batiswift_client_leads') || '[]');
+          clientLeads.unshift({
+            id: data.lead_id,
+            date: new Date().toISOString(),
+            description: text,
+            adresse: adresse,
+            telephone: telephone,
+            statut: 'En recherche d\'artisan'
+          });
+          localStorage.setItem('batiswift_client_leads', JSON.stringify(clientLeads));
+        } catch(e) {}
+
         const conf = document.getElementById('lead-confirmation');
         if (conf) {
-          conf.innerHTML = `<div class="alert alert-success" style="margin:0 var(--space-lg) var(--space-md)">
-            ✅ Demande enregistrée ! Un artisan vous rappellera sous 1h. Référence #${data.lead_id}
+          conf.innerHTML = `<div class="alert alert-success" style="margin:0 var(--space-lg) var(--space-md);display:flex;flex-direction:column;gap:8px;">
+            <div>✅ <strong>Demande enregistrée !</strong> Un artisan vous rappellera sous 1h. Référence #${data.lead_id}</div>
+            <div><a href="/client-dashboard.html" class="btn btn-primary btn-sm" style="display:inline-block;margin-top:6px;">Accéder à mon espace client →</a></div>
           </div>`;
         }
         input.disabled = true; btn.disabled = true;
