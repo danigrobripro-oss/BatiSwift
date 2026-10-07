@@ -223,12 +223,9 @@
 <script src="/js/artisan.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  // ─── AUTH ──────────────────────────────────────────────────
-  if (typeof requireAuth === 'function') {
-    requireAuth();
-  }
-  
+document.addEventListener('DOMContentLoaded', async function() {
+  await Session.requireRole('artisan');
+
   const user = JSON.parse(localStorage.getItem(CONFIG.USER_KEY) || 'null');
   const usernameEl = document.getElementById('nav-username');
   if (user && usernameEl) {

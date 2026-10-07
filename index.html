@@ -3,245 +3,376 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="BâtiSwift — Trouvez un artisan BTP qualifié en moins de 2 minutes. Plomberie, électricité, peinture, maçonnerie.">
-  <title>Accueil – BâtiSwift</title>
+  <title>Bienvenue sur BâtiSwift — Choisissez votre espace</title>
+  <meta name="description" content="Plateforme BâtiSwift — Choisissez votre espace dédié : Espace Artisan BTP ou Espace Client Particulier.">
 
-  <!-- ─── FAVICON ─── -->
+  <!-- Favicon -->
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg" />
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="manifest" href="/assets/site.webmanifest" />
   <meta name="theme-color" content="#F5F0EB" />
 
   <link rel="stylesheet" href="/css/style.css">
+
   <style>
-    /* ── HERO ── */
-    .hero {
-      min-height: 92vh;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    body {
+      background: radial-gradient(ellipse 90% 60% at 50% -10%, rgba(201,168,76,.10) 0%, transparent 70%), var(--beige);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .portal-hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: calc(var(--header-h) + 30px) 5vw 40px;
       text-align: center;
-      padding: calc(var(--header-h) + 60px) 5vw 80px;
-      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,.08) 0%, transparent 70%), var(--beige);
-      position: relative; overflow: hidden;
     }
-    .hero::before {
+
+    .portal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(201,168,76,.15);
+      color: #7a5b1a;
+      padding: 6px 18px;
+      border-radius: 50px;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .portal-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      font-weight: 700;
+      color: var(--anthracite);
+      margin-bottom: 0.8rem;
+      line-height: 1.2;
+    }
+
+    .portal-subtitle {
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: var(--gris);
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      line-height: 1.6;
+    }
+
+    /* Grille des 2 cartes */
+    .portal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(280px, 460px));
+      gap: 2rem;
+      width: 100%;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .portal-card {
+      background: var(--blanc);
+      border-radius: var(--radius-xl);
+      padding: 3rem 2.5rem;
+      border: 2px solid var(--beige-dark);
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 20px rgba(43,43,43,0.04);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .portal-card::before {
       content: '';
-      position: absolute; inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%232B2B2B' fill-opacity='.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      pointer-events: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: transparent;
+      transition: background 0.3s ease;
     }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(201,168,76,.12); color: #7a5b1a;
-      padding: 6px 16px; border-radius: 50px;
-      font-size: .8rem; font-weight: 600; letter-spacing: .5px; text-transform: uppercase;
-      margin-bottom: 28px;
-    }
-    .hero h1 { max-width: 800px; }
-    .hero h1 span { color: var(--or); }
-    .hero-sub { max-width: 560px; margin: 20px auto 0; font-size: 1.05rem; color: var(--gris); }
-    .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 36px; }
-    .metiers-chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 44px; }
-    .chip {
-      display: flex; align-items: center; gap: 8px;
-      background: var(--blanc); border: 1.5px solid var(--beige-dark);
-      padding: 9px 18px; border-radius: 50px; font-size: .87rem; font-weight: 500;
-      box-shadow: 0 2px 8px rgba(43,43,43,.05);
-      transition: all var(--transition); cursor: default;
-    }
-    .chip:hover { border-color: var(--or); box-shadow: 0 4px 16px rgba(201,168,76,.15); transform: translateY(-2px); }
 
-    /* ── STATS BANDE ── */
-    .stats-band {
-      background: var(--anthracite); padding: 36px 5vw;
-      display: flex; justify-content: center; flex-wrap: wrap; gap: 0;
+    /* Hover et micro-animation */
+    .portal-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(43,43,43,0.10);
     }
-    .stats-band .stat {
-      flex: 1; min-width: 160px; max-width: 220px; text-align: center;
-      padding: 12px 24px; border-right: 1px solid rgba(255,255,255,.08);
-    }
-    .stats-band .stat:last-child { border-right: none; }
-    .stats-band .stat-num { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: var(--blanc); }
-    .stats-band .stat-num span { color: var(--or); }
-    .stats-band .stat-lbl { font-size: .8rem; color: rgba(255,255,255,.5); margin-top: 4px; }
 
-    /* ── RESPONSIVE STATS ── */
+    .portal-card:active {
+      transform: translateY(-2px) scale(0.99);
+    }
+
+    .portal-card.card-artisan:hover {
+      border-color: var(--or);
+    }
+    .portal-card.card-artisan:hover::before {
+      background: var(--or);
+    }
+
+    .portal-card.card-client:hover {
+      border-color: var(--anthracite);
+    }
+    .portal-card.card-client:hover::before {
+      background: var(--anthracite);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      transition: transform 0.3s ease;
+    }
+
+    .card-artisan .card-icon {
+      background: rgba(201,168,76,.12);
+      color: var(--or);
+    }
+
+    .card-client .card-icon {
+      background: var(--gris-ultra);
+      color: var(--anthracite);
+    }
+
+    .portal-card:hover .card-icon {
+      transform: scale(1.1);
+    }
+
+    .card-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .card-artisan .card-tag {
+      background: rgba(201,168,76,.15);
+      color: #7a5b1a;
+    }
+
+    .card-client .card-tag {
+      background: var(--gris-ultra);
+      color: var(--anthracite);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--anthracite);
+      margin-bottom: 0.5rem;
+    }
+
+    .card-desc {
+      font-size: 0.95rem;
+      color: var(--gris);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .card-features {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card-features li {
+      font-size: 0.88rem;
+      color: var(--anthracite);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-features li span {
+      color: var(--or);
+      font-weight: bold;
+    }
+
+    .card-btn {
+      width: 100%;
+      text-align: center;
+      padding: 14px 20px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .card-artisan .card-btn {
+      background: var(--or);
+      color: var(--blanc);
+    }
+    .card-artisan .card-btn:hover {
+      background: #b8952e;
+    }
+
+    .card-client .card-btn {
+      background: var(--anthracite);
+      color: var(--blanc);
+    }
+    .card-client .card-btn:hover {
+      background: var(--anthracite2);
+    }
+
+    .portal-footer-link {
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: var(--gris);
+    }
+
+    .portal-footer-link a {
+      color: var(--anthracite);
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
     @media (max-width: 768px) {
-      .stats-band { flex-direction: column; align-items: center; padding: 24px 5vw; }
-      .stats-band .stat { 
-        min-width: unset; max-width: 100%; width: 100%;
-        border-right: none; border-bottom: 1px solid rgba(255,255,255,.08);
-        padding: 12px 0;
+      .portal-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
       }
-      .stats-band .stat:last-child { border-bottom: none; }
-      .stats-band .stat-num { font-size: 1.8rem; }
-    }
-
-    /* ── HOW IT WORKS ── */
-    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 24px; margin-top: 56px; }
-    .step-card { background: var(--blanc); border-radius: var(--radius-lg); padding: var(--space-lg); border: 1.5px solid var(--beige-dark); position: relative; overflow: hidden; }
-    .step-num { position: absolute; top: -8px; right: 14px; font-family: var(--font-display); font-size: 5rem; font-weight: 800; color: rgba(43,43,43,.04); line-height: 1; }
-    .step-icon { font-size: 2rem; margin-bottom: 14px; }
-    .step-card h3 { font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 8px; }
-    .step-card p { font-size: .9rem; color: var(--gris); line-height: 1.6; }
-
-    /* ── AVANTAGES ── */
-    .av-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 18px; margin-top: 52px; }
-    .av-card { background: var(--beige); border-radius: var(--radius-lg); padding: var(--space-md); transition: all var(--transition); cursor: default; }
-    .av-card:hover { background: var(--anthracite); color: var(--blanc); transform: translateY(-3px); }
-    .av-card:hover p { color: rgba(255,255,255,.65); }
-    .av-icon { font-size: 1.6rem; margin-bottom: 12px; }
-    .av-card h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
-    .av-card p  { font-size: .86rem; color: var(--gris); transition: color var(--transition); }
-
-    /* ── ARTISANS CTA ── */
-    .artisans-cta-section {
-      margin: 0 5vw var(--space-xxl);
-      background: linear-gradient(135deg, var(--anthracite2) 0%, #1a1a1a 100%);
-      border-radius: var(--radius-xl); padding: 64px 5vw;
-      display: flex; gap: 48px; align-items: center; flex-wrap: wrap; color: var(--blanc);
-    }
-    .artisans-cta-text { flex: 1; min-width: 260px; }
-    .artisans-cta-text h2 { color: var(--blanc); }
-    .artisans-cta-text p { color: rgba(255,255,255,.6); margin-top: 12px; }
-    .artisans-features { margin-top: 24px; display: flex; flex-direction: column; gap: 10px; }
-    .artisans-features li { display: flex; align-items: center; gap: 10px; font-size: .9rem; color: rgba(255,255,255,.8); list-style: none; }
-    .artisans-features li::before { content: '✓'; width: 20px; height: 20px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .7rem; font-weight: 700; flex-shrink: 0; }
-    .btn-or { background: var(--or); color: var(--blanc); box-shadow: 0 4px 18px rgba(201,168,76,.4); }
-    .btn-or:hover { background: #b8952e; transform: translateY(-2px); }
-
-    /* ── RESPONSIVE ARTISANS CTA ── */
-    @media (max-width: 768px) {
-      .artisans-cta-section {
-        padding: 32px 4vw;
-        margin: 0 4vw var(--space-xl);
-        flex-direction: column;
-        text-align: center;
+      .portal-card {
+        padding: 2rem 1.8rem;
       }
-      .artisans-features li { justify-content: center; }
-      .btn-or { width: 100%; justify-content: center; }
-    }
-
-    @media (max-width: 480px) {
-      .hero h1 { font-size: 1.8rem; }
-      .hero-sub { font-size: 0.9rem; }
-      .hero-cta .btn { width: 100%; justify-content: center; }
-      .step-card { padding: var(--space-md); }
-      .av-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-<div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
-<div id="header-container"></div>
+  <div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
+  <div id="header-container"></div>
 
-<main>
+  <main class="portal-hero">
+    <div class="portal-badge">⚡ Mise en relation directe & qualifiée</div>
+    <h1 class="portal-title">Bienvenue sur BâtiSwift</h1>
+    <p class="portal-subtitle">Choisissez votre espace pour une expérience sur-mesure adaptée à vos besoins.</p>
 
-  <!-- ── HERO ─────────────────────────────────────── -->
-  <section class="hero">
-    <div class="hero-badge">⚡ Service disponible 7j/7 · 24h/24</div>
-    <h1>Trouvez un artisan qualifié<br><span>en moins de 2 minutes</span></h1>
-    <p class="hero-sub">Panne d'eau ? Problème électrique ? Peinture urgente ? Décrivez votre besoin et un artisan vérifié vous rappelle sous 1h — gratuitement.</p>
-    <div class="hero-cta">
-      <a href="/client.html" class="btn btn-primary btn-lg">💬 Décrire mon besoin</a>
-      <a href="/inscription.html" class="btn btn-secondary btn-lg">Je suis artisan →</a>
-    </div>
-    <div class="metiers-chips">
-      <div class="chip">🔧 Plomberie</div>
-      <div class="chip">⚡ Électricité</div>
-      <div class="chip">🎨 Peinture</div>
-      <div class="chip">🧱 Maçonnerie</div>
-      <div class="chip">🔥 Chauffage</div>
-      <div class="chip">🔐 Serrurerie</div>
-    </div>
-  </section>
+    <div class="portal-grid">
 
-  <!-- ── STATS LIVE ─────────────────────────────── -->
-  <div class="stats-band">
-    <div class="stat"><div class="stat-num"><span data-stat="artisans_inscrits">—</span></div><div class="stat-lbl">Artisans partenaires</div></div>
-    <div class="stat"><div class="stat-num"><span data-stat="leads_total">—</span></div><div class="stat-lbl">Demandes traitées</div></div>
-    <div class="stat"><div class="stat-num">10<span>€</span></div><div class="stat-lbl">Prix par lead (artisan)</div></div>
-    <div class="stat"><div class="stat-num">0<span>€</span></div><div class="stat-lbl">Gratuit pour le client</div></div>
-  </div>
-
-  <!-- ── COMMENT ÇA MARCHE ─────────────────────── -->
-  <section class="section" id="how">
-    <div class="container">
-      <div class="text-center">
-        <span class="section-label reveal">Comment ça marche</span>
-        <h2 class="reveal">Simple, rapide, efficace</h2>
-        <p class="reveal" style="max-width:480px;margin:12px auto 0">Trois étapes, moins de deux minutes, un artisan qualifié.</p>
-      </div>
-      <div class="steps">
-        <div class="step-card reveal">
-          <div class="step-num">1</div>
-          <div class="step-icon">💬</div>
-          <h3>Décrivez votre problème</h3>
-          <p>Notre agent IA analyse votre demande en temps réel. Une photo suffit. Aucune inscription requise.</p>
+      <!-- ─── CARTE ARTISAN ─── -->
+      <div class="portal-card card-artisan" id="select-artisan" role="button" tabindex="0">
+        <div>
+          <div class="card-top">
+            <div class="card-icon">🛠️</div>
+            <span class="card-tag">Professionnel BTP</span>
+          </div>
+          <h2 class="card-title">Espace Artisan</h2>
+          <p class="card-desc">Développez votre activité, recevez des leads qualifiés dans votre zone et gérez vos chantiers.</p>
+          <ul class="card-features">
+            <li><span>✓</span> Demandes clients vérifiées par l'IA</li>
+            <li><span>✓</span> 10 € le lead, sans abonnement obligatoire</li>
+            <li><span>✓</span> Marketplace géolocalisée & notifications directes</li>
+          </ul>
         </div>
-        <div class="step-card reveal reveal-delay-1">
-          <div class="step-num">2</div>
-          <div class="step-icon">🔍</div>
-          <h3>BâtiSwift qualifie votre besoin</h3>
-          <p>L'IA détermine l'urgence, le type de travaux et localise les artisans disponibles près de vous.</p>
+        <button type="button" class="card-btn">Entrer dans l'espace Artisan →</button>
+      </div>
+
+      <!-- ─── CARTE CLIENT ─── -->
+      <div class="portal-card card-client" id="select-client" role="button" tabindex="0">
+        <div>
+          <div class="card-top">
+            <div class="card-icon">🏠</div>
+            <span class="card-tag">Particulier & Client</span>
+          </div>
+          <h2 class="card-title">Espace Client</h2>
+          <p class="card-desc">Décrivez votre problème et trouvez un artisan vérifié et qualifié près de chez vous en moins de 2 minutes.</p>
+          <ul class="card-features">
+            <li><span>✓</span> 100% gratuit & sans engagement</li>
+            <li><span>✓</span> Qualification instantanée par notre agent IA</li>
+            <li><span>✓</span> Rappel sous 1h par un artisan disponible</li>
+          </ul>
         </div>
-        <div class="step-card reveal reveal-delay-2">
-          <div class="step-num">3</div>
-          <div class="step-icon">📞</div>
-          <h3>Un artisan vous rappelle sous 1h</h3>
-          <p>Un professionnel vérifié vous contacte directement. Devis gratuit, sans engagement.</p>
-        </div>
+        <button type="button" class="card-btn">Entrer dans l'espace Client →</button>
       </div>
+
     </div>
-  </section>
 
-  <!-- ── AVANTAGES ──────────────────────────────── -->
-  <section class="section" style="background:var(--blanc)">
-    <div class="container">
-      <div class="text-center">
-        <span class="section-label reveal">Pourquoi BâtiSwift</span>
-        <h2 class="reveal">La mise en relation la plus rapide</h2>
-      </div>
-      <div class="av-grid">
-        <div class="av-card reveal"><div class="av-icon">✅</div><h3>Artisans vérifiés</h3><p>Chaque artisan est contrôlé : assurance décennale, qualifications, avis clients.</p></div>
-        <div class="av-card reveal reveal-delay-1"><div class="av-icon">⚡</div><h3>Réponse sous 1h</h3><p>Réseau d'artisans disponibles pour garantir une réponse rapide, même les weekends.</p></div>
-        <div class="av-card reveal reveal-delay-2"><div class="av-icon">💶</div><h3>Devis 100% gratuit</h3><p>Aucun frais pour le client. Le devis est toujours gratuit et sans engagement.</p></div>
-        <div class="av-card reveal reveal-delay-3"><div class="av-icon">📸</div><h3>Photos acceptées</h3><p>Envoyez une photo ou une vidéo pour une évaluation encore plus précise de votre problème.</p></div>
-      </div>
+    <div class="portal-footer-link">
+      Découvrir notre fonctionnement et nos tarifs : <a href="/vitrine.html">Voir le site complet →</a>
     </div>
-  </section>
+  </main>
 
-  <!-- ── CTA ARTISANS ───────────────────────────── -->
-  <div class="artisans-cta-section">
-    <div class="artisans-cta-text">
-      <span class="section-label" style="color:rgba(255,255,255,.4)">Pour les artisans</span>
-      <h2>Recevez des clients qualifiés directement sur votre téléphone</h2>
-      <p>Fini les appels manqués. BâtiSwift vous envoie une fiche client complète en temps réel. 10€ par lead, aucun abonnement.</p>
-      <ul class="artisans-features">
-        <li>Clients pré-qualifiés avec ville, urgence et description</li>
-        <li>Notification instantanée WhatsApp/SMS</li>
-        <li>10€ par lead, 0€ commission sur vos chantiers</li>
-        <li>Dashboard simple, aucune formation nécessaire</li>
-      </ul>
-    </div>
-    <div>
-      <a href="/inscription.html" class="btn btn-or btn-lg">Rejoindre BâtiSwift →</a>
-      <p style="font-size:.78rem;color:rgba(255,255,255,.35);margin-top:12px;text-align:center">Inscription gratuite · Sans engagement</p>
-    </div>
-  </div>
+  <div id="footer-container"></div>
 
-</main>
+  <script src="/js/config.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/session.js"></script>
+  <script src="/js/main.js"></script>
 
-<div id="footer-container"></div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var btnArtisan = document.getElementById('select-artisan');
+      var btnClient = document.getElementById('select-client');
 
-<script src="/js/config.js"></script>
-<script src="/js/api.js"></script>
-<script src="/js/session.js"></script>
-<script src="/js/main.js"></script>
+      function enterArtisan() {
+        Session.setContext('artisan');
+        var user = Session.getUser();
+        if (Session.isLoggedIn() && user) {
+          if (user.role === 'client') {
+            window.location.href = '/client-dashboard.html';
+          } else {
+            window.location.href = '/dashboard.html';
+          }
+        } else {
+          window.location.href = '/vitrine.html#artisans';
+        }
+      }
+
+      function enterClient() {
+        Session.setContext('client');
+        var user = Session.getUser();
+        if (Session.isLoggedIn() && user) {
+          if (user.role === 'artisan') {
+            window.location.href = '/dashboard.html';
+          } else {
+            window.location.href = '/client-dashboard.html';
+          }
+        } else {
+          window.location.href = '/client.html';
+        }
+      }
+
+      if (btnArtisan) {
+        btnArtisan.addEventListener('click', enterArtisan);
+        btnArtisan.addEventListener('keydown', function(e) { if (e.key === 'Enter') enterArtisan(); });
+      }
+
+      if (btnClient) {
+        btnClient.addEventListener('click', enterClient);
+        btnClient.addEventListener('keydown', function(e) { if (e.key === 'Enter') enterClient(); });
+      }
+    });
+  </script>
 </body>
 </html>
+

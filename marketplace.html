@@ -97,8 +97,10 @@
 <script src="/js/session.js"></script>
 <script src="/js/main.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded',function(){
+document.addEventListener('DOMContentLoaded',async function(){
 'use strict';
+
+await Session.requireRole('artisan');
 
 const leadsEl=document.getElementById('leads');
 const countEl=document.getElementById('count');
@@ -264,10 +266,9 @@ function fragment(id,url){
   }).catch(e=>console.warn('[Marketplace] Fragment non chargé:',url,e));
 }
 
-if(!jwt()){location.href='/connexion.html';return}
-fragment('header-container','/header.html');
-fragment('footer-container','/footer.html');
-load();
+  fragment('header-container','/header.html');
+  fragment('footer-container','/footer.html');
+  load();
 });
 </script>
 </body>

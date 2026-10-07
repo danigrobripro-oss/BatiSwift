@@ -295,16 +295,14 @@
   <script src="/js/main.js"></script>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', async function () {
       'use strict';
+
+      await Session.requireRole('artisan');
 
       var list = document.getElementById('purchases-list');
       var count = document.getElementById('purchase-count');
       var refresh = document.getElementById('refresh-purchases');
-
-      function getToken() {
-        return localStorage.getItem(CONFIG.TOKEN_KEY) || '';
-      }
 
       function escapeHtml(value) {
         return String(value == null ? '' : value)
@@ -572,11 +570,6 @@
           .catch(function (error) {
             console.warn('[Mes achats] Fragment non chargé :', url, error);
           });
-      }
-
-      if (!getToken()) {
-        window.location.href = '/connexion.html';
-        return;
       }
 
       loadFragment('header-container', '/header.html');

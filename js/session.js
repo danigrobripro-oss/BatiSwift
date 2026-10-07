@@ -1,6 +1,7 @@
 /**
  * BâtiSwift — session.js
- * Gestion JWT. Chargé après config.js et api.js.
+ * Gestion JWT, Rôles et Contexte (Artisan / Client).
+ * Chargé après config.js et api.js.
  */
 
 var Session = {
@@ -19,9 +20,50 @@ var Session = {
     return user && user.role ? user.role : null;
   },
 
+  // ─── GESTION DU CONTEXTE ACTIF (Artisan / Client) ───────────
+  getContext: function() {
+    var saved = localStorage.getItem(CONFIG.CONTEXT_KEY);
+    if (saved === 'artisan' || saved === 'client') return saved;
+    var user = this.getUser();
+    if (user && user.role) {
+      if (user.role === 'client') return 'client';
+      if (user.role === 'artisan') return 'artisan';
+      if (user.role === 'mixte') return 'artisan';
+    }
+    return 'artisan'; // défaut
+  },
+
+  setContext: function(ctx) {
+    if (ctx !== 'artisan' && ctx !== 'client') return;
+    localStorage.setItem(CONFIG.CONTEXT_KEY, ctx);
+    document.dispatchEvent(new CustomEvent('context:changed', { detail: { context: ctx } }));
+    this.updateNav();
+  },
+
+  switchContext: function() {
+    var user = this.getUser();
+    if (!user || user.role !== 'mixte') {
+      return;
+    }
+    var current = this.getContext();
+    var next = (current === 'artisan') ? 'client' : 'artisan';
+    this.setContext(next);
+    var path = window.location.pathname;
+    if (next === 'client' && (path.includes('dashboard') || path.includes('marketplace') || path.includes('achats') || path.includes('stripe'))) {
+      window.location.href = '/client-dashboard.html';
+    } else if (next === 'artisan' && path.includes('client-dashboard')) {
+      window.location.href = '/dashboard.html';
+    } else {
+      window.location.reload();
+    }
+  },
+
   save: function(token, artisan) {
     localStorage.setItem(CONFIG.TOKEN_KEY, token);
     localStorage.setItem(CONFIG.USER_KEY, JSON.stringify(artisan));
+    if (artisan && artisan.role) {
+      this.setContext(artisan.role === 'client' ? 'client' : 'artisan');
+    }
   },
 
   clear: function() {
@@ -62,9 +104,34 @@ var Session = {
   },
 
   /**
-   * Pages auth : redirige selon le rôle.
-   * - Si un paramètre `to` est fourni, il est prioritaire.
-   * - Sinon, artisan → /dashboard.html, client → /client.html
+   * Vérifie que l'utilisateur a le rôle requis.
+   * Si non autorisé, redirige vers l'espace correspondant.
+   */
+  requireRole: async function(expectedRole) {
+    var user = await this.requireAuth();
+    if (!user) return null;
+
+    if (user.role === 'mixte') {
+      this.setContext(expectedRole);
+      return user;
+    }
+
+    if (expectedRole === 'artisan' && user.role !== 'artisan') {
+      window.location.href = '/client-dashboard.html?denied=artisan';
+      return null;
+    }
+
+    if (expectedRole === 'client' && user.role !== 'client') {
+      window.location.href = '/dashboard.html?denied=client';
+      return null;
+    }
+
+    this.setContext(expectedRole);
+    return user;
+  },
+
+  /**
+   * Pages auth : redirige selon le rôle vers l'espace approprié.
    */
   redirectIfAuth: async function(to) {
     if (this.isLoggedIn()) {
@@ -73,8 +140,8 @@ var Session = {
 
       var target = to;
       if (!target) {
-        if (user.role === 'client') {
-          target = '/client.html';
+        if (user.role === 'client' || this.getContext() === 'client') {
+          target = '/client-dashboard.html';
         } else {
           target = '/dashboard.html';
         }
@@ -91,36 +158,59 @@ var Session = {
   },
 
   /**
-   * Met à jour la nav après injection du header.
-   * Connecté  → masque .nav-guest, affiche .nav-user + prénom
-   * Invité    → affiche .nav-guest, masque .nav-user
+   * Met à jour la nav après injection du header ou changement de contexte.
    */
   updateNav: function() {
     var user   = this.getUser();
     var isAuth = this.isLoggedIn() && !!user;
+    var ctx    = this.getContext();
 
-    document.querySelectorAll('.nav-guest').forEach(function(el) {
+    // Affichage invité vs connecté
+    document.querySelectorAll('.nav-guest, .sidebar-guest').forEach(function(el) {
       el.style.display = isAuth ? 'none' : '';
     });
-    document.querySelectorAll('.nav-user').forEach(function(el) {
+    document.querySelectorAll('.nav-user, .sidebar-user').forEach(function(el) {
       el.style.display = isAuth ? 'flex' : 'none';
+      if (isAuth && el.classList.contains('sidebar-user')) {
+        el.style.flexDirection = 'column';
+      }
     });
 
     if (isAuth && user) {
-      var g = document.getElementById('nav-user-greeting');
-      if (g) g.textContent = (user.nom || '').split(' ')[0];
+      var g = document.getElementById('nav-user-greeting') || document.getElementById('sidebar-user-nom');
+      if (g) g.textContent = (user.nom || '').split(' ')[0] || (ctx === 'client' ? 'Client' : 'Artisan');
+
+      var roleBadge = document.getElementById('sidebar-role-badge');
+      if (roleBadge) {
+        roleBadge.textContent = (ctx === 'client') ? '🏠 Mode Client' : '🛠️ Mode Artisan';
+      }
+    }
+
+    // Gestion des liens spécifiques de la nav selon le contexte
+    document.querySelectorAll('[data-context-only]').forEach(function(el) {
+      var allowed = el.getAttribute('data-context-only');
+      if (allowed === ctx || allowed === 'all') {
+        el.style.display = '';
+      } else {
+        el.style.display = 'none';
+      }
+    });
+
+    // Bouton de bascule de contexte
+    var switcher = document.getElementById('context-switcher');
+    if (switcher) {
+      var isMixed = user && user.role === 'mixte';
+      switcher.style.display = (isAuth && isMixed) ? 'block' : 'none';
+      var switchText = document.getElementById('context-switcher-text');
+      if (switchText) {
+        switchText.textContent = (ctx === 'artisan') ? 'Passer en mode Client 🏠' : 'Passer en mode Artisan 🛠️';
+      }
     }
 
     // Boutons logout
-    document.querySelectorAll('[data-action="logout"]').forEach(function(btn) {
-      btn.addEventListener('click', function() { Session.logout(); });
+    document.querySelectorAll('[data-action="logout"], #sidebar-logout').forEach(function(btn) {
+      btn.onclick = function() { Session.logout(); };
     });
-
-    // Adaptation du lien dashboard selon le rôle
-    var dashLink = document.getElementById('nav-dashboard-link');
-    if (dashLink && user) {
-      dashLink.href = (user.role === 'client') ? '/client.html' : '/dashboard.html';
-    }
   }
 };
 

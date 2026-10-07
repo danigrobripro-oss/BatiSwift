@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon Espace Client — BâtiSwift</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+  <link rel="manifest" href="/assets/site.webmanifest" />
+  <meta name="theme-color" content="#F5F0EB" />
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  <style>
+    .client-hero {
+      padding-top: calc(var(--header-h) + 40px);
+      padding-bottom: var(--space-lg);
+      background: var(--beige);
+      border-bottom: 1px solid var(--beige-dark);
+    }
+
+    .client-hero-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .client-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      color: var(--anthracite);
+      margin-bottom: 0.3rem;
+    }
+
+    .client-hero .sub {
+      color: var(--gris);
+      font-size: 0.95rem;
+    }
+
+    .hero-badges {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      align-items: center;
+    }
+
+    .badge-client {
+      background: var(--anthracite);
+      color: var(--blanc);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .quick-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0 2rem;
+    }
+
+    .stat-card-client {
+      background: var(--blanc);
+      border-radius: var(--radius-lg);
+      padding: 1.2rem 1.4rem;
+      border: 1.5px solid var(--beige-dark);
+      box-shadow: 0 2px 10px rgba(43,43,43,0.03);
+    }
+
+    .stat-card-client .num {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--anthracite);
+    }
+
+    .stat-card-client .lbl {
+      font-size: 0.82rem;
+      color: var(--gris);
+      margin-top: 2px;
+    }
+
+    /* Grille des demandes */
+    .requests-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .request-card {
+      background: var(--blanc);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      border: 1.5px solid var(--beige-dark);
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .request-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(43,43,43,0.06);
+      border-color: var(--anthracite);
+    }
+
+    .request-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.8rem;
+    }
+
+    .request-id {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--anthracite);
+    }
+
+    .request-date {
+      font-size: 0.78rem;
+      color: var(--gris-light);
+    }
+
+    .request-desc {
+      font-size: 0.92rem;
+      color: var(--gris);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .request-meta {
+      font-size: 0.82rem;
+      color: var(--anthracite);
+      background: var(--gris-ultra);
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-bottom: 1.2rem;
+    }
+
+    .timeline-steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin: 1rem 0 0.5rem;
+    }
+
+    .timeline-steps::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 15px;
+      right: 15px;
+      height: 2px;
+      background: var(--beige-dark);
+      z-index: 1;
+    }
+
+    .step-node {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.72rem;
+      color: var(--gris);
+    }
+
+    .step-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--blanc);
+      border: 2px solid var(--beige-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+    }
+
+    .step-node.done .step-dot {
+      background: var(--success);
+      border-color: var(--success);
+      color: var(--blanc);
+    }
+
+    .step-node.active .step-dot {
+      background: var(--or);
+      border-color: var(--or);
+      color: var(--blanc);
+    }
+
+    /* Actions rapides */
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1rem;
+    }
+
+    .action-box {
+      background: var(--blanc);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      border: 1.5px solid var(--beige-dark);
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .action-box:hover {
+      border-color: var(--or);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(201,168,76,0.12);
+    }
+
+    .action-icon {
+      font-size: 2rem;
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: var(--gris-ultra);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .empty-client {
+      text-align: center;
+      padding: 3.5rem 1.5rem;
+      background: var(--blanc);
+      border-radius: var(--radius-xl);
+      border: 1.5px dashed var(--beige-dark);
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
+  <div id="header-container"></div>
+
+  <!-- Hero Client -->
+  <section class="client-hero">
+    <div class="container">
+      <div class="client-hero-content">
+        <div>
+          <h1>👋 Bonjour, <span id="client-user-nom">Client</span></h1>
+          <p class="sub">Suivez vos demandes de travaux et échangez avec vos artisans qualifiés.</p>
+          <div class="hero-badges">
+            <span class="badge-client">🏠 Espace Client / Particulier</span>
+            <span id="client-ville-badge" style="font-size:0.8rem;color:var(--gris);">📍 Ville non renseignée</span>
+          </div>
+        </div>
+        <div>
+          <a href="/client.html" class="btn btn-primary btn-md">💬 Nouvelle demande</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+
+    <div id="alert-zone" style="display:none;margin-bottom:1.5rem;" class="alert alert-info"></div>
+
+    <!-- Statistiques rapides -->
+    <div class="quick-stats">
+      <div class="stat-card-client">
+        <div class="num" id="stat-count-requests">0</div>
+        <div class="lbl">Demandes enregistrées</div>
+      </div>
+      <div class="stat-card-client">
+        <div class="num" style="color:var(--success);">0 €</div>
+        <div class="lbl">Coût du service client (100% Gratuit)</div>
+      </div>
+      <div class="stat-card-client">
+        <div class="num" style="color:var(--or);">Sous 1h</div>
+        <div class="lbl">Délai moyen de prise de contact</div>
+      </div>
+    </div>
+
+    <!-- Section Mes Demandes -->
+    <section id="demandes" style="margin-bottom: 3.5rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <h2 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:4px;">📋 Mes demandes de travaux</h2>
+          <p style="color:var(--gris);font-size:0.9rem;">Historique de vos chantiers et demandes d'intervention.</p>
+        </div>
+        <button id="btn-refresh-demandes" class="btn btn-secondary btn-sm" type="button">↻ Actualiser</button>
+      </div>
+
+      <div id="requests-container">
+        <!-- Rendu dynamique par JS -->
+      </div>
+    </section>
+
+    <!-- Section Actions rapides -->
+    <section>
+      <h2 style="font-family:var(--font-display);font-size:1.4rem;margin-bottom:4px;">⚡ Services disponibles</h2>
+      <p style="color:var(--gris);font-size:0.9rem;">Accédez aux fonctionnalités complémentaires de votre espace.</p>
+
+      <div class="quick-actions-grid">
+        <a href="/client.html" class="action-box">
+          <div class="action-icon">💬</div>
+          <div>
+            <div style="font-weight:700;">Déposer une demande</div>
+            <div style="font-size:0.82rem;color:var(--gris);">Qualifiez votre projet avec notre assistant IA gratuit.</div>
+          </div>
+        </a>
+
+        <a href="/carte.html" class="action-box">
+          <div class="action-icon">🗺️</div>
+          <div>
+            <div style="font-weight:700;">Carte des artisans</div>
+            <div style="font-size:0.82rem;color:var(--gris);">Explorez les professionnels vérifiés disponibles dans votre zone.</div>
+          </div>
+        </a>
+
+        <a href="/aide.html" class="action-box">
+          <div class="action-icon">❓</div>
+          <div>
+            <div style="font-weight:700;">Centre d'aide & FAQ</div>
+            <div style="font-size:0.82rem;color:var(--gris);">Consultez nos réponses et posez vos questions à l'IA.</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="footer-container"></div>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/session.js"></script>
+  <script src="/js/main.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var user = await Session.requireRole('client');
+      if (!user) return;
+
+      // Alerte de redirection si un client a tenté d'accéder à l'espace artisan
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('denied') === 'artisan') {
+        var alertZone = document.getElementById('alert-zone');
+        if (alertZone) {
+          alertZone.textContent = 'ℹ️ Vous êtes sur votre Espace Client. Les pages de gestion de chantiers et d\'achats de leads sont réservées aux artisans.';
+          alertZone.style.display = 'block';
+        }
+      }
+
+      // 3. Remplissage des données utilisateur
+      var nomEl = document.getElementById('client-user-nom');
+      if (nomEl) nomEl.textContent = user.nom || 'Client';
+
+      var villeEl = document.getElementById('client-ville-badge');
+      if (villeEl && user.ville) {
+        villeEl.textContent = '📍 ' + user.ville;
+      }
+
+      // 4. Chargement des demandes du client
+      function loadClientRequests() {
+        var container = document.getElementById('requests-container');
+        var countEl = document.getElementById('stat-count-requests');
+
+        var leads = [];
+        try {
+          leads = JSON.parse(localStorage.getItem('batiswift_client_leads') || '[]');
+        } catch(e) {
+          leads = [];
+        }
+
+        if (countEl) countEl.textContent = leads.length;
+
+        if (!leads || leads.length === 0) {
+          container.innerHTML = `
+            <div class="empty-client">
+              <div style="font-size:3rem;margin-bottom:1rem;">📝</div>
+              <h3 style="font-family:var(--font-display);font-size:1.3rem;margin-bottom:0.5rem;">Vous n'avez pas encore déposé de demande</h3>
+              <p style="color:var(--gris);font-size:0.9rem;max-width:440px;margin:0 auto 1.5rem;">
+                Besoin d'un plombier, électricien, peintre ou chauffagiste ? Décrivez votre problème en 2 minutes. C'est 100% gratuit et sans engagement.
+              </p>
+              <a href="/client.html" class="btn btn-primary btn-md">💬 Déposer ma première demande</a>
+            </div>
+          `;
+          return;
+        }
+
+        var html = '<div class="requests-grid">';
+        leads.forEach(function(lead) {
+          var dateStr = lead.date ? new Date(lead.date).toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }) : 'Récemment';
+          var refId = lead.id ? '#' + String(lead.id).padStart(4, '0') : '#DEMANDE';
+          var statutLabel = lead.statut || 'En recherche d\'artisan';
+
+          html += `
+            <div class="request-card">
+              <div>
+                <div class="request-header">
+                  <span class="request-id">${refId}</span>
+                  <span class="badge badge-success">${statutLabel}</span>
+                </div>
+                <div class="request-date">📅 Déposée le ${dateStr}</div>
+                <div class="request-desc">${lead.description || 'Projet de travaux BTP'}</div>
+                ${lead.adresse ? `<div class="request-meta">📍 <strong>Chantier :</strong> ${lead.adresse}</div>` : ''}
+              </div>
+
+              <div>
+                <div class="timeline-steps">
+                  <div class="step-node done">
+                    <div class="step-dot">✓</div>
+                    <span>Enregistrée</span>
+                  </div>
+                  <div class="step-node active">
+                    <div class="step-dot">●</div>
+                    <span>Qualifiée</span>
+                  </div>
+                  <div class="step-node">
+                    <div class="step-dot">○</div>
+                    <span>Artisan notifié</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        html += '</div>';
+
+        container.innerHTML = html;
+      }
+
+      loadClientRequests();
+
+      document.getElementById('btn-refresh-demandes')?.addEventListener('click', function() {
+        loadClientRequests();
+        toast('Demandes actualisées', 'success');
+      });
+    });
+  </script>
+</body>
+</html>
+

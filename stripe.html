@@ -209,7 +209,7 @@
 document.addEventListener('DOMContentLoaded', async function () {
 
   // ─── AUTH : redirige vers connexion si non connecté ───────
-  const user = await Session.requireAuth();
+  const user = await Session.requireRole('artisan');
   if (!user) return;
 
   const alertSuccess = document.getElementById('alert-success');
