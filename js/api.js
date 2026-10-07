@@ -56,12 +56,27 @@ async function apiFetch(endpoint, options = {}, _retry = true) {
 // ─── OBJET API — tous les endpoints du backend ───────────────
 const API = {
 
-  // ─── Méthode générique POST (pour tout endpoint) ───────────
-  post: function(endpoint, body) {
-    return apiFetch(endpoint, {
+  // ─── Méthodes génériques (GET, POST, PUT, DELETE) ──────────
+  get: function(endpoint, options) {
+    return apiFetch(endpoint, Object.assign({ method: 'GET' }, options || {}));
+  },
+
+  post: function(endpoint, body, options) {
+    return apiFetch(endpoint, Object.assign({
       method: 'POST',
       body: JSON.stringify(body)
-    });
+    }, options || {}));
+  },
+
+  put: function(endpoint, body, options) {
+    return apiFetch(endpoint, Object.assign({
+      method: 'PUT',
+      body: JSON.stringify(body)
+    }, options || {}));
+  },
+
+  delete: function(endpoint, options) {
+    return apiFetch(endpoint, Object.assign({ method: 'DELETE' }, options || {}));
   },
 
   // Auth

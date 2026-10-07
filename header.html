@@ -23,23 +23,43 @@
     <button id="sidebar-close" class="sidebar-close">✕</button>
   </div>
   <nav class="sidebar-nav">
-    <a href="/index.html">🏠 Accueil</a>
-    <a href="/client.html">💬 Déposer une demande</a>
-    <a href="/tarifs.html">💰 Tarifs</a>
-    <a href="/marketplace.html">🔥 Marketplace</a>
-    <a href="/achats.html">📦 Mes achats</a>
-    <a href="/carte.html">🗺️ Carte</a>
-    <a href="/aide.html">❓ Aide</a>
+    <!-- Liens communs -->
+    <a href="/index.html" data-context-only="all">🏠 Accueil</a>
+    <a href="/tarifs.html" data-context-only="all">💰 Tarifs</a>
+    <a href="/aide.html" data-context-only="all">❓ Centre d'aide</a>
+
+    <!-- Liens Espace Artisan -->
+    <a href="/dashboard.html" data-context-only="artisan">📊 Mon Dashboard</a>
+    <a href="/marketplace.html" data-context-only="artisan">🔥 Marketplace</a>
+    <a href="/achats.html" data-context-only="artisan">📦 Mes achats</a>
+    <a href="/carte.html" data-context-only="artisan">🗺️ Carte des chantiers</a>
+    <a href="/stripe.html" data-context-only="artisan">💳 Connexion Stripe</a>
+    <a href="/parametres.html" data-context-only="artisan">⚙ Paramètres Pro</a>
+
+    <!-- Liens Espace Client -->
+    <a href="/client-dashboard.html" data-context-only="client">📋 Mon Espace Client</a>
+    <a href="/client.html" data-context-only="client">💬 Déposer une demande</a>
+    <a href="/carte.html" data-context-only="client">🗺️ Carte des artisans</a>
   </nav>
+
   <div class="sidebar-actions">
     <div class="sidebar-guest">
       <a href="/connexion.html" class="btn btn-secondary btn-block">Connexion</a>
       <a href="/inscription.html" class="btn btn-primary btn-block">S'inscrire</a>
     </div>
     <div class="sidebar-user" style="display:none;">
-      <span id="sidebar-user-name" style="font-weight:600;display:block;padding:0.5rem 0;">👋 <span id="sidebar-user-nom"></span></span>
-      <a href="/dashboard.html" class="btn btn-secondary btn-block">📊 Mon Dashboard</a>
-      <a href="/parametres.html" class="btn btn-secondary btn-block">⚙ Paramètres</a>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:0.4rem 0;">
+        <span id="sidebar-user-name" style="font-weight:600;">👋 <span id="sidebar-user-nom"></span></span>
+        <span id="sidebar-role-badge" style="font-size:0.75rem;padding:3px 8px;border-radius:12px;background:var(--beige-dark);font-weight:600;"></span>
+      </div>
+
+      <!-- Bouton pour basculer d'espace (compte mixte ou artisan/client) -->
+      <div id="context-switcher" style="display:none;margin-bottom:0.4rem;">
+        <button id="btn-switch-context" class="btn btn-secondary btn-block" style="font-size:0.85rem;padding:8px 12px;">
+          <span id="context-switcher-text">🔄 Basculer d'espace</span>
+        </button>
+      </div>
+
       <button id="sidebar-logout" class="btn btn-danger btn-block">Déconnexion</button>
     </div>
   </div>
@@ -275,28 +295,43 @@
     link.addEventListener('click', closeSidebar);
   });
 
-  // ---- 4. Gestion de session (Connexion / Inscription) ----
-  var user = JSON.parse(localStorage.getItem('batiswift_user') || 'null');
-  var guestDiv = document.querySelector('.sidebar-guest');
-  var userDiv = document.querySelector('.sidebar-user');
-  var userNameSpan = document.getElementById('sidebar-user-nom');
-
-  if (user && userDiv && guestDiv) {
-    guestDiv.style.display = 'none';
-    userDiv.style.display = 'flex';
-    userDiv.style.flexDirection = 'column';
-    userDiv.style.gap = '0.8rem';
-    if (userNameSpan) userNameSpan.textContent = user.nom || 'Artisan';
-    console.log('👤 Utilisateur connecté :', user.nom);
+  // ---- 4. Initialisation de la nav selon la Session et le Contexte ----
+  if (typeof Session !== 'undefined' && Session.updateNav) {
+    Session.updateNav();
   } else {
-    console.log('👤 Utilisateur invité');
+    var user = JSON.parse(localStorage.getItem('batiswift_user') || 'null');
+    var guestDiv = document.querySelector('.sidebar-guest');
+    var userDiv = document.querySelector('.sidebar-user');
+    var userNameSpan = document.getElementById('sidebar-user-nom');
+    if (user && userDiv && guestDiv) {
+      guestDiv.style.display = 'none';
+      userDiv.style.display = 'flex';
+      userDiv.style.flexDirection = 'column';
+      userDiv.style.gap = '0.8rem';
+      if (userNameSpan) userNameSpan.textContent = (user.nom || '').split(' ')[0] || 'Utilisateur';
+    }
+  }
+
+  // Switcher de contexte (Artisan ⇄ Client)
+  var switchBtn = document.getElementById('btn-switch-context');
+  if (switchBtn) {
+    switchBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (typeof Session !== 'undefined' && Session.switchContext) {
+        Session.switchContext();
+      }
+    });
   }
 
   // ---- 5. Déconnexion ----
   document.getElementById('sidebar-logout')?.addEventListener('click', function() {
-    localStorage.removeItem('batiswift_token');
-    localStorage.removeItem('batiswift_user');
-    window.location.href = '/index.html';
+    if (typeof Session !== 'undefined' && Session.logout) {
+      Session.logout();
+    } else {
+      localStorage.removeItem('batiswift_token');
+      localStorage.removeItem('batiswift_user');
+      window.location.href = '/index.html';
+    }
   });
 
   console.log('✅ Header initialisé avec succès');

@@ -280,7 +280,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
   // Redirige si déjà connecté
   if (typeof Session !== 'undefined' && Session.redirectIfAuth) {
-    await Session.redirectIfAuth('/dashboard.html');
+    await Session.redirectIfAuth();
   }
 
   // ─── GESTION DU RÔLE ─────────────────────────────────
@@ -422,7 +422,8 @@ document.addEventListener('DOMContentLoaded', async function() {
       if (typeof toast === 'function') {
         toast('Compte créé ! Bienvenue 🎉', 'success');
       }
-      setTimeout(function() { window.location.href = '/dashboard.html'; }, 700);
+      var target = (role === 'client') ? '/client-dashboard.html' : '/dashboard.html';
+      setTimeout(function() { window.location.href = target; }, 700);
 
     } catch(err) {
       if (typeof showAlert === 'function') showAlert(alertId, err.message || 'Erreur lors de l\'inscription.', 'danger');
