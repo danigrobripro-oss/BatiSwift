@@ -1,11 +1,17 @@
-<!-- header.html – Version corrigée (burger + sidebar) -->
-<header class="site-header">
+<!-- header.html — Espace Artisan BâtiSwift -->
+<header class="site-header site-header--artisan" id="site-header">
   <div class="container">
-    <a href="/index.html" class="nav-logo">
+    <a href="/dashboard.html" class="nav-logo">
       <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
-      BâtiSwift
+      <span>BâtiSwift</span>
     </a>
-    <button class="menu-toggle" id="menu-toggle" aria-label="Ouvrir le menu">
+
+    <!-- Indicateur de contexte (desktop) -->
+    <div class="header-context-badge" id="header-context-badge" style="display:none;">
+      🛠️ <span>Espace Artisan</span>
+    </div>
+
+    <button class="menu-toggle" id="menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false">
       <span class="bar"></span>
       <span class="bar"></span>
       <span class="bar"></span>
@@ -14,75 +20,98 @@
 </header>
 
 <div id="sidebar-overlay" class="sidebar-overlay"></div>
-<div id="sidebar" class="sidebar">
+<div id="sidebar" class="sidebar" role="navigation" aria-label="Navigation principale">
   <div class="sidebar-header">
-    <a href="/index.html" class="nav-logo">
+    <a href="/dashboard.html" class="nav-logo">
       <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
-      BâtiSwift
+      <span>BâtiSwift</span>
     </a>
-    <button id="sidebar-close" class="sidebar-close">✕</button>
+    <button id="sidebar-close" class="sidebar-close" aria-label="Fermer le menu">✕</button>
   </div>
+
+  <!-- Profil connecté (masqué si invité) -->
+  <div class="sidebar-user" style="display:none;">
+    <div class="sidebar-profile">
+      <div class="sidebar-profile-avatar">🛠️</div>
+      <div>
+        <div class="sidebar-profile-name">👋 <span id="sidebar-user-nom"></span></div>
+        <span id="sidebar-role-badge" class="sidebar-badge-role"></span>
+      </div>
+    </div>
+
+    <!-- Switcher de contexte — visible UNIQUEMENT pour les comptes mixtes -->
+    <div id="context-switcher" style="display:none;">
+      <button id="btn-switch-context" class="btn btn-secondary btn-sm btn-block">
+        <span id="context-switcher-text">🏠 Passer en mode Client</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Navigation Artisan -->
   <nav class="sidebar-nav">
-    <!-- Liens communs -->
-    <a href="/index.html" data-context-only="all">🏠 Accueil</a>
+    <div class="sidebar-section-label" data-context-only="artisan">Espace Artisan</div>
+    <a href="/dashboard.html"     data-context-only="artisan">📊 Tableau de bord</a>
+    <a href="/marketplace.html"   data-context-only="artisan">🔥 Marketplace</a>
+    <a href="/achats.html"        data-context-only="artisan">📦 Mes achats</a>
+    <a href="/carte.html"         data-context-only="artisan">🗺️ Carte des chantiers</a>
+    <a href="/stripe.html"        data-context-only="artisan">💳 Paiements Stripe</a>
+    <a href="/parametres.html"    data-context-only="artisan">⚙️ Paramètres Pro</a>
+
+    <div class="sidebar-section-label" data-context-only="client">Espace Client</div>
+    <a href="/client-dashboard.html" data-context-only="client">🏠 Mon espace</a>
+    <a href="/client.html"           data-context-only="client">💬 Nouvelle demande</a>
+    <a href="/carte.html"            data-context-only="client">🔎 Trouver un artisan</a>
+
+    <div class="sidebar-section-label" data-context-only="all">Général</div>
+    <a href="/aide.html"   data-context-only="all">❓ Centre d'aide</a>
     <a href="/tarifs.html" data-context-only="all">💰 Tarifs</a>
-    <a href="/aide.html" data-context-only="all">❓ Centre d'aide</a>
-
-    <!-- Liens Espace Artisan -->
-    <a href="/dashboard.html" data-context-only="artisan">📊 Mon Dashboard</a>
-    <a href="/marketplace.html" data-context-only="artisan">🔥 Marketplace</a>
-    <a href="/achats.html" data-context-only="artisan">📦 Mes achats</a>
-    <a href="/carte.html" data-context-only="artisan">🗺️ Carte des chantiers</a>
-    <a href="/stripe.html" data-context-only="artisan">💳 Connexion Stripe</a>
-    <a href="/parametres.html" data-context-only="artisan">⚙ Paramètres Pro</a>
-
-    <!-- Liens Espace Client -->
-    <a href="/client-dashboard.html" data-context-only="client">📋 Mon Espace Client</a>
-    <a href="/client.html" data-context-only="client">💬 Déposer une demande</a>
-    <a href="/carte.html" data-context-only="client">🗺️ Carte des artisans</a>
   </nav>
 
   <div class="sidebar-actions">
+    <!-- Invité -->
     <div class="sidebar-guest">
-      <a href="/connexion.html" class="btn btn-secondary btn-block">Connexion</a>
+      <a href="/connexion.html"  class="btn btn-secondary btn-block">Connexion</a>
       <a href="/inscription.html" class="btn btn-primary btn-block">S'inscrire</a>
     </div>
+    <!-- Connecté -->
     <div class="sidebar-user" style="display:none;">
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:0.4rem 0;">
-        <span id="sidebar-user-name" style="font-weight:600;">👋 <span id="sidebar-user-nom"></span></span>
-        <span id="sidebar-role-badge" style="font-size:0.75rem;padding:3px 8px;border-radius:12px;background:var(--beige-dark);font-weight:600;"></span>
-      </div>
-
-      <!-- Bouton pour basculer d'espace (compte mixte ou artisan/client) -->
-      <div id="context-switcher" style="display:none;margin-bottom:0.4rem;">
-        <button id="btn-switch-context" class="btn btn-secondary btn-block" style="font-size:0.85rem;padding:8px 12px;">
-          <span id="context-switcher-text">🔄 Basculer d'espace</span>
-        </button>
-      </div>
-
       <button id="sidebar-logout" class="btn btn-danger btn-block">Déconnexion</button>
     </div>
   </div>
 </div>
 
 <style>
-/* ============================================================
-   STYLES CRITIQUES (version corrigée pour z-index)
-   ============================================================ */
+/* ================================================================
+   HEADER BÂTISWIFT — Shared Base Styles
+   Utilisé par header.html (Artisan) et header-client.html (Client)
+   ================================================================ */
+
 .site-header {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;                /* au-dessus du contenu normal, mais sous la sidebar */
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
   height: 72px;
   display: flex;
   align-items: center;
-  background: rgba(245,240,235,0.9);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid #EDE6DD;
+  background: rgba(245,240,235,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(232,224,212,0.8);
   padding: 0 1.5rem;
+  transition: background 0.3s ease;
 }
+
+/* Liseré de contexte */
+.site-header--artisan {
+  border-bottom-color: rgba(201,168,76,0.3);
+  box-shadow: 0 1px 0 rgba(201,168,76,0.12);
+}
+
+.site-header--client {
+  border-bottom-color: rgba(47,26,58,0.15);
+  box-shadow: 0 1px 0 rgba(47,26,58,0.06);
+}
+
 .site-header .container {
   display: flex;
   align-items: center;
@@ -91,20 +120,44 @@
   max-width: 1180px;
   margin: 0 auto;
 }
+
 .nav-logo {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1.4rem;
   font-weight: 700;
-  color: #2B2B2B;
+  color: #2F1A3A;
   text-decoration: none;
+  transition: opacity 0.2s ease;
 }
-.logo-svg {
-  width: 40px;
-  height: auto;
+
+.nav-logo:hover { opacity: 0.8; }
+
+.logo-svg { width: 38px; height: auto; }
+
+/* Badge de contexte desktop */
+.header-context-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #7a5b1a;
+  background: rgba(201,168,76,0.12);
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(201,168,76,0.25);
 }
+
+.site-header--client .header-context-badge {
+  color: #2F1A3A;
+  background: rgba(47,26,58,0.07);
+  border-color: rgba(47,26,58,0.15);
+}
+
+/* Burger */
 .menu-toggle {
   display: flex;
   flex-direction: column;
@@ -113,206 +166,305 @@
   border: none;
   cursor: pointer;
   padding: 8px;
-  z-index: 1001;                /* reste cliquable au-dessus du header */
+  border-radius: 10px;
+  transition: background 0.2s;
+  z-index: 1001;
 }
-.menu-toggle .bar {
-  width: 28px;
-  height: 3px;
-  background: #2B2B2B;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-}
-.menu-toggle.open .bar:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
-.menu-toggle.open .bar:nth-child(2) { opacity: 0; }
-.menu-toggle.open .bar:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
 
-/* Overlay semi-transparent – au-dessus de tout */
+.menu-toggle:hover { background: rgba(47,26,58,0.06); }
+
+.menu-toggle .bar {
+  width: 26px;
+  height: 2.5px;
+  background: #2F1A3A;
+  border-radius: 4px;
+  transition: all 0.28s cubic-bezier(0.4,0,0.2,1);
+}
+
+.menu-toggle.open .bar:nth-child(1) { transform: rotate(45deg) translate(5.5px, 5.5px); }
+.menu-toggle.open .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.menu-toggle.open .bar:nth-child(3) { transform: rotate(-45deg) translate(5.5px, -5.5px); }
+
+/* Overlay */
 .sidebar-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.4);
-  z-index: 9998;                /* très haut */
+  position: fixed; inset: 0;
+  background: rgba(20,10,30,0.45);
+  z-index: 9998;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
-}
-.sidebar-overlay.active {
-  opacity: 1;
-  pointer-events: auto;
+  backdrop-filter: blur(3px);
 }
 
-/* Sidebar elle-même – au-dessus de l'overlay et de Leaflet */
+.sidebar-overlay.active { opacity: 1; pointer-events: auto; }
+
+/* Sidebar */
 .sidebar {
   position: fixed;
-  top: 0;
-  right: -380px;
+  top: 0; right: -400px;
   width: 340px;
-  max-width: 85vw;
+  max-width: 88vw;
   height: 100vh;
   background: #FFFFFF;
-  z-index: 9999;                /* au-dessus de tout */
+  z-index: 9999;
   padding: 1.8rem;
-  box-shadow: -4px 0 40px rgba(0,0,0,0.15);
-  transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: -8px 0 48px rgba(20,10,30,0.18);
+  transition: right 0.32s cubic-bezier(0.4,0,0.2,1);
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.4rem;
   overflow-y: auto;
   box-sizing: border-box;
 }
-.sidebar.active {
-  right: 0;
-}
+
+.sidebar.active { right: 0; }
+
 .sidebar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-bottom: 1rem;
   border-bottom: 1px solid #EDE6DD;
+  flex-shrink: 0;
 }
+
 .sidebar-close {
   background: none;
   border: none;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   color: #8B8B8B;
   cursor: pointer;
-  padding: 0 0.5rem;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  line-height: 1;
 }
-.sidebar-close:hover {
-  color: #2B2B2B;
+
+.sidebar-close:hover { color: #2F1A3A; background: #F5F0EB; }
+
+/* Profil sidebar */
+.sidebar-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.6rem;
+  background: #F5F0EB;
+  border-radius: 14px;
+  margin-bottom: 0.4rem;
 }
+
+.sidebar-profile-avatar {
+  font-size: 1.5rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(201,168,76,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sidebar-profile-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2F1A3A;
+  margin-bottom: 3px;
+}
+
+.sidebar-badge-role {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: rgba(201,168,76,0.15);
+  color: #7a5b1a;
+}
+
+/* Section labels */
+.sidebar-section-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #B0A898;
+  padding: 8px 10px 4px;
+  margin-top: 4px;
+}
+
+/* Nav links */
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 2px;
+  flex: 1;
 }
+
 .sidebar-nav a {
-  padding: 0.8rem 1rem;
-  border-radius: 14px;
-  font-size: 1rem;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.95rem;
   font-weight: 500;
-  color: #2B2B2B;
-  transition: background 0.2s;
+  color: #2F1A3A;
+  transition: background 0.18s ease, color 0.18s ease;
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
+
 .sidebar-nav a:hover {
   background: #F5F0EB;
 }
 
-/* Boutons d'action */
+.sidebar-nav a.active,
+.sidebar-nav a[aria-current="page"] {
+  background: rgba(201,168,76,0.12);
+  color: #7a5b1a;
+  font-weight: 600;
+  border-left: 3px solid #C99A4C;
+  padding-left: 11px;
+}
+
+/* Actions */
 .sidebar-actions {
-  margin-top: 0;
-  padding-top: 0.5rem;
+  flex-shrink: 0;
+  padding-top: 0.8rem;
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.7rem;
   border-top: 1px solid #EDE6DD;
 }
-.sidebar-actions .btn {
-  text-align: center;
-  display: block;
-  width: 100%;
-}
-.sidebar-actions .btn-secondary {
-  background: transparent;
-  color: #2B2B2B;
-  border: 1.5px solid #D4D0CB;
-}
-.sidebar-actions .btn-primary {
-  background: #2B2B2B;
-  color: #FFFFFF;
-}
-.sidebar-actions .btn-danger {
-  background: #EF4444;
-  color: #FFFFFF;
-}
+
 .sidebar-actions .btn-block {
   width: 100%;
-  padding: 12px 16px;
+  padding: 11px 16px;
   border-radius: 50px;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 500;
   border: none;
   cursor: pointer;
   text-decoration: none;
   text-align: center;
+  display: block;
   transition: all 0.2s;
+}
+
+.sidebar-actions .btn-secondary {
+  background: transparent;
+  color: #2F1A3A;
+  border: 1.5px solid #D4D0CB;
+}
+
+.sidebar-actions .btn-secondary:hover { border-color: #2F1A3A; background: rgba(47,26,58,0.04); }
+
+.sidebar-actions .btn-primary {
+  background: #2F1A3A;
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(47,26,58,0.2);
+}
+
+.sidebar-actions .btn-primary:hover { background: #1A0F23; }
+
+.sidebar-actions .btn-danger {
+  background: #EF4444;
+  color: #FFFFFF;
+}
+
+.sidebar-actions .btn-danger:hover { background: #dc2626; }
+
+/* Petit btn */
+.sidebar-actions .btn-sm {
+  padding: 8px 14px;
+  font-size: 0.85rem;
 }
 </style>
 
 <script>
-// ════════════════════════════════════════════════════════════════
-// SCRIPT RÉSILIENT (s'exécute même si chargé dynamiquement)
-// ════════════════════════════════════════════════════════════════
-(function initHeader() {
-  console.log('🔍 Header : initialisation...');
-
-  // ---- 1. Récupérer les éléments ----
-  var toggle = document.getElementById('menu-toggle');
+(function initHeaderArtisan() {
+  'use strict';
+  var toggle  = document.getElementById('menu-toggle');
   var overlay = document.getElementById('sidebar-overlay');
   var sidebar = document.getElementById('sidebar');
   var closeBtn = document.getElementById('sidebar-close');
-  var allLinks = sidebar ? sidebar.querySelectorAll('a') : [];
+  var headerEl = document.getElementById('site-header');
 
   if (!toggle || !sidebar || !overlay) {
-    console.warn('⚠️ Header : éléments manquants (ids incorrects ?)');
+    console.warn('BâtiSwift header: éléments manquants.');
     return;
   }
 
-  console.log('✅ Header : éléments trouvés');
-
-  // ---- 2. Fonctions d’ouverture / fermeture ----
+  // ── Sidebar open/close ────────────────────────────────────
   function openSidebar() {
     toggle.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
     overlay.classList.add('active');
     sidebar.classList.add('active');
     document.body.style.overflow = 'hidden';
-    console.log('📂 Sidebar ouverte');
   }
 
   function closeSidebar() {
     toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
     overlay.classList.remove('active');
     sidebar.classList.remove('active');
     document.body.style.overflow = '';
-    console.log('📂 Sidebar fermée');
   }
 
-  // ---- 3. Écouteurs d’événements ----
   toggle.addEventListener('click', function(e) {
     e.stopPropagation();
-    if (sidebar.classList.contains('active')) {
-      closeSidebar();
-    } else {
-      openSidebar();
-    }
+    sidebar.classList.contains('active') ? closeSidebar() : openSidebar();
   });
 
   if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
   if (overlay) overlay.addEventListener('click', closeSidebar);
 
-  allLinks.forEach(function(link) {
+  // Fermer sur navigation
+  sidebar.querySelectorAll('a').forEach(function(link) {
     link.addEventListener('click', closeSidebar);
   });
 
-  // ---- 4. Initialisation de la nav selon la Session et le Contexte ----
+  // Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && sidebar.classList.contains('active')) closeSidebar();
+  });
+
+  // ── Active nav link ───────────────────────────────────────
+  var current = window.location.pathname.split('/').pop() || 'index.html';
+  sidebar.querySelectorAll('a[href]').forEach(function(a) {
+    var href = a.getAttribute('href').replace(/^\//, '');
+    if (href === current) {
+      a.classList.add('active');
+      a.setAttribute('aria-current', 'page');
+    }
+  });
+
+  // ── Badge contexte desktop ────────────────────────────────
+  var contextBadge = document.getElementById('header-context-badge');
+  if (contextBadge) contextBadge.style.display = 'flex';
+
+  // ── Session nav ───────────────────────────────────────────
   if (typeof Session !== 'undefined' && Session.updateNav) {
     Session.updateNav();
   } else {
-    var user = JSON.parse(localStorage.getItem('batiswift_user') || 'null');
-    var guestDiv = document.querySelector('.sidebar-guest');
-    var userDiv = document.querySelector('.sidebar-user');
-    var userNameSpan = document.getElementById('sidebar-user-nom');
-    if (user && userDiv && guestDiv) {
-      guestDiv.style.display = 'none';
-      userDiv.style.display = 'flex';
-      userDiv.style.flexDirection = 'column';
-      userDiv.style.gap = '0.8rem';
-      if (userNameSpan) userNameSpan.textContent = (user.nom || '').split(' ')[0] || 'Utilisateur';
+    // Fallback sans session.js
+    var user = null;
+    try { user = JSON.parse(localStorage.getItem('batiswift_user') || 'null'); } catch(e) {}
+    var guestDivs = document.querySelectorAll('.sidebar-guest');
+    var userDivs  = document.querySelectorAll('.sidebar-user');
+    if (user) {
+      guestDivs.forEach(function(el) { el.style.display = 'none'; });
+      userDivs.forEach(function(el) {
+        el.style.display = 'flex';
+        el.style.flexDirection = 'column';
+        el.style.gap = '0.6rem';
+      });
+      var nomEl = document.getElementById('sidebar-user-nom');
+      if (nomEl) nomEl.textContent = (user.nom || '').split(' ')[0] || 'Artisan';
     }
   }
 
-  // Switcher de contexte (Artisan ⇄ Client)
+  // ── Switcher mixte ────────────────────────────────────────
   var switchBtn = document.getElementById('btn-switch-context');
   if (switchBtn) {
     switchBtn.addEventListener('click', function(e) {
@@ -323,17 +475,20 @@
     });
   }
 
-  // ---- 5. Déconnexion ----
-  document.getElementById('sidebar-logout')?.addEventListener('click', function() {
-    if (typeof Session !== 'undefined' && Session.logout) {
-      Session.logout();
-    } else {
-      localStorage.removeItem('batiswift_token');
-      localStorage.removeItem('batiswift_user');
-      window.location.href = '/index.html';
-    }
-  });
+  // ── Logout ────────────────────────────────────────────────
+  var logoutBtn = document.getElementById('sidebar-logout');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', function() {
+      if (typeof Session !== 'undefined' && Session.logout) {
+        Session.logout();
+      } else {
+        localStorage.removeItem('batiswift_token');
+        localStorage.removeItem('batiswift_user');
+        localStorage.removeItem('batiswift_context');
+        window.location.href = '/index.html';
+      }
+    });
+  }
 
-  console.log('✅ Header initialisé avec succès');
 })();
 </script>

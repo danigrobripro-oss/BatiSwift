@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bienvenue sur BâtiSwift — Choisissez votre espace</title>
-  <meta name="description" content="Plateforme BâtiSwift — Choisissez votre espace dédié : Espace Artisan BTP ou Espace Client Particulier.">
+  <title>BâtiSwift — Plateforme BTP de mise en relation qualifiée</title>
+  <meta name="description" content="BâtiSwift connecte artisans BTP et clients qualifiés en moins de 2 minutes. Choisissez votre espace.">
 
   <!-- Favicon -->
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
@@ -16,254 +16,383 @@
   <link rel="stylesheet" href="/css/style.css">
 
   <style>
+    /* ================================================================
+       INDEX — PORTAIL BÂTISWIFT PREMIUM
+       ================================================================ */
+
+    * { box-sizing: border-box; }
+
     body {
-      background: radial-gradient(ellipse 90% 60% at 50% -10%, rgba(201,168,76,.10) 0%, transparent 70%), var(--beige);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      background: #F5F0EB;
+      /* Gradient radial subtil en haut */
+      background-image: radial-gradient(
+        ellipse 80% 50% at 50% -5%,
+        rgba(201,154,76,0.10) 0%,
+        transparent 70%
+      );
     }
 
-    .portal-hero {
+    /* ── PORTAIL WRAPPER ── */
+    .portal-wrapper {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: calc(var(--header-h) + 30px) 5vw 40px;
+      padding: calc(72px + 40px) 5vw 60px;
       text-align: center;
     }
 
-    .portal-badge {
+    /* ── EYEBROW ── */
+    .portal-eyebrow {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(201,168,76,.15);
+      background: rgba(201,154,76,0.12);
       color: #7a5b1a;
-      padding: 6px 18px;
+      padding: 6px 20px;
       border-radius: 50px;
-      font-size: .8rem;
-      font-weight: 600;
-      letter-spacing: .5px;
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
-    }
-
-    .portal-title {
-      font-family: var(--font-display);
-      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      font-size: 0.78rem;
       font-weight: 700;
-      color: var(--anthracite);
-      margin-bottom: 0.8rem;
-      line-height: 1.2;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 1.6rem;
+      border: 1px solid rgba(201,154,76,0.2);
     }
 
+    .portal-eyebrow::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #C99A4C;
+      flex-shrink: 0;
+    }
+
+    /* ── TITRE ── */
+    .portal-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 700;
+      color: #2F1A3A;
+      margin-bottom: 1rem;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+    }
+
+    .portal-title em {
+      font-style: normal;
+      color: #C99A4C;
+    }
+
+    /* ── SUBTITLE ── */
     .portal-subtitle {
-      font-size: clamp(0.95rem, 2vw, 1.15rem);
-      color: var(--gris);
-      max-width: 600px;
+      font-size: clamp(0.95rem, 2vw, 1.12rem);
+      color: #8B8B8B;
+      max-width: 560px;
       margin: 0 auto 3rem;
-      line-height: 1.6;
+      line-height: 1.65;
     }
 
-    /* Grille des 2 cartes */
+    /* ── CARDS GRID ── */
     .portal-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(280px, 460px));
-      gap: 2rem;
+      gap: 1.8rem;
       width: 100%;
-      max-width: 980px;
+      max-width: 960px;
       margin: 0 auto;
     }
 
+    /* ── CARD BASE ── */
     .portal-card {
-      background: var(--blanc);
-      border-radius: var(--radius-xl);
-      padding: 3rem 2.5rem;
-      border: 2px solid var(--beige-dark);
+      background: #FFFFFF;
+      border-radius: 28px;
+      padding: 2.8rem 2.5rem;
+      border: 2px solid #EDE6DD;
       text-align: left;
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
       position: relative;
       overflow: hidden;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 4px 20px rgba(43,43,43,0.04);
+      transition:
+        transform 0.3s cubic-bezier(0.4,0,0.2,1),
+        box-shadow 0.3s cubic-bezier(0.4,0,0.2,1),
+        border-color 0.3s ease;
+      box-shadow: 0 4px 24px rgba(47,26,58,0.05);
       text-decoration: none;
       color: inherit;
     }
 
+    /* Barre colorée en haut */
     .portal-card::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       height: 4px;
-      background: transparent;
-      transition: background 0.3s ease;
+      transition: opacity 0.3s ease;
+      opacity: 0;
     }
 
-    /* Hover et micro-animation */
     .portal-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 16px 40px rgba(43,43,43,0.10);
+      transform: translateY(-8px);
+      box-shadow: 0 24px 56px rgba(47,26,58,0.12);
     }
 
     .portal-card:active {
-      transform: translateY(-2px) scale(0.99);
+      transform: translateY(-3px) scale(0.99);
     }
 
-    .portal-card.card-artisan:hover {
-      border-color: var(--or);
-    }
-    .portal-card.card-artisan:hover::before {
-      background: var(--or);
+    /* ── ARTISAN CARD ── */
+    .card-artisan:hover {
+      border-color: #C99A4C;
     }
 
-    .portal-card.card-client:hover {
-      border-color: var(--anthracite);
-    }
-    .portal-card.card-client:hover::before {
-      background: var(--anthracite);
+    .card-artisan::before {
+      background: linear-gradient(90deg, #C99A4C, #EDD88A);
+      opacity: 0;
     }
 
+    .card-artisan:hover::before { opacity: 1; }
+
+    /* ── CLIENT CARD ── */
+    .card-client:hover {
+      border-color: #2F1A3A;
+    }
+
+    .card-client::before {
+      background: linear-gradient(90deg, #2F1A3A, #6B3A8A);
+      opacity: 0;
+    }
+
+    .card-client:hover::before { opacity: 1; }
+
+    /* ── CARD HEADER ── */
     .card-top {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.8rem;
     }
 
     .card-icon {
-      width: 64px;
-      height: 64px;
-      border-radius: 18px;
+      width: 68px;
+      height: 68px;
+      border-radius: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2rem;
+      font-size: 2.2rem;
       transition: transform 0.3s ease;
+      flex-shrink: 0;
     }
 
     .card-artisan .card-icon {
-      background: rgba(201,168,76,.12);
-      color: var(--or);
+      background: rgba(201,154,76,0.10);
     }
 
     .card-client .card-icon {
-      background: var(--gris-ultra);
-      color: var(--anthracite);
+      background: rgba(47,26,58,0.07);
     }
 
-    .portal-card:hover .card-icon {
-      transform: scale(1.1);
-    }
+    .portal-card:hover .card-icon { transform: scale(1.08) rotate(-3deg); }
 
     .card-tag {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.8px;
-      padding: 4px 12px;
-      border-radius: 20px;
+      padding: 5px 14px;
+      border-radius: 50px;
     }
 
     .card-artisan .card-tag {
-      background: rgba(201,168,76,.15);
+      background: rgba(201,154,76,0.12);
       color: #7a5b1a;
+      border: 1px solid rgba(201,154,76,0.2);
     }
 
     .card-client .card-tag {
-      background: var(--gris-ultra);
-      color: var(--anthracite);
+      background: rgba(47,26,58,0.07);
+      color: #2F1A3A;
+      border: 1px solid rgba(47,26,58,0.15);
     }
 
+    /* ── CARD BODY ── */
     .card-title {
-      font-family: var(--font-display);
-      font-size: 1.8rem;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 2rem;
       font-weight: 700;
-      color: var(--anthracite);
-      margin-bottom: 0.5rem;
+      color: #2F1A3A;
+      margin-bottom: 0.6rem;
+      line-height: 1.1;
     }
 
     .card-desc {
-      font-size: 0.95rem;
-      color: var(--gris);
-      line-height: 1.6;
+      font-size: 0.93rem;
+      color: #8B8B8B;
+      line-height: 1.65;
       margin-bottom: 2rem;
     }
 
+    /* ── FEATURES ── */
     .card-features {
       list-style: none;
-      padding: 0;
-      margin: 0 0 2rem;
+      padding: 0; margin: 0;
       display: flex;
       flex-direction: column;
       gap: 10px;
+      margin-bottom: 2.2rem;
     }
 
     .card-features li {
-      font-size: 0.88rem;
-      color: var(--anthracite);
+      font-size: 0.87rem;
+      color: #2F1A3A;
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .card-features li span {
-      color: var(--or);
-      font-weight: bold;
+    .card-features li .check {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      flex-shrink: 0;
     }
 
-    .card-btn {
+    .card-artisan .card-features li .check {
+      background: rgba(201,154,76,0.15);
+      color: #7a5b1a;
+    }
+
+    .card-client .card-features li .check {
+      background: rgba(16,185,129,0.12);
+      color: #065f46;
+    }
+
+    /* ── CTA BUTTON ── */
+    .card-cta {
       width: 100%;
       text-align: center;
-      padding: 14px 20px;
+      padding: 15px 24px;
       border-radius: 50px;
       font-weight: 600;
       font-size: 0.95rem;
-      transition: all 0.2s ease;
+      transition: all 0.22s ease;
       border: none;
       cursor: pointer;
+      display: block;
+      letter-spacing: 0.2px;
     }
 
-    .card-artisan .card-btn {
-      background: var(--or);
-      color: var(--blanc);
-    }
-    .card-artisan .card-btn:hover {
-      background: #b8952e;
+    .card-artisan .card-cta {
+      background: #C99A4C;
+      color: #FFFFFF;
+      box-shadow: 0 6px 24px rgba(201,154,76,0.3);
     }
 
-    .card-client .card-btn {
-      background: var(--anthracite);
-      color: var(--blanc);
+    .card-artisan .card-cta:hover {
+      background: #b08638;
+      box-shadow: 0 10px 32px rgba(201,154,76,0.4);
+      transform: translateY(-1px);
     }
-    .card-client .card-btn:hover {
-      background: var(--anthracite2);
+
+    .card-client .card-cta {
+      background: #2F1A3A;
+      color: #FFFFFF;
+      box-shadow: 0 6px 24px rgba(47,26,58,0.2);
+    }
+
+    .card-client .card-cta:hover {
+      background: #1A0F23;
+      box-shadow: 0 10px 32px rgba(47,26,58,0.3);
+      transform: translateY(-1px);
+    }
+
+    /* ── FOOTER LINKS ── */
+    .portal-footer {
+      margin-top: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .portal-footer-link {
-      margin-top: 3rem;
-      font-size: 0.9rem;
-      color: var(--gris);
+      font-size: 0.87rem;
+      color: #8B8B8B;
+      text-decoration: none;
+      transition: color 0.2s;
     }
 
-    .portal-footer-link a {
-      color: var(--anthracite);
-      font-weight: 600;
-      text-decoration: underline;
+    .portal-footer-link:hover { color: #2F1A3A; }
+
+    .portal-footer-sep {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: #D4D0CB;
     }
 
+    /* ── STATS ── */
+    .portal-stats {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .portal-stat {
+      text-align: center;
+    }
+
+    .portal-stat-value {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2F1A3A;
+      display: block;
+    }
+
+    .portal-stat-label {
+      font-size: 0.78rem;
+      color: #8B8B8B;
+      letter-spacing: 0.3px;
+    }
+
+    .portal-stat-sep {
+      width: 1px;
+      height: 40px;
+      background: #E8E0D4;
+    }
+
+    /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       .portal-grid {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: 1.4rem;
       }
+
       .portal-card {
-        padding: 2rem 1.8rem;
+        padding: 2.2rem 1.8rem;
       }
+
+      .portal-stats { gap: 1.2rem; }
+      .portal-stat-sep { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .portal-wrapper { padding-top: calc(72px + 24px); }
+      .card-title { font-size: 1.7rem; }
     }
   </style>
 </head>
@@ -272,58 +401,104 @@
   <div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
   <div id="header-container"></div>
 
-  <main class="portal-hero">
-    <div class="portal-badge">⚡ Mise en relation directe & qualifiée</div>
-    <h1 class="portal-title">Bienvenue sur BâtiSwift</h1>
-    <p class="portal-subtitle">Choisissez votre espace pour une expérience sur-mesure adaptée à vos besoins.</p>
+  <main class="portal-wrapper">
 
-    <div class="portal-grid">
+    <!-- Eyebrow -->
+    <div class="portal-eyebrow">Mise en relation BTP qualifiée</div>
 
-      <!-- ─── CARTE ARTISAN ─── -->
-      <div class="portal-card card-artisan" id="select-artisan" role="button" tabindex="0">
-        <div>
-          <div class="card-top">
-            <div class="card-icon">🛠️</div>
-            <span class="card-tag">Professionnel BTP</span>
-          </div>
-          <h2 class="card-title">Espace Artisan</h2>
-          <p class="card-desc">Développez votre activité, recevez des leads qualifiés dans votre zone et gérez vos chantiers.</p>
-          <ul class="card-features">
-            <li><span>✓</span> Demandes clients vérifiées par l'IA</li>
-            <li><span>✓</span> 10 € le lead, sans abonnement obligatoire</li>
-            <li><span>✓</span> Marketplace géolocalisée & notifications directes</li>
-          </ul>
+    <!-- Titre -->
+    <h1 class="portal-title">
+      Bienvenue sur <em>BâtiSwift</em>
+    </h1>
+
+    <p class="portal-subtitle">
+      La plateforme qui connecte artisans professionnels et clients qualifiés
+      en moins de 2 minutes — vérifiée et pilotée par l'intelligence artificielle.
+    </p>
+
+    <!-- Stats live -->
+    <div class="portal-stats reveal">
+      <div class="portal-stat">
+        <span class="portal-stat-value" data-stat="artisans_inscrits">—</span>
+        <span class="portal-stat-label">Artisans inscrits</span>
+      </div>
+      <div class="portal-stat-sep"></div>
+      <div class="portal-stat">
+        <span class="portal-stat-value" data-stat="leads_total">—</span>
+        <span class="portal-stat-label">Demandes traitées</span>
+      </div>
+      <div class="portal-stat-sep"></div>
+      <div class="portal-stat">
+        <span class="portal-stat-value">10 €</span>
+        <span class="portal-stat-label">Par lead, sans abonnement</span>
+      </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="portal-grid reveal reveal-delay-1">
+
+      <!-- ── ARTISAN ── -->
+      <div class="portal-card card-artisan" id="select-artisan" role="button" tabindex="0" aria-label="Entrer dans l'espace artisan">
+        <div class="card-top">
+          <div class="card-icon">🛠️</div>
+          <span class="card-tag">Professionnel BTP</span>
         </div>
-        <button type="button" class="card-btn">Entrer dans l'espace Artisan →</button>
+
+        <h2 class="card-title">Espace Artisan</h2>
+        <p class="card-desc">
+          Développez votre activité, recevez des leads qualifiés dans votre zone
+          géographique et gérez vos projets depuis un seul espace.
+        </p>
+
+        <ul class="card-features">
+          <li><span class="check">✓</span> Leads vérifiés par notre agent IA</li>
+          <li><span class="check">✓</span> 10 € le lead, sans abonnement obligatoire</li>
+          <li><span class="check">✓</span> Marketplace géolocalisée en temps réel</li>
+          <li><span class="check">✓</span> Tableau de bord & gestion des paiements</li>
+        </ul>
+
+        <button type="button" class="card-cta">Entrer dans l'espace Artisan →</button>
       </div>
 
-      <!-- ─── CARTE CLIENT ─── -->
-      <div class="portal-card card-client" id="select-client" role="button" tabindex="0">
-        <div>
-          <div class="card-top">
-            <div class="card-icon">🏠</div>
-            <span class="card-tag">Particulier & Client</span>
-          </div>
-          <h2 class="card-title">Espace Client</h2>
-          <p class="card-desc">Décrivez votre problème et trouvez un artisan vérifié et qualifié près de chez vous en moins de 2 minutes.</p>
-          <ul class="card-features">
-            <li><span>✓</span> 100% gratuit & sans engagement</li>
-            <li><span>✓</span> Qualification instantanée par notre agent IA</li>
-            <li><span>✓</span> Rappel sous 1h par un artisan disponible</li>
-          </ul>
+      <!-- ── CLIENT ── -->
+      <div class="portal-card card-client" id="select-client" role="button" tabindex="0" aria-label="Entrer dans l'espace client">
+        <div class="card-top">
+          <div class="card-icon">🏠</div>
+          <span class="card-tag">Particulier & Client</span>
         </div>
-        <button type="button" class="card-btn">Entrer dans l'espace Client →</button>
+
+        <h2 class="card-title">Espace Client</h2>
+        <p class="card-desc">
+          Décrivez votre problème et trouvez un artisan vérifié et disponible
+          près de chez vous en moins de 2 minutes. 100% gratuit, sans engagement.
+        </p>
+
+        <ul class="card-features">
+          <li><span class="check">✓</span> Gratuit & sans engagement</li>
+          <li><span class="check">✓</span> Qualification instantanée par IA</li>
+          <li><span class="check">✓</span> Rappel sous 1h par un artisan disponible</li>
+          <li><span class="check">✓</span> Suivi de votre demande en temps réel</li>
+        </ul>
+
+        <button type="button" class="card-cta">Entrer dans l'espace Client →</button>
       </div>
 
     </div>
 
-    <div class="portal-footer-link">
-      Découvrir notre fonctionnement et nos tarifs : <a href="/vitrine.html">Voir le site complet →</a>
+    <!-- Footer links -->
+    <div class="portal-footer">
+      <a href="/vitrine.html" class="portal-footer-link">Comment ça marche ?</a>
+      <div class="portal-footer-sep"></div>
+      <a href="/tarifs.html" class="portal-footer-link">Tarifs</a>
+      <div class="portal-footer-sep"></div>
+      <a href="/connexion.html" class="portal-footer-link">Déjà inscrit ? Se connecter</a>
     </div>
+
   </main>
 
   <div id="footer-container"></div>
 
+  <!-- Scripts — ordre obligatoire -->
   <script src="/js/config.js"></script>
   <script src="/js/api.js"></script>
   <script src="/js/session.js"></script>
@@ -332,47 +507,56 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       var btnArtisan = document.getElementById('select-artisan');
-      var btnClient = document.getElementById('select-client');
+      var btnClient  = document.getElementById('select-client');
 
       function enterArtisan() {
-        Session.setContext('artisan');
         var user = Session.getUser();
         if (Session.isLoggedIn() && user) {
           if (user.role === 'client') {
+            // Un client ne peut pas entrer dans l'espace artisan
             window.location.href = '/client-dashboard.html';
           } else {
+            // artisan ou mixte
+            if (user.role === 'mixte') Session.setContext('artisan');
             window.location.href = '/dashboard.html';
           }
         } else {
+          // Visiteur non connecté → landing artisan (inscription/info)
           window.location.href = '/vitrine.html#artisans';
         }
       }
 
       function enterClient() {
-        Session.setContext('client');
         var user = Session.getUser();
         if (Session.isLoggedIn() && user) {
           if (user.role === 'artisan') {
+            // Un artisan reste dans son espace
             window.location.href = '/dashboard.html';
           } else {
+            // client ou mixte
+            if (user.role === 'mixte') Session.setContext('client');
             window.location.href = '/client-dashboard.html';
           }
         } else {
+          // Visiteur non connecté → formulaire de demande (gratuit, sans compte requis)
           window.location.href = '/client.html';
         }
       }
 
       if (btnArtisan) {
         btnArtisan.addEventListener('click', enterArtisan);
-        btnArtisan.addEventListener('keydown', function(e) { if (e.key === 'Enter') enterArtisan(); });
+        btnArtisan.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); enterArtisan(); }
+        });
       }
 
       if (btnClient) {
         btnClient.addEventListener('click', enterClient);
-        btnClient.addEventListener('keydown', function(e) { if (e.key === 'Enter') enterClient(); });
+        btnClient.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); enterClient(); }
+        });
       }
     });
   </script>
 </body>
 </html>
-

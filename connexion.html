@@ -162,8 +162,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     document.getElementById('alert-expired').style.display = 'flex';
   }
 
-  // Redirige si déjà connecté
-  await Session.redirectIfAuth('/dashboard.html');
+  // Redirige si déjà connecté selon le rôle
+  await Session.redirectIfAuth();
 
   // Toggle mot de passe
   document.getElementById('toggle-pw').addEventListener('click', function() {
@@ -204,9 +204,14 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (user && user.role === 'artisan') {
           setTimeout(function() { window.location.href = '/dashboard.html'; }, 600);
         } else if (user && user.role === 'client') {
-          setTimeout(function() { window.location.href = '/client.html'; }, 600);
+          setTimeout(function() { window.location.href = '/client-dashboard.html'; }, 600);
+        } else if (user && user.role === 'mixte') {
+          // Mixte : redirige selon le dernier contexte sauvegardé
+          var ctx = Session.getContext();
+          var dest = (ctx === 'client') ? '/client-dashboard.html' : '/dashboard.html';
+          setTimeout(function() { window.location.href = dest; }, 600);
         } else {
-          // Fallback
+          // Fallback sécurisé
           setTimeout(function() { window.location.href = '/dashboard.html'; }, 600);
         }
       }

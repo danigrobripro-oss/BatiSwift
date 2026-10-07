@@ -1,7 +1,12 @@
 /**
- * BâtiSwift — session.js
+ * BâtiSwift — session.js v2.1
  * Gestion JWT, Rôles et Contexte (Artisan / Client).
  * Chargé après config.js et api.js.
+ *
+ * RÈGLES DE SÉCURITÉ :
+ * - getContext() retourne TOUJOURS le rôle réel si l'utilisateur est artisan ou client.
+ * - Seul un compte MIXTE peut avoir un contexte sauvegardé différent.
+ * - Un changement manuel de localStorage.batiswift_context ne peut pas élever les droits.
  */
 
 var Session = {
@@ -20,40 +25,58 @@ var Session = {
     return user && user.role ? user.role : null;
   },
 
-  // ─── GESTION DU CONTEXTE ACTIF (Artisan / Client) ───────────
+  // ─── GESTION DU CONTEXTE ACTIF (Artisan / Client) ─────────────────────────
+  // IMPORTANT : pour les rôles "artisan" et "client", le contexte est FIXE.
+  // Seul le rôle "mixte" peut changer de contexte via switchContext().
+  // Un changement manuel de localStorage ne peut pas bypasser cette vérification.
   getContext: function() {
-    var saved = localStorage.getItem(CONFIG.CONTEXT_KEY);
-    if (saved === 'artisan' || saved === 'client') return saved;
     var user = this.getUser();
-    if (user && user.role) {
-      if (user.role === 'client') return 'client';
-      if (user.role === 'artisan') return 'artisan';
-      if (user.role === 'mixte') return 'artisan';
+    if (!user) return 'artisan'; // défaut visiteur
+
+    // Rôle fixe : le contexte est toujours déterminé par le rôle JWT
+    if (user.role === 'artisan') return 'artisan';
+    if (user.role === 'client') return 'client';
+
+    // Seulement pour 'mixte' : lire le contexte sauvegardé
+    if (user.role === 'mixte') {
+      var saved = localStorage.getItem(CONFIG.CONTEXT_KEY);
+      if (saved === 'artisan' || saved === 'client') return saved;
+      return 'artisan'; // défaut mixte
     }
-    return 'artisan'; // défaut
+
+    return 'artisan'; // sécurité finale
   },
 
   setContext: function(ctx) {
     if (ctx !== 'artisan' && ctx !== 'client') return;
-    localStorage.setItem(CONFIG.CONTEXT_KEY, ctx);
+    // On ne sauvegarde dans localStorage que pour les mixtes
+    // Pour les autres rôles, le contexte est déterminé par getContext() dynamiquement
+    var user = this.getUser();
+    if (user && user.role === 'mixte') {
+      localStorage.setItem(CONFIG.CONTEXT_KEY, ctx);
+    }
     document.dispatchEvent(new CustomEvent('context:changed', { detail: { context: ctx } }));
     this.updateNav();
   },
 
+  // Bascule uniquement disponible pour les comptes mixtes
   switchContext: function() {
     var user = this.getUser();
     if (!user || user.role !== 'mixte') {
+      console.warn('BatiSwift: switchContext() ignoré — compte non mixte.');
       return;
     }
     var current = this.getContext();
     var next = (current === 'artisan') ? 'client' : 'artisan';
-    this.setContext(next);
+    localStorage.setItem(CONFIG.CONTEXT_KEY, next);
+    document.dispatchEvent(new CustomEvent('context:changed', { detail: { context: next } }));
     var path = window.location.pathname;
-    if (next === 'client' && (path.includes('dashboard') || path.includes('marketplace') || path.includes('achats') || path.includes('stripe'))) {
+    if (next === 'client' && (path.includes('dashboard') && !path.includes('client-dashboard') || path.includes('marketplace') || path.includes('achats') || path.includes('stripe'))) {
       window.location.href = '/client-dashboard.html';
     } else if (next === 'artisan' && path.includes('client-dashboard')) {
       window.location.href = '/dashboard.html';
     } else {
+      this.updateNav();
       window.location.reload();
     }
   },
@@ -61,14 +84,16 @@ var Session = {
   save: function(token, artisan) {
     localStorage.setItem(CONFIG.TOKEN_KEY, token);
     localStorage.setItem(CONFIG.USER_KEY, JSON.stringify(artisan));
-    if (artisan && artisan.role) {
-      this.setContext(artisan.role === 'client' ? 'client' : 'artisan');
+    // Nettoyer le contexte sauvegardé si ce n'est pas un compte mixte
+    if (artisan && artisan.role !== 'mixte') {
+      localStorage.removeItem(CONFIG.CONTEXT_KEY);
     }
   },
 
   clear: function() {
     localStorage.removeItem(CONFIG.TOKEN_KEY);
     localStorage.removeItem(CONFIG.USER_KEY);
+    localStorage.removeItem(CONFIG.CONTEXT_KEY);
   },
 
   isLoggedIn: function() {
@@ -86,6 +111,10 @@ var Session = {
       var data = await API.me();
       if (data && data.artisan) {
         localStorage.setItem(CONFIG.USER_KEY, JSON.stringify(data.artisan));
+        // Nettoyer le contexte si rôle changé côté serveur
+        if (data.artisan.role !== 'mixte') {
+          localStorage.removeItem(CONFIG.CONTEXT_KEY);
+        }
         return data.artisan;
       }
       this.clear(); return null;
@@ -104,34 +133,49 @@ var Session = {
   },
 
   /**
-   * Vérifie que l'utilisateur a le rôle requis.
-   * Si non autorisé, redirige vers l'espace correspondant.
+   * Vérifie que l'utilisateur a accès à l'espace demandé.
+   * La vérification est TOUJOURS faite contre le rôle JWT, jamais contre le localStorage seul.
+   *
+   * - 'artisan' requis : seuls artisan et mixte passent. Un client est bloqué.
+   * - 'client' requis  : seuls client et mixte passent. Un artisan est bloqué.
    */
   requireRole: async function(expectedRole) {
     var user = await this.requireAuth();
     if (!user) return null;
 
-    if (user.role === 'mixte') {
-      this.setContext(expectedRole);
+    var role = user.role;
+
+    // Compte mixte : accès aux deux espaces
+    if (role === 'mixte') {
+      // Forcer le contexte selon la page demandée
+      if (user.role === 'mixte') {
+        localStorage.setItem(CONFIG.CONTEXT_KEY, expectedRole);
+      }
       return user;
     }
 
-    if (expectedRole === 'artisan' && user.role !== 'artisan') {
+    // Accès correct
+    if (role === expectedRole) {
+      return user;
+    }
+
+    // Client tente d'accéder à l'espace artisan → blocage
+    if (expectedRole === 'artisan' && role === 'client') {
       window.location.href = '/client-dashboard.html?denied=artisan';
       return null;
     }
 
-    if (expectedRole === 'client' && user.role !== 'client') {
+    // Artisan tente d'accéder à l'espace client → blocage
+    if (expectedRole === 'client' && role === 'artisan') {
       window.location.href = '/dashboard.html?denied=client';
       return null;
     }
 
-    this.setContext(expectedRole);
     return user;
   },
 
   /**
-   * Pages auth : redirige selon le rôle vers l'espace approprié.
+   * Pages auth (connexion, inscription) : redirige selon le rôle vers l'espace approprié.
    */
   redirectIfAuth: async function(to) {
     if (this.isLoggedIn()) {
@@ -140,8 +184,11 @@ var Session = {
 
       var target = to;
       if (!target) {
-        if (user.role === 'client' || this.getContext() === 'client') {
+        if (user.role === 'client') {
           target = '/client-dashboard.html';
+        } else if (user.role === 'mixte') {
+          var ctx = this.getContext();
+          target = (ctx === 'client') ? '/client-dashboard.html' : '/dashboard.html';
         } else {
           target = '/dashboard.html';
         }
@@ -158,12 +205,13 @@ var Session = {
   },
 
   /**
-   * Met à jour la nav après injection du header ou changement de contexte.
+   * Met à jour la navigation selon le contexte et le rôle réel.
+   * Le bouton switcher est visible UNIQUEMENT pour les comptes mixtes.
    */
   updateNav: function() {
     var user   = this.getUser();
     var isAuth = this.isLoggedIn() && !!user;
-    var ctx    = this.getContext();
+    var ctx    = this.getContext(); // retourne toujours le bon contexte selon le rôle
 
     // Affichage invité vs connecté
     document.querySelectorAll('.nav-guest, .sidebar-guest').forEach(function(el) {
@@ -183,6 +231,8 @@ var Session = {
       var roleBadge = document.getElementById('sidebar-role-badge');
       if (roleBadge) {
         roleBadge.textContent = (ctx === 'client') ? '🏠 Mode Client' : '🛠️ Mode Artisan';
+        roleBadge.style.background = (ctx === 'client') ? 'rgba(43,43,43,0.08)' : 'rgba(201,168,76,0.15)';
+        roleBadge.style.color = (ctx === 'client') ? '#2B2B2B' : '#7a5b1a';
       }
     }
 
@@ -196,14 +246,16 @@ var Session = {
       }
     });
 
-    // Bouton de bascule de contexte
+    // Bouton de bascule de contexte — UNIQUEMENT pour les comptes mixtes
     var switcher = document.getElementById('context-switcher');
     if (switcher) {
-      var isMixed = user && user.role === 'mixte';
-      switcher.style.display = (isAuth && isMixed) ? 'block' : 'none';
-      var switchText = document.getElementById('context-switcher-text');
-      if (switchText) {
-        switchText.textContent = (ctx === 'artisan') ? 'Passer en mode Client 🏠' : 'Passer en mode Artisan 🛠️';
+      var isMixte = isAuth && user && user.role === 'mixte';
+      switcher.style.display = isMixte ? 'block' : 'none';
+      if (isMixte) {
+        var switchText = document.getElementById('context-switcher-text');
+        if (switchText) {
+          switchText.textContent = (ctx === 'artisan') ? '🏠 Passer en mode Client' : '🛠️ Passer en mode Artisan';
+        }
       }
     }
 

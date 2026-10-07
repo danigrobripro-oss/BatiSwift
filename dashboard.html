@@ -9,213 +9,462 @@
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg" />
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg" />
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="manifest" href="/assets/site.webmanifest" />
   <meta name="theme-color" content="#F5F0EB" />
 
   <link rel="stylesheet" href="/css/style.css">
   <script src="https://js.stripe.com/v3/"></script>
+
   <style>
-    /* ── DASHBOARD SPECIFIQUE ── */
-    .dashboard-hero {
-      padding-top: calc(var(--header-h) + 40px);
-      padding-bottom: var(--space-lg);
-      background: var(--beige);
-      border-bottom: 1px solid var(--beige-dark);
+    /* ══════════════════════════════════════════
+       DASHBOARD ARTISAN — STYLES PREMIUM
+    ══════════════════════════════════════════ */
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      padding-top: calc(var(--header-h, 72px) + 48px);
+      padding-bottom: 3rem;
     }
-    .dashboard-hero h1 {
-      font-family: var(--font-display);
-      font-size: 2rem;
+    .page-hero-artisan {
+      background: linear-gradient(135deg, #F5F0EB 0%, #FDFBF8 100%);
+      border-top: 3px solid var(--or, #C99A4C);
+      border-bottom: 1px solid rgba(201,154,76,0.15);
+    }
+
+    /* ── WELCOME BLOCK ── */
+    .dashboard-welcome {
+      margin-bottom: 0.5rem;
+    }
+    .dashboard-welcome h1 {
+      font-family: var(--font-display, 'Cormorant Garamond', serif);
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
       font-weight: 700;
+      color: var(--anthracite, #2F1A3A);
+      line-height: 1.2;
+      margin-bottom: 0.35rem;
     }
-    .dashboard-hero .sub {
-      color: var(--gris);
+    .dashboard-welcome h1 em {
+      font-style: normal;
+      color: var(--or, #C99A4C);
+    }
+    .dashboard-welcome .sub {
       font-size: 0.95rem;
+      color: var(--gris, #8B8B8B);
+      margin-bottom: 1rem;
     }
-    
+
+    /* ── BADGES ROW ── */
+    .dashboard-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+    .dashboard-badges .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .badge-pill-role {
+      background: var(--anthracite, #2F1A3A);
+      color: #fff;
+    }
+    .badge-pill-gold {
+      background: rgba(201,154,76,0.12);
+      color: var(--or, #C99A4C);
+      border: 1px solid rgba(201,154,76,0.3);
+    }
+    .badge-pill-neutral {
+      background: rgba(47,26,58,0.06);
+      color: var(--anthracite, #2F1A3A);
+      border: 1px solid rgba(47,26,58,0.1);
+    }
+
+    /* ── KPI GRID ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    .kpi-card {
+      background: var(--blanc, #fff);
+      border-radius: 16px;
+      padding: 1.4rem 1.25rem;
+      border: 1.5px solid rgba(201,154,76,0.15);
+      box-shadow: 0 2px 12px rgba(47,26,58,0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--or, #C99A4C), rgba(201,154,76,0.3));
+    }
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(47,26,58,0.1);
+    }
+    .kpi-icon {
+      font-size: 1.4rem;
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+    .kpi-value {
+      font-family: var(--font-display, 'Cormorant Garamond', serif);
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--anthracite, #2F1A3A);
+      line-height: 1;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+    .kpi-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gris, #8B8B8B);
+    }
+    .kpi-card-gold .kpi-value {
+      color: var(--or, #C99A4C);
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .section-header h2 {
+      font-family: var(--font-display, 'Cormorant Garamond', serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--anthracite, #2F1A3A);
+      margin: 0;
+    }
+    .section-header h2 span {
+      font-family: var(--font-body, sans-serif);
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: rgba(201,154,76,0.12);
+      color: var(--or, #C99A4C);
+      border: 1px solid rgba(201,154,76,0.3);
+      border-radius: 999px;
+      padding: 0.2rem 0.65rem;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+
+    .leads-section {
+      padding: 3rem 0;
+    }
+    .leads-block {
+      margin-bottom: 3rem;
+    }
+    .leads-block + .leads-block {
+      padding-top: 2.5rem;
+      border-top: 1px solid rgba(47,26,58,0.08);
+    }
+
+    /* ── LEAD GRID ── */
     .lead-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: var(--space-lg);
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+      min-height: 80px;
     }
-    
+
+    /* ── LEAD CARD (override / complement style.css) ── */
     .lead-card {
-      background: var(--blanc);
-      border-radius: var(--radius-lg);
-      padding: var(--space-lg);
-      border: 1.5px solid var(--beige-dark);
-      transition: all var(--transition);
+      background: var(--blanc, #fff);
+      border-radius: 16px;
+      padding: 1.4rem;
+      border: 1.5px solid rgba(47,26,58,0.08);
+      box-shadow: 0 2px 8px rgba(47,26,58,0.04);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     }
     .lead-card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 32px rgba(43,43,43,0.08);
-      border-color: var(--gris-light);
-    }
-    .lead-card .badge {
-      float: right;
-    }
-    .lead-card .price {
-      font-family: var(--font-display);
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--or);
-    }
-    .lead-card .distance {
-      font-size: 0.85rem;
-      color: var(--gris);
-    }
-    .lead-card .description {
-      font-size: 0.9rem;
-      color: var(--gris);
-      margin: var(--space-sm) 0;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .lead-card .footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: var(--space-sm);
-      padding-top: var(--space-sm);
-      border-top: 1px solid var(--beige-dark);
-    }
-    
-    .empty-state {
-      text-align: center;
-      padding: var(--space-xl) 0;
-      color: var(--gris);
-    }
-    .empty-state .icon {
-      font-size: 3rem;
-      margin-bottom: var(--space-md);
+      box-shadow: 0 10px 32px rgba(47,26,58,0.1);
+      border-color: rgba(201,154,76,0.3);
     }
 
-    /* ── SECTION AVIS ── */
-    .avis-section {
-      margin-top: 2.5rem;
-      padding-top: 1.5rem;
-      border-top: 2px solid var(--beige-dark);
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--gris, #8B8B8B);
+      grid-column: 1 / -1;
     }
-    .avis-section h3 {
-      font-family: var(--font-display);
-      font-size: 1.4rem;
+    .empty-state .icon {
+      font-size: 2.8rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .empty-state p {
+      font-size: 0.9rem;
+      max-width: 280px;
+      margin: 0 auto;
+    }
+
+    /* ── AVIS SECTION ── */
+    #avis-section {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(47,26,58,0.08);
+    }
+    .avis-section-header {
+      margin-bottom: 1.25rem;
+    }
+    .avis-section-header h2 {
+      font-family: var(--font-display, 'Cormorant Garamond', serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--anthracite, #2F1A3A);
+      margin: 0 0 0.25rem;
     }
     .avis-card {
-      background: var(--beige);
-      border-radius: var(--radius);
-      padding: 1rem;
-      margin-bottom: 0.8rem;
+      background: #FDFBF8;
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      border: 1px solid rgba(201,154,76,0.15);
+      margin-bottom: 0.75rem;
     }
-    .avis-card .stars {
-      color: var(--or);
-      font-size: 1rem;
-    }
-    .avis-card .client {
-      font-weight: 600;
-      color: var(--anthracite);
-    }
-    .avis-card .comment {
-      font-size: 0.9rem;
-      color: var(--gris);
-      margin-top: 4px;
-    }
-    .avis-card .date {
-      font-size: 0.7rem;
-      color: var(--gris-light);
-    }
-    
-    /* ── Mode mixte : boutons de dépot ── */
-    .mixed-actions {
+    .avis-card .stars { color: var(--or, #C99A4C); }
+    .avis-card .client { font-weight: 600; color: var(--anthracite, #2F1A3A); }
+    .avis-card .comment { font-size: 0.9rem; color: var(--gris, #8B8B8B); margin-top: 4px; }
+    .avis-card .date { font-size: 0.72rem; color: #bbb; }
+
+    /* ── QUICK ACTIONS ── */
+    .quick-actions {
       display: flex;
-      gap: 0.8rem;
       flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1rem;
     }
-    .mixed-actions .btn {
-      white-space: nowrap;
+
+    /* ── MODALS ── */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(47,26,58,0.45);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
     }
-    
-    @media (max-width: 768px) {
-      .dashboard-hero h1 {
-        font-size: 1.6rem;
-      }
-      .lead-grid {
-        grid-template-columns: 1fr;
-      }
-      .lead-card {
-        padding: var(--space-md);
-      }
-      .mixed-actions {
-        flex-direction: column;
-      }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 440px;
+      width: calc(100% - 2rem);
+      box-shadow: 0 24px 64px rgba(47,26,58,0.2);
+      position: relative;
     }
-    
-    @media (max-width: 480px) {
-      .dashboard-hero {
-        padding-top: calc(var(--header-h) + 20px);
-        padding-bottom: var(--space-md);
-      }
-      .dashboard-hero h1 {
-        font-size: 1.3rem;
-      }
-      .lead-card .price {
-        font-size: 1.1rem;
-      }
+    .modal-box h3 {
+      font-family: var(--font-display, 'Cormorant Garamond', serif);
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: var(--anthracite, #2F1A3A);
+    }
+    .modal-close {
+      position: absolute;
+      top: 1rem; right: 1.1rem;
+      background: none; border: none;
+      font-size: 1.3rem; cursor: pointer;
+      color: var(--gris, #8B8B8B);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+      .kpi-value { font-size: 2rem; }
+      .page-hero { padding-top: calc(var(--header-h, 72px) + 28px); padding-bottom: 2rem; }
+      .lead-grid { grid-template-columns: 1fr; }
+      .section-header { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
 
-<div id="page-loader" class="page-loader"><div class="spinner spinner-dark" style="width:40px;height:40px;"></div></div>
+<!-- ── LOADER ── -->
+<div id="page-loader" class="page-loader">
+  <div class="spinner spinner-dark" style="width:40px;height:40px;"></div>
+</div>
+
+<!-- ── HEADER ── -->
 <div id="header-container"></div>
 
+<!-- ── DASHBOARD ROOT (requis par artisan.js initDashboard) ── -->
+<div id="dashboard-root">
+
 <main>
-  <!-- ── HERO DASHBOARD ── -->
-  <section class="dashboard-hero">
+
+  <!-- ══════════════════════════════════════
+       HERO — Accueil artisan
+  ══════════════════════════════════════ -->
+  <section class="page-hero page-hero-artisan">
     <div class="container">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:15px;">
-        <div>
-          <h1>👋 Tableau de bord</h1>
-          <p class="sub">Bienvenue, <span id="nav-username" style="font-weight:600;color:var(--anthracite);">—</span></p>
-          <p style="margin-top:6px;font-size:0.85rem;color:var(--gris);">
-            🔨 Espace artisan · Vous pouvez aussi <strong>déposer une demande</strong> (chantier, recherche de sous-traitant) ci-dessous.
-          </p>
+
+      <!-- Bienvenue -->
+      <div class="dashboard-welcome">
+        <h1>Bonjour <em><span id="nav-username">—</span></em> 👋</h1>
+        <p class="sub">Espace Artisan BTP · Gérez vos leads et votre activité</p>
+      </div>
+
+      <!-- Badges -->
+      <div class="dashboard-badges">
+        <span class="badge-pill badge-pill-role">🔨 Artisan</span>
+        <span class="badge-pill badge-pill-gold" id="badge-ville" style="display:none;">📍 <span id="artisan-ville">—</span></span>
+        <span class="badge-pill badge-pill-neutral">✅ Profil vérifié</span>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-icon">📋</span>
+          <span class="kpi-value" id="kpi-leads-dispo">—</span>
+          <span class="kpi-label">Leads disponibles</span>
         </div>
-        <div class="mixed-actions">
-          <a href="/client.html" class="btn btn-gold btn-sm">✍️ Déposer une demande</a>
-          <a href="/stripe.html" class="btn btn-secondary btn-sm">💳 Connexion Stripe</a>
-          <a href="/parametres.html" class="btn btn-secondary btn-sm">⚙ Paramètres</a>
+        <div class="kpi-card">
+          <span class="kpi-icon">✅</span>
+          <span class="kpi-value" id="kpi-leads-achetes">—</span>
+          <span class="kpi-label">Leads achetés</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-icon">⭐</span>
+          <span class="kpi-value" id="kpi-avis">—</span>
+          <span class="kpi-label">Avis reçus</span>
+        </div>
+        <div class="kpi-card kpi-card-gold">
+          <span class="kpi-icon">💳</span>
+          <span class="kpi-value" id="kpi-balance">—</span>
+          <span class="kpi-label">Balance Stripe</span>
         </div>
       </div>
+
+      <!-- Actions rapides -->
+      <div class="quick-actions">
+        <a href="/client.html" class="btn btn-gold btn-sm">✍️ Déposer une demande</a>
+        <a href="/stripe.html" class="btn btn-secondary btn-sm">💳 Connexion Stripe</a>
+        <a href="/parametres.html" class="btn btn-secondary btn-sm">⚙ Paramètres</a>
+      </div>
+
     </div>
   </section>
 
-  <!-- ── LEADS ── -->
-  <section class="section-sm">
+  <!-- ══════════════════════════════════════
+       LEADS & AVIS
+  ══════════════════════════════════════ -->
+  <section class="leads-section">
     <div class="container">
-      <h2 class="reveal" style="font-size:1.4rem;">📋 Leads disponibles</h2>
-      <div id="available-leads" class="lead-grid mt-md"></div>
-      
-      <h2 class="mt-xl reveal" style="font-size:1.4rem;">✅ Mes leads achetés</h2>
-      <div id="purchased-leads" class="lead-grid mt-md"></div>
 
-      <!-- ─── SECTION AVIS ─── -->
-      <div class="avis-section" id="avis-section">
-        <h3>⭐ Mes avis</h3>
+      <!-- Leads disponibles -->
+      <div class="leads-block">
+        <div class="section-header">
+          <h2>Leads disponibles <span id="count-available">0</span></h2>
+          <a href="/marketplace.html" class="btn btn-gold btn-sm">Voir la Marketplace →</a>
+        </div>
+        <div id="available-leads" class="lead-grid">
+          <div class="empty-state">
+            <span class="icon">🔍</span>
+            <p>Chargement des leads…</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Leads achetés -->
+      <div class="leads-block">
+        <div class="section-header">
+          <h2>Mes leads achetés <span id="count-purchased">0</span></h2>
+          <a href="/achats.html" class="btn btn-secondary btn-sm">Voir mes achats →</a>
+        </div>
+        <div id="purchased-leads" class="lead-grid">
+          <div class="empty-state">
+            <span class="icon">💼</span>
+            <p>Chargement…</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Avis -->
+      <div id="avis-section">
+        <div class="avis-section-header">
+          <h2>⭐ Mes avis clients</h2>
+        </div>
         <div id="avis-container">
           <p style="color:var(--gris);">Chargement des avis…</p>
         </div>
       </div>
+
     </div>
   </section>
+
 </main>
 
+</div><!-- /#dashboard-root -->
+
+<!-- ── FOOTER ── -->
 <div id="footer-container"></div>
 
+<!-- ══════════════════════════════════════
+     MODAL — Achat lead
+══════════════════════════════════════ -->
+<div id="modal-buy" class="modal-backdrop">
+  <div class="modal-box">
+    <button class="modal-close" data-close-modal="modal-buy" aria-label="Fermer">✕</button>
+    <h3>🛒 Acheter ce lead</h3>
+    <div id="modal-lead-info" style="margin-bottom:1.25rem;font-size:0.95rem;color:var(--anthracite);"></div>
+    <p style="font-size:0.85rem;color:var(--gris);margin-bottom:1.25rem;">
+      Paiement sécurisé via Stripe. Les coordonnées complètes du client seront débloquées immédiatement.
+    </p>
+    <div style="display:flex;gap:0.75rem;justify-content:flex-end;">
+      <button class="btn btn-secondary btn-sm" data-close-modal="modal-buy">Annuler</button>
+      <button class="btn btn-gold" id="btn-confirm-buy">Confirmer — 10 €</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MODAL — Tag lead
+══════════════════════════════════════ -->
+<div id="modal-tag" class="modal-backdrop">
+  <div class="modal-box">
+    <button class="modal-close" data-close-modal="modal-tag" aria-label="Fermer">✕</button>
+    <h3>🏷 Ajouter un tag</h3>
+    <p style="font-size:0.9rem;color:var(--gris);margin-bottom:1rem;">Étiquetez ce lead pour mieux organiser votre suivi.</p>
+    <input id="tag-input" type="text" class="form-control" placeholder="Ex : Rappelé, En attente, Signé…"
+           style="margin-bottom:1.25rem;">
+    <div style="display:flex;gap:0.75rem;justify-content:flex-end;">
+      <button class="btn btn-secondary btn-sm" data-close-modal="modal-tag">Annuler</button>
+      <button class="btn btn-gold btn-sm" id="btn-add-tag">Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCRIPTS (ordre obligatoire)
+══════════════════════════════════════ -->
 <script src="/js/config.js"></script>
 <script src="/js/api.js"></script>
 <script src="/js/session.js"></script>
@@ -223,61 +472,101 @@
 <script src="/js/artisan.js"></script>
 
 <script>
+/* ── Helpers modaux ── */
+function openModal(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.add('open');
+}
+function closeModal(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.remove('open');
+}
+
+/* ── Fermer modal au clic backdrop ── */
+document.querySelectorAll('.modal-backdrop').forEach(function(backdrop) {
+  backdrop.addEventListener('click', function(e) {
+    if (e.target === backdrop) backdrop.classList.remove('open');
+  });
+});
+
+/* ── Dashboard inline ── */
 document.addEventListener('DOMContentLoaded', async function() {
-  await Session.requireRole('artisan');
+  var user = await Session.requireRole('artisan');
+  if (!user) return;
 
-  const user = JSON.parse(localStorage.getItem(CONFIG.USER_KEY) || 'null');
-  const usernameEl = document.getElementById('nav-username');
-  if (user && usernameEl) {
-    usernameEl.textContent = user.nom || 'Artisan';
-  }
-  
-  // ─── LEADS ─────────────────────────────────────────────────
-  if (typeof loadArtisanLeads === 'function') {
-    loadArtisanLeads();
+  /* Prénom */
+  var nameEl = document.getElementById('nav-username');
+  if (nameEl) nameEl.textContent = (user.nom || 'Artisan').split(' ')[0];
+
+  /* Ville */
+  if (user.ville) {
+    var villeEl = document.getElementById('artisan-ville');
+    var badgeVille = document.getElementById('badge-ville');
+    if (villeEl) villeEl.textContent = user.ville;
+    if (badgeVille) badgeVille.style.display = '';
   }
 
-  // ─── AVIS ──────────────────────────────────────────────────
+  /* KPI — leads disponibles */
+  try {
+    var leadsData = await API.leadsAvailable();
+    var count = leadsData.leads ? leadsData.leads.length : (leadsData.count || 0);
+    var kpiEl = document.getElementById('kpi-leads-dispo');
+    if (kpiEl) kpiEl.textContent = count;
+  } catch(e) {
+    var kpiEl = document.getElementById('kpi-leads-dispo');
+    if (kpiEl) kpiEl.textContent = '—';
+  }
+
+  /* Charger les leads artisan (défini dans artisan.js) */
+  if (typeof loadArtisanLeads === 'function') loadArtisanLeads();
+
+  /* Mise à jour KPI achetés & grille après chargement */
+  setTimeout(function() {
+    var kpiAch = document.getElementById('kpi-leads-achetes');
+    if (kpiAch && typeof purchasedLeads !== 'undefined') kpiAch.textContent = purchasedLeads.length;
+    var kpiDispo = document.getElementById('kpi-leads-dispo');
+    if (kpiDispo && typeof availableLeads !== 'undefined' && availableLeads.length) kpiDispo.textContent = availableLeads.length;
+  }, 1200);
+
+  /* ── Avis ── */
   function loadAvis() {
-    const container = document.getElementById('avis-container');
-    const token = localStorage.getItem(CONFIG.TOKEN_KEY);
-    if (!token) {
-      container.innerHTML = '<p style="color:var(--gris);">Connectez-vous pour voir vos avis.</p>';
-      return;
-    }
-
-    fetch(`${CONFIG.API_URL}/api/artisan/avis`, {
+    var container = document.getElementById('avis-container');
+    var token = Session.getToken();
+    if (!token || !container) return;
+    fetch(CONFIG.API_URL + '/api/artisan/avis', {
       headers: { 'Authorization': 'Bearer ' + token }
     })
-    .then(r => r.json())
-    .then(data => {
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      /* KPI avis */
+      var kpiAvis = document.getElementById('kpi-avis');
+      if (kpiAvis && data.total !== undefined) kpiAvis.textContent = data.total;
+
       if (!data.avis || data.avis.length === 0) {
-        container.innerHTML = '<p style="color:var(--gris);">Aucun avis pour le moment.</p>';
+        container.innerHTML = '<div class="empty-state"><span class="icon">💬</span><p>Aucun avis pour le moment.</p></div>';
         return;
       }
-      let html = `<p style="font-weight:600;">⭐ Note moyenne : ${data.moyenne || '—'} / 5 (${data.total} avis)</p>`;
-      html += '<div style="display:flex;flex-direction:column;gap:0.8rem;margin-top:0.8rem;">';
-      data.avis.forEach(a => {
-        const stars = '⭐'.repeat(a.note) + '☆'.repeat(5 - a.note);
-        html += `<div class="avis-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;">
-            <span class="client">${a.client_nom || 'Anonyme'}</span>
-            <span class="stars">${stars}</span>
-          </div>
-          ${a.commentaire ? `<p class="comment">${a.commentaire}</p>` : ''}
-          <small class="date">${new Date(a.date).toLocaleDateString()}</small>
-        </div>`;
+      var html = '<p style="font-weight:600;margin-bottom:0.75rem;">⭐ Note moyenne : ' + (data.moyenne || '—') + '/5 (' + data.total + ' avis)</p>';
+      html += '<div style="display:flex;flex-direction:column;gap:0;}">';
+      data.avis.forEach(function(a) {
+        var stars = '⭐'.repeat(a.note) + '☆'.repeat(5 - a.note);
+        html += '<div class="avis-card">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
+        html += '<span class="client">' + (a.client_nom || 'Anonyme') + '</span>';
+        html += '<span class="stars">' + stars + '</span></div>';
+        if (a.commentaire) html += '<p class="comment">' + a.commentaire + '</p>';
+        html += '<small class="date">' + new Date(a.date).toLocaleDateString() + '</small>';
+        html += '</div>';
       });
       html += '</div>';
       container.innerHTML = html;
     })
-    .catch(() => {
-      container.innerHTML = '<p style="color:var(--gris);">Erreur chargement des avis.</p>';
+    .catch(function() {
+      var container = document.getElementById('avis-container');
+      if (container) container.innerHTML = '<p style="color:var(--gris);">Erreur lors du chargement des avis.</p>';
     });
   }
-
-  // Charger les avis après un court délai (attendre que le dashboard soit prêt)
-  setTimeout(loadAvis, 500);
+  setTimeout(loadAvis, 600);
 });
 </script>
 

@@ -1256,3 +1256,928 @@
        font-size: 3rem;
      }
    }
+
+
+/* ========================================================
+   BÂTISWIFT — DESIGN PREMIUM v3.0
+   Extensions pour espaces Artisan & Client
+   ======================================================== */
+
+/* ---- 1. VARIABLES PREMIUM & MODE SOMBRE ---- */
+:root {
+  --shadow-sm:          0 2px 8px rgba(47, 26, 58, 0.05);
+  --shadow-md:          0 8px 24px rgba(47, 26, 58, 0.08);
+  --shadow-lg:          0 16px 40px rgba(47, 26, 58, 0.12);
+  --shadow-or:          0 8px 24px rgba(201, 154, 76, 0.22);
+  --or-glow:            rgba(201, 154, 76, 0.15);
+  --gradient-gold:      linear-gradient(135deg, var(--or-light) 0%, var(--or) 100%);
+  --gradient-dark:      linear-gradient(135deg, var(--anthracite) 0%, var(--anthracite2) 100%);
+  --gradient-artisan:   linear-gradient(135deg, rgba(201, 154, 76, 0.07) 0%, rgba(245, 240, 235, 0.95) 100%);
+}
+
+[data-theme="dark"] {
+  --beige:              #160D1D;
+  --beige-dark:         #241530;
+  --anthracite:         #F5F0EB;
+  --anthracite2:        #FAF7F4;
+  --blanc:              #201229;
+  --gris:               #A8A29E;
+  --gris-light:         #3D264E;
+  --gris-ultra:         #291636;
+  --glass-bg:           rgba(32, 18, 41, 0.78);
+  --glass-border:       rgba(201, 154, 76, 0.18);
+  --glass-shadow:       0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* ---- 2. HEADER PREMIUM ---- */
+.site-header.user-logged-in::after,
+header.user-logged-in::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--or), transparent);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.header-artisan {
+  border-bottom: 2px solid rgba(201, 154, 76, 0.35) !important;
+  position: relative;
+}
+
+.header-artisan::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--or), transparent);
+  pointer-events: none;
+}
+
+.header-client {
+  border-bottom: 2px solid rgba(47, 26, 58, 0.25) !important;
+  position: relative;
+}
+
+.header-client::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--anthracite), transparent);
+  pointer-events: none;
+}
+
+.header-context-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--or), var(--anthracite));
+  opacity: 0.6;
+}
+
+/* ---- 3. SIDEBAR PREMIUM ---- */
+.sidebar-section-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gris);
+  padding: 16px var(--space-lg) 6px;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.sidebar-nav a,
+.sidebar-nav li a {
+  position: relative;
+  transition: all var(--transition);
+  border-left: 3px solid transparent;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav li a:hover {
+  color: var(--anthracite);
+  background: var(--beige);
+  border-left-color: var(--or-light);
+  transform: translateX(3px);
+}
+
+.sidebar-nav a.nav-active,
+.sidebar-nav li a.nav-active {
+  background: var(--beige) !important;
+  color: var(--anthracite) !important;
+  border-left-color: var(--or) !important;
+  font-weight: 600;
+  box-shadow: inset 3px 0 0 var(--or);
+}
+
+/* ---- 4. DASHBOARD CARDS PREMIUM & KPIS ---- */
+.stat-card-premium {
+  background: var(--blanc);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  border: 1.5px solid var(--beige-dark);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition);
+}
+
+.stat-card-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--or), var(--or-light));
+}
+
+.stat-card-premium:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--or-light);
+}
+
+.stat-card-premium .stat-number {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--anthracite);
+  line-height: 1.05;
+  margin-bottom: var(--space-xs);
+}
+
+.stat-card-premium .stat-label {
+  font-size: 0.95rem;
+  color: var(--gris);
+  font-weight: 500;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.kpi-card {
+  background: var(--blanc);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  border: 1.5px solid var(--beige-dark);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  transition: all var(--transition);
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--or-light);
+}
+
+.kpi-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.kpi-card .kpi-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(201, 154, 76, 0.12);
+  color: var(--or);
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.kpi-card .kpi-value {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--anthracite);
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+
+.kpi-card .kpi-label {
+  font-size: 0.85rem;
+  color: var(--gris);
+  font-weight: 500;
+}
+
+.kpi-card .kpi-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 50px;
+  align-self: flex-start;
+}
+
+.kpi-card .kpi-trend.positive,
+.kpi-card .kpi-trend.up {
+  background: rgba(16, 185, 129, 0.12);
+  color: #065f46;
+}
+
+.kpi-card .kpi-trend.negative,
+.kpi-card .kpi-trend.down {
+  background: rgba(239, 68, 68, 0.12);
+  color: #7f1d1d;
+}
+
+.kpi-card .kpi-trend.neutral {
+  background: rgba(47, 26, 58, 0.06);
+  color: var(--anthracite);
+}
+
+/* ---- 5. SECTION HEADERS ---- */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--anthracite);
+  margin: 0;
+}
+
+.section-action {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--or);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition);
+  text-decoration: none;
+}
+
+.section-action:hover {
+  color: var(--anthracite);
+  transform: translateX(2px);
+}
+
+/* ---- 6. REQUEST & LEAD CARDS V2 / TIMELINE ---- */
+.request-card-v2 {
+  background: var(--blanc);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  border: 1.5px solid var(--beige-dark);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.request-card-v2:hover {
+  transform: translateY(-2px);
+  border-color: var(--or-light);
+  box-shadow: var(--shadow-md);
+}
+
+.request-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.request-status-dot.status-done,
+.request-status-dot.status-completed {
+  background: var(--success);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+.request-status-dot.status-active,
+.request-status-dot.status-in-progress {
+  background: var(--or);
+  box-shadow: 0 0 0 3px rgba(201, 154, 76, 0.25);
+}
+
+.request-status-dot.status-pending {
+  background: var(--gris-light);
+  box-shadow: 0 0 0 3px rgba(139, 139, 139, 0.15);
+}
+
+.request-status-dot.status-danger,
+.request-status-dot.status-cancelled {
+  background: var(--danger);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+/* Timeline v2 */
+.timeline-v2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin: var(--space-md) 0;
+  position: relative;
+}
+
+.timeline-v2 .step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  flex: 1;
+  font-size: 0.8rem;
+}
+
+.timeline-v2 .step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--beige-dark);
+  z-index: 1;
+}
+
+.timeline-v2 .step.done:not(:last-child)::after {
+  background: var(--or);
+}
+
+.timeline-v2 .step.active:not(:last-child)::after {
+  background: linear-gradient(90deg, var(--anthracite), var(--beige-dark));
+}
+
+.timeline-v2 .step::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--blanc);
+  border: 2px solid var(--beige-dark);
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 2;
+  transition: all var(--transition);
+}
+
+.timeline-v2 .step.done::before {
+  background: var(--or);
+  border-color: var(--or);
+  box-shadow: 0 0 0 3px rgba(201, 154, 76, 0.2);
+}
+
+.timeline-v2 .step.done {
+  color: var(--or);
+  font-weight: 600;
+}
+
+.timeline-v2 .step.active::before {
+  background: var(--anthracite);
+  border-color: var(--anthracite);
+  box-shadow: 0 0 0 4px rgba(47, 26, 58, 0.18);
+}
+
+.timeline-v2 .step.active {
+  color: var(--anthracite);
+  font-weight: 600;
+}
+
+.timeline-v2 .step.pending::before {
+  background: var(--blanc);
+  border-color: var(--gris-light);
+}
+
+.timeline-v2 .step.pending {
+  color: var(--gris);
+}
+
+.timeline-v2 .step-label {
+  font-size: 0.78rem;
+  margin-top: 4px;
+}
+
+/* ---- 7. NAVIGATION ACTIVE STATE ---- */
+.sidebar-nav a.active,
+.sidebar-nav li a.active,
+.sidebar-nav a[aria-current='page'],
+.sidebar-nav li a[aria-current='page'] {
+  background: var(--beige) !important;
+  color: var(--anthracite) !important;
+  border-left-color: var(--or) !important;
+  font-weight: 600;
+  box-shadow: inset 3px 0 0 var(--or);
+}
+
+/* ---- 8. EMPTY STATES ---- */
+.empty-state {
+  text-align: center;
+  padding: var(--space-xxl) var(--space-lg);
+  background: var(--blanc);
+  border-radius: var(--radius-xl);
+  border: 1.5px dashed var(--beige-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin: var(--space-lg) 0;
+}
+
+.empty-state-icon {
+  font-size: 64px;
+  line-height: 1;
+  margin-bottom: var(--space-xs);
+  filter: drop-shadow(0 4px 12px rgba(47, 26, 58, 0.08));
+}
+
+.empty-state h3,
+.empty-state-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--anthracite);
+}
+
+.empty-state p,
+.empty-state-desc {
+  font-size: 0.95rem;
+  color: var(--gris);
+  max-width: 440px;
+  margin: 0 auto var(--space-sm);
+  line-height: 1.6;
+}
+
+.empty-state .empty-state-cta,
+.empty-state .btn {
+  margin-top: var(--space-xs);
+}
+
+/* ---- 9. PAGE HERO SECTIONS ---- */
+.page-hero {
+  padding: var(--space-xl) 0;
+  border-bottom: 1px solid var(--beige-dark);
+  margin-bottom: var(--space-xl);
+  background: var(--blanc);
+  position: relative;
+}
+
+.page-hero-artisan {
+  background: linear-gradient(135deg, rgba(201, 154, 76, 0.07) 0%, rgba(245, 240, 235, 0.9) 100%);
+  border-bottom: 1.5px solid rgba(201, 154, 76, 0.25);
+  position: relative;
+}
+
+.page-hero-artisan::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--or), transparent);
+}
+
+.page-hero-client {
+  background: var(--blanc);
+  border-bottom: 1px solid var(--beige-dark);
+}
+
+.page-hero h1 {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  margin-bottom: var(--space-xs);
+}
+
+.page-hero p {
+  font-size: 1.05rem;
+  color: var(--gris);
+  max-width: 680px;
+}
+
+.page-hero-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-top: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+/* ---- 10. AMÉLIORATION RESPONSIVE ---- */
+.responsive-hide-sm {
+  display: inherit;
+}
+
+.responsive-show-sm {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .responsive-hide-sm {
+    display: none !important;
+  }
+  .responsive-show-sm {
+    display: block !important;
+  }
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .timeline-v2 {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+  .timeline-v2 .step {
+    flex-direction: row;
+    gap: 14px;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+  }
+  .timeline-v2 .step:not(:last-child)::after {
+    left: 9px;
+    top: 22px;
+    width: 2px;
+    height: calc(100% + 18px);
+  }
+  .timeline-v2 .step::before {
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-show-sm {
+    display: block !important;
+  }
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+  .stat-card-premium {
+    padding: var(--space-lg);
+  }
+  .stat-card-premium .stat-number {
+    font-size: 2.5rem;
+  }
+  .empty-state {
+    padding: var(--space-xl) var(--space-sm);
+  }
+  .empty-state-icon {
+    font-size: 48px;
+  }
+}
+
+/* ---- 11. SCROLLBAR PERSONNALISÉE (WEBKIT) ---- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--beige);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--beige-dark);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gris-light);
+}
+
+/* ---- 12. FOCUS STATES ACCESSIBLES ---- */
+:focus-visible {
+  outline: 2.5px solid var(--or);
+  outline-offset: 3px;
+}
+
+/* ---- 13. SELECTION ---- */
+::selection {
+  background: rgba(201, 168, 76, 0.2);
+}
+
+/* ---- 14. PRINT ---- */
+@media print {
+  .site-header,
+  .sidebar,
+  .sidebar-overlay,
+  .page-loader {
+    display: none !important;
+  }
+  main {
+    padding-top: 0 !important;
+  }
+}
+
+/* ---- 15. CLASSES UTILITAIRES SUPPLÉMENTAIRES ---- */
+.text-or      { color: var(--or) !important; }
+.text-success { color: var(--success) !important; }
+.text-danger  { color: var(--danger) !important; }
+.font-display { font-family: var(--font-display) !important; }
+.font-body    { font-family: var(--font-body) !important; }
+.mt-xl        { margin-top: var(--space-xl) !important; }
+.mb-sm        { margin-bottom: var(--space-sm) !important; }
+.mb-md        { margin-bottom: var(--space-md) !important; }
+.mb-lg        { margin-bottom: var(--space-lg) !important; }
+.p-0          { padding: 0 !important; }
+.w-full       { width: 100% !important; }
+
+
+/* ============================================================
+   BÂTISWIFT — MODERN UI OVERRIDES v4
+   Objectif : moderne, premium, tech, avec le violet BâtiSwift
+   Ces règles restent en fin de fichier pour ne pas casser les
+   composants existants.
+   ============================================================ */
+
+:root {
+  --brand-primary: #6D28D9;
+  --brand-primary-dark: #4C1D95;
+  --brand-primary-light: #8B5CF6;
+  --brand-primary-soft: rgba(109, 40, 217, 0.10);
+  --brand-primary-glow: rgba(109, 40, 217, 0.22);
+
+  --surface: #FFFFFF;
+  --surface-soft: #FAF9FC;
+  --surface-muted: #F3F1F7;
+  --border-modern: rgba(47, 26, 58, 0.10);
+  --text-primary: #24152F;
+  --text-secondary: #746B7D;
+
+  --modern-shadow-sm: 0 2px 10px rgba(36, 21, 47, 0.06);
+  --modern-shadow-md: 0 10px 30px rgba(36, 21, 47, 0.09);
+  --modern-shadow-lg: 0 20px 55px rgba(36, 21, 47, 0.13);
+
+  --modern-radius: 16px;
+  --modern-radius-lg: 24px;
+}
+
+/* Base : plus clair et plus contemporain */
+body {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(139, 92, 246, 0.08), transparent 30%),
+    radial-gradient(circle at 90% 10%, rgba(201, 154, 76, 0.07), transparent 26%),
+    var(--surface-soft);
+  color: var(--text-primary);
+}
+
+/* Titres : garder l'identité BâtiSwift sans l'effet "ancien luxe" */
+h1, h2, h3, h4 {
+  color: var(--text-primary);
+  letter-spacing: -0.025em;
+}
+
+/* Cartes : effet premium plus subtil */
+.glass-card,
+.lead-card,
+.stat-card,
+.kpi-card,
+.stat-card-premium,
+.pricing-card,
+.review-item {
+  border-color: var(--border-modern);
+  box-shadow: var(--modern-shadow-sm);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.78);
+  border-radius: var(--modern-radius-lg);
+}
+
+.glass-card:hover,
+.lead-card:hover,
+.stat-card-premium:hover,
+.kpi-card:hover,
+.pricing-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--modern-shadow-lg);
+  border-color: rgba(109, 40, 217, 0.18);
+}
+
+/* Boutons : le violet devient réellement la couleur d'action */
+.btn-primary {
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-dark));
+  color: #fff;
+  box-shadow: 0 8px 22px var(--brand-primary-glow);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--brand-primary-light), var(--brand-primary));
+  box-shadow: 0 12px 30px rgba(109, 40, 217, 0.30);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  color: var(--brand-primary-dark);
+  border-color: rgba(109, 40, 217, 0.22);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  color: var(--brand-primary);
+  border-color: var(--brand-primary);
+  background: var(--brand-primary-soft);
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, #D4A84F, #B9822F);
+}
+
+/* Champs : focus violet */
+.form-control {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: var(--border-modern);
+  border-radius: 12px;
+}
+
+.form-control:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 4px rgba(109, 40, 217, 0.10);
+}
+
+/* Header : plus fin, plus SaaS moderne */
+header,
+.site-header {
+  background: rgba(255, 255, 255, 0.82);
+  border-bottom: 1px solid rgba(47, 26, 58, 0.08);
+  box-shadow: 0 4px 24px rgba(36, 21, 47, 0.05);
+}
+
+.nav-logo {
+  color: var(--text-primary);
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--brand-primary);
+}
+
+/* Navigation active : violet au lieu du gris/or systématique */
+.sidebar-nav li a:hover,
+.sidebar-nav li a.active,
+.sidebar-nav a.nav-active,
+.sidebar-nav li a.nav-active {
+  color: var(--brand-primary) !important;
+  background: var(--brand-primary-soft) !important;
+  border-left-color: var(--brand-primary) !important;
+  box-shadow: inset 3px 0 0 var(--brand-primary);
+}
+
+/* KPI / icônes : identité violette */
+.kpi-card .kpi-icon {
+  background: var(--brand-primary-soft);
+  color: var(--brand-primary);
+}
+
+.stat-card-premium::before {
+  background: linear-gradient(90deg, var(--brand-primary), var(--brand-primary-light));
+}
+
+.stat-card-premium:hover {
+  border-color: rgba(109, 40, 217, 0.20);
+}
+
+/* Prix / informations importantes */
+.lead-price {
+  color: var(--brand-primary);
+}
+
+/* Badges */
+.badge-gold {
+  background: rgba(201, 154, 76, 0.12);
+  color: #8A611D;
+}
+
+.badge-neutral {
+  background: var(--brand-primary-soft);
+  color: var(--brand-primary-dark);
+}
+
+/* Tableaux */
+.table-wrap {
+  border-color: var(--border-modern);
+  box-shadow: var(--modern-shadow-sm);
+}
+
+.table-wrap th {
+  background: var(--surface-muted);
+}
+
+/* Modales : profondeur plus moderne */
+.modal-overlay {
+  background: rgba(25, 12, 35, 0.52);
+  backdrop-filter: blur(8px);
+}
+
+.modal {
+  border: 1px solid rgba(255,255,255,0.70);
+  box-shadow: var(--modern-shadow-lg);
+}
+
+/* Chat IA : violet pour l'assistant BâtiSwift */
+.chat-bubble.user {
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-dark));
+}
+
+.chat-bubble.assistant {
+  border-color: rgba(109, 40, 217, 0.12);
+}
+
+/* Filtres */
+.filters-bar .filter-group {
+  border-color: var(--border-modern);
+  box-shadow: var(--modern-shadow-sm);
+}
+
+/* Pricing */
+.pricing-card.featured {
+  border-color: rgba(109, 40, 217, 0.30);
+  background: linear-gradient(
+    180deg,
+    rgba(109, 40, 217, 0.07) 0%,
+    #fff 72%
+  );
+}
+
+.pricing-card.featured::before {
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-dark));
+}
+
+/* Header contextuels */
+.header-client::after {
+  background: linear-gradient(90deg, transparent, var(--brand-primary), transparent);
+}
+
+.header-artisan::after {
+  background: linear-gradient(90deg, transparent, var(--or), transparent);
+}
+
+/* Liens génériques : violet uniquement quand ils sont interactifs */
+a:hover {
+  color: var(--brand-primary);
+}
+
+/* Mobile : conserver une vraie sensation d'app SaaS */
+@media (max-width: 768px) {
+  body {
+    background:
+      radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.08), transparent 34%),
+      var(--surface-soft);
+  }
+
+  .glass-card,
+  .lead-card,
+  .kpi-card,
+  .stat-card-premium,
+  .pricing-card {
+    border-radius: 18px;
+  }
+
+  .btn {
+    min-height: 44px;
+  }
+}
+
+/* Accessibilité : réduire les animations si demandé par le système */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -314,7 +314,7 @@
       }
 
       function api(path) {
-        var token = getToken();
+        var token = Session.getToken();
 
         if (!token) {
           return Promise.reject(
