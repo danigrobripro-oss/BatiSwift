@@ -1,14 +1,14 @@
-<!-- header.html — Espace Artisan BâtiSwift -->
+﻿<!-- header.html â€” Espace Artisan BÃ¢tiSwift -->
 <header class="site-header site-header--artisan" id="site-header">
   <div class="container">
     <a href="/dashboard.html" class="nav-logo">
-      <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
-      <span>BâtiSwift</span>
+      <img src="/assets/logo.svg" alt="BÃ¢tiSwift" class="logo-svg">
+      <span>BÃ¢tiSwift</span>
     </a>
 
     <!-- Indicateur de contexte (desktop) -->
     <div class="header-context-badge" id="header-context-badge" style="display:none;">
-      🛠️ <span>Espace Artisan</span>
+      ðŸ› ï¸ <span>Espace Artisan</span>
     </div>
 
     <button class="menu-toggle" id="menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false">
@@ -23,26 +23,26 @@
 <div id="sidebar" class="sidebar" role="navigation" aria-label="Navigation principale">
   <div class="sidebar-header">
     <a href="/dashboard.html" class="nav-logo">
-      <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
-      <span>BâtiSwift</span>
+      <img src="/assets/logo.svg" alt="BÃ¢tiSwift" class="logo-svg">
+      <span>BÃ¢tiSwift</span>
     </a>
-    <button id="sidebar-close" class="sidebar-close" aria-label="Fermer le menu">✕</button>
+    <button id="sidebar-close" class="sidebar-close" aria-label="Fermer le menu">âœ•</button>
   </div>
 
-  <!-- Profil connecté (masqué si invité) -->
+  <!-- Profil connectÃ© (masquÃ© si invitÃ©) -->
   <div class="sidebar-user" style="display:none;">
     <div class="sidebar-profile">
-      <div class="sidebar-profile-avatar">🛠️</div>
+      <div class="sidebar-profile-avatar">ðŸ› ï¸</div>
       <div>
-        <div class="sidebar-profile-name">👋 <span id="sidebar-user-nom"></span></div>
+        <div class="sidebar-profile-name">ðŸ‘‹ <span id="sidebar-user-nom"></span></div>
         <span id="sidebar-role-badge" class="sidebar-badge-role"></span>
       </div>
     </div>
 
-    <!-- Switcher de contexte — visible UNIQUEMENT pour les comptes mixtes -->
+    <!-- Switcher de contexte â€” visible UNIQUEMENT pour les comptes mixtes -->
     <div id="context-switcher" style="display:none;">
       <button id="btn-switch-context" class="btn btn-secondary btn-sm btn-block">
-        <span id="context-switcher-text">🏠 Passer en mode Client</span>
+        <span id="context-switcher-text">ðŸ  Passer en mode Client</span>
       </button>
     </div>
   </div>
@@ -50,40 +50,40 @@
   <!-- Navigation Artisan -->
   <nav class="sidebar-nav">
     <div class="sidebar-section-label" data-context-only="artisan">Espace Artisan</div>
-    <a href="/dashboard.html"     data-context-only="artisan">📊 Tableau de bord</a>
-    <a href="/marketplace.html"   data-context-only="artisan">🔥 Marketplace</a>
-    <a href="/achats.html"        data-context-only="artisan">📦 Mes achats</a>
-    <a href="/carte.html"         data-context-only="artisan">🗺️ Carte des chantiers</a>
-    <a href="/stripe.html"        data-context-only="artisan">💳 Paiements Stripe</a>
-    <a href="/parametres.html"    data-context-only="artisan">⚙️ Paramètres Pro</a>
+    <a href="/dashboard.html"     data-context-only="artisan">ðŸ“Š Tableau de bord</a>
+    <a href="/marketplace.html"   data-context-only="artisan">ðŸ”¥ Marketplace</a>
+    <a href="/achats.html"        data-context-only="artisan">ðŸ“¦ Mes achats</a>
+    <a href="/carte.html"         data-context-only="artisan">ðŸ—ºï¸ Carte des chantiers</a>
+    <a href="/stripe.html"        data-context-only="artisan">ðŸ’³ Paiements Stripe</a>
+    <a href="/parametres.html"    data-context-only="artisan">âš™ï¸ ParamÃ¨tres Pro</a>
 
     <div class="sidebar-section-label" data-context-only="client">Espace Client</div>
-    <a href="/client-dashboard.html" data-context-only="client">🏠 Mon espace</a>
-    <a href="/client.html"           data-context-only="client">💬 Nouvelle demande</a>
-    <a href="/carte.html"            data-context-only="client">🔎 Trouver un artisan</a>
+    <a href="/client-dashboard.html" data-context-only="client">ðŸ  Mon espace</a>
+    <a href="/client.html"           data-context-only="client">ðŸ’¬ Nouvelle demande</a>
+    <a href="/carte.html"            data-context-only="client">ðŸ”Ž Trouver un artisan</a>
 
-    <div class="sidebar-section-label" data-context-only="all">Général</div>
-    <a href="/aide.html"   data-context-only="all">❓ Centre d'aide</a>
-    <a href="/tarifs.html" data-context-only="all">💰 Tarifs</a>
+    <div class="sidebar-section-label" data-context-only="all">GÃ©nÃ©ral</div>
+    <a href="/aide.html"   data-context-only="all">â“ Centre d'aide</a>
+    <a href="/tarifs.html" data-context-only="all">ðŸ’° Tarifs</a>
   </nav>
 
   <div class="sidebar-actions">
-    <!-- Invité -->
+    <!-- InvitÃ© -->
     <div class="sidebar-guest">
       <a href="/connexion.html"  class="btn btn-secondary btn-block">Connexion</a>
       <a href="/inscription.html" class="btn btn-primary btn-block">S'inscrire</a>
     </div>
-    <!-- Connecté -->
+    <!-- ConnectÃ© -->
     <div class="sidebar-user" style="display:none;">
-      <button id="sidebar-logout" class="btn btn-danger btn-block">Déconnexion</button>
+      <button id="sidebar-logout" class="btn btn-danger btn-block">DÃ©connexion</button>
     </div>
   </div>
 </div>
 
 <style>
 /* ================================================================
-   HEADER BÂTISWIFT — Shared Base Styles
-   Utilisé par header.html (Artisan) et header-client.html (Client)
+   HEADER BÃ‚TISWIFT â€” Shared Base Styles
+   UtilisÃ© par header.html (Artisan) et header-client.html (Client)
    ================================================================ */
 
 .site-header {
@@ -101,7 +101,7 @@
   transition: background 0.3s ease;
 }
 
-/* Liseré de contexte */
+/* LiserÃ© de contexte */
 .site-header--artisan {
   border-bottom-color: rgba(201,168,76,0.3);
   box-shadow: 0 1px 0 rgba(201,168,76,0.12);
@@ -390,11 +390,11 @@
   var headerEl = document.getElementById('site-header');
 
   if (!toggle || !sidebar || !overlay) {
-    console.warn('BâtiSwift header: éléments manquants.');
+    console.warn('BÃ¢tiSwift header: Ã©lÃ©ments manquants.');
     return;
   }
 
-  // ── Sidebar open/close ────────────────────────────────────
+  // â”€â”€ Sidebar open/close â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   function openSidebar() {
     toggle.classList.add('open');
     toggle.setAttribute('aria-expanded', 'true');
@@ -429,7 +429,7 @@
     if (e.key === 'Escape' && sidebar.classList.contains('active')) closeSidebar();
   });
 
-  // ── Active nav link ───────────────────────────────────────
+  // â”€â”€ Active nav link â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   var current = window.location.pathname.split('/').pop() || 'index.html';
   sidebar.querySelectorAll('a[href]').forEach(function(a) {
     var href = a.getAttribute('href').replace(/^\//, '');
@@ -439,11 +439,11 @@
     }
   });
 
-  // ── Badge contexte desktop ────────────────────────────────
+  // â”€â”€ Badge contexte desktop â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   var contextBadge = document.getElementById('header-context-badge');
   if (contextBadge) contextBadge.style.display = 'flex';
 
-  // ── Session nav ───────────────────────────────────────────
+  // â”€â”€ Session nav â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (typeof Session !== 'undefined' && Session.updateNav) {
     Session.updateNav();
   } else {
@@ -464,7 +464,7 @@
     }
   }
 
-  // ── Switcher mixte ────────────────────────────────────────
+  // â”€â”€ Switcher mixte â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   var switchBtn = document.getElementById('btn-switch-context');
   if (switchBtn) {
     switchBtn.addEventListener('click', function(e) {
@@ -475,7 +475,7 @@
     });
   }
 
-  // ── Logout ────────────────────────────────────────────────
+  // â”€â”€ Logout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   var logoutBtn = document.getElementById('sidebar-logout');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', function() {
@@ -492,3 +492,4 @@
 
 })();
 </script>
+

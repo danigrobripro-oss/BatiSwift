@@ -1,0 +1,578 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ðŸ—ºï¸ Carte des artisans â€“ BÃ¢tiSwift</title>
+
+  <!-- â”€â”€â”€ FAVICON â”€â”€â”€ -->
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+  <link rel="manifest" href="/assets/site.webmanifest" />
+  <meta name="theme-color" content="#F5F0EB" />
+
+  <!-- â”€â”€â”€ DESIGN SYSTEM â”€â”€â”€ -->
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <!-- â”€â”€â”€ LEAFET CSS â”€â”€â”€ -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    /* â”€â”€ PAGE CARTE â”€â”€ */
+    .carte-page {
+      padding: calc(var(--header-h) + 20px) 5vw 60px;
+      background: var(--beige);
+      min-height: 100vh;
+    }
+    .carte-header h1 {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .carte-header p {
+      color: var(--gris);
+      margin-bottom: 1.5rem;
+    }
+
+    /* â”€â”€ STATS BAR â”€â”€ */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .stat-card {
+      background: var(--blanc);
+      border-radius: var(--radius-lg);
+      padding: 1.2rem 1rem;
+      text-align: center;
+      border: 1.5px solid var(--beige-dark);
+      transition: all var(--transition);
+    }
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(43,43,43,0.06);
+    }
+    .stat-card .stat-value {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--anthracite);
+      line-height: 1.2;
+    }
+    .stat-card .stat-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gris);
+      margin-top: 4px;
+    }
+    .stat-card.highlight .stat-value {
+      color: var(--or);
+    }
+
+    /* â”€â”€ CONTROLS â”€â”€ */
+    .controls-panel {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+      background: var(--blanc);
+      border-radius: var(--radius-lg);
+      padding: 0.8rem 1.5rem;
+      border: 1.5px solid var(--beige-dark);
+      margin-bottom: 1.5rem;
+    }
+    .radius-control {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex: 1;
+      min-width: 200px;
+    }
+    .radius-control label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--anthracite);
+      white-space: nowrap;
+    }
+    .radius-control input[type="range"] {
+      flex: 1;
+      height: 4px;
+      accent-color: var(--or);
+      cursor: pointer;
+    }
+    .radius-control .radius-value {
+      font-weight: 700;
+      color: var(--or);
+      min-width: 50px;
+      text-align: right;
+      font-size: 0.9rem;
+    }
+    .btn-reset {
+      background: var(--anthracite);
+      color: var(--blanc);
+      border: none;
+      border-radius: 50px;
+      padding: 0.5rem 1.5rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+    .btn-reset:hover {
+      background: var(--or);
+    }
+
+    /* â”€â”€ MAP â”€â”€ */
+    .map-wrapper {
+      background: var(--blanc);
+      border-radius: var(--radius-xl);
+      border: 1.5px solid var(--beige-dark);
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(43,43,43,0.06);
+    }
+    #map {
+      height: 550px;
+      width: 100%;
+    }
+    .map-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      padding: 0.8rem 1.5rem;
+      border-top: 1px solid var(--beige-dark);
+      font-size: 0.8rem;
+      color: var(--gris);
+    }
+    .map-legend span {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .legend-dot.leads { background: var(--or); opacity: 0.75; }
+    .legend-dot.center { background: var(--anthracite); }
+    .legend-dot.zone { border: 2px solid var(--or); background: transparent; }
+
+    /* â”€â”€â”€ POPUP LEAFET â”€â”€â”€ */
+    .leaflet-popup-content-wrapper {
+      border-radius: var(--radius);
+      box-shadow: 0 8px 32px rgba(43,43,43,0.12);
+    }
+    .popup-ville {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--anthracite);
+      margin: 0 0 4px;
+    }
+    .popup-leads {
+      font-weight: 600;
+      color: var(--or);
+      margin: 0 0 2px;
+    }
+    .popup-travaux {
+      font-size: 0.8rem;
+      color: var(--gris);
+      margin: 0;
+    }
+
+    /* â”€â”€â”€ LOADING / ERROR / EMPTY â”€â”€â”€ */
+    .map-loading, .map-error, .map-empty {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: var(--gris);
+    }
+    .map-error { color: var(--danger); display: none; }
+    .map-empty { color: var(--gris-light); display: none; }
+
+    /* â”€â”€â”€ RESPONSIVE â”€â”€â”€ */
+    @media (max-width: 992px) {
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+      #map { height: 450px; }
+    }
+    @media (max-width: 640px) {
+      .carte-header h1 { font-size: 1.6rem; }
+      .stats-bar { grid-template-columns: 1fr; }
+      .controls-panel { flex-direction: column; align-items: stretch; }
+      .radius-control { flex-wrap: wrap; }
+      .radius-control input[type="range"] { flex: 1; min-width: 120px; }
+      .btn-reset { width: 100%; text-align: center; }
+      #map { height: 380px; }
+      .map-legend { justify-content: center; }
+    }
+  </style>
+</head>
+<body class="client-layout">
+
+<div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
+<div id="header-container"></div>
+
+<main class="carte-page">
+  <div class="container">
+    <div class="carte-header">
+      <h1>ðŸ—ºï¸ Carte des artisans</h1>
+      <p>Visualisez la rÃ©partition des artisans et des demandes de travaux disponibles sur le territoire.</p>
+    </div>
+
+    <!-- â”€â”€â”€ STATS â”€â”€â”€ -->
+    <div class="stats-bar" id="stats-bar">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-artisans">â€”</div>
+        <div class="stat-label">Artisans inscrits</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-demandes">â€”</div>
+        <div class="stat-label">Demandes disponibles</div>
+      </div>
+      <div class="stat-card highlight">
+        <div class="stat-value" id="stat-leads-zone">â€”</div>
+        <div class="stat-label">Leads dans la zone</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-rayon">50 km</div>
+        <div class="stat-label">Rayon de recherche</div>
+      </div>
+    </div>
+
+    <!-- â”€â”€â”€ CONTROLS â”€â”€â”€ -->
+    <div class="controls-panel">
+      <div class="radius-control">
+        <label for="radius-slider">ðŸ“ Rayon</label>
+        <input type="range" id="radius-slider" min="10" max="100" value="50" step="5">
+        <span class="radius-value" id="radius-display">50 km</span>
+      </div>
+      <button class="btn-reset" id="btn-reset">RÃ©initialiser</button>
+    </div>
+
+    <!-- â”€â”€â”€ MAP â”€â”€â”€ -->
+    <div class="map-wrapper">
+      <div id="map"></div>
+      <div class="map-loading" id="map-loading">â³ Chargement des donnÃ©esâ€¦</div>
+      <div class="map-error" id="map-error">âš ï¸ Impossible de charger les donnÃ©es. Veuillez rÃ©essayer.</div>
+      <div class="map-empty" id="map-empty">â„¹ï¸ Aucun lead disponible dans cette zone pour le moment.</div>
+      <div class="map-legend">
+        <span><span class="legend-dot leads"></span> Zone avec leads (taille = nombre)</span>
+        <span><span class="legend-dot center"></span> Centre de recherche</span>
+        <span><span class="legend-dot zone"></span> PÃ©rimÃ¨tre de recherche</span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="footer-container"></div>
+
+<!-- â”€â”€â”€ LEAFET JS â”€â”€â”€ -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- â”€â”€â”€ SCRIPTS PARTAGÃ‰S â”€â”€â”€ -->
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/session.js"></script>
+<script src="/js/main.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  'use strict';
+
+  // â”€â”€â”€ CONSTANTES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  const DEFAULT_CENTER = [46.603, 2.5];  // Fallback France
+  const DEFAULT_RADIUS = 50; // km
+
+  // â”€â”€â”€ Ã‰TAT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  const state = {
+    center: { lat: DEFAULT_CENTER[0], lon: DEFAULT_CENTER[1] },
+    userCenter: { lat: DEFAULT_CENTER[0], lon: DEFAULT_CENTER[1] }, // centre de l'utilisateur connectÃ©
+    radius: DEFAULT_RADIUS,
+    totalArtisans: 0,
+    totalDemandes: 0,
+    leadsInZone: 0,
+  };
+
+  let map, circle, marker, leadMarkers = [];
+  let debounceTimer = null;
+
+  // â”€â”€â”€ DOM REFS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  const $ = (id) => document.getElementById(id);
+  const elArtisans = $('stat-artisans');
+  const elDemandes = $('stat-demandes');
+  const elLeadsZone = $('stat-leads-zone');
+  const elRayon = $('stat-rayon');
+  const slider = $('radius-slider');
+  const radiusDisplay = $('radius-display');
+  const btnReset = $('btn-reset');
+  const loadingEl = $('map-loading');
+  const errorEl = $('map-error');
+  const emptyEl = $('map-empty');
+
+  // â”€â”€â”€ HELPERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  function formatNumber(n) {
+    return new Intl.NumberFormat('fr-FR').format(n || 0);
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = String(str);
+    return div.innerHTML;
+  }
+
+  function showLoading(show) {
+    if (loadingEl) loadingEl.style.display = show ? 'block' : 'none';
+  }
+
+  function showError(msg) {
+    if (errorEl) {
+      errorEl.textContent = msg || 'âš ï¸ Impossible de charger les donnÃ©es. Veuillez rÃ©essayer.';
+      errorEl.style.display = 'block';
+    }
+    if (emptyEl) emptyEl.style.display = 'none';
+  }
+
+  function showEmpty() {
+    if (emptyEl) emptyEl.style.display = 'block';
+    if (errorEl) errorEl.style.display = 'none';
+  }
+
+  function hideStatus() {
+    if (errorEl) errorEl.style.display = 'none';
+    if (emptyEl) emptyEl.style.display = 'none';
+    if (loadingEl) loadingEl.style.display = 'none';
+  }
+
+  // â”€â”€â”€ INITIALISATION DU CENTRE UTILISATEUR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  async function initUserCenter() {
+    try {
+      // RÃ©cupÃ©rer l'utilisateur connectÃ© (vÃ©rifie le token et rafraÃ®chit les infos)
+      const user = await Session.verify();
+      if (user && typeof user.latitude === 'number' && typeof user.longitude === 'number') {
+        state.userCenter = { lat: user.latitude, lon: user.longitude };
+        state.center = { lat: user.latitude, lon: user.longitude };
+      }
+      // Sinon on garde le centre par dÃ©faut (France)
+    } catch (err) {
+      console.warn('ðŸ‘¤ Utilisateur non connectÃ© ou coordonnÃ©es indisponibles, centre par dÃ©faut utilisÃ©.', err);
+    }
+  }
+
+  // â”€â”€â”€ API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  async function fetchMapStats() {
+    try {
+      const data = await API.get('/api/map/stats');
+      state.totalArtisans = data.total_artisans || 0;
+      state.totalDemandes = data.total_leads || 0;
+      return data;
+    } catch (err) {
+      console.warn('âš ï¸ Erreur stats (non bloquante):', err);
+      return null;
+    }
+  }
+
+  async function fetchLeadsForZone() {
+    showLoading(true);
+    hideStatus();
+
+    try {
+      const url = `/api/leads/map?lat=${state.center.lat}&lon=${state.center.lon}&rayon=${state.radius}`;
+      console.log('ðŸ“¡ Appel API:', url);
+
+      const data = await API.get(url);
+      console.log('ðŸ“¦ DonnÃ©es reÃ§ues:', data);
+
+      state.leadsInZone = data.total || 0;
+      const zones = data.zones || {};
+
+      updateStats();
+
+      if (Object.keys(zones).length === 0) {
+        showEmpty();
+        updateMarkers({});
+        return;
+      }
+
+      updateMarkers(zones);
+    } catch (err) {
+      console.warn('âš ï¸ Erreur leads (non bloquante):', err);
+      state.leadsInZone = 0;
+      updateStats();
+      showEmpty();
+      updateMarkers({});
+    } finally {
+      showLoading(false);
+    }
+  }
+
+  // â”€â”€â”€ RENDU â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  function updateStats() {
+    elArtisans.textContent = formatNumber(state.totalArtisans);
+    elDemandes.textContent = formatNumber(state.totalDemandes);
+    elLeadsZone.textContent = formatNumber(state.leadsInZone);
+    elRayon.textContent = state.radius + ' km';
+  }
+
+  function updateMarkers(zones) {
+    leadMarkers.forEach(m => map.removeLayer(m));
+    leadMarkers = [];
+
+    const entries = Object.entries(zones);
+    if (entries.length === 0) {
+      showEmpty();
+      return;
+    }
+
+    hideStatus();
+
+    const counts = entries.map(([_, data]) => data.count || 0);
+    const maxCount = counts.length ? Math.max(...counts) : 1;
+
+    entries.forEach(([ville, data]) => {
+      if (typeof data.lat !== 'number' || typeof data.lon !== 'number') return;
+
+      const count = data.count || 0;
+      const radiusPx = Math.max(6, Math.min(28, 6 + Math.sqrt(count / maxCount) * 22));
+
+      const marker = L.circleMarker([data.lat, data.lon], {
+        radius: radiusPx,
+        color: '#C9A84C',
+        weight: 1.5,
+        fillColor: '#C9A84C',
+        fillOpacity: 0.65,
+      }).addTo(map);
+
+      const travaux = Array.isArray(data.type_travaux)
+        ? data.type_travaux.join(', ')
+        : (data.type_travaux || 'Non prÃ©cisÃ©');
+
+      marker.bindPopup(`
+        <div class="popup-ville">${escapeHtml(ville)}</div>
+        <div class="popup-leads">${count} demande${count > 1 ? 's' : ''}</div>
+        <div class="popup-travaux">ðŸ”§ ${escapeHtml(travaux)}</div>
+      `);
+
+      leadMarkers.push(marker);
+    });
+  }
+
+  // â”€â”€â”€ INIT MAP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  function initMap() {
+    map = L.map('map', {
+      center: [state.center.lat, state.center.lon],
+      zoom: 10,  // zoom plus proche si centre utilisateur
+      scrollWheelZoom: true,
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
+
+    // Cercle
+    circle = L.circle([state.center.lat, state.center.lon], {
+      radius: state.radius * 1000,
+      color: '#C9A84C',
+      weight: 2,
+      fillColor: '#C9A84C',
+      fillOpacity: 0.08,
+    }).addTo(map);
+
+    // Marqueur central (dÃ©plaÃ§able)
+    const icon = L.divIcon({
+      className: '',
+      html: `<div style="width:16px;height:16px;border-radius:50%;background:#2B2B2B;border:3px solid #fff;box-shadow:0 0 0 2px rgba(0,0,0,0.15);"></div>`,
+      iconSize: [16, 16],
+      iconAnchor: [8, 8],
+    });
+
+    marker = L.marker([state.center.lat, state.center.lon], {
+      icon: icon,
+      draggable: true,
+    }).addTo(map);
+
+    // Drag du marqueur
+    marker.on('dragend', function(e) {
+      const pos = e.target.getLatLng();
+      state.center.lat = pos.lat;
+      state.center.lon = pos.lng;
+      circle.setLatLng(pos);
+      fetchLeadsForZone();
+    });
+
+    // Clic sur la carte
+    map.on('click', function(e) {
+      state.center.lat = e.latlng.lat;
+      state.center.lon = e.latlng.lng;
+      marker.setLatLng(e.latlng);
+      circle.setLatLng(e.latlng);
+      fetchLeadsForZone();
+    });
+  }
+
+  // â”€â”€â”€ CONTROLS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  function bindControls() {
+    slider.addEventListener('input', function() {
+      const km = parseInt(this.value);
+      state.radius = km;
+      radiusDisplay.textContent = km + ' km';
+      circle.setRadius(km * 1000);
+      elRayon.textContent = km + ' km';
+
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(fetchLeadsForZone, 300);
+    });
+
+    btnReset.addEventListener('click', function() {
+      // RÃ©initialiser au centre de l'utilisateur (pas Ã  la France entiÃ¨re)
+      state.center.lat = state.userCenter.lat;
+      state.center.lon = state.userCenter.lon;
+      state.radius = DEFAULT_RADIUS;
+
+      const latlng = L.latLng(state.userCenter.lat, state.userCenter.lon);
+      marker.setLatLng(latlng);
+      circle.setLatLng(latlng);
+      circle.setRadius(DEFAULT_RADIUS * 1000);
+      map.setView(latlng, 10);
+
+      slider.value = DEFAULT_RADIUS;
+      radiusDisplay.textContent = DEFAULT_RADIUS + ' km';
+
+      fetchLeadsForZone();
+    });
+  }
+
+  // â”€â”€â”€ INIT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  async function init() {
+    try {
+      // RÃ©cupÃ©rer le centre utilisateur AVANT d'initialiser la carte
+      await initUserCenter();
+
+      initMap();
+      bindControls();
+
+      await fetchMapStats();
+      await fetchLeadsForZone();
+
+      console.log('ðŸ—ºï¸ Carte initialisÃ©e avec succÃ¨s.');
+    } catch (err) {
+      console.error('âŒ Erreur d\'initialisation:', err);
+      showError('Erreur de chargement de la carte.');
+    }
+  }
+
+  // â”€â”€â”€ LANCEMENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  setTimeout(init, 300);
+});
+</script>
+</body>
+</html>

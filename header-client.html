@@ -1,14 +1,14 @@
-<!-- header-client.html — Espace Client BâtiSwift -->
+﻿<!-- header-client.html â€” Espace Client BÃ¢tiSwift -->
 <header class="site-header site-header--client" id="site-header">
   <div class="container">
     <a href="/client-dashboard.html" class="nav-logo">
-      <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
-      <span>BâtiSwift</span>
+      <img src="/assets/logo.svg" alt="BÃ¢tiSwift" class="logo-svg">
+      <span>BÃ¢tiSwift</span>
     </a>
 
     <!-- Indicateur de contexte (desktop) -->
     <div class="header-context-badge" id="header-context-badge" style="display:none;">
-      🏠 <span>Espace Client</span>
+      ðŸ  <span>Espace Client</span>
     </div>
 
     <button class="menu-toggle" id="menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false">
@@ -23,26 +23,26 @@
 <div id="sidebar" class="sidebar" role="navigation" aria-label="Navigation client">
   <div class="sidebar-header">
     <a href="/client-dashboard.html" class="nav-logo">
-      <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
-      <span>BâtiSwift</span>
+      <img src="/assets/logo.svg" alt="BÃ¢tiSwift" class="logo-svg">
+      <span>BÃ¢tiSwift</span>
     </a>
-    <button id="sidebar-close" class="sidebar-close" aria-label="Fermer le menu">✕</button>
+    <button id="sidebar-close" class="sidebar-close" aria-label="Fermer le menu">âœ•</button>
   </div>
 
-  <!-- Profil connecté (masqué si invité) -->
+  <!-- Profil connectÃ© (masquÃ© si invitÃ©) -->
   <div class="sidebar-user" style="display:none;">
     <div class="sidebar-profile">
-      <div class="sidebar-profile-avatar" style="background:rgba(47,26,58,0.07);">🏠</div>
+      <div class="sidebar-profile-avatar" style="background:rgba(47,26,58,0.07);">ðŸ </div>
       <div>
-        <div class="sidebar-profile-name">👋 <span id="sidebar-user-nom"></span></div>
+        <div class="sidebar-profile-name">ðŸ‘‹ <span id="sidebar-user-nom"></span></div>
         <span id="sidebar-role-badge" class="sidebar-badge-role" style="background:rgba(47,26,58,0.08);color:#2F1A3A;"></span>
       </div>
     </div>
 
-    <!-- Switcher de contexte — visible UNIQUEMENT pour les comptes mixtes -->
+    <!-- Switcher de contexte â€” visible UNIQUEMENT pour les comptes mixtes -->
     <div id="context-switcher" style="display:none;">
       <button id="btn-switch-context" class="btn btn-secondary btn-sm btn-block">
-        <span id="context-switcher-text">🛠️ Passer en mode Artisan</span>
+        <span id="context-switcher-text">ðŸ› ï¸ Passer en mode Artisan</span>
       </button>
     </div>
   </div>
@@ -50,32 +50,32 @@
   <!-- Navigation Client -->
   <nav class="sidebar-nav">
     <div class="sidebar-section-label">Mon espace</div>
-    <a href="/client-dashboard.html">🏠 Tableau de bord</a>
-    <a href="/client.html">💬 Nouvelle demande</a>
-    <a href="/carte.html">🔎 Trouver un artisan</a>
+    <a href="/client-dashboard.html">ðŸ  Tableau de bord</a>
+    <a href="/client.html">ðŸ’¬ Nouvelle demande</a>
+    <a href="/carte-client.html">ðŸ”Ž Trouver un artisan</a>
 
     <div class="sidebar-section-label">Informations</div>
-    <a href="/aide.html">❓ Centre d'aide</a>
-    <a href="/tarifs.html">💳 Tarifs</a>
+    <a href="/aide.html">â“ Centre d'aide</a>
+    
   </nav>
 
   <div class="sidebar-actions">
-    <!-- Invité -->
+    <!-- InvitÃ© -->
     <div class="sidebar-guest">
       <a href="/connexion.html"   class="btn btn-secondary btn-block">Connexion</a>
       <a href="/inscription.html" class="btn btn-primary btn-block">S'inscrire</a>
     </div>
-    <!-- Connecté -->
+    <!-- ConnectÃ© -->
     <div class="sidebar-user" style="display:none;">
-      <button id="sidebar-logout" class="btn btn-danger btn-block">Déconnexion</button>
+      <button id="sidebar-logout" class="btn btn-danger btn-block">DÃ©connexion</button>
     </div>
   </div>
 </div>
 
-<!-- Styles repris du header.html — pas de duplication de logique -->
+<!-- Styles repris du header.html â€” pas de duplication de logique -->
 <style>
-/* Styles identiques à header.html — voir header.html pour les définitions complètes.
-   Seules les surcharges spécifiques au client sont ici. */
+/* Styles identiques Ã  header.html â€” voir header.html pour les dÃ©finitions complÃ¨tes.
+   Seules les surcharges spÃ©cifiques au client sont ici. */
 
 .site-header {
   position: fixed;
@@ -351,7 +351,7 @@
   var closeBtn = document.getElementById('sidebar-close');
 
   if (!toggle || !sidebar || !overlay) {
-    console.warn('BâtiSwift header-client: éléments manquants.');
+    console.warn('BÃ¢tiSwift header-client: Ã©lÃ©ments manquants.');
     return;
   }
 
@@ -449,3 +449,4 @@
 
 })();
 </script>
+

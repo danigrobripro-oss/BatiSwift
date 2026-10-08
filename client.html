@@ -18,7 +18,7 @@
 
   <link rel="stylesheet" href="/css/style.css">
   <style>
-    .client-layout {
+    .chat-layout {
       display: grid; grid-template-columns: 1fr 380px;
       gap: 0; min-height: calc(100vh - var(--header-h));
     }
@@ -117,7 +117,7 @@
     .user-banner .btn:hover { background: #b8952e; }
 
     @media (max-width: 900px) {
-      .client-layout { grid-template-columns: 1fr; }
+      .chat-layout { grid-template-columns: 1fr; }
       .info-pane { order: -1; padding: var(--space-lg); }
       .user-banner { justify-content: center; text-align: center; }
     }
@@ -135,7 +135,7 @@
 </div>
 
 <main class="main-content">
-  <div class="client-layout">
+  <div class="chat-layout">
 
     <!-- ── CHAT ── -->
     <div class="chat-pane">
