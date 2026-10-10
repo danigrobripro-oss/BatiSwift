@@ -286,8 +286,12 @@
 <script src="/js/main.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
   'use strict';
+
+  // Vérifier le rôle artisan avant toute initialisation
+  const user = await Session.requireRole('artisan');
+  if (!user) return;
 
   // ─── CONSTANTES ──────────────────────────────────────────────
   const DEFAULT_CENTER = [46.603, 2.5];  // Fallback France

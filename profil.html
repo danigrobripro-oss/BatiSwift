@@ -10,9 +10,9 @@
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg" />
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="manifest" href="/assets/site.webmanifest" />
   <meta name="theme-color" content="#F5F0EB" />
@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="/css/style.css" />
   <style>
     .profile-card {
       max-width: 560px;
@@ -67,97 +67,106 @@
   </script>
 </head>
 <body>
-  <div id="header-placeholder"></div>
 
-  <main class="container">
-    <div class="profile-card">
-      <h1>👤 Mon profil</h1>
-      <p class="sub">Consultez et modifiez vos informations personnelles.</p>
+<div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
+<div id="header-container"></div>
 
-      <form id="profile-form">
-        <div class="form-group">
-          <label>Nom / raison sociale</label>
-          <input type="text" id="prof-name" placeholder="SARAS Plomberie" />
-        </div>
-        <div class="form-group">
-          <label>Email professionnel</label>
-          <input type="email" id="prof-email" placeholder="contact@artisan.fr" readonly />
-        </div>
-        <div class="form-group">
-          <label>Téléphone</label>
-          <input type="tel" id="prof-phone" placeholder="0612345678" />
-        </div>
-        <div class="form-group">
-          <label>Métier principal</label>
-          <input type="text" id="prof-trade" placeholder="Plomberie" />
-        </div>
-        <div class="form-group">
-          <label>Zone d’intervention</label>
-          <input type="text" id="prof-zone" placeholder="Lyon, 69003" />
-        </div>
-        <button type="submit" class="btn btn--primary btn--block">💾 Enregistrer les modifications</button>
-        <div id="profile-status" style="margin-top:0.5rem;color:var(--text-muted);"></div>
-      </form>
-    </div>
-  </main>
+<main class="container">
+  <div class="profile-card">
+    <h1>👤 Mon profil</h1>
+    <p class="sub">Consultez et modifiez vos informations personnelles.</p>
 
-  <div id="footer-placeholder"></div>
+    <form id="profile-form">
+      <div class="form-group">
+        <label>Nom / raison sociale</label>
+        <input type="text" id="prof-name" placeholder="SARAS Plomberie" />
+      </div>
+      <div class="form-group">
+        <label>Email professionnel</label>
+        <input type="email" id="prof-email" placeholder="contact@artisan.fr" readonly />
+      </div>
+      <div class="form-group">
+        <label>Téléphone</label>
+        <input type="tel" id="prof-phone" placeholder="0612345678" />
+      </div>
+      <div class="form-group">
+        <label>Métier principal</label>
+        <input type="text" id="prof-trade" placeholder="Plomberie" />
+      </div>
+      <div class="form-group">
+        <label>Zone d'intervention</label>
+        <input type="text" id="prof-zone" placeholder="Lyon, 69003" />
+      </div>
+      <button type="submit" class="btn btn--primary btn--block">💾 Enregistrer les modifications</button>
+      <div id="profile-status" style="margin-top:0.5rem;color:var(--text-muted);"></div>
+    </form>
+  </div>
+</main>
 
-  <script>
-    const API_BASE = "https://agent-btp.onrender.com";
-    const TOKEN_KEY = "batiswift-artisan-token";
-    const token = localStorage.getItem(TOKEN_KEY);
+<div id="footer-container"></div>
 
-    if (!token) {
-      window.location.href = "inscription.html";
+<!-- ① config   ② api   ③ session   ④ main — ordre obligatoire -->
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/session.js"></script>
+<script src="/js/main.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', async function() {
+
+  // Vérifier le rôle artisan avant toute initialisation
+  const user = await Session.requireRole('artisan');
+  if (!user) return;
+
+  const API_BASE = "https://agent-btp.onrender.com";
+  const TOKEN_KEY = "batiswift-artisan-token";
+  const token = localStorage.getItem(TOKEN_KEY);
+
+  if (!token) {
+    window.location.href = "/connexion.html";
+  }
+
+  async function loadProfile() {
+    try {
+      const res = await fetch(`${API_BASE}/api/artisan/me?token=${token}`);
+      if (!res.ok) throw new Error('Erreur');
+      const data = await res.json();
+      document.getElementById('prof-name').value = data.name || '';
+      document.getElementById('prof-email').value = data.email || '';
+      document.getElementById('prof-phone').value = data.phone || '';
+      document.getElementById('prof-trade').value = data.trade || '';
+      document.getElementById('prof-zone').value = (data.zones || []).join(', ');
+    } catch (e) {
+      console.error('Erreur chargement profil', e);
     }
+  }
 
-    async function loadProfile() {
-      try {
-        const res = await fetch(`${API_BASE}/api/artisan/me?token=${token}`);
-        if (!res.ok) throw new Error('Erreur');
-        const data = await res.json();
-        document.getElementById('prof-name').value = data.name || '';
-        document.getElementById('prof-email').value = data.email || '';
-        document.getElementById('prof-phone').value = data.phone || '';
-        document.getElementById('prof-trade').value = data.trade || '';
-        document.getElementById('prof-zone').value = (data.zones || []).join(', ');
-      } catch (e) {
-        console.error('Erreur chargement profil', e);
-      }
+  document.getElementById('profile-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const name = document.getElementById('prof-name').value.trim();
+    const phone = document.getElementById('prof-phone').value.trim();
+    const trade = document.getElementById('prof-trade').value.trim();
+    const zone = document.getElementById('prof-zone').value.trim();
+    const zones = zone.split(',').map(s => s.trim()).filter(Boolean);
+
+    try {
+      const res = await fetch(`${API_BASE}/api/artisan/settings?token=${token}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, name, trade, zones })
+      });
+      if (!res.ok) throw new Error('Erreur');
+      document.getElementById('profile-status').textContent = '✅ Profil mis à jour !';
+      document.getElementById('profile-status').style.color = '#2ecc71';
+    } catch (e) {
+      document.getElementById('profile-status').textContent = '❌ Erreur : ' + e.message;
+      document.getElementById('profile-status').style.color = '#ff2d7a';
     }
+  });
 
-    document.getElementById('profile-form').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const name = document.getElementById('prof-name').value.trim();
-      const phone = document.getElementById('prof-phone').value.trim();
-      const trade = document.getElementById('prof-trade').value.trim();
-      const zone = document.getElementById('prof-zone').value.trim();
-      const zones = zone.split(',').map(s => s.trim()).filter(Boolean);
+  loadProfile();
 
-      try {
-        const res = await fetch(`${API_BASE}/api/artisan/settings?token=${token}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone, name, trade, zones })
-        });
-        if (!res.ok) throw new Error('Erreur');
-        document.getElementById('profile-status').textContent = '✅ Profil mis à jour !';
-        document.getElementById('profile-status').style.color = '#2ecc71';
-      } catch (e) {
-        document.getElementById('profile-status').textContent = '❌ Erreur : ' + e.message;
-        document.getElementById('profile-status').style.color = '#ff2d7a';
-      }
-    });
-
-    loadProfile();
-
-    fetch('header.html').then(r => r.text()).then(html => {
-      document.getElementById('header-placeholder').innerHTML = html;
-    });
-    fetch('footer.html').then(r => r.text()).then(html => {
-      document.getElementById('footer-placeholder').innerHTML = html;
-    });
-  </script>
+});
+</script>
 </body>
 </html>

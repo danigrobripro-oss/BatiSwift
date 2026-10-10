@@ -87,7 +87,7 @@
     }
   </style>
 </head>
-<body class="minimal-layout">
+<body>
 
 <div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
 <div id="header-container"></div>
@@ -343,8 +343,12 @@
 <script src="/js/main.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
   'use strict';
+
+  // Vérifier le rôle artisan avant toute initialisation
+  const user = await Session.requireRole('artisan');
+  if (!user) return;
 
   var form = document.getElementById('params-form');
   var saveBtn = document.getElementById('btn-save');
@@ -723,11 +727,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Initialisation : le chargement des paramètres ne dépend pas de Stripe.
-  if (!token()) {
-    window.location.href = '/connexion.html';
-    return;
-  }
-
   console.log('[BâtiSwift] parametres.html chargé.');
 
   loadSettings()

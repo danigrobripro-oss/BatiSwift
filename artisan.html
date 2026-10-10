@@ -9,63 +9,202 @@
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg" />
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="manifest" href="/assets/site.webmanifest" />
   <meta name="theme-color" content="#F5F0EB" />
 
   <link rel="stylesheet" href="/css/style.css">
-  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    body { background: var(--beige); }
+    .auth-wrapper {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+    }
+    .auth-visual {
+      background: linear-gradient(145deg, var(--anthracite2) 0%, #0d0d0d 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: var(--space-xl); position: relative; overflow: hidden;
+    }
+    .auth-visual::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 30% 70%, rgba(201,168,76,.15) 0%, transparent 60%);
+    }
+    .auth-visual-content { position: relative; z-index: 1; text-align: center; color: var(--blanc); }
+    .auth-visual-content h2 { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; margin-bottom: 16px; }
+    .auth-visual-content p  { color: rgba(255,255,255,.6); font-size: .95rem; line-height: 1.7; max-width: 340px; }
+    .auth-stats { display: flex; gap: 32px; margin-top: 40px; justify-content: center; }
+    .auth-stat-num { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--or); }
+    .auth-stat-lbl { font-size: .75rem; color: rgba(255,255,255,.4); margin-top: 2px; }
+    .auth-form-side {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: var(--space-xl) 5vw;
+    }
+    .auth-card { width: 100%; max-width: 420px; }
+    .auth-title    { font-family: var(--font-display); font-size: 2rem; font-weight: 700; margin-bottom: 6px; }
+    .auth-subtitle { color: var(--gris); font-size: .9rem; margin-bottom: var(--space-xl); }
+    .pass-wrapper { position: relative; }
+    .pass-toggle {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; font-size: 1rem; color: var(--gris); padding: 4px;
+    }
+    .auth-link { text-align: center; margin-top: var(--space-lg); font-size: .88rem; color: var(--gris); }
+    .auth-link a { color: var(--anthracite); font-weight: 600; }
+    .forgot-link {
+      text-align: center;
+      margin-top: 12px;
+    }
+    .forgot-link a {
+      color: var(--gris);
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .forgot-link a:hover {
+      color: var(--anthracite);
+      text-decoration: underline;
+    }
+    @media (max-width: 768px) {
+      .auth-wrapper { grid-template-columns: 1fr; }
+      .auth-visual  { display: none; }
+      .auth-form-side { padding: calc(var(--header-h) + 32px) 5vw 40px; }
+    }
+  </style>
 </head>
-<body>
-  <header class="site-header">
-    <div class="logo-container">
-      <!-- Même SVG -->
-      <svg viewBox="0 0 538 262" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M61 84h55c6.315 0 17.255-2.088 22.896 1.028C144.484 88.114 147.823 97.704 151 103c3.37 5.618 6.604 11.31 9.85 17 1.74 3.051 4.254 6.412 4.652 10 .48 4.334-3.002 8.496-5.102 12-4.55 7.589-8.845 15.327-13.25 23-2.152 3.747-4.315 8.486-8.243 10.682C133.031 178.968 122.556 177 116 177H61c3.847 12.073 15.03 23.485 25 30.844 25.975 19.174 61.478 25.991 92 13.703 15.344-6.177 29.004-15.704 39.535-28.547 11.741-14.317 19.215-31.588 31.08-46 21.094-25.622 50.629-45.068 81.385-57-6.919-2.903-17.52-1-25-1-20.478 0-43.245 2.73-63-3.75-13.713-4.497-20.505-14.368-30.09-24.21-6.38-6.553-13.929-12.162-21.91-16.601-35.645-19.825-83.158-13.07-112 15.565C71.158 66.799 64.356 74.837 61 84m270-50c2.271 7.886 6.309 15.47 9.576 23 4.77 10.997 9.297 22.168 14.424 33-32.571 10.616-62.79 27.64-87.075 51.925-9.949 9.949-20.03 20.702-26.925 33.075 7.372-.993 14.539-3.397 22-3.91 30.36-2.091 61.561-.09 92-.09-7.344 18.93-16.655 37.069-24 56 6.036-1.91 11.466-5.655 17-8.694 12.418-6.82 24.673-13.902 37-20.882 22.57-12.78 45.427-25.067 68-37.848 16.835-9.533 33.473-20.393 51-28.576v-2c-16.666-6.976-32.28-17.693-48-26.576-25.884-14.624-52.037-28.8-78-43.284-14.782-8.247-30.744-20.358-47-25.14" fill="#2B2B2B"/>
-      </svg>
-    </div>
-    <nav class="nav-links">
-      <a href="index.html">Accueil</a>
-      <a href="client.html">Déposer une demande</a>
-      <a href="#" id="logout-link" style="display:none;">Déconnexion</a>
-    </nav>
-  </header>
+<body class="minimal-layout">
 
-  <main style="max-width: 900px; margin: 2rem auto; padding: 0 1rem;">
-    <!-- Bloc connexion / inscription (masqué si connecté) -->
-    <div id="auth-section" class="glass-card" style="margin-bottom: 2rem;">
-      <h2>Connexion</h2>
-      <form id="login-form">
-        <input type="email" id="login-email" placeholder="Email" required>
-        <input type="password" id="login-password" placeholder="Mot de passe" required>
-        <div id="login-error" class="error-msg"></div>
-        <button type="submit" class="btn-primary">Se connecter</button>
+<div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
+<div id="header-container"></div>
+
+<div class="auth-wrapper">
+  <!-- Visuel gauche -->
+  <div class="auth-visual">
+    <div class="auth-visual-content">
+      <img src="/assets/logo.svg" alt="BâtiSwift" style="width:60px;filter:invert(1);margin:0 auto 20px;display:block">
+      <h2>BâtiSwift</h2>
+      <p>La plateforme qui connecte artisans BTP et clients qualifiés en moins de 2 minutes.</p>
+      <div class="auth-stats">
+        <div>
+          <div class="auth-stat-num" data-stat="artisans_inscrits">—</div>
+          <div class="auth-stat-lbl">Artisans</div>
+        </div>
+        <div>
+          <div class="auth-stat-num" data-stat="leads_total">—</div>
+          <div class="auth-stat-lbl">Demandes</div>
+        </div>
+        <div>
+          <div class="auth-stat-num">10€</div>
+          <div class="auth-stat-lbl">Par lead</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulaire droite -->
+  <div class="auth-form-side">
+    <div class="auth-card">
+
+      <div class="auth-title">Connexion</div>
+      <div class="auth-subtitle">Accédez à votre espace artisan</div>
+
+      <div id="alert-login" class="alert" style="display:none"></div>
+
+      <form id="form-login" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="email">E-mail <span class="req">*</span></label>
+          <input id="email" type="email" class="form-control" placeholder="vous@exemple.fr" required autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Mot de passe <span class="req">*</span></label>
+          <div class="pass-wrapper">
+            <input id="password" type="password" class="form-control" placeholder="••••••••" required autocomplete="current-password" style="padding-right:44px">
+            <button type="button" class="pass-toggle" id="toggle-pw">👁</button>
+          </div>
+        </div>
+
+        <div class="forgot-link">
+          <a href="/forgot-password.html">Mot de passe oublié ?</a>
+        </div>
+
+        <button type="submit" id="btn-login" class="btn btn-primary btn-block btn-lg" style="margin-top:8px">
+          Se connecter
+        </button>
       </form>
-      <hr style="margin: 1.5rem 0;">
-      <h2>Inscription</h2>
-      <form id="register-form">
-        <input type="text" id="reg-nom" placeholder="Nom complet" required>
-        <input type="email" id="reg-email" placeholder="Email" required>
-        <input type="password" id="reg-password" placeholder="Mot de passe" required>
-        <input type="tel" id="reg-tel" placeholder="Téléphone">
-        <input type="text" id="reg-ville" placeholder="Ville">
-        <input type="number" id="reg-rayon" placeholder="Rayon (km)" value="30" min="1">
-        <div id="register-error" class="error-msg"></div>
-        <button type="submit" class="btn-primary">Créer mon compte</button>
-      </form>
-    </div>
 
-    <!-- Bloc dashboard (visible uniquement si connecté) -->
-    <div id="dashboard-section" style="display:none;">
-      <h2>Bienvenue, <span id="artisan-nom"></span></h2>
-      <p>Ville : <span id="artisan-ville"></span> | Rayon : <span id="artisan-rayon"></span> km</p>
-      <div id="leads-container"></div>
+      <div class="auth-link">Pas encore de compte ? <a href="/inscription.html">S'inscrire gratuitement</a></div>
+      <div class="auth-link" style="margin-top:8px">
+        <a href="/client.html" style="color:var(--gris)">Je suis client — Déposer une demande →</a>
+      </div>
     </div>
-  </main>
+  </div>
+</div>
 
-  <script src="script.js"></script>
+<div id="footer-container"></div>
+
+<!-- ① config   ② api   ③ session   ④ main — ordre obligatoire -->
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/session.js"></script>
+<script src="/js/main.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', async function() {
+
+  // Redirige si déjà connecté selon le rôle
+  await Session.redirectIfAuth('/dashboard.html');
+
+  // Toggle mot de passe
+  document.getElementById('toggle-pw').addEventListener('click', function() {
+    var inp = document.getElementById('password');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+    this.textContent = inp.type === 'password' ? '👁' : '🙈';
+  });
+
+  // Soumission
+  document.getElementById('form-login').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    var alertId = 'alert-login';
+    hideAlert(alertId);
+
+    var email = document.getElementById('email').value.trim();
+    var pass  = document.getElementById('password').value;
+
+    if (!email) { showAlert(alertId, 'Veuillez saisir votre e-mail.', 'danger'); return; }
+    if (!pass)  { showAlert(alertId, 'Veuillez saisir votre mot de passe.', 'danger'); return; }
+
+    var btn = document.getElementById('btn-login');
+    btnLoading(btn, true);
+
+    try {
+      var data = await API.login(email, pass);
+      Session.save(data.token, data.artisan);
+
+      toast('Connexion réussie !', 'success');
+
+      var user = data.artisan;
+      var redirect = new URLSearchParams(window.location.search).get('redirect');
+
+      if (redirect) {
+        setTimeout(function() { window.location.href = redirect; }, 600);
+      } else if (user && user.role === 'client') {
+        setTimeout(function() { window.location.href = '/client-dashboard.html'; }, 600);
+      } else if (user && user.role === 'mixte') {
+        var ctx = Session.getContext();
+        var dest = (ctx === 'client') ? '/client-dashboard.html' : '/dashboard.html';
+        setTimeout(function() { window.location.href = dest; }, 600);
+      } else {
+        setTimeout(function() { window.location.href = '/dashboard.html'; }, 600);
+      }
+    } catch(err) {
+      showAlert(alertId, err.message, 'danger');
+      btnLoading(btn, false);
+    }
+  });
+
+});
+</script>
 </body>
 </html>

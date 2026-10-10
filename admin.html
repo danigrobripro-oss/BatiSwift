@@ -88,7 +88,7 @@
   <main class="admin-page">
     <div class="container">
       <h1 class="text-center" style="font-family:var(--font-display);font-size:2rem;">📊 Dashboard Admin</h1>
-      <p class="text-center" style="color:var(--gris);margin-bottom:2rem;">Vue d’ensemble de la plateforme BâtiSwift</p>
+      <p class="text-center" style="color:var(--gris);margin-bottom:2rem;">Vue d'ensemble de la plateforme BâtiSwift</p>
 
       <div class="admin-stats" id="admin-stats">
         <div class="stat-box"><div class="number" id="stat-artisans">—</div><div class="label">Artisans inscrits</div></div>
@@ -113,7 +113,11 @@
   <script src="/js/main.js"></script>
 
   <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', async function() {
+    // Vérifier l'accès artisan (le backend DOIT valider les droits admin via /api/admin/*)
+    const user = await Session.requireRole('artisan');
+    if (!user) return;
+
     // Charger les statistiques
     fetch(`${CONFIG.API_URL}/api/admin/stats`)
       .then(r => r.json())

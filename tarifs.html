@@ -328,21 +328,6 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
-  // ─── CHARGEMENT DU HEADER ET INITIALISATION DE LA SIDEBAR ──
-  function loadFragmentAndInit(id, url) {
-    fetch(url)
-      .then(r => r.text())
-      .then(html => {
-        document.getElementById(id).innerHTML = html;
-        // Une fois le header chargé, on initialise la sidebar
-        initSidebar();
-        // Puis on applique l'état de connexion (guest vs user)
-        // car les <script> du header ne s'exécutent pas via innerHTML.
-        updateSessionUI();
-      })
-      .catch(() => {});
-  }
-
   function initSidebar() {
     var toggle = document.getElementById('menu-toggle');
     var overlay = document.getElementById('sidebar-overlay');
@@ -426,10 +411,6 @@ document.addEventListener('DOMContentLoaded', function() {
       window.location.href = '/index.html';
     }
   });
-
-  // ─── CHARGEMENT ────────────────────────────────────────────
-  loadFragmentAndInit('header-container', '/header.html');
-  loadFragmentAndInit('footer-container', '/footer.html');
 
   // ─── BOUTON D'ABONNEMENT PRO ─────────────────────────────
   var btnSubscribe = document.getElementById('btn-subscribe');

@@ -9,97 +9,55 @@
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg" />
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="manifest" href="/assets/site.webmanifest" />
   <meta name="theme-color" content="#F5F0EB" />
 
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
-  <div id="page-loader" class="page-loader"><div class="spinner spinner-dark" style="width:40px; height:40px;"></div></div>
-  <header>
-    <div class="container">
-      <a href="index.html" class="nav-logo">
-        <img src="assets/logo.svg" alt="BâtiSwift" class="logo-svg">
-        BâtiSwift
-      </a>
-      <nav>
-        <ul class="nav-links">
-          <li><a href="index.html">Accueil</a></li>
-          <li><a href="client.html">Déposer une demande</a></li>
-        </ul>
-      </nav>
-      <div class="nav-actions">
-        <a href="connexion.html" class="btn btn-secondary btn-sm">Connexion</a>
-        <a href="inscription.html" class="btn btn-primary btn-sm">Inscription</a>
+<body class="minimal-layout">
+
+<div id="page-loader" class="page-loader"><div class="spinner spinner-dark" style="width:40px; height:40px;"></div></div>
+<div id="header-container"></div>
+
+<main>
+  <section class="section" style="padding-top: calc(var(--header-h) + 40px);">
+    <div class="container-sm">
+      <h1 class="reveal">Conditions Générales d'Utilisation</h1>
+      <div class="glass-card mt-lg reveal reveal-delay-1">
+        <h2>1. Objet</h2>
+        <p>Les présentes CGU définissent les conditions d'utilisation de la plateforme BâtiSwift, accessible à l'adresse <a href="https://batiswift.onrender.com">batiswift.onrender.com</a>.</p>
+
+        <h2>2. Accès aux services</h2>
+        <p>L'inscription en tant qu'artisan est gratuite. L'achat de leads (contacts clients qualifiés) est facturé 10€ TTC par lead, sans abonnement obligatoire.</p>
+
+        <h2>3. Obligations de l'utilisateur</h2>
+        <p>L'utilisateur s'engage à fournir des informations exactes lors de son inscription et à ne pas utiliser la plateforme à des fins frauduleuses.</p>
+
+        <h2>4. Paiement et remboursement</h2>
+        <p>Les paiements sont effectués via Stripe. Un lead acheté est définitif ; aucun remboursement n'est prévu sauf en cas de non-conformité manifeste du lead.</p>
+
+        <h2>5. Responsabilité</h2>
+        <p>BâtiSwift ne garantit pas la conclusion d'un contrat entre le client et l'artisan. Notre rôle se limite à la mise en relation.</p>
+
+        <h2>6. Modification des CGU</h2>
+        <p>BâtiSwift se réserve le droit de modifier les présentes conditions. Les utilisateurs seront informés par email de tout changement substantiel.</p>
+
+        <h2>7. Loi applicable</h2>
+        <p>Les présentes CGU sont soumises au droit français. Tout litige relèvera des tribunaux compétents de [ville].</p>
       </div>
     </div>
-  </header>
+  </section>
+</main>
 
-  <main>
-    <section class="section" style="padding-top: 120px;">
-      <div class="container-sm">
-        <h1 class="reveal">Conditions Générales d'Utilisation</h1>
-        <div class="glass-card mt-lg reveal reveal-delay-1">
-          <h2>1. Objet</h2>
-          <p>Les présentes CGU définissent les conditions d'utilisation de la plateforme BâtiSwift, accessible à l'adresse <a href="https://batiswift.onrender.com">batiswift.onrender.com</a>.</p>
+<div id="footer-container"></div>
 
-          <h2>2. Accès aux services</h2>
-          <p>L'inscription en tant qu'artisan est gratuite. L'achat de leads (contacts clients qualifiés) est facturé 10€ TTC par lead, sans abonnement obligatoire.</p>
-
-          <h2>3. Obligations de l'utilisateur</h2>
-          <p>L'utilisateur s'engage à fournir des informations exactes lors de son inscription et à ne pas utiliser la plateforme à des fins frauduleuses.</p>
-
-          <h2>4. Paiement et remboursement</h2>
-          <p>Les paiements sont effectués via Stripe. Un lead acheté est définitif ; aucun remboursement n'est prévu sauf en cas de non-conformité manifeste du lead.</p>
-
-          <h2>5. Responsabilité</h2>
-          <p>BâtiSwift ne garantit pas la conclusion d'un contrat entre le client et l'artisan. Notre rôle se limite à la mise en relation.</p>
-
-          <h2>6. Modification des CGU</h2>
-          <p>BâtiSwift se réserve le droit de modifier les présentes conditions. Les utilisateurs seront informés par email de tout changement substantiel.</p>
-
-          <h2>7. Loi applicable</h2>
-          <p>Les présentes CGU sont soumises au droit français. Tout litige relèvera des tribunaux compétents de [ville].</p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="nav-logo">BâtiSwift</a>
-          <p>Place de marché inversée pour artisans du BTP.</p>
-        </div>
-        <div class="footer-col">
-          <h4>Navigation</h4>
-          <a href="index.html">Accueil</a>
-          <a href="client.html">Déposer une demande</a>
-        </div>
-        <div class="footer-col">
-          <h4>Artisans</h4>
-          <a href="connexion.html">Connexion</a>
-          <a href="inscription.html">Inscription</a>
-        </div>
-        <div class="footer-col">
-          <h4>Légal</h4>
-          <a href="mentions-legales.html">Mentions légales</a>
-          <a href="cgu.html">CGU</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>© 2024 BâtiSwift</span>
-        <a href="cgu.html">CGU</a>
-      </div>
-    </div>
-  </footer>
-
-  <script src="js/config.js"></script>
-  <script src="js/main.js"></script>
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/session.js"></script>
+<script src="/js/main.js"></script>
 </body>
 </html>

@@ -9,97 +9,55 @@
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg" />
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="manifest" href="/assets/site.webmanifest" />
   <meta name="theme-color" content="#F5F0EB" />
 
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
-  <div id="page-loader" class="page-loader"><div class="spinner spinner-dark" style="width:40px; height:40px;"></div></div>
-  <header>
-    <div class="container">
-      <a href="index.html" class="nav-logo">
-        <img src="assets/logo.svg" alt="BâtiSwift" class="logo-svg">
-        BâtiSwift
-      </a>
-      <nav>
-        <ul class="nav-links">
-          <li><a href="index.html">Accueil</a></li>
-          <li><a href="client.html">Déposer une demande</a></li>
-        </ul>
-      </nav>
-      <div class="nav-actions">
-        <a href="connexion.html" class="btn btn-secondary btn-sm">Connexion</a>
-        <a href="inscription.html" class="btn btn-primary btn-sm">Inscription</a>
+<body class="minimal-layout">
+
+<div id="page-loader" class="page-loader"><div class="spinner spinner-dark" style="width:40px; height:40px;"></div></div>
+<div id="header-container"></div>
+
+<main>
+  <section class="section" style="padding-top: calc(var(--header-h) + 40px);">
+    <div class="container-sm">
+      <h1 class="reveal">Mentions légales</h1>
+      <div class="glass-card mt-lg reveal reveal-delay-1">
+        <h2>1. Éditeur du site</h2>
+        <p>Le site BâtiSwift est édité par [Nom de l'entreprise], [forme juridique], au capital de [montant] euros, immatriculée au RCS de [ville] sous le numéro [numéro].</p>
+        <p>Siège social : [adresse complète]</p>
+        <p>Directeur de la publication : [Nom du responsable]</p>
+        <p>Contact : <a href="mailto:contact@batiswift.fr">contact@batiswift.fr</a></p>
+
+        <h2>2. Hébergement</h2>
+        <p>Le site est hébergé par Render, Inc., dont le siège social est situé [adresse Render ou autre].</p>
+
+        <h2>3. Propriété intellectuelle</h2>
+        <p>L'ensemble des éléments du site (textes, logo, code source) est la propriété exclusive de BâtiSwift. Toute reproduction, même partielle, est interdite sans autorisation préalable.</p>
+
+        <h2>4. Données personnelles</h2>
+        <p>Les données collectées sont destinées à la mise en relation entre clients et artisans. Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et d'opposition en écrivant à <a href="mailto:privacy@batiswift.fr">privacy@batiswift.fr</a>.</p>
+
+        <h2>5. Cookies</h2>
+        <p>Le site utilise des cookies de session strictement nécessaires au fonctionnement de l'authentification. Aucun cookie publicitaire n'est déposé.</p>
+
+        <h2>6. Limitation de responsabilité</h2>
+        <p>BâtiSwift agit en tant qu'intermédiaire et ne saurait être tenu responsable de la qualité des travaux réalisés par les artisans.</p>
       </div>
     </div>
-  </header>
+  </section>
+</main>
 
-  <main>
-    <section class="section" style="padding-top: 120px;">
-      <div class="container-sm">
-        <h1 class="reveal">Mentions légales</h1>
-        <div class="glass-card mt-lg reveal reveal-delay-1">
-          <h2>1. Éditeur du site</h2>
-          <p>Le site BâtiSwift est édité par [Nom de l'entreprise], [forme juridique], au capital de [montant] euros, immatriculée au RCS de [ville] sous le numéro [numéro].</p>
-          <p>Siège social : [adresse complète]</p>
-          <p>Directeur de la publication : [Nom du responsable]</p>
-          <p>Contact : <a href="mailto:contact@batiswift.fr">contact@batiswift.fr</a></p>
+<div id="footer-container"></div>
 
-          <h2>2. Hébergement</h2>
-          <p>Le site est hébergé par Render, Inc., dont le siège social est situé [adresse Render ou autre].</p>
-
-          <h2>3. Propriété intellectuelle</h2>
-          <p>L'ensemble des éléments du site (textes, logo, code source) est la propriété exclusive de BâtiSwift. Toute reproduction, même partielle, est interdite sans autorisation préalable.</p>
-
-          <h2>4. Données personnelles</h2>
-          <p>Les données collectées sont destinées à la mise en relation entre clients et artisans. Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et d'opposition en écrivant à <a href="mailto:privacy@batiswift.fr">privacy@batiswift.fr</a>.</p>
-
-          <h2>5. Cookies</h2>
-          <p>Le site utilise des cookies de session strictement nécessaires au fonctionnement de l'authentification. Aucun cookie publicitaire n'est déposé.</p>
-
-          <h2>6. Limitation de responsabilité</h2>
-          <p>BâtiSwift agit en tant qu'intermédiaire et ne saurait être tenu responsable de la qualité des travaux réalisés par les artisans.</p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="nav-logo">BâtiSwift</a>
-          <p>Place de marché inversée pour artisans du BTP.</p>
-        </div>
-        <div class="footer-col">
-          <h4>Navigation</h4>
-          <a href="index.html">Accueil</a>
-          <a href="client.html">Déposer une demande</a>
-        </div>
-        <div class="footer-col">
-          <h4>Artisans</h4>
-          <a href="connexion.html">Connexion</a>
-          <a href="inscription.html">Inscription</a>
-        </div>
-        <div class="footer-col">
-          <h4>Légal</h4>
-          <a href="mentions-legales.html">Mentions légales</a>
-          <a href="cgu.html">CGU</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>© 2024 BâtiSwift</span>
-        <a href="mentions-legales.html">Mentions légales</a>
-      </div>
-    </div>
-  </footer>
-
-  <script src="js/config.js"></script>
-  <script src="js/main.js"></script>
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/session.js"></script>
+<script src="/js/main.js"></script>
 </body>
 </html>
