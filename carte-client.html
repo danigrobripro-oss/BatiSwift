@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ðŸ—ºï¸ Carte des artisans â€“ BÃ¢tiSwift</title>
+  <title>🗺️ Carte des artisans — BâtiSwift</title>
 
-  <!-- â”€â”€â”€ FAVICON â”€â”€â”€ -->
+  <!-- // ----- FAVICON // ----- -->
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
@@ -16,13 +16,13 @@
   <link rel="manifest" href="/assets/site.webmanifest" />
   <meta name="theme-color" content="#F5F0EB" />
 
-  <!-- â”€â”€â”€ DESIGN SYSTEM â”€â”€â”€ -->
+  <!-- // ----- DESIGN SYSTEM // ----- -->
   <link rel="stylesheet" href="/css/style.css" />
 
-  <!-- â”€â”€â”€ LEAFET CSS â”€â”€â”€ -->
+  <!-- // ----- LEAFET CSS // ----- -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
-    /* â”€â”€ PAGE CARTE â”€â”€ */
+    /* // ---- PAGE CARTE // ---- */
     .carte-page {
       padding: calc(var(--header-h) + 20px) 5vw 60px;
       background: var(--beige);
@@ -39,7 +39,7 @@
       margin-bottom: 1.5rem;
     }
 
-    /* â”€â”€ STATS BAR â”€â”€ */
+    /* // ---- STATS BAR // ---- */
     .stats-bar {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -76,7 +76,7 @@
       color: var(--or);
     }
 
-    /* â”€â”€ CONTROLS â”€â”€ */
+    /* // ---- CONTROLS // ---- */
     .controls-panel {
       display: flex;
       flex-wrap: wrap;
@@ -130,7 +130,7 @@
       background: var(--or);
     }
 
-    /* â”€â”€ MAP â”€â”€ */
+    /* // ---- MAP // ---- */
     .map-wrapper {
       background: var(--blanc);
       border-radius: var(--radius-xl);
@@ -167,7 +167,7 @@
     .legend-dot.center { background: var(--anthracite); }
     .legend-dot.zone { border: 2px solid var(--or); background: transparent; }
 
-    /* â”€â”€â”€ POPUP LEAFET â”€â”€â”€ */
+    /* // ----- POPUP LEAFET // ----- */
     .leaflet-popup-content-wrapper {
       border-radius: var(--radius);
       box-shadow: 0 8px 32px rgba(43,43,43,0.12);
@@ -190,7 +190,7 @@
       margin: 0;
     }
 
-    /* â”€â”€â”€ LOADING / ERROR / EMPTY â”€â”€â”€ */
+    /* // ----- LOADING / ERROR / EMPTY // ----- */
     .map-loading, .map-error, .map-empty {
       text-align: center;
       padding: 1rem;
@@ -200,7 +200,7 @@
     .map-error { color: var(--danger); display: none; }
     .map-empty { color: var(--gris-light); display: none; }
 
-    /* â”€â”€â”€ RESPONSIVE â”€â”€â”€ */
+    /* // ----- RESPONSIVE // ----- */
     @media (max-width: 992px) {
       .stats-bar { grid-template-columns: repeat(2, 1fr); }
       #map { height: 450px; }
@@ -225,22 +225,22 @@
 <main class="carte-page">
   <div class="container">
     <div class="carte-header">
-      <h1>ðŸ—ºï¸ Carte des artisans</h1>
-      <p>Visualisez la rÃ©partition des artisans et des demandes de travaux disponibles sur le territoire.</p>
+      <h1>🗺️ Carte des artisans</h1>
+      <p>Visualisez la répartition des artisans et des demandes de travaux disponibles sur le territoire.</p>
     </div>
 
-    <!-- â”€â”€â”€ STATS â”€â”€â”€ -->
+    <!-- // ----- STATS // ----- -->
     <div class="stats-bar" id="stats-bar">
       <div class="stat-card">
-        <div class="stat-value" id="stat-artisans">â€”</div>
+        <div class="stat-value" id="stat-artisans">–”</div>
         <div class="stat-label">Artisans inscrits</div>
       </div>
       <div class="stat-card">
-        <div class="stat-value" id="stat-demandes">â€”</div>
+        <div class="stat-value" id="stat-demandes">–”</div>
         <div class="stat-label">Demandes disponibles</div>
       </div>
       <div class="stat-card highlight">
-        <div class="stat-value" id="stat-leads-zone">â€”</div>
+        <div class="stat-value" id="stat-leads-zone">–”</div>
         <div class="stat-label">Leads dans la zone</div>
       </div>
       <div class="stat-card">
@@ -249,26 +249,26 @@
       </div>
     </div>
 
-    <!-- â”€â”€â”€ CONTROLS â”€â”€â”€ -->
+    <!-- // ----- CONTROLS // ----- -->
     <div class="controls-panel">
       <div class="radius-control">
         <label for="radius-slider">ðŸ“ Rayon</label>
         <input type="range" id="radius-slider" min="10" max="100" value="50" step="5">
         <span class="radius-value" id="radius-display">50 km</span>
       </div>
-      <button class="btn-reset" id="btn-reset">RÃ©initialiser</button>
+      <button class="btn-reset" id="btn-reset">Réinitialiser</button>
     </div>
 
-    <!-- â”€â”€â”€ MAP â”€â”€â”€ -->
+    <!-- // ----- MAP // ----- -->
     <div class="map-wrapper">
       <div id="map"></div>
-      <div class="map-loading" id="map-loading">â³ Chargement des donnÃ©esâ€¦</div>
-      <div class="map-error" id="map-error">âš ï¸ Impossible de charger les donnÃ©es. Veuillez rÃ©essayer.</div>
-      <div class="map-empty" id="map-empty">â„¹ï¸ Aucun lead disponible dans cette zone pour le moment.</div>
+      <div class="map-loading" id="map-loading">⏳ Chargement des données…</div>
+      <div class="map-error" id="map-error">⚠️ Impossible de charger les données. Veuillez réessayer.</div>
+      <div class="map-empty" id="map-empty">ℹ️ Aucun lead disponible dans cette zone pour le moment.</div>
       <div class="map-legend">
         <span><span class="legend-dot leads"></span> Zone avec leads (taille = nombre)</span>
         <span><span class="legend-dot center"></span> Centre de recherche</span>
-        <span><span class="legend-dot zone"></span> PÃ©rimÃ¨tre de recherche</span>
+        <span><span class="legend-dot zone"></span> Périmètre de recherche</span>
       </div>
     </div>
   </div>
@@ -276,10 +276,10 @@
 
 <div id="footer-container"></div>
 
-<!-- â”€â”€â”€ LEAFET JS â”€â”€â”€ -->
+<!-- // ----- LEAFET JS // ----- -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<!-- â”€â”€â”€ SCRIPTS PARTAGÃ‰S â”€â”€â”€ -->
+<!-- // ----- SCRIPTS PARTAGÉS // ----- -->
 <script src="/js/config.js"></script>
 <script src="/js/api.js"></script>
 <script src="/js/session.js"></script>
@@ -289,14 +289,14 @@
 document.addEventListener('DOMContentLoaded', function() {
   'use strict';
 
-  // â”€â”€â”€ CONSTANTES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ----- CONSTANTES // ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----
   const DEFAULT_CENTER = [46.603, 2.5];  // Fallback France
   const DEFAULT_RADIUS = 50; // km
 
-  // â”€â”€â”€ Ã‰TAT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ----- ÉTAT // ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----
   const state = {
     center: { lat: DEFAULT_CENTER[0], lon: DEFAULT_CENTER[1] },
-    userCenter: { lat: DEFAULT_CENTER[0], lon: DEFAULT_CENTER[1] }, // centre de l'utilisateur connectÃ©
+    userCenter: { lat: DEFAULT_CENTER[0], lon: DEFAULT_CENTER[1] }, // centre de l'utilisateur connecté
     radius: DEFAULT_RADIUS,
     totalArtisans: 0,
     totalDemandes: 0,
@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let map, circle, marker, leadMarkers = [];
   let debounceTimer = null;
 
-  // â”€â”€â”€ DOM REFS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ----- DOM REFS // ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// -----
   const $ = (id) => document.getElementById(id);
   const elArtisans = $('stat-artisans');
   const elDemandes = $('stat-demandes');
@@ -319,7 +319,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const errorEl = $('map-error');
   const emptyEl = $('map-empty');
 
-  // â”€â”€â”€ HELPERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ----- HELPERS // ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----
   function formatNumber(n) {
     return new Intl.NumberFormat('fr-FR').format(n || 0);
   }
@@ -336,7 +336,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function showError(msg) {
     if (errorEl) {
-      errorEl.textContent = msg || 'âš ï¸ Impossible de charger les donnÃ©es. Veuillez rÃ©essayer.';
+      errorEl.textContent = msg || '⚠️ Impossible de charger les données. Veuillez réessayer.';
       errorEl.style.display = 'block';
     }
     if (emptyEl) emptyEl.style.display = 'none';
@@ -353,22 +353,22 @@ document.addEventListener('DOMContentLoaded', function() {
     if (loadingEl) loadingEl.style.display = 'none';
   }
 
-  // â”€â”€â”€ INITIALISATION DU CENTRE UTILISATEUR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ----- INITIALISATION DU CENTRE UTILISATEUR // ----// ----// ----// -----
   async function initUserCenter() {
     try {
-      // RÃ©cupÃ©rer l'utilisateur connectÃ© (vÃ©rifie le token et rafraÃ®chit les infos)
+      // Récupérer l'utilisateur connecté (vérifie le token et rafraÃ®chit les infos)
       const user = await Session.verify();
       if (user && typeof user.latitude === 'number' && typeof user.longitude === 'number') {
         state.userCenter = { lat: user.latitude, lon: user.longitude };
         state.center = { lat: user.latitude, lon: user.longitude };
       }
-      // Sinon on garde le centre par dÃ©faut (France)
+      // Sinon on garde le centre par défaut (France)
     } catch (err) {
-      console.warn('ðŸ‘¤ Utilisateur non connectÃ© ou coordonnÃ©es indisponibles, centre par dÃ©faut utilisÃ©.', err);
+      console.warn('ðŸ‘¤ Utilisateur non connecté ou coordonnées indisponibles, centre par défaut utilisé.', err);
     }
   }
 
-  // â”€â”€â”€ API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ----- API // ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----
   async function fetchMapStats() {
     try {
       const data = await API.get('/api/map/stats');
@@ -376,7 +376,7 @@ document.addEventListener('DOMContentLoaded', function() {
       state.totalDemandes = data.total_leads || 0;
       return data;
     } catch (err) {
-      console.warn('âš ï¸ Erreur stats (non bloquante):', err);
+      console.warn('⚠️ Erreur stats (non bloquante):', err);
       return null;
     }
   }
@@ -390,7 +390,7 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('ðŸ“¡ Appel API:', url);
 
       const data = await API.get(url);
-      console.log('ðŸ“¦ DonnÃ©es reÃ§ues:', data);
+      console.log('📦 Données reçues:', data);
 
       state.leadsInZone = data.total || 0;
       const zones = data.zones || {};
@@ -405,7 +405,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       updateMarkers(zones);
     } catch (err) {
-      console.warn('âš ï¸ Erreur leads (non bloquante):', err);
+      console.warn('⚠️ Erreur leads (non bloquante):', err);
       state.leadsInZone = 0;
       updateStats();
       showEmpty();
@@ -415,7 +415,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // â”€â”€â”€ RENDU â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ----- RENDU // ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----
   function updateStats() {
     elArtisans.textContent = formatNumber(state.totalArtisans);
     elDemandes.textContent = formatNumber(state.totalDemandes);
@@ -454,7 +454,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       const travaux = Array.isArray(data.type_travaux)
         ? data.type_travaux.join(', ')
-        : (data.type_travaux || 'Non prÃ©cisÃ©');
+        : (data.type_travaux || 'Non précisé');
 
       marker.bindPopup(`
         <div class="popup-ville">${escapeHtml(ville)}</div>
@@ -466,7 +466,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // â”€â”€â”€ INIT MAP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ----- INIT MAP // ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----
   function initMap() {
     map = L.map('map', {
       center: [state.center.lat, state.center.lon],
@@ -487,7 +487,7 @@ document.addEventListener('DOMContentLoaded', function() {
       fillOpacity: 0.08,
     }).addTo(map);
 
-    // Marqueur central (dÃ©plaÃ§able)
+    // Marqueur central (déplaçable)
     const icon = L.divIcon({
       className: '',
       html: `<div style="width:16px;height:16px;border-radius:50%;background:#2B2B2B;border:3px solid #fff;box-shadow:0 0 0 2px rgba(0,0,0,0.15);"></div>`,
@@ -519,7 +519,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // â”€â”€â”€ CONTROLS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ----- CONTROLS // ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----
   function bindControls() {
     slider.addEventListener('input', function() {
       const km = parseInt(this.value);
@@ -533,7 +533,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     btnReset.addEventListener('click', function() {
-      // RÃ©initialiser au centre de l'utilisateur (pas Ã  la France entiÃ¨re)
+      // Réinitialiser au centre de l'utilisateur (pas Ã  la France entière)
       state.center.lat = state.userCenter.lat;
       state.center.lon = state.userCenter.lon;
       state.radius = DEFAULT_RADIUS;
@@ -551,10 +551,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // â”€â”€â”€ INIT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ----- INIT // ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----
   async function init() {
     try {
-      // RÃ©cupÃ©rer le centre utilisateur AVANT d'initialiser la carte
+      // Récupérer le centre utilisateur AVANT d'initialiser la carte
       await initUserCenter();
 
       initMap();
@@ -563,14 +563,14 @@ document.addEventListener('DOMContentLoaded', function() {
       await fetchMapStats();
       await fetchLeadsForZone();
 
-      console.log('ðŸ—ºï¸ Carte initialisÃ©e avec succÃ¨s.');
+      console.log('🗺️ Carte initialisée avec succès.');
     } catch (err) {
-      console.error('âŒ Erreur d\'initialisation:', err);
+      console.error('❌ Erreur d\'initialisation:', err);
       showError('Erreur de chargement de la carte.');
     }
   }
 
-  // â”€â”€â”€ LANCEMENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ----- LANCEMENT // ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----// ----
   setTimeout(init, 300);
 });
 </script>
