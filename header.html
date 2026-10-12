@@ -2,249 +2,464 @@
 
 <!-- Sprite SVG (symbols réutilisables) -->
 <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-    <symbol id="ic-dashboard" viewBox="0 0 24 24"><path d="M3 3h8v10H3zM13 3h8v6h-8zM13 11h8v10h-8zM3 15h8v6H3z"/><path d="M13 3h8v6h-8z" fill="currentColor" fill-opacity=".28"/></symbol>
-    <symbol id="ic-marketplace" viewBox="0 0 24 24"><path d="M3 9l2-5h14l2 5zM4.5 9v11h15V9M9 20v-6h6v6"/><path d="M3 9l2-5h14l2 5z" fill="currentColor" fill-opacity=".28"/></symbol>
-    <symbol id="ic-achats" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9zM4 7.5l8 4.5 8-4.5M12 12v9"/><path d="M4 7.5L12 12v9l-8-4.5z" fill="currentColor" fill-opacity=".28"/></symbol>
-    <symbol id="ic-carte" viewBox="0 0 24 24"><path d="M12 21l-6-9a6 6 0 1 1 12 0z"/><circle cx="12" cy="9" r="2.2" fill="currentColor" fill-opacity=".28"/><path d="M4 21h16"/></symbol>
-    <symbol id="ic-stripe" viewBox="0 0 24 24"><path d="M3 6h18v13H3zM3 10h18M6 15h4"/><path d="M3 6h18v4H3z" fill="currentColor" fill-opacity=".28"/></symbol>
-    <symbol id="ic-parametres" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/><path d="M8 5h4v4H8zM14 10h4v4h-4zM7 15h4v4H7z" fill="currentColor" fill-opacity=".28"/></symbol>
-    <symbol id="ic-accueil" viewBox="0 0 24 24"><path d="M3 11L12 3l9 8M5 9.5V21h14V9.5"/><path d="M10 14h4v7h-4z" fill="currentColor" fill-opacity=".28"/></symbol>
-    <symbol id="ic-nouvelle-demande" viewBox="0 0 24 24"><path d="M5 3h10l4 4v14H5zM15 3v4h4M8 12h8M8 16h5"/><path d="M15 3l4 4h-4z" fill="currentColor" fill-opacity=".28"/></symbol>
-    <symbol id="ic-trouver-artisan" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M8 13v-3l2.5-2 2.5 2v3z"/><path d="M8 13v-3l2.5-2 2.5 2v3z" fill="currentColor" fill-opacity=".28"/></symbol>
-    <symbol id="ic-aide" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 2.5 2.5V14"/><circle cx="12" cy="17.2" r=".9" fill="currentColor"/></symbol>
-    <symbol id="ic-tarifs" viewBox="0 0 24 24"><path d="M3 12V3h9l9 9-9 9z"/><circle cx="7.5" cy="7.5" r="1.4" fill="currentColor" fill-opacity=".28"/></symbol>
-    <symbol id="ic-deconnexion" viewBox="0 0 24 24"><path d="M10 4H5v16h5M10 12h10M16 8l4 4-4 4"/></symbol>
-  </svg>
-  
-  <header class="site-header site-header--artisan" id="site-header">
-    <div class="container">
-      <a href="/dashboard.html" class="nav-logo">
-        <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
-        <span>BâtiSwift</span>
-      </a>
-  
-      <div class="header-context-badge" id="header-context-badge" style="display:none;">
-        Espace Artisan
+  <symbol id="ic-dashboard" viewBox="0 0 24 24"><path d="M3 3h8v10H3zM13 3h8v6h-8zM13 11h8v10h-8zM3 15h8v6H3z"/><path d="M13 3h8v6h-8z" fill="currentColor" fill-opacity=".28"/></symbol>
+  <symbol id="ic-marketplace" viewBox="0 0 24 24"><path d="M3 9l2-5h14l2 5zM4.5 9v11h15V9M9 20v-6h6v6"/><path d="M3 9l2-5h14l2 5z" fill="currentColor" fill-opacity=".28"/></symbol>
+  <symbol id="ic-achats" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9zM4 7.5l8 4.5 8-4.5M12 12v9"/><path d="M4 7.5L12 12v9l-8-4.5z" fill="currentColor" fill-opacity=".28"/></symbol>
+  <symbol id="ic-carte" viewBox="0 0 24 24"><path d="M12 21l-6-9a6 6 0 1 1 12 0z"/><circle cx="12" cy="9" r="2.2" fill="currentColor" fill-opacity=".28"/><path d="M4 21h16"/></symbol>
+  <symbol id="ic-stripe" viewBox="0 0 24 24"><path d="M3 6h18v13H3zM3 10h18M6 15h4"/><path d="M3 6h18v4H3z" fill="currentColor" fill-opacity=".28"/></symbol>
+  <symbol id="ic-parametres" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/><path d="M8 5h4v4H8zM14 10h4v4h-4zM7 15h4v4H7z" fill="currentColor" fill-opacity=".28"/></symbol>
+  <symbol id="ic-accueil" viewBox="0 0 24 24"><path d="M3 11L12 3l9 8M5 9.5V21h14V9.5"/><path d="M10 14h4v7h-4z" fill="currentColor" fill-opacity=".28"/></symbol>
+  <symbol id="ic-nouvelle-demande" viewBox="0 0 24 24"><path d="M5 3h10l4 4v14H5zM15 3v4h4M8 12h8M8 16h5"/><path d="M15 3l4 4h-4z" fill="currentColor" fill-opacity=".28"/></symbol>
+  <symbol id="ic-trouver-artisan" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M8 13v-3l2.5-2 2.5 2v3z"/><path d="M8 13v-3l2.5-2 2.5 2v3z" fill="currentColor" fill-opacity=".28"/></symbol>
+  <symbol id="ic-aide" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 2.5 2.5V14"/><circle cx="12" cy="17.2" r=".9" fill="currentColor"/></symbol>
+  <symbol id="ic-tarifs" viewBox="0 0 24 24"><path d="M3 12V3h9l9 9-9 9z"/><circle cx="7.5" cy="7.5" r="1.4" fill="currentColor" fill-opacity=".28"/></symbol>
+  <symbol id="ic-deconnexion" viewBox="0 0 24 24"><path d="M10 4H5v16h5M10 12h10M16 8l4 4-4 4"/></symbol>
+</svg>
+
+<header class="site-header site-header--artisan" id="site-header">
+  <div class="container">
+    <a href="/dashboard.html" class="nav-logo">
+      <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
+      <span>BâtiSwift</span>
+    </a>
+
+    <div class="header-context-badge" id="header-context-badge" style="display:none;">
+      Espace Artisan
+    </div>
+
+    <button class="menu-toggle" id="menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false">
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </button>
+  </div>
+</header>
+
+<div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+<div id="sidebar" class="sidebar" role="navigation" aria-label="Navigation principale">
+  <div class="sidebar-header">
+    <a href="/dashboard.html" class="nav-logo">
+      <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
+      <span>BâtiSwift</span>
+    </a>
+    <button id="sidebar-close" class="sidebar-close" aria-label="Fermer le menu">✕</button>
+  </div>
+
+  <div class="sidebar-user" style="display:none;">
+    <div class="sidebar-profile">
+      <div class="sidebar-profile-avatar">👤</div>
+      <div>
+        <div class="sidebar-profile-name"><span id="sidebar-user-nom"></span></div>
+        <span id="sidebar-role-badge" class="sidebar-badge-role"></span>
       </div>
-  
-      <button class="menu-toggle" id="menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false">
-        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </div>
+
+    <div id="context-switcher" style="display:none;">
+      <button id="btn-switch-context" class="btn btn-secondary btn-sm btn-block">
+        <span id="context-switcher-text">Passer en mode Client</span>
       </button>
     </div>
-  </header>
-  
-  <div id="sidebar-overlay" class="sidebar-overlay"></div>
-  
-  <div id="sidebar" class="sidebar" role="navigation" aria-label="Navigation principale">
-    <div class="sidebar-header">
-      <a href="/dashboard.html" class="nav-logo">
-        <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
-        <span>BâtiSwift</span>
-      </a>
-      <button id="sidebar-close" class="sidebar-close" aria-label="Fermer le menu">✕</button>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label" data-context-only="artisan">Espace Artisan</div>
+    <a href="/dashboard.html" data-context-only="artisan"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-dashboard"/></svg></span><span>Tableau de bord</span></a>
+    <a href="/marketplace.html" data-context-only="artisan"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-marketplace"/></svg></span><span>Marketplace</span></a>
+    <a href="/achats.html" data-context-only="artisan"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-achats"/></svg></span><span>Mes achats</span></a>
+    <a href="/carte.html" data-context-only="artisan"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-carte"/></svg></span><span>Carte des chantiers</span></a>
+    <a href="/stripe.html" data-context-only="artisan"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-stripe"/></svg></span><span>Paiements Stripe</span></a>
+    <a href="/parametres.html" data-context-only="artisan"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-parametres"/></svg></span><span>Paramètres Pro</span></a>
+
+    <div class="sidebar-section-label" data-context-only="client">Espace Client</div>
+    <a href="/client-dashboard.html" data-context-only="client"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-accueil"/></svg></span><span>Mon espace</span></a>
+    <a href="/client.html" data-context-only="client"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-nouvelle-demande"/></svg></span><span>Nouvelle demande</span></a>
+    <a href="/carte.html" data-context-only="client"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-trouver-artisan"/></svg></span><span>Trouver un artisan</span></a>
+
+    <div class="sidebar-section-label" data-context-only="all">Général</div>
+    <a href="/aide.html" data-context-only="all"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-aide"/></svg></span><span>Centre d'aide</span></a>
+    <a href="/tarifs.html" data-context-only="all"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-tarifs"/></svg></span><span>Tarifs</span></a>
+  </nav>
+
+  <div class="sidebar-actions">
+    <div class="sidebar-guest">
+      <a href="/connexion.html" class="btn btn-secondary btn-block">Connexion</a>
+      <a href="/inscription.html" class="btn btn-primary btn-block">S'inscrire</a>
     </div>
-  
     <div class="sidebar-user" style="display:none;">
-      <div class="sidebar-profile">
-        <div class="sidebar-profile-avatar">👤</div>
-        <div>
-          <div class="sidebar-profile-name"><span id="sidebar-user-nom"></span></div>
-          <span id="sidebar-role-badge" class="sidebar-badge-role"></span>
-        </div>
-      </div>
-  
-      <div id="context-switcher" style="display:none;">
-        <button id="btn-switch-context" class="btn btn-secondary btn-sm btn-block">
-          <span id="context-switcher-text">Passer en mode Client</span>
-        </button>
-      </div>
-    </div>
-  
-    <nav class="sidebar-nav">
-      <div class="sidebar-section-label" data-context-only="artisan">Espace Artisan</div>
-      <a href="/dashboard.html" data-context-only="artisan"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-dashboard"/></svg></span><span>Tableau de bord</span></a>
-      <a href="/marketplace.html" data-context-only="artisan"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-marketplace"/></svg></span><span>Marketplace</span></a>
-      <a href="/achats.html" data-context-only="artisan"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-achats"/></svg></span><span>Mes achats</span></a>
-      <a href="/carte.html" data-context-only="artisan"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-carte"/></svg></span><span>Carte des chantiers</span></a>
-      <a href="/stripe.html" data-context-only="artisan"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-stripe"/></svg></span><span>Paiements Stripe</span></a>
-      <a href="/parametres.html" data-context-only="artisan"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-parametres"/></svg></span><span>Paramètres Pro</span></a>
-  
-      <div class="sidebar-section-label" data-context-only="client">Espace Client</div>
-      <a href="/client-dashboard.html" data-context-only="client"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-accueil"/></svg></span><span>Mon espace</span></a>
-      <a href="/client.html" data-context-only="client"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-nouvelle-demande"/></svg></span><span>Nouvelle demande</span></a>
-      <a href="/carte.html" data-context-only="client"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-trouver-artisan"/></svg></span><span>Trouver un artisan</span></a>
-  
-      <div class="sidebar-section-label" data-context-only="all">Général</div>
-      <a href="/aide.html" data-context-only="all"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-aide"/></svg></span><span>Centre d'aide</span></a>
-      <a href="/tarifs.html" data-context-only="all"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-tarifs"/></svg></span><span>Tarifs</span></a>
-    </nav>
-  
-    <div class="sidebar-actions">
-      <div class="sidebar-guest">
-        <a href="/connexion.html" class="btn btn-secondary btn-block">Connexion</a>
-        <a href="/inscription.html" class="btn btn-primary btn-block">S'inscrire</a>
-      </div>
-      <div class="sidebar-user" style="display:none;">
-        <button id="sidebar-logout" class="btn btn-danger btn-block"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-deconnexion"/></svg></span><span>Déconnexion</span></button>
-      </div>
+      <button id="sidebar-logout" class="btn btn-danger btn-block"><span class="bs-ico" aria-hidden="true"><svg><use href="#ic-deconnexion"/></svg></span><span>Déconnexion</span></button>
     </div>
   </div>
-  
-  <style>
-  /* HEADER BÂTISWIFT — styles de base + liquid glass */
-  .site-header{position:fixed;top:0;left:0;right:0;z-index:1000;height:72px;display:flex;align-items:center;background:linear-gradient(180deg,rgba(255,255,255,0.55) 0%,rgba(245,240,235,0.42) 100%);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);border-bottom:1px solid rgba(255,255,255,0.4);box-shadow:inset 0 1px 0 rgba(255,255,255,0.75),0 4px 30px rgba(20,10,30,0.06);padding:0 1.5rem;transition:background .3s ease}
-  @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.site-header{background:rgba(245,240,235,0.97)!important}}
-  .site-header .container{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1180px;margin:0 auto}
-  .nav-logo{display:flex;align-items:center;gap:10px;font-family:'Cormorant Garamond',Georgia,serif;font-size:1.4rem;font-weight:700;color:#2F1A3A;text-decoration:none;transition:opacity .2s ease}
-  .nav-logo:hover{opacity:.8}
-  .logo-svg{width:38px;height:auto}
-  .header-context-badge{display:flex;align-items:center;gap:6px;font-size:.82rem;font-weight:500;padding:5px 14px;border-radius:20px}
-  .menu-toggle{display:flex;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;border-radius:10px;transition:background .2s;z-index:1001}
-  .menu-toggle:hover{background:rgba(47,26,58,0.06)}
-  .menu-toggle .bar{width:26px;height:2.5px;background:#2F1A3A;border-radius:4px;transition:all .28s cubic-bezier(.4,0,.2,1)}
-  .menu-toggle.open .bar:nth-child(1){transform:rotate(45deg) translate(5.5px,5.5px)}
-  .menu-toggle.open .bar:nth-child(2){opacity:0;transform:scaleX(0)}
-  .menu-toggle.open .bar:nth-child(3){transform:rotate(-45deg) translate(5.5px,-5.5px)}
-  .sidebar-overlay{position:fixed;inset:0;background:rgba(20,10,30,0.45);z-index:9998;opacity:0;pointer-events:none;transition:opacity .3s ease;backdrop-filter:blur(3px)}
-  .sidebar-overlay.active{opacity:1;pointer-events:auto}
-  .sidebar{position:fixed;top:0;right:-400px;width:340px;max-width:88vw;height:100vh;background:#FFF;z-index:9999;padding:1.8rem;box-shadow:-8px 0 48px rgba(20,10,30,0.18);transition:right .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;gap:1.4rem;overflow-y:auto;box-sizing:border-box}
-  .sidebar.active{right:0}
-  .sidebar-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:1rem;border-bottom:1px solid #EDE6DD;flex-shrink:0}
-  .sidebar-close{background:none;border:none;font-size:1.5rem;color:#8B8B8B;cursor:pointer;padding:4px 8px;border-radius:8px;transition:all .2s;line-height:1}
-  .sidebar-close:hover{color:#2F1A3A;background:#F5F0EB}
-  .sidebar-profile{display:flex;align-items:center;gap:.8rem;padding:.6rem;background:#F5F0EB;border-radius:14px;margin-bottom:.4rem}
-  .sidebar-profile-avatar{font-size:1.5rem;width:44px;height:44px;border-radius:12px;background:rgba(201,168,76,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  .sidebar-profile-name{font-size:.95rem;font-weight:600;color:#2F1A3A;margin-bottom:3px}
-  .sidebar-badge-role{font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:20px;background:rgba(201,168,76,0.15);color:#7a5b1a}
-  .sidebar-section-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#B0A898;padding:8px 10px 4px;margin-top:4px}
-  .sidebar-nav{display:flex;flex-direction:column;gap:2px;flex:1}
-  .sidebar-nav a{padding:8px 12px;border-radius:12px;font-size:.95rem;font-weight:500;color:#2F1A3A;transition:background .18s ease,color .18s ease;text-decoration:none;display:flex;align-items:center;gap:12px}
-  .sidebar-nav a:hover{background:#F5F0EB}
-  .sidebar-actions{flex-shrink:0;padding-top:.8rem;display:flex;flex-direction:column;gap:.7rem;border-top:1px solid #EDE6DD}
-  .sidebar-actions .btn-block{width:100%;padding:11px 16px;border-radius:50px;font-size:.92rem;font-weight:500;border:none;cursor:pointer;text-decoration:none;text-align:center;display:block;transition:all .2s}
-  .sidebar-actions .btn-secondary{background:transparent;color:#2F1A3A;border:1.5px solid #D4D0CB}
-  .sidebar-actions .btn-secondary:hover{border-color:#2F1A3A;background:rgba(47,26,58,0.04)}
-  .sidebar-actions .btn-primary{background:#2F1A3A;color:#FFF;box-shadow:0 4px 14px rgba(47,26,58,0.2)}
-  .sidebar-actions .btn-primary:hover{background:#1A0F23}
-  .sidebar-actions .btn-danger{background:#EF4444;color:#FFF}
-  .sidebar-actions .btn-danger:hover{background:#dc2626}
-  .sidebar-actions .btn-sm{padding:8px 14px;font-size:.85rem}
-  @media (max-width:640px){
-    .site-header{padding:0 1rem}
-    .nav-logo{font-size:1.1rem;gap:6px}
-    .logo-svg{width:32px;height:auto}
-    .header-context-badge{display:none!important}
-    .menu-toggle{padding:6px}
-    .menu-toggle .bar{width:22px;height:2px}
-    .sidebar{width:100%;max-width:100%;right:-100%;padding:1.5rem}
-    .sidebar-header{padding-bottom:.8rem}
-    .sidebar-nav a{padding:8px 12px;font-size:1rem}
-    .sidebar-actions .btn-block{padding:14px 16px;font-size:1rem}
+</div>
+
+<style>
+/* HEADER BÂTISWIFT — styles de base + liquid glass */
+.site-header{position:fixed;top:0;left:0;right:0;z-index:1000;height:72px;display:flex;align-items:center;background:linear-gradient(180deg,rgba(255,255,255,0.55) 0%,rgba(245,240,235,0.42) 100%);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);border-bottom:1px solid rgba(255,255,255,0.4);box-shadow:inset 0 1px 0 rgba(255,255,255,0.75),0 4px 30px rgba(20,10,30,0.06);padding:0 1.5rem;transition:background .3s ease}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.site-header{background:rgba(245,240,235,0.97)!important}}
+.site-header .container{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1180px;margin:0 auto}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:'Cormorant Garamond',Georgia,serif;font-size:1.4rem;font-weight:700;color:#2F1A3A;text-decoration:none;transition:opacity .2s ease}
+.nav-logo:hover{opacity:.8}
+.logo-svg{width:38px;height:auto}
+.header-context-badge{display:flex;align-items:center;gap:6px;font-size:.82rem;font-weight:500;padding:5px 14px;border-radius:20px}
+.menu-toggle{display:flex;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;border-radius:10px;transition:background .2s;z-index:1001}
+.menu-toggle:hover{background:rgba(47,26,58,0.06)}
+.menu-toggle .bar{width:26px;height:2.5px;background:#2F1A3A;border-radius:4px;transition:all .28s cubic-bezier(.4,0,.2,1)}
+.menu-toggle.open .bar:nth-child(1){transform:rotate(45deg) translate(5.5px,5.5px)}
+.menu-toggle.open .bar:nth-child(2){opacity:0;transform:scaleX(0)}
+.menu-toggle.open .bar:nth-child(3){transform:rotate(-45deg) translate(5.5px,-5.5px)}
+.sidebar-overlay{position:fixed;inset:0;background:rgba(20,10,30,0.45);z-index:9998;opacity:0;pointer-events:none;transition:opacity .3s ease;backdrop-filter:blur(3px)}
+.sidebar-overlay.active{opacity:1;pointer-events:auto}
+.sidebar{position:fixed;top:0;right:-400px;width:340px;max-width:88vw;height:100vh;background:#FFF;z-index:9999;padding:1.8rem;box-shadow:-8px 0 48px rgba(20,10,30,0.18);transition:right .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;gap:1.4rem;overflow-y:auto;box-sizing:border-box}
+.sidebar.active{right:0}
+.sidebar-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:1rem;border-bottom:1px solid #EDE6DD;flex-shrink:0}
+.sidebar-close{background:none;border:none;font-size:1.5rem;color:#8B8B8B;cursor:pointer;padding:4px 8px;border-radius:8px;transition:all .2s;line-height:1}
+.sidebar-close:hover{color:#2F1A3A;background:#F5F0EB}
+.sidebar-profile{display:flex;align-items:center;gap:.8rem;padding:.6rem;background:#F5F0EB;border-radius:14px;margin-bottom:.4rem}
+.sidebar-profile-avatar{font-size:1.5rem;width:44px;height:44px;border-radius:12px;background:rgba(201,168,76,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sidebar-profile-name{font-size:.95rem;font-weight:600;color:#2F1A3A;margin-bottom:3px}
+.sidebar-badge-role{font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:20px;background:rgba(201,168,76,0.15);color:#7a5b1a}
+.sidebar-section-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#B0A898;padding:8px 10px 4px;margin-top:4px}
+.sidebar-nav{display:flex;flex-direction:column;gap:2px;flex:1}
+.sidebar-nav a{padding:8px 12px;border-radius:12px;font-size:.95rem;font-weight:500;color:#2F1A3A;transition:background .18s ease,color .18s ease;text-decoration:none;display:flex;align-items:center;gap:12px}
+.sidebar-nav a:hover{background:#F5F0EB}
+.sidebar-actions{flex-shrink:0;padding-top:.8rem;display:flex;flex-direction:column;gap:.7rem;border-top:1px solid #EDE6DD}
+.sidebar-actions .btn-block{width:100%;padding:11px 16px;border-radius:50px;font-size:.92rem;font-weight:500;border:none;cursor:pointer;text-decoration:none;text-align:center;display:block;transition:all .2s}
+.sidebar-actions .btn-secondary{background:transparent;color:#2F1A3A;border:1.5px solid #D4D0CB}
+.sidebar-actions .btn-secondary:hover{border-color:#2F1A3A;background:rgba(47,26,58,0.04)}
+.sidebar-actions .btn-primary{background:#2F1A3A;color:#FFF;box-shadow:0 4px 14px rgba(47,26,58,0.2)}
+.sidebar-actions .btn-primary:hover{background:#1A0F23}
+.sidebar-actions .btn-danger{background:#EF4444;color:#FFF}
+.sidebar-actions .btn-danger:hover{background:#dc2626}
+.sidebar-actions .btn-sm{padding:8px 14px;font-size:.85rem}
+@media (max-width:640px){
+  .site-header{padding:0 1rem}
+  .nav-logo{font-size:1.1rem;gap:6px}
+  .logo-svg{width:32px;height:auto}
+  .header-context-badge{display:none!important}
+  .menu-toggle{padding:6px}
+  .menu-toggle .bar{width:22px;height:2px}
+  .sidebar{width:100%;max-width:100%;right:-100%;padding:1.5rem}
+  .sidebar-header{padding-bottom:.8rem}
+  .sidebar-nav a{padding:8px 12px;font-size:1rem}
+  .sidebar-actions .btn-block{padding:14px 16px;font-size:1rem}
+}
+
+.site-header--artisan{border-bottom-color:rgba(201,168,76,0.35);box-shadow:inset 0 1px 0 rgba(255,255,255,0.75),0 4px 30px rgba(20,10,30,0.06),0 1px 0 rgba(201,168,76,0.15)}
+.header-context-badge{color:#7a5b1a;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.25)}
+.sidebar-nav a.active,.sidebar-nav a[aria-current="page"]{background:rgba(201,168,76,0.12);color:#7a5b1a;font-weight:600;border-left:3px solid #C99A4C;padding-left:11px}
+
+/* Icônes BâtiSwift */
+.bs-ico{width:34px;height:34px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;background:linear-gradient(145deg,#3d2450,#2F1A3A);color:#C9A84C;transition:background .18s ease,color .18s ease}
+.bs-ico svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linejoin:miter;stroke-linecap:square}
+.sidebar-nav a:hover .bs-ico{background:linear-gradient(145deg,#4a2c60,#2F1A3A)}
+.sidebar-nav a.active .bs-ico,.sidebar-nav a[aria-current="page"] .bs-ico{background:#C9A84C;color:#2F1A3A}
+.sidebar-actions .btn-danger{display:flex!important;align-items:center;justify-content:center;gap:8px}
+.sidebar-actions .btn-danger .bs-ico{width:22px;height:22px;background:none;color:#fff}
+.sidebar-actions .btn-danger .bs-ico svg{width:18px;height:18px}
+@media (max-width:640px){.bs-ico{width:38px;height:38px}}
+
+/* ============================================================
+   REFONTE VISUELLE — le panneau du menu devient un dock flottant
+   (verre dépoli, bord droit, squircle). Aucune logique modifiée :
+   même hamburger, mêmes ids, mêmes classes .active, même JS.
+   Les sélecteurs #sidebar.sidebar surchargent les règles ci-dessus.
+   ============================================================ */
+
+/* Fond : la page reste visible, on garde seulement la zone de clic pour fermer */
+#sidebar-overlay.sidebar-overlay{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
+
+/* Le panneau : flottant, compact, collé à droite, sous le header */
+#sidebar.sidebar{
+  top:80px;right:max(12px,env(safe-area-inset-right,0px));left:auto;bottom:auto;
+  width:272px;max-width:calc(100vw - 24px);
+  height:auto;
+  max-height:calc(100vh - 80px - 16px);
+  max-height:calc(100dvh - 80px - 16px - env(safe-area-inset-bottom,0px));
+  padding:10px;gap:8px;
+  overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;box-sizing:border-box;
+  background:linear-gradient(180deg,rgba(250,246,238,.74) 0%,rgba(238,231,217,.62) 100%); /* ivoire */
+  -webkit-backdrop-filter:blur(12px) saturate(160%);
+  backdrop-filter:blur(12px) saturate(160%);
+  border:1px solid rgba(197,160,89,.34); /* doré #C5A059, très subtil */
+  border-radius:28px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 14px 40px rgba(43,43,46,.20),0 2px 8px rgba(43,43,46,.08);
+  /* état fermé : replié vers le coin haut-droit (là où est le hamburger) */
+  transform-origin:top right;
+  transform:translateX(18px) scale(.92);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:transform .34s cubic-bezier(.2,.9,.3,1.15),opacity .2s ease,visibility 0s linear .34s;
+}
+/* Barre de défilement dorée, fine et TOUJOURS visible (mobile + PC) */
+#sidebar.sidebar::-webkit-scrollbar{width:7px}
+#sidebar.sidebar::-webkit-scrollbar-track{background:rgba(43,43,46,.06);border-radius:7px;margin:20px 0}
+#sidebar.sidebar::-webkit-scrollbar-thumb{background:rgba(197,160,89,.80);border-radius:7px;min-height:44px;border:1px solid rgba(255,255,255,.35);background-clip:padding-box}
+#sidebar.sidebar::-webkit-scrollbar-thumb:active{background:#C5A059}
+@supports not selector(::-webkit-scrollbar){ /* Firefox */
+  #sidebar.sidebar{scrollbar-width:thin;scrollbar-color:rgba(197,160,89,.85) rgba(43,43,46,.06)}
+}
+/* Défilement UNIQUEMENT vertical : aucun contenu ne peut forcer un débordement horizontal */
+#sidebar.sidebar *{min-width:0;max-width:100%}
+#sidebar .sidebar-nav a>span:last-child,#sidebar .sidebar-profile-name{overflow-wrap:anywhere}
+#sidebar.sidebar.active{
+  transform:none;opacity:1;visibility:visible;pointer-events:auto;
+  transition:transform .34s cubic-bezier(.2,.9,.3,1.15),opacity .2s ease,visibility 0s;
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  #sidebar.sidebar{background:rgba(250,246,238,.97)}
+}
+@supports (corner-shape:squircle){
+  #sidebar.sidebar{corner-shape:squircle;border-radius:38px}
+  #sidebar .sidebar-nav a,#sidebar .sidebar-profile,#sidebar .sidebar-actions .btn-block{corner-shape:squircle}
+}
+
+/* En-tête du panneau masqué : le hamburger (qui devient ✕) ferme déjà le menu */
+#sidebar .sidebar-header{display:none}
+
+/* Profil + switch de contexte */
+#sidebar .sidebar-profile{background:rgba(255,255,255,.45);border:1px solid rgba(197,160,89,.22);border-radius:18px;margin:0}
+#sidebar .sidebar-profile-name{color:#2B2B2E}
+#sidebar .sidebar-badge-role{background:rgba(197,160,89,.18);color:#6b4f14}
+#sidebar .sidebar-actions .btn-secondary{border:1px solid rgba(197,160,89,.45);color:#2B2B2E;background:rgba(255,255,255,.35)}
+
+/* Liste de navigation */
+#sidebar .sidebar-nav{gap:4px;flex:0 0 auto}
+#sidebar .sidebar-section-label{color:#8d8574;padding:6px 10px 2px;margin-top:2px}
+#sidebar .sidebar-nav a{
+  padding:6px 10px 6px 6px;gap:12px;
+  border:1px solid transparent;border-radius:18px;
+  color:#2B2B2E;font-size:.95rem;
+  background:rgba(197,160,89,0);
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  transition:transform .12s ease-out,border-color .12s ease-out,box-shadow .12s ease-out,background-color .15s ease,color .15s ease,
+             translate .32s cubic-bezier(.2,.9,.3,1) var(--d,0s),opacity .26s ease var(--d,0s);
+}
+#sidebar .sidebar-nav a:hover{background:rgba(197,160,89,.10)}
+
+/* Micro-interaction tactile : enfoncement + illumination dorée de la bordure */
+#sidebar .sidebar-nav a:active,
+#sidebar .sidebar-actions .btn-block:active{
+  transform:scale(.97);
+  border-color:#C5A059;
+  background:rgba(197,160,89,.16);
+  box-shadow:0 0 0 1px rgba(197,160,89,.55),0 0 14px rgba(197,160,89,.55),inset 0 0 8px rgba(197,160,89,.25);
+  transition-duration:.06s;
+}
+#sidebar .sidebar-actions .btn-block{border-radius:18px;transition:transform .12s ease-out,border-color .12s,box-shadow .12s,background-color .15s;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+/* Connexion / S'inscrire : pas de rétrécissement au toucher (le cadre doré reste) */
+#sidebar .sidebar-actions .sidebar-guest .btn-block:active{transform:none}
+
+/* Page courante (remplace le liseré gauche de l'ancien design) */
+#sidebar .sidebar-nav a.active,#sidebar .sidebar-nav a[aria-current="page"]{
+  background:rgba(197,160,89,.18);color:#2B2B2E;font-weight:600;
+  border:1px solid rgba(197,160,89,.55);padding:6px 10px 6px 6px;
+}
+
+/* Icônes : tuiles anthracite + trait doré, façon icônes de dock */
+#sidebar .bs-ico{width:38px;height:38px;border-radius:13px;background:linear-gradient(145deg,#3a3a3e,#2B2B2E);color:#C5A059;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 2px 5px rgba(43,43,46,.25)}
+#sidebar .sidebar-nav a:hover .bs-ico{background:linear-gradient(145deg,#454549,#2B2B2E)}
+#sidebar .sidebar-nav a.active .bs-ico,#sidebar .sidebar-nav a[aria-current="page"] .bs-ico{background:linear-gradient(145deg,#D6B572,#C5A059);color:#2B2B2E}
+#sidebar .sidebar-actions .btn-danger .bs-ico{width:22px;height:22px;background:none;box-shadow:none;color:#fff}
+
+/* Zone du bas */
+#sidebar .sidebar-actions{border-top:1px solid rgba(197,160,89,.28);padding-top:8px;gap:8px}
+
+/* Apparition échelonnée des entrées à l'ouverture */
+#sidebar .sidebar-nav > *{translate:14px 0;opacity:0}
+#sidebar.active .sidebar-nav > *{translate:0 0;opacity:1}
+#sidebar.active .sidebar-nav > :nth-child(1){--d:.04s}
+#sidebar.active .sidebar-nav > :nth-child(2){--d:.07s}
+#sidebar.active .sidebar-nav > :nth-child(3){--d:.10s}
+#sidebar.active .sidebar-nav > :nth-child(4){--d:.13s}
+#sidebar.active .sidebar-nav > :nth-child(5){--d:.16s}
+#sidebar.active .sidebar-nav > :nth-child(6){--d:.19s}
+#sidebar.active .sidebar-nav > :nth-child(7){--d:.22s}
+#sidebar.active .sidebar-nav > :nth-child(8){--d:.25s}
+#sidebar.active .sidebar-nav > :nth-child(n+9){--d:.28s}
+
+@media (max-width:640px){
+  #sidebar.sidebar{width:min(272px,calc(100vw - 24px));padding:10px}
+  #sidebar .sidebar-nav a{font-size:.95rem;padding:6px 10px 6px 6px}
+  #sidebar .bs-ico{width:38px;height:38px}
+  #sidebar .sidebar-actions .btn-block{padding:12px 16px;font-size:.95rem}
+}
+@media (prefers-reduced-motion:reduce){
+  #sidebar.sidebar,#sidebar.sidebar.active{transition:opacity .15s ease,visibility 0s}
+  #sidebar .sidebar-nav > *{translate:0 0;opacity:1;transition:none}
+}
+
+/* ============================================================
+   AFFINAGE — plus aéré, plus professionnel, panneau translucide
+   (placé en dernier : surcharge les règles précédentes)
+   ============================================================ */
+
+/* Panneau plus translucide : réglage = les 2 valeurs d'opacité (.46 / .34) ; plus bas = plus transparent */
+#sidebar.sidebar{
+  width:288px;max-width:calc(100vw - 24px);
+  padding:18px 14px;gap:16px;
+  background:linear-gradient(180deg,rgba(250,246,238,.46) 0%,rgba(238,231,217,.34) 100%);
+  -webkit-backdrop-filter:blur(12px) saturate(170%);
+  backdrop-filter:blur(12px) saturate(170%);
+  border:1px solid rgba(197,160,89,.22);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 18px 50px rgba(43,43,46,.14);
+}
+
+/* Profil : sans cadre, plus d'air */
+#sidebar .sidebar-profile{background:rgba(255,255,255,.26);border:none;padding:12px;gap:12px;border-radius:20px}
+
+/* Libellés de section et liens : espacement généreux */
+#sidebar .sidebar-section-label{padding:10px 12px 4px;margin-top:6px;font-size:.68rem;letter-spacing:1.4px}
+#sidebar .sidebar-nav{gap:8px}
+#sidebar .sidebar-nav a{padding:8px 14px 8px 8px;gap:14px;border-radius:20px;font-size:.98rem}
+/* Page courante : simple fond doré doux, plus de cadre */
+#sidebar .sidebar-nav a.active,#sidebar .sidebar-nav a[aria-current="page"]{
+  background:rgba(197,160,89,.18);border-color:transparent;padding:8px 14px 8px 8px;
+}
+
+/* Zone du bas */
+#sidebar .sidebar-actions{border-top:1px solid rgba(197,160,89,.18);padding-top:18px;gap:12px}
+
+/* Connexion / S'inscrire : AUCUN cadre, boutons plus grands et espacés */
+#sidebar .sidebar-actions .sidebar-guest .btn-block{
+  border:none;outline:none;box-shadow:none;
+  padding:15px 20px;border-radius:20px;
+  font-size:1rem;font-weight:600;letter-spacing:.01em;
+}
+#sidebar .sidebar-actions .sidebar-guest .btn-block + .btn-block{margin-top:12px}
+#sidebar .sidebar-actions .sidebar-guest .btn-secondary{background:rgba(255,255,255,.42);color:#2B2B2E}
+#sidebar .sidebar-actions .sidebar-guest .btn-primary{background:#2B2B2E;color:#fff;box-shadow:0 6px 16px rgba(43,43,46,.16)}
+/* Au toucher : ni cadre, ni rétrécissement — simple assombrissement léger */
+#sidebar .sidebar-actions .sidebar-guest .btn-block:active{
+  transform:none;border:none;box-shadow:none;filter:brightness(.94);
+}
+
+@media (max-width:640px){
+  #sidebar.sidebar{width:min(288px,calc(100vw - 24px));padding:18px 14px}
+  #sidebar .sidebar-nav a{padding:8px 14px 8px 8px;font-size:.98rem}
+  #sidebar .sidebar-actions .sidebar-guest .btn-block{padding:15px 20px;font-size:1rem}
+}
+
+/* ============================================================
+   CONNEXION / S'INSCRIRE — compacts, espacés, sans cadre au repos,
+   petit cadre gris uniquement pendant l'appui
+   ============================================================ */
+#sidebar .sidebar-actions .sidebar-guest .btn-block{
+  display:block;
+  width:62%;
+  margin:0 auto!important;
+  padding:9px 16px;
+  font-size:.88rem;font-weight:600;line-height:1.2;letter-spacing:.01em;
+  border-radius:14px;
+  -webkit-tap-highlight-color:transparent;
+  transition:box-shadow .12s ease-out,background-color .15s ease;
+}
+/* Espace net entre les deux boutons */
+#sidebar .sidebar-actions .sidebar-guest .btn-block + .btn-block{margin-top:10px!important}
+
+/* Aucun cadre au repos, au survol ni au focus (verrouillé) */
+#sidebar .sidebar-actions .sidebar-guest .btn-block,
+#sidebar .sidebar-actions .sidebar-guest .btn-block:hover,
+#sidebar .sidebar-actions .sidebar-guest .btn-block:focus,
+#sidebar .sidebar-actions .sidebar-guest .btn-block:focus-visible{
+  border:0!important;outline:0!important;box-shadow:none!important;
+}
+/* Appui : mini cadre gris tout autour, sans rétrécir ni changer la taille */
+#sidebar .sidebar-actions .sidebar-guest .btn-block:active{
+  transform:none!important;filter:none;
+  box-shadow:0 0 0 3px rgba(128,128,134,.30)!important;
+}
+</style>
+
+<script>
+(function initHeaderArtisan() {
+  'use strict';
+  var toggle   = document.getElementById('menu-toggle');
+  var overlay  = document.getElementById('sidebar-overlay');
+  var sidebar  = document.getElementById('sidebar');
+  var closeBtn = document.getElementById('sidebar-close');
+
+  if (!toggle || !sidebar || !overlay) {
+    console.warn('BâtiSwift header: éléments manquants.');
+    return;
   }
-  
-  .site-header--artisan{border-bottom-color:rgba(201,168,76,0.35);box-shadow:inset 0 1px 0 rgba(255,255,255,0.75),0 4px 30px rgba(20,10,30,0.06),0 1px 0 rgba(201,168,76,0.15)}
-  .header-context-badge{color:#7a5b1a;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.25)}
-  .sidebar-nav a.active,.sidebar-nav a[aria-current="page"]{background:rgba(201,168,76,0.12);color:#7a5b1a;font-weight:600;border-left:3px solid #C99A4C;padding-left:11px}
-  
-  /* Icônes BâtiSwift */
-  .bs-ico{width:34px;height:34px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;background:linear-gradient(145deg,#3d2450,#2F1A3A);color:#C9A84C;transition:background .18s ease,color .18s ease}
-  .bs-ico svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linejoin:miter;stroke-linecap:square}
-  .sidebar-nav a:hover .bs-ico{background:linear-gradient(145deg,#4a2c60,#2F1A3A)}
-  .sidebar-nav a.active .bs-ico,.sidebar-nav a[aria-current="page"] .bs-ico{background:#C9A84C;color:#2F1A3A}
-  .sidebar-actions .btn-danger{display:flex!important;align-items:center;justify-content:center;gap:8px}
-  .sidebar-actions .btn-danger .bs-ico{width:22px;height:22px;background:none;color:#fff}
-  .sidebar-actions .btn-danger .bs-ico svg{width:18px;height:18px}
-  @media (max-width:640px){.bs-ico{width:38px;height:38px}}
-  </style>
-  
-  <script>
-  (function initHeaderArtisan() {
-    'use strict';
-    var toggle   = document.getElementById('menu-toggle');
-    var overlay  = document.getElementById('sidebar-overlay');
-    var sidebar  = document.getElementById('sidebar');
-    var closeBtn = document.getElementById('sidebar-close');
-  
-    if (!toggle || !sidebar || !overlay) {
-      console.warn('BâtiSwift header: éléments manquants.');
-      return;
+
+  function openSidebar() {
+    toggle.classList.add('open');
+    toggle.setAttribute('aria-expanded','true');
+    overlay.classList.add('active');
+    sidebar.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSidebar() {
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded','false');
+    overlay.classList.remove('active');
+    sidebar.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  toggle.addEventListener('click', function(e){
+    e.stopPropagation();
+    sidebar.classList.contains('active') ? closeSidebar() : openSidebar();
+  });
+  if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+  overlay.addEventListener('click', closeSidebar);
+
+  sidebar.querySelectorAll('a').forEach(function(l){
+    l.addEventListener('click', closeSidebar);
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && sidebar.classList.contains('active')) closeSidebar();
+  });
+
+  var current = window.location.pathname.split('/').pop() || 'index.html';
+  sidebar.querySelectorAll('a[href]').forEach(function(a){
+    if (a.getAttribute('href').replace(/^\//,'') === current) {
+      a.classList.add('active');
+      a.setAttribute('aria-current','page');
     }
-  
-    function openSidebar() {
-      toggle.classList.add('open');
-      toggle.setAttribute('aria-expanded','true');
-      overlay.classList.add('active');
-      sidebar.classList.add('active');
-      document.body.style.overflow = 'hidden';
+  });
+
+  var badge = document.getElementById('header-context-badge');
+  if (badge) badge.style.display = 'flex';
+
+  if (typeof Session !== 'undefined' && Session.updateNav) {
+    Session.updateNav();
+  } else {
+    var user = null;
+    try { user = JSON.parse(localStorage.getItem('batiswift_user') || 'null'); } catch(e) {}
+    if (user) {
+      document.querySelectorAll('.sidebar-guest').forEach(function(el){ el.style.display = 'none'; });
+      document.querySelectorAll('.sidebar-user').forEach(function(el){
+        el.style.display = 'flex';
+        el.style.flexDirection = 'column';
+        el.style.gap = '0.6rem';
+      });
+      var nomEl = document.getElementById('sidebar-user-nom');
+      if (nomEl) nomEl.textContent = (user.nom||'').split(' ')[0] || 'Artisan';
     }
-  
-    function closeSidebar() {
-      toggle.classList.remove('open');
-      toggle.setAttribute('aria-expanded','false');
-      overlay.classList.remove('active');
-      sidebar.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-  
-    toggle.addEventListener('click', function(e){
-      e.stopPropagation();
-      sidebar.classList.contains('active') ? closeSidebar() : openSidebar();
-    });
-    if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
-    overlay.addEventListener('click', closeSidebar);
-  
-    sidebar.querySelectorAll('a').forEach(function(l){
-      l.addEventListener('click', closeSidebar);
-    });
-  
-    document.addEventListener('keydown', function(e){
-      if (e.key === 'Escape' && sidebar.classList.contains('active')) closeSidebar();
-    });
-  
-    var current = window.location.pathname.split('/').pop() || 'index.html';
-    sidebar.querySelectorAll('a[href]').forEach(function(a){
-      if (a.getAttribute('href').replace(/^\//,'') === current) {
-        a.classList.add('active');
-        a.setAttribute('aria-current','page');
-      }
-    });
-  
-    var badge = document.getElementById('header-context-badge');
-    if (badge) badge.style.display = 'flex';
-  
-    if (typeof Session !== 'undefined' && Session.updateNav) {
-      Session.updateNav();
+  }
+
+  var sw = document.getElementById('btn-switch-context');
+  if (sw) sw.addEventListener('click', function(e){
+    e.preventDefault();
+    if (typeof Session !== 'undefined' && Session.switchContext) Session.switchContext();
+  });
+
+  var lo = document.getElementById('sidebar-logout');
+  if (lo) lo.addEventListener('click', function(){
+    if (typeof Session !== 'undefined' && Session.logout) {
+      Session.logout();
     } else {
-      var user = null;
-      try { user = JSON.parse(localStorage.getItem('batiswift_user') || 'null'); } catch(e) {}
-      if (user) {
-        document.querySelectorAll('.sidebar-guest').forEach(function(el){ el.style.display = 'none'; });
-        document.querySelectorAll('.sidebar-user').forEach(function(el){
-          el.style.display = 'flex';
-          el.style.flexDirection = 'column';
-          el.style.gap = '0.6rem';
-        });
-        var nomEl = document.getElementById('sidebar-user-nom');
-        if (nomEl) nomEl.textContent = (user.nom||'').split(' ')[0] || 'Artisan';
-      }
+      localStorage.removeItem('batiswift_token');
+      localStorage.removeItem('batiswift_user');
+      localStorage.removeItem('batiswift_context');
+      window.location.href = '/index.html';
     }
-  
-    var sw = document.getElementById('btn-switch-context');
-    if (sw) sw.addEventListener('click', function(e){
-      e.preventDefault();
-      if (typeof Session !== 'undefined' && Session.switchContext) Session.switchContext();
-    });
-  
-    var lo = document.getElementById('sidebar-logout');
-    if (lo) lo.addEventListener('click', function(){
-      if (typeof Session !== 'undefined' && Session.logout) {
-        Session.logout();
-      } else {
-        localStorage.removeItem('batiswift_token');
-        localStorage.removeItem('batiswift_user');
-        localStorage.removeItem('batiswift_context');
-        window.location.href = '/index.html';
-      }
-    });
-  })();
-  </script>
+  });
+})();
+</script>
+
+<script>
+/* Active l'état :active (retour tactile) sur iOS Safari — purement visuel */
+document.addEventListener('touchstart', function(){}, { passive: true });
+</script>
