@@ -127,6 +127,14 @@ const API = {
   artisanLeads: function() {
     return apiFetch('/api/artisan/leads');
   },
+  // Demandes du client connecté (route sécurisée : filtrée par le JWT côté serveur)
+  clientLeads: function() {
+    return apiFetch('/api/client/leads');
+  },
+  // Renvoi de l'email de confirmation (route publique, par adresse email)
+  resendConfirmation: function(email) {
+    return apiFetch('/api/resend-confirmation', { method: 'POST', body: JSON.stringify({ email: email }) });
+  },
   addTag: function(leadId, tag) {
     return apiFetch('/api/leads/' + leadId + '/tag', { method: 'POST', body: JSON.stringify({ tag: tag }) });
   },

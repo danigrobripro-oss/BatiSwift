@@ -10,13 +10,49 @@ let availableLeads = [];
 let purchasedLeads = [];
 let selectedLeadId = null;
 
+// ─── HELPERS (utilisés par leadCard / openBuyModal) ──────────
+// Valeurs réelles du backend : urgence = immediate | normale | faible
+//                              type_travaux = plomberie | electricite | peinture | maconnerie | chauffage | serrurerie | autre
+var URGENCE_LABEL = {
+  immediate: { label: '🚨 Urgent',   class: 'badge-danger'  },
+  normale:   { label: '📅 Normal',   class: 'badge-neutral' },
+  faible:    { label: '🕓 Flexible', class: 'badge-neutral' }
+};
+URGENCE_LABEL.urgent   = URGENCE_LABEL.immediate;
+URGENCE_LABEL.normal   = URGENCE_LABEL.normale;
+URGENCE_LABEL.flexible = URGENCE_LABEL.faible;
+
+var TRAVAUX_EMOJI = {
+  plomberie: '🚰', electricite: '⚡', peinture: '🎨', maconnerie: '🧱',
+  chauffage: '🔥', serrurerie: '🔑', autre: '🏗️'
+};
+
+var capitalize = (typeof window.capitalize === 'function') ? window.capitalize : function(s) {
+  s = String(s == null ? '' : s);
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
+var fmtDate = (typeof window.fmtDate === 'function') ? window.fmtDate : function(iso) {
+  if (!iso) return '';
+  var d = new Date(iso);
+  return isNaN(d.getTime()) ? '' : d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+};
+
+// Échappement HTML : description / nom / ville viennent des clients (contenu non fiable)
+var esc = (typeof window.esc === 'function') ? window.esc : function(v) {
+  return String(v == null ? '' : v).replace(/[&<>"']/g, function(c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[c];
+  });
+};
+
 // ─── INIT DASHBOARD ─────────────────────────────────────────
 async function initDashboard() {
   const el = document.getElementById('dashboard-root');
   if (!el) return;
 
   // Auth obligatoire
-  currentUser = await Session.requireAuth('/connexion.html');
+  // Espace artisan : rôle vérifié (un client est redirigé, sans appel API inutile)
+  currentUser = await Session.requireRole('artisan');
   if (!currentUser) return;
 
   // Affiche le nom
@@ -34,29 +70,51 @@ async function initDashboard() {
 }
 
 // ─── CHARGER LES LEADS ──────────────────────────────────────
-async function refreshLeads() {
-  try {
-    const data = await API.get('/api/artisan/leads');
-    availableLeads = data.available || [];
-    purchasedLeads = data.purchased || [];
-    renderAvailableLeads();
-    renderPurchasedLeads();
-    updateCounters();
-  } catch (err) {
-    toast('Impossible de charger les leads.', 'danger');
-  }
+let _refreshing = null;
+function refreshLeads() {
+  // Un seul appel réseau à la fois (initDashboard + dashboard.html appellent tous deux cette fonction)
+  if (_refreshing) return _refreshing;
+  _refreshing = (async () => {
+    let data;
+    try {
+      data = await API.get('/api/artisan/leads');
+    } catch (err) {
+      // On affiche la vraie raison renvoyée par le serveur (ex. email non confirmé, rôle)
+      toast(err.message || 'Impossible de charger les leads.', 'danger', 6000);
+      return;
+    }
+    availableLeads = Array.isArray(data.available) ? data.available : [];
+    purchasedLeads = Array.isArray(data.purchased) ? data.purchased : [];
+    try {
+      renderAvailableLeads();
+      renderPurchasedLeads();
+      updateCounters();
+    } catch (err) {
+      console.error('[artisan.js] Affichage des leads impossible :', err);
+      toast("Les leads ont été reçus mais n'ont pas pu être affichés.", 'danger', 6000);
+    }
+  })().finally(() => { _refreshing = null; });
+  return _refreshing;
 }
+
+// Nom appelé par dashboard.html
+function loadArtisanLeads() { return refreshLeads(); }
 
 function updateCounters() {
   const cAvail = document.getElementById('count-available');
   const cPurch = document.getElementById('count-purchased');
   if (cAvail) cAvail.textContent = availableLeads.length;
   if (cPurch) cPurch.textContent = purchasedLeads.length;
+  // KPI du tableau de bord : valeurs réelles (dans le rayon de l'artisan)
+  const kAvail = document.getElementById('kpi-leads-dispo');
+  const kPurch = document.getElementById('kpi-leads-achetes');
+  if (kAvail) kAvail.textContent = availableLeads.length;
+  if (kPurch) kPurch.textContent = purchasedLeads.length;
 }
 
 // ─── RENDER LEADS DISPONIBLES ───────────────────────────────
 function renderAvailableLeads() {
-  const container = document.getElementById('leads-available');
+  const container = document.getElementById('leads-available') || document.getElementById('available-leads');
   if (!container) return;
 
   if (!availableLeads.length) {
@@ -79,7 +137,7 @@ function renderAvailableLeads() {
 
 // ─── RENDER LEADS ACHETÉS ───────────────────────────────────
 function renderPurchasedLeads() {
-  const container = document.getElementById('leads-purchased');
+  const container = document.getElementById('leads-purchased') || document.getElementById('purchased-leads');
   if (!container) return;
 
   if (!purchasedLeads.length) {
@@ -102,46 +160,52 @@ function renderPurchasedLeads() {
 
 // ─── CARD HTML ──────────────────────────────────────────────
 function leadCard(lead, withContact) {
-  const urg   = URGENCE_LABEL[lead.urgence] || URGENCE_LABEL.normale;
-  const emoji = TRAVAUX_EMOJI[lead.type_travaux] || '🏗️';
-  const tags  = (lead.tags || []).map(t => `<span class="badge badge-neutral">${t}</span>`).join('');
+  const urg    = URGENCE_LABEL[lead.urgence] || URGENCE_LABEL.normale;
+  const emoji  = TRAVAUX_EMOJI[lead.type_travaux] || '🏗️';
+  const tags   = (lead.tags || []).map(t => `<span class="badge badge-neutral">${esc(t)}</span>`).join('');
+  const id     = Number(lead.id);
+  const titre  = esc(capitalize(lead.type_travaux || 'Travaux'));
+  const ville  = esc(lead.client_ville || '—');
+  const desc   = esc(lead.description || 'Aucune description.');
+  const date   = esc(fmtDate(lead.date_creation));
 
-  // ✅ MODIFICATIONS ICI UNIQUEMENT
   if (withContact) {
     // Après achat : afficher toutes les infos
+    const tel     = String(lead.client_telephone || '');
+    const telHref = tel.replace(/[^\d+]/g, '');
     const contactBlock = `
       <div class="lead-contact-box" style="background:var(--beige);padding:12px;border-radius:12px;margin:8px 0;">
-        <p><strong>👤 Client :</strong> ${lead.client_nom || 'Non renseigné'}</p>
-        <p><strong>📞 Téléphone :</strong> <a href="tel:${lead.client_telephone}" style="color:var(--anthracite);font-weight:600;">${lead.client_telephone || 'Non renseigné'}</a></p>
-        ${lead.adresse ? `<p><strong>📍 Adresse :</strong> ${lead.adresse}</p>` : ''}
+        <p><strong>👤 Client :</strong> ${esc(lead.client_nom || 'Non renseigné')}</p>
+        <p><strong>📞 Téléphone :</strong> <a href="tel:${esc(telHref)}" style="color:var(--anthracite);font-weight:600;">${esc(tel || 'Non renseigné')}</a></p>
+        ${lead.adresse ? `<p><strong>📍 Adresse :</strong> ${esc(lead.adresse)}</p>` : ''}
       </div>`;
 
     return `
       <article class="lead-card fade-in">
         <div class="lead-card-header">
           <div>
-            <h4 class="lead-card-title">${emoji} ${capitalize(lead.type_travaux || 'Travaux')}</h4>
+            <h4 class="lead-card-title">${emoji} ${titre}</h4>
             <div class="lead-card-meta">
               <span class="badge ${urg.class}">${urg.label}</span>
-              <span class="badge badge-neutral">📍 ${lead.client_ville || '—'}</span>
+              <span class="badge badge-neutral">📍 ${ville}</span>
               <span class="badge badge-success">✅ Acheté</span>
             </div>
           </div>
-          <span class="lead-date"><small>${fmtDate(lead.date_creation)}</small></span>
+          <span class="lead-date"><small>${date}</small></span>
         </div>
-        <p class="lead-card-description">${lead.description || 'Aucune description.'}</p>
+        <p class="lead-card-description">${desc}</p>
         ${tags ? `<div class="lead-tags">${tags}</div>` : ''}
         ${contactBlock}
         <div class="lead-card-footer">
           <span></span>
-          <button class="btn btn-secondary btn-sm" data-tag-lead="${lead.id}">🏷 Ajouter tag</button>
+          <button class="btn btn-secondary btn-sm" data-tag-lead="${id}">🏷 Ajouter tag</button>
         </div>
       </article>`;
   } else {
     // Avant achat : masquer les informations sensibles
     const maskedContact = `
       <div class="lead-contact-box" style="background:var(--beige);padding:12px;border-radius:12px;margin:8px 0;">
-        <p><strong>👤 Client :</strong> Client vérifié #${String(lead.id).padStart(4, '0')}</p>
+        <p><strong>👤 Client :</strong> Client vérifié #${String(id).padStart(4, '0')}</p>
         <p><strong>📞 Téléphone :</strong> 06 XX XX XX XX</p>
         <p style="color:var(--success);margin-top:6px;font-weight:500;">
           🔒 Lead 100% vérifié par notre Agent IA. Numéro et adresse débloqués instantanément après validation du paiement sécurisé par Stripe.
@@ -150,28 +214,28 @@ function leadCard(lead, withContact) {
 
     // Détails techniques (surface, budget) si disponibles
     const details = [];
-    if (lead.surface_estimee) details.push(`<span class="badge badge-neutral">📐 ${lead.surface_estimee} m²</span>`);
-    if (lead.budget_estime)  details.push(`<span class="badge badge-neutral">💰 ${lead.budget_estime}€</span>`);
+    if (lead.surface_estimee) details.push(`<span class="badge badge-neutral">📐 ${esc(lead.surface_estimee)} m²</span>`);
+    if (lead.budget_estime)  details.push(`<span class="badge badge-neutral">💰 ${esc(lead.budget_estime)}€</span>`);
     const detailsBlock = details.length ? `<div class="lead-card-meta" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;">${details.join('')}</div>` : '';
 
     return `
       <article class="lead-card fade-in">
         <div class="lead-card-header">
           <div>
-            <h4 class="lead-card-title">${emoji} ${capitalize(lead.type_travaux || 'Travaux')}</h4>
+            <h4 class="lead-card-title">${emoji} ${titre}</h4>
             <div class="lead-card-meta">
               <span class="badge ${urg.class}">${urg.label}</span>
-              <span class="badge badge-neutral">📍 ${lead.client_ville || '—'}</span>
+              <span class="badge badge-neutral">📍 ${ville}</span>
             </div>
           </div>
-          <span class="lead-date"><small>${fmtDate(lead.date_creation)}</small></span>
+          <span class="lead-date"><small>${date}</small></span>
         </div>
-        <p class="lead-card-description">${lead.description || 'Aucune description.'}</p>
+        <p class="lead-card-description">${desc}</p>
         ${detailsBlock}
         ${maskedContact}
         <div class="lead-card-footer">
           <span class="lead-price">10 €</span>
-          <button class="btn btn-gold btn-sm" data-buy="${lead.id}">Acheter — 10€</button>
+          <button class="btn btn-gold btn-sm" data-buy="${id}">Acheter — 10€</button>
         </div>
       </article>`;
   }
@@ -187,71 +251,26 @@ function openBuyModal(leadId) {
   if (info) {
     const emoji = TRAVAUX_EMOJI[lead.type_travaux] || '🏗️';
     info.innerHTML = `
-      <p><strong>${emoji} ${capitalize(lead.type_travaux)}</strong></p>
-      <p>📍 ${lead.client_ville}</p>
-      <p>${lead.description?.slice(0,120)}...</p>`;
+      <p><strong>${emoji} ${esc(capitalize(lead.type_travaux))}</strong></p>
+      <p>📍 ${esc(lead.client_ville)}</p>
+      <p>${esc((lead.description || '').slice(0, 120))}${(lead.description || '').length > 120 ? '…' : ''}</p>`;
   }
   openModal('modal-buy');
 }
 
 // ─── PAIEMENT STRIPE ────────────────────────────────────────
-async function initStripePayment() {
+// Le paiement réel (Stripe Elements + PaymentIntent + confirmation par webhook)
+// se fait UNIQUEMENT sur /marketplace.html. Ce tableau de bord n'affiche donc
+// plus de succès « simulé » : aucun lead n'est considéré acheté tant que le
+// serveur (webhook Stripe) ne l'a pas attribué.
+function initStripePayment() {
   const btn = document.getElementById('btn-confirm-buy');
   if (!btn) return;
 
-  btn.addEventListener('click', async () => {
+  btn.addEventListener('click', () => {
     if (!selectedLeadId) return;
-    btnLoading(btn, true);
-
-    try {
-      const data = await API.post('/api/create-payment-intent', { lead_id: selectedLeadId });
-
-      if (data.publishable_key && data.client_secret) {
-        // Chargement Stripe.js dynamique
-        if (typeof Stripe === 'undefined') {
-          const s = document.createElement('script');
-          s.src = 'https://js.stripe.com/v3/';
-          s.onload = () => confirmStripePayment(data.publishable_key, data.client_secret, btn);
-          document.head.appendChild(s);
-        } else {
-          confirmStripePayment(data.publishable_key, data.client_secret, btn);
-        }
-      } else {
-        // Pas de Stripe configuré → simulation
-        simulatePayment(btn);
-      }
-    } catch (err) {
-      toast(err.message, 'danger');
-      btnLoading(btn, false);
-    }
+    window.location.href = '/marketplace.html?lead=' + encodeURIComponent(selectedLeadId);
   });
-}
-
-async function confirmStripePayment(pk, clientSecret, btn) {
-  const stripe  = Stripe(pk);
-  const { error } = await stripe.confirmCardPayment(clientSecret, {
-    payment_method: { card: { token: 'tok_visa' } }   // en test seulement
-  });
-  if (error) {
-    toast(error.message, 'danger');
-    btnLoading(btn, false);
-  } else {
-    paymentSuccess();
-  }
-}
-
-function simulatePayment(btn) {
-  // Mode test sans clé Stripe
-  setTimeout(() => {
-    paymentSuccess();
-    btnLoading(btn, false);
-  }, 1200);
-}
-
-function paymentSuccess() {
-  closeModal('modal-buy');
-  toast('✅ Lead acheté ! Les coordonnées client sont dans "Mes leads".', 'success', 5000);
-  setTimeout(refreshLeads, 1000);
 }
 
 // ─── MODAL TAG ───────────────────────────────────────────────

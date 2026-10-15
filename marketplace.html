@@ -100,7 +100,9 @@
 document.addEventListener('DOMContentLoaded',async function(){
 'use strict';
 
-await Session.requireRole('artisan');
+/* Espace artisan : rôle vérifié (un client est redirigé). Le serveur reste l'autorité finale. */
+const user=await Session.requireRole('artisan');
+if(!user)return;
 
 const leadsEl=document.getElementById('leads');
 const countEl=document.getElementById('count');
@@ -114,36 +116,67 @@ let selected=null;
 let stripe=null;
 let card=null;
 let clientSecret=null;
+let autoOpened=false;
 
-function jwt(){return localStorage.getItem(CONFIG.TOKEN_KEY)||''}
+const URGENCE={immediate:'🚨 Urgent',urgent:'🚨 Urgent',normale:'📅 Normal',normal:'📅 Normal',faible:'🕓 Flexible',flexible:'🕓 Flexible',soon:'⚡ Prochainement'};
+
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]})}
-function api(path,opt){
-  opt=opt||{};
-  const t=jwt();
-  if(!t)return Promise.reject(new Error('Session expirée. Veuillez vous reconnecter.'));
-  const headers={'Accept':'application/json','Content-Type':'application/json','Authorization':'Bearer '+t};
-  console.log('[Marketplace] →',opt.method||'GET',path);
-  return fetch(CONFIG.API_URL+path,Object.assign({},opt,{headers:headers})).then(async r=>{
-    const d=await r.json().catch(()=>({}));
-    console.log('[Marketplace] ←',r.status,path,d);
-    if(!r.ok)throw new Error(d.error||d.message||('Erreur serveur ('+r.status+')'));
-    return d;
-  });
+
+/* apiFetch (api.js) : JWT, timeout, nouvel essai réseau, déconnexion propre sur 401 */
+function api(path,opt){return apiFetch(path,opt||{})}
+
+function notify(msg,type){
+  if(typeof toast==='function')toast(msg,type||'success',7000);else alert(msg);
 }
+
 function load(){
   leadsEl.innerHTML='<div class="market-loading">⏳ Recherche des demandes dans votre zone…</div>';
   return api('/api/artisan/leads').then(d=>{
     leads=Array.isArray(d.available)?d.available:[];
     countEl.textContent=leads.length;
-    let u={};try{u=JSON.parse(localStorage.getItem(CONFIG.USER_KEY)||'{}')}catch(e){}
-    radiusEl.textContent=(u.rayon||30)+' km';
+    radiusEl.textContent=(d.radius_km||user.rayon||30)+' km';
     render();
-  }).catch(e=>{
-    console.error('[Marketplace]',e);
-    leadsEl.innerHTML='<div class="market-error"><strong>Impossible de charger les leads.</strong><p>'+esc(e.message)+'</p><button id="retry" class="btn btn-secondary btn-sm">Réessayer</button></div>';
-    document.getElementById('retry').onclick=load;
-  });
+    openRequestedLead();
+  }).catch(showLoadError);
 }
+
+function showLoadError(e){
+  console.error('[Marketplace]',e);
+  const msg=(e&&e.message)?e.message:'Erreur inconnue.';
+  if(/confirmer votre adresse email/i.test(msg)){renderUnconfirmed(msg);return}
+  leadsEl.innerHTML='<div class="market-error"><strong>Impossible de charger les leads.</strong><p>'+esc(msg)+'</p><button id="retry" class="btn btn-secondary btn-sm" type="button">Réessayer</button></div>';
+  document.getElementById('retry').onclick=load;
+}
+
+/* Le serveur exige un email confirmé : on n'y touche pas, on aide à le confirmer réellement. */
+function renderUnconfirmed(msg){
+  const email=user.email||'';
+  leadsEl.innerHTML='<div class="market-error">'+
+    '<strong>Adresse email non confirmée</strong>'+
+    '<p>'+esc(msg)+'</p>'+
+    (email?'<p>Compte : <strong>'+esc(email)+'</strong></p>':'')+
+    '<p id="confirm-state" style="font-size:.88rem">Vérification de l’état de votre compte…</p>'+
+    '<div style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:.8rem">'+
+      (email?'<button id="resend" class="btn btn-gold btn-sm" type="button">Renvoyer l’email de confirmation</button>':'')+
+      '<button id="retry" class="btn btn-secondary btn-sm" type="button">Réessayer</button>'+
+    '</div></div>';
+  document.getElementById('retry').onclick=load;
+  const state=document.getElementById('confirm-state');
+  api('/api/me').then(d=>{
+    const a=d&&d.artisan;
+    state.textContent=(a&&a.confirmed)
+      ?'Le serveur indique que votre compte est confirmé. Cliquez sur « Réessayer » ; si le message persiste, déconnectez-vous puis reconnectez-vous.'
+      :'Le serveur indique que votre compte n’est pas encore confirmé. Ouvrez l’email reçu et cliquez sur le lien de confirmation, ou demandez un nouvel email.';
+  }).catch(()=>{state.textContent=''});
+  const resend=document.getElementById('resend');
+  if(resend)resend.onclick=function(){
+    resend.disabled=true;
+    API.resendConfirmation(email).then(r=>{state.textContent=(r&&r.message)||'Un email de confirmation vient d’être envoyé.'})
+      .catch(err=>{state.textContent=err.message})
+      .finally(()=>{resend.disabled=false});
+  };
+}
+
 function render(){
   if(!leads.length){
     leadsEl.innerHTML='<div class="market-empty"><div style="font-size:2rem">📭</div><strong>Aucun lead disponible dans votre zone.</strong><p>Les nouvelles demandes apparaîtront ici automatiquement.</p></div>';
@@ -152,19 +185,27 @@ function render(){
   leadsEl.innerHTML=leads.map(l=>{
     const type=l.type_travaux||l.trade_type||'Travaux';
     const city=l.client_ville||l.location_city||'Non précisée';
-    const urgency=l.urgence||l.urgency||'normal';
-    const u=urgency==='urgent'?'🚨 Urgent':urgency==='soon'?'⚡ Prochainement':'📅 Normal';
-    const distance=l.distance_km!=null?'📍 '+Number(l.distance_km).toFixed(1)+' km':'📍 Dans votre zone';
+    const u=URGENCE[l.urgence||l.urgency]||URGENCE.normale;
+    const distance=l.distance_km!=null?'📍 ~'+Number(l.distance_km)+' km':'📍 Dans votre zone';
     const desc=l.description||'Aucune description disponible.';
     return '<article class="market-card">'+
       '<div class="market-top"><div><h2>'+esc(type)+'</h2><small style="color:var(--gris)">Demande #'+esc(l.id)+'</small></div><span class="market-badge">Disponible</span></div>'+
-      '<div class="market-meta"><span>🏠 '+esc(city)+'</span><span>'+distance+'</span><span>'+u+'</span></div>'+
+      '<div class="market-meta"><span>🏠 '+esc(city)+'</span><span>'+esc(distance)+'</span><span>'+esc(u)+'</span></div>'+
       '<div class="market-desc">'+esc(desc.slice(0,300))+(desc.length>300?'…':'')+'</div>'+
       '<div class="market-foot"><div class="market-price">10 €<small>par lead</small></div><button class="btn btn-gold btn-sm buy" data-id="'+esc(l.id)+'">Acheter le lead</button></div>'+
       '</article>';
   }).join('');
   leadsEl.querySelectorAll('.buy').forEach(b=>b.onclick=()=>openModal(Number(b.dataset.id)));
 }
+
+/* /marketplace.html?lead=ID (depuis le tableau de bord) ouvre directement l'achat de ce lead */
+function openRequestedLead(){
+  if(autoOpened)return;
+  autoOpened=true;
+  const id=Number(new URLSearchParams(window.location.search).get('lead'));
+  if(id&&leads.some(l=>Number(l.id)===id))openModal(id);
+}
+
 function openModal(id){
   selected=leads.find(l=>Number(l.id)===id);
   if(!selected)return;
@@ -175,14 +216,27 @@ function openModal(id){
   modal.classList.add('open');modal.setAttribute('aria-hidden','false');
   preparePayment();
 }
-function closeModal(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');selected=null;clientSecret=null;errors.textContent=''}
+
+function destroyCard(){
+  try{if(card)card.destroy()}catch(e){}
+  card=null;stripe=null;clientSecret=null;
+}
+function closeModal(){
+  modal.classList.remove('open');modal.setAttribute('aria-hidden','true');
+  selected=null;destroyCard();errors.textContent='';
+  payBtn.disabled=true;payBtn.textContent='💳 Payer 10 €';
+}
+
 function preparePayment(){
+  destroyCard();
   payBtn.disabled=true;payBtn.textContent='⏳ Préparation…';
+  const leadId=selected.id;
   const loadStripe=window.Stripe?Promise.resolve():new Promise((ok,no)=>{
     const s=document.createElement('script');s.src='https://js.stripe.com/v3/';s.onload=ok;s.onerror=()=>no(new Error('Impossible de charger Stripe.'));document.head.appendChild(s);
   });
-  loadStripe.then(()=>api('/api/create-payment-intent',{method:'POST',body:JSON.stringify({lead_id:selected.id})}))
+  loadStripe.then(()=>api('/api/create-payment-intent',{method:'POST',body:JSON.stringify({lead_id:leadId})}))
   .then(d=>{
+    if(!selected||selected.id!==leadId)return; /* modale fermée entre-temps */
     if(!d.publishable_key||!d.client_secret)throw new Error('Stripe n’a pas fourni les informations de paiement.');
     stripe=Stripe(d.publishable_key);
     const elements=stripe.elements();
@@ -191,8 +245,13 @@ function preparePayment(){
     card.on('change',e=>errors.textContent=e.error?e.error.message:'');
     clientSecret=d.client_secret;
     payBtn.disabled=false;payBtn.textContent='💳 Payer 10 €';
-  }).catch(e=>{errors.textContent=e.message;payBtn.disabled=true;payBtn.textContent='💳 Payer 10 €'});
+  }).catch(e=>{
+    errors.textContent=e.message;payBtn.disabled=true;payBtn.textContent='💳 Payer 10 €';
+    /* lead pris entre-temps par un autre artisan : on rafraîchit la liste */
+    if(/plus disponible/i.test(e.message))setTimeout(function(){closeModal();load()},2500);
+  });
 }
+
 payBtn.onclick=async function(){
   if(!stripe||!card||!clientSecret)return;
   payBtn.disabled=true;payBtn.textContent='⏳ Paiement…';errors.textContent='';
@@ -201,74 +260,22 @@ payBtn.onclick=async function(){
     if(result.error)throw new Error(result.error.message);
     if(!result.paymentIntent||result.paymentIntent.status!=='succeeded')throw new Error('Le paiement n’a pas été confirmé.');
     closeModal();
-    alert('✅ Paiement confirmé. Le lead sera attribué à votre compte après confirmation Stripe.');
-    setTimeout(load,1500);
-  }catch(e){errors.textContent=e.message}
-  finally{payBtn.disabled=false;payBtn.textContent='💳 Payer 10 €'}
+    /* L'attribution du lead est faite par le serveur (webhook Stripe), jamais par cette page. */
+    notify('✅ Paiement reçu. Le lead vous est attribué dès la confirmation du serveur (quelques secondes) : retrouvez-le dans « Mes achats ».','success');
+    setTimeout(load,1500);setTimeout(load,6000);
+  }catch(e){
+    errors.textContent=e.message;
+    payBtn.disabled=!(stripe&&card&&clientSecret);payBtn.textContent='💳 Payer 10 €';
+  }
 };
 document.getElementById('close-modal').onclick=closeModal;
 document.getElementById('cancel-buy').onclick=closeModal;
 modal.onclick=e=>{if(e.target===modal)closeModal()};
 document.getElementById('refresh').onclick=load;
 
-function initSidebar(){
-  const toggle=document.getElementById('menu-toggle');
-  const overlay=document.getElementById('sidebar-overlay');
-  const sidebar=document.getElementById('sidebar');
-  const closeBtn=document.getElementById('sidebar-close');
-  if(!toggle||!overlay||!sidebar)return;
-
-  function closeSidebar(){
-    toggle.classList.remove('open');
-    overlay.classList.remove('active');
-    sidebar.classList.remove('active');
-    document.body.style.overflow='';
-  }
-
-  toggle.addEventListener('click',function(e){
-    e.stopPropagation();
-    const open=sidebar.classList.toggle('active');
-    overlay.classList.toggle('active',open);
-    toggle.classList.toggle('open',open);
-    document.body.style.overflow=open?'hidden':'';
-  });
-
-  if(closeBtn)closeBtn.addEventListener('click',closeSidebar);
-  overlay.addEventListener('click',closeSidebar);
-  sidebar.querySelectorAll('a').forEach(link=>link.addEventListener('click',closeSidebar));
-
-  const user=JSON.parse(localStorage.getItem('batiswift_user')||'null');
-  const guest=document.querySelector('.sidebar-guest');
-  const userDiv=document.querySelector('.sidebar-user');
-  const name=document.getElementById('sidebar-user-nom');
-
-  if(user&&guest&&userDiv){
-    guest.style.display='none';
-    userDiv.style.display='flex';
-    userDiv.style.flexDirection='column';
-    userDiv.style.gap='.8rem';
-    if(name)name.textContent=user.nom||'Artisan';
-  }
-
-  const logout=document.getElementById('sidebar-logout');
-  if(logout)logout.addEventListener('click',function(){
-    localStorage.removeItem('batiswift_token');
-    localStorage.removeItem('batiswift_user');
-    window.location.href='/index.html';
-  });
-}
-
-function fragment(id,url){
-  return fetch(url).then(r=>r.text()).then(h=>{
-    const el=document.getElementById(id);
-    if(el)el.innerHTML=h;
-    if(id==='header-container')initSidebar();
-  }).catch(e=>console.warn('[Marketplace] Fragment non chargé:',url,e));
-}
-
-  fragment('header-container','/header.html');
-  fragment('footer-container','/footer.html');
-  load();
+/* Le header (menu, bascule de contexte, déconnexion) est injecté et géré par main.js + header.html :
+   plus de second chargement ni de second gestionnaire ici. */
+load();
 });
 </script>
 </body>

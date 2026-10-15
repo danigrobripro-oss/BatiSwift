@@ -42,7 +42,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: calc(72px + 40px) 5vw 60px;
+      padding: 56px 5vw 60px;
       text-align: center;
     }
 
@@ -391,15 +391,14 @@
     }
 
     @media (max-width: 480px) {
-      .portal-wrapper { padding-top: calc(72px + 24px); }
+      .portal-wrapper { padding-top: 32px; }
       .card-title { font-size: 1.7rem; }
     }
   </style>
 </head>
-<body></body>
+<body class="no-header">
 
   <div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
-  <div id="header-container"></div>
 
   <main class="portal-wrapper">
 
@@ -502,6 +501,13 @@
   <script src="/js/config.js"></script>
   <script src="/js/api.js"></script>
   <script src="/js/session.js"></script>
+  <script>
+    /* Compte client seul déjà connecté : direct vers son tableau de bord,
+       il ne passe jamais par cette page de choix (voir Session.guardSpaceSelection). */
+    if (Session.guardSpaceSelection() === 'redirected') {
+      document.documentElement.style.visibility = 'hidden';
+    }
+  </script>
   <script src="/js/main.js"></script>
 
   <script>
@@ -516,8 +522,8 @@
             // Un client ne peut pas entrer dans l'espace artisan
             window.location.href = '/client-dashboard.html';
           } else {
-            // artisan ou mixte
-            if (user.role === 'mixte') Session.setContext('artisan');
+            // artisan ou mixte : on force le contexte artisan
+            Session.setContext('artisan');
             window.location.href = '/dashboard.html';
           }
         } else {
@@ -529,14 +535,11 @@
       function enterClient() {
         var user = Session.getUser();
         if (Session.isLoggedIn() && user) {
-          if (user.role === 'artisan') {
-            // Un artisan reste dans son espace
-            window.location.href = '/dashboard.html';
-          } else {
-            // client ou mixte
-            if (user.role === 'mixte') Session.setContext('client');
-            window.location.href = '/client-dashboard.html';
-          }
+          // client, artisan ou mixte : tous peuvent entrer dans l'espace client.
+          // Un artisan garde son rôle (les routes artisan restent protégées par le
+          // serveur) : seul le contexte d'affichage passe en « client ».
+          if (user.role === 'artisan' || user.role === 'mixte') Session.setContext('client');
+          window.location.href = '/client-dashboard.html';
         } else {
           // Visiteur non connecté → formulaire de demande (gratuit, sans compte requis)
           window.location.href = '/client.html';
