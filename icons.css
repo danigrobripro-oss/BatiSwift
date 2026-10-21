@@ -1,0 +1,30 @@
+.bs-icon{display:inline-block;vertical-align:-.2em;flex:none;width:1em;height:1em;overflow:hidden;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.bs-icon-spin{animation:bs-spin 1s linear infinite}
+@keyframes bs-spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.bs-icon-spin{animation:none}}
+
+/* Conteneurs d'icônes fonctionnelles — ne s'applique pas au logo */
+.kpi-icon svg,
+.feature-icon svg,
+.step-icon svg,
+.av-icon svg,
+.bs-ico svg,
+.role-icon svg,
+.card-icon svg,
+.cat-icon svg,
+.action-icon svg,
+.empty-icon svg,
+.empty-client-icon svg,
+.purchases-empty-icon svg,
+.rentability-icon svg,
+.empty-state .icon svg,
+.trust-item .icon svg,
+.chip .bs-icon,
+.btn .bs-icon,
+.badge-pill .bs-icon,
+.hero-badge .bs-icon,
+.plan-name .bs-icon,
+.popular-badge .bs-icon {
+  fill: none;
+  stroke: currentColor;
+}

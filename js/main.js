@@ -26,11 +26,16 @@ async function loadComponent(containerId, filePath) {
 async function initLayout() {
   var isMinimal = document.body.classList.contains('minimal-layout');
   var isClient = document.body.classList.contains('client-layout');
+  // <body class="no-header"> : page autonome (ex. sélection Client / Artisan).
+  // Aucun header n'est injecté ; les autres pages ne sont pas concernées.
+  var noHeader = document.body.classList.contains('no-header');
   var headerFile = '/header.html';
   if (isMinimal) headerFile = '/header-minimal.html';
   else if (isClient) headerFile = '/header-client.html';
-  await loadComponent('header-container', headerFile);
-  document.dispatchEvent(new Event('header:loaded'));
+  if (!noHeader) {
+    await loadComponent('header-container', headerFile);
+    document.dispatchEvent(new Event('header:loaded'));
+  }
   Session.updateNav();
   highlightActiveNav();
   await loadComponent('footer-container', isMinimal ? '/footer-minimal.html' : '/footer.html');
@@ -100,7 +105,7 @@ function toast(message, type, duration) {
     'box-shadow:0 8px 32px rgba(0,0,0,.2)',
     'max-width:340px;animation:fadeIn .3s ease both'
   ].join(';');
-  t.textContent = message;
+  t.innerHTML = message;
   document.body.appendChild(t);
   setTimeout(function() {
     t.style.opacity = '0';

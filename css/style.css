@@ -6,6 +6,7 @@
    ============================================================ */
 
    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+   @import url('../icons.css');
 
    /* ---- VARIABLES (Palette Violet & Or cuivré) ---- */
    :root {
@@ -754,7 +755,7 @@
      color: var(--gris);
    }
    .pricing-card ul li::before {
-     content: '✅';
+     content: '';
      font-size: 0.8rem;
    }
 
@@ -1466,6 +1467,11 @@ header.user-logged-in::after {
   color: var(--or);
   font-size: 1.3rem;
   flex-shrink: 0;
+}
+
+.kpi-card .kpi-icon svg {
+  width: 1.4rem;
+  height: 1.4rem;
 }
 
 .kpi-card .kpi-value {

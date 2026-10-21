@@ -51,7 +51,7 @@ async function loadLandingStats() {
         try {
           const resp = await submitClientRequest(clientForm);
           if (resp.lead_created) {
-            successDiv.textContent = '✅ Votre demande a été créée. Un artisan va vous contacter.';
+            successDiv.textContent = 'Votre demande a été créée. Un artisan va vous contacter.';
             clientForm.reset();
           } else if (resp.response) {
             successDiv.textContent = resp.response; // réponse intermédiaire de Claude

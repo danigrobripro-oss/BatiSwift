@@ -1,0 +1,260 @@
+{
+  "name": "BâtiSwift icons",
+  "count": 36,
+  "viewBox": "0 0 24 24",
+  "strokeWidth": 1.75,
+  "icons": [
+    {
+      "id": "ic-dashboard",
+      "file": "icons/ic-dashboard.svg",
+      "label": "Tableau de bord",
+      "function": "Vue d’ensemble de l’activité",
+      "group": "Navigation et espaces"
+    },
+    {
+      "id": "ic-marketplace",
+      "file": "icons/ic-marketplace.svg",
+      "label": "Marketplace",
+      "function": "Place de marché des demandes",
+      "group": "Navigation et espaces"
+    },
+    {
+      "id": "ic-achats",
+      "file": "icons/ic-achats.svg",
+      "label": "Mes achats",
+      "function": "Demandes et contacts achetés",
+      "group": "Navigation et espaces"
+    },
+    {
+      "id": "ic-carte",
+      "file": "icons/ic-carte.svg",
+      "label": "Carte des chantiers",
+      "function": "Chantiers localisés sur une carte",
+      "group": "Navigation et espaces"
+    },
+    {
+      "id": "ic-stripe",
+      "file": "icons/ic-stripe.svg",
+      "label": "Paiements Stripe",
+      "function": "Encaissements et paiements en ligne",
+      "group": "Navigation et espaces"
+    },
+    {
+      "id": "ic-parametres",
+      "file": "icons/ic-parametres.svg",
+      "label": "Paramètres",
+      "function": "Réglages du compte et de la plateforme",
+      "group": "Navigation et espaces"
+    },
+    {
+      "id": "ic-accueil",
+      "file": "icons/ic-accueil.svg",
+      "label": "Accueil / Espace client",
+      "function": "Page d’accueil de l’espace client",
+      "group": "Navigation et espaces"
+    },
+    {
+      "id": "ic-nouvelle-demande",
+      "file": "icons/ic-nouvelle-demande.svg",
+      "label": "Nouvelle demande",
+      "function": "Créer une demande de travaux",
+      "group": "Navigation et espaces"
+    },
+    {
+      "id": "ic-trouver-artisan",
+      "file": "icons/ic-trouver-artisan.svg",
+      "label": "Trouver un artisan",
+      "function": "Rechercher un professionnel du bâtiment",
+      "group": "Navigation et espaces"
+    },
+    {
+      "id": "ic-aide",
+      "file": "icons/ic-aide.svg",
+      "label": "Centre d’aide",
+      "function": "Questions fréquentes et assistance",
+      "group": "Navigation et espaces"
+    },
+    {
+      "id": "ic-tarifs",
+      "file": "icons/ic-tarifs.svg",
+      "label": "Tarifs",
+      "function": "Grille tarifaire et abonnements",
+      "group": "Navigation et espaces"
+    },
+    {
+      "id": "ic-deconnexion",
+      "file": "icons/ic-deconnexion.svg",
+      "label": "Déconnexion",
+      "function": "Quitter la session",
+      "group": "Navigation et espaces"
+    },
+    {
+      "id": "ic-search",
+      "file": "icons/ic-search.svg",
+      "label": "Recherche",
+      "function": "Rechercher dans la plateforme",
+      "group": "États vides et actions"
+    },
+    {
+      "id": "ic-briefcase",
+      "file": "icons/ic-briefcase.svg",
+      "label": "Portefeuille / Achats",
+      "function": "Mallette professionnelle",
+      "group": "États vides et actions"
+    },
+    {
+      "id": "ic-chat",
+      "file": "icons/ic-chat.svg",
+      "label": "Discussion / Aide",
+      "function": "Messagerie et échanges",
+      "group": "États vides et actions"
+    },
+    {
+      "id": "ic-lock",
+      "file": "icons/ic-lock.svg",
+      "label": "Sécurité / Verrouillé",
+      "function": "Contenu protégé ou verrouillé",
+      "group": "États vides et actions"
+    },
+    {
+      "id": "ic-close",
+      "file": "icons/ic-close.svg",
+      "label": "Fermer / Supprimer",
+      "function": "Fermer une fenêtre ou supprimer",
+      "group": "États vides et actions"
+    },
+    {
+      "id": "ic-inbox-empty",
+      "file": "icons/ic-inbox-empty.svg",
+      "label": "Boîte vide",
+      "function": "État vide : aucun élément",
+      "group": "États vides et actions"
+    },
+    {
+      "id": "ic-check",
+      "file": "icons/ic-check.svg",
+      "label": "Validé / Confirmé",
+      "function": "Action réussie ou confirmée",
+      "group": "États vides et actions"
+    },
+    {
+      "id": "ic-map",
+      "file": "icons/ic-map.svg",
+      "label": "Carte / Géolocalisation",
+      "function": "Carte dépliée",
+      "group": "Pages et sections spécifiques"
+    },
+    {
+      "id": "ic-help",
+      "file": "icons/ic-help.svg",
+      "label": "Aide / Support",
+      "function": "Bouée de secours",
+      "group": "Pages et sections spécifiques"
+    },
+    {
+      "id": "ic-document",
+      "file": "icons/ic-document.svg",
+      "label": "Document / Demande",
+      "function": "Document ou demande de travaux",
+      "group": "Pages et sections spécifiques"
+    },
+    {
+      "id": "ic-warning",
+      "file": "icons/ic-warning.svg",
+      "label": "Attention / Erreur",
+      "function": "Avertissement ou erreur",
+      "group": "Pages et sections spécifiques"
+    },
+    {
+      "id": "ic-list",
+      "file": "icons/ic-list.svg",
+      "label": "Liste / KPI",
+      "function": "Liste d’indicateurs",
+      "group": "Pages et sections spécifiques"
+    },
+    {
+      "id": "ic-credit-card",
+      "file": "icons/ic-credit-card.svg",
+      "label": "Carte bancaire / Facturation",
+      "function": "Moyen de paiement et factures",
+      "group": "Pages et sections spécifiques"
+    },
+    {
+      "id": "ic-star",
+      "file": "icons/ic-star.svg",
+      "label": "Note / Avis",
+      "function": "Évaluation et avis clients",
+      "group": "Pages et sections spécifiques"
+    },
+    {
+      "id": "ic-phone",
+      "file": "icons/ic-phone.svg",
+      "label": "Téléphone / Contact",
+      "function": "Appeler ou être rappelé",
+      "group": "Pages et sections spécifiques"
+    },
+    {
+      "id": "ic-lightning",
+      "file": "icons/ic-lightning.svg",
+      "label": "Rapidité / Urgence",
+      "function": "Intervention rapide ou urgente",
+      "group": "Pages et sections spécifiques"
+    },
+    {
+      "id": "ic-money",
+      "file": "icons/ic-money.svg",
+      "label": "Argent / Devis",
+      "function": "Montant, devis et tarification",
+      "group": "Pages et sections spécifiques"
+    },
+    {
+      "id": "ic-camera",
+      "file": "icons/ic-camera.svg",
+      "label": "Photo / Preuve",
+      "function": "Photos du chantier",
+      "group": "Pages et sections spécifiques"
+    },
+    {
+      "id": "ic-location-pin",
+      "file": "icons/ic-location-pin.svg",
+      "label": "Position / Ville",
+      "function": "Localisation d’un chantier",
+      "group": "Pages et sections spécifiques"
+    },
+    {
+      "id": "ic-refresh",
+      "file": "icons/ic-refresh.svg",
+      "label": "Actualiser / Relancer",
+      "function": "Rafraîchir ou relancer",
+      "group": "Pages et sections spécifiques"
+    },
+    {
+      "id": "ic-chart",
+      "file": "icons/ic-chart.svg",
+      "label": "Statistiques / Dashboard",
+      "function": "Graphique de statistiques",
+      "group": "Pages et sections spécifiques"
+    },
+    {
+      "id": "ic-globe",
+      "file": "icons/ic-globe.svg",
+      "label": "Traduction / International",
+      "function": "Langues et international",
+      "group": "Pages et sections spécifiques"
+    },
+    {
+      "id": "ic-rocket",
+      "file": "icons/ic-rocket.svg",
+      "label": "Premiers pas / Lancement",
+      "function": "Démarrage et lancement",
+      "group": "Pages et sections spécifiques"
+    },
+    {
+      "id": "ic-ia-robot",
+      "file": "icons/ic-ia-robot.svg",
+      "label": "Intelligence artificielle",
+      "function": "Assistant IA",
+      "group": "Pages et sections spécifiques"
+    }
+  ]
+}

@@ -216,6 +216,7 @@
     border:        1.5px dashed var(--gris-light);
   }
   .empty-icon { font-size: 3rem; margin-bottom: var(--space-md); }
+.empty-icon svg { width: 3rem; height: 3rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; display: block; margin: 0 auto var(--space-xs); }
   .empty-state h3 { font-family: var(--font-display); margin-bottom: 8px; }
   .empty-state p  { color: var(--gris); font-size: 0.9rem; }
   
