@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace Privé BâtiSwift AI — Tableau de bord</title>
+
+  <!-- Favicons BâtiSwift -->
+  <link rel="icon" href="../assets/favicon.ico" type="image/x-icon" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon-v2.svg" />
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../icons.css">
+  <link rel="stylesheet" href="css/bs-private-icons.css">
+  <link rel="stylesheet" href="css/ai-layout.css">
+  <link rel="stylesheet" href="css/ai-modules.css">
+</head>
+<body>
+
+  <!-- ─── SIDEBAR GAUCHE ─────────────────────────────────────── -->
+  <aside class="ai-sidebar">
+    <div class="ai-sidebar-header">
+      <a href="index.html" class="ai-sidebar-logo">
+        <span>BâtiSwift</span>
+        <span class="badge-ai">AI</span>
+      </a>
+    </div>
+
+    <nav class="ai-sidebar-nav">
+      <div class="ai-nav-category">Général</div>
+      <a href="index.html" class="ai-nav-item active">
+        <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><use href="#ic-grid"/></svg>
+        <span>Tableau de bord</span>
+      </a>
+
+      <div class="ai-nav-category">Modules IA Spécialisés</div>
+      <a href="modules/qualification.html" class="ai-nav-item">
+        <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><use href="#ic-document"/></svg>
+        <span>Analyse Devis</span>
+      </a>
+      <a href="modules/chantier.html" class="ai-nav-item">
+        <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><use href="#ic-mic"/></svg>
+        <span>Assistant Chantier</span>
+      </a>
+      <a href="modules/achats.html" class="ai-nav-item">
+        <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><use href="#ic-cart"/></svg>
+        <span>Contrôle Factures</span>
+      </a>
+      <a href="modules/travaux-sup.html" class="ai-nav-item">
+        <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><use href="#ic-shield"/></svg>
+        <span>Travaux Sup'</span>
+      </a>
+      <a href="modules/coordination.html" class="ai-nav-item">
+        <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><use href="#ic-bell"/></svg>
+        <span>Relances & Planning</span>
+      </a>
+
+      <div class="ai-nav-category">Navigation Externe</div>
+      <a href="../espace-artisan.html" class="ai-nav-item">
+        <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><use href="#ic-briefcase"/></svg>
+        <span>Marketplace Leads</span>
+      </a>
+    </nav>
+
+    <div class="ai-sidebar-footer">
+      <div class="ai-user-card">
+        <div class="ai-user-avatar" id="ai-artisan-avatar">B</div>
+        <div class="ai-user-info">
+          <div class="ai-user-name" id="ai-artisan-name">Chargement...</div>
+          <div class="ai-user-badge">Compte Artisan Pro</div>
+        </div>
+        <button onclick="AIAuth.logout()" title="Déconnexion" style="background:none;border:none;color:#A0AEC0;cursor:pointer;">
+          <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#ic-lock"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ─── CONTENU PRINCIPAL ──────────────────────────────────── -->
+  <div class="ai-main-wrapper">
+    <header class="ai-topbar">
+      <div class="ai-topbar-breadcrumb">
+        <span>BâtiSwift AI</span>
+        <span>/</span>
+        <a href="index.html">Hub des Outils IA</a>
+      </div>
+
+      <div class="ai-topbar-actions">
+        <a href="../espace-artisan.html" class="btn-marketplace">
+          <svg class="bs-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#ic-arrow-left"/></svg>
+          Retour aux Opportunités Chantiers
+        </a>
+      </div>
+    </header>
+
+    <main class="ai-content">
+      <div id="ai-alert-banner"></div>
+
+      <!-- Hero Banner -->
+      <section class="ai-hero">
+        <h1 class="ai-hero-title">
+          <svg class="bs-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#ic-lightning"/></svg>
+          Espace Privé BâtiSwift AI
+        </h1>
+        <p class="ai-hero-desc">
+          Activez et configurez à la carte vos assistants d'intelligence artificielle dédiés aux métiers du BTP. 
+          Gagnez des heures précieuses sur l'administratif, le suivi de chantier et la rentabilité de vos opérations.
+        </p>
+
+        <div class="ai-stats-row">
+          <div class="ai-stat-badge">
+            <svg class="bs-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#ic-check"/></svg>
+            <span id="ai-active-count">Chargement de vos accès...</span>
+          </div>
+          <div class="ai-stat-badge">
+            <svg class="bs-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#ic-shield"/></svg>
+            <span>Facturation individuelle Stripe & Sécurisée</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Grille des modules -->
+      <section>
+        <h2 style="font-size:1.25rem;font-weight:700;margin-bottom:1.25rem;color:var(--bs-dark);">
+          Modules IA disponibles
+        </h2>
+        <div class="ai-modules-grid" id="ai-modules-container">
+          <!-- Injecté dynamiquement par ai-dashboard.js -->
+          <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--bs-text-muted);">
+            Chargement sécurisé des modules de votre compte...
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/bs-private-icons.js" data-sprite></script>
+  <script src="../js/config.js"></script>
+  <script src="js/ai-api.js"></script>
+  <script src="js/ai-auth.js"></script>
+  <script src="js/ai-dashboard.js"></script>
+</body>
+</html>
+

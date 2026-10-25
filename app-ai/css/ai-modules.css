@@ -1,0 +1,294 @@
+/* ============================================================
+   BâtiSwift AI — ai-modules.css
+   Composants d'interface pour les 5 modules et le tableau de bord
+   ============================================================ */
+
+/* ─── EN-TÊTE DU DASHBOARD ────────────────────────────────── */
+.ai-hero {
+  background: linear-gradient(135deg, #FFFFFF 0%, #FAF7F4 100%);
+  border-radius: 16px;
+  padding: 2.25rem;
+  border: 1px solid var(--bs-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--bs-gold) 0%, var(--bs-gold-dark) 100%);
+}
+
+.ai-hero-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--bs-dark);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ai-hero-desc {
+  font-size: 1rem;
+  color: var(--bs-text-muted);
+  max-width: 750px;
+}
+
+.ai-stats-row {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.ai-stat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bs-white);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--bs-border);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* ─── GRILLE DES MODULES ──────────────────────────────────── */
+.ai-modules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.75rem;
+}
+
+.ai-module-card {
+  background: var(--bs-white);
+  border-radius: 14px;
+  border: 1px solid var(--bs-border);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  position: relative;
+}
+
+.ai-module-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border-color: rgba(201, 154, 76, 0.4);
+}
+
+.ai-module-card.card-active {
+  border-top: 4px solid var(--bs-success);
+}
+
+.ai-module-card.card-inactive {
+  border-top: 4px solid #CBD5E0;
+}
+
+.card-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.card-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--bs-cream-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bs-gold-dark);
+  border: 1px solid rgba(201, 154, 76, 0.2);
+}
+
+.card-status-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-active {
+  background: var(--bs-success-bg);
+  color: var(--bs-success);
+  border: 1px solid rgba(27, 135, 63, 0.2);
+}
+
+.badge-inactive {
+  background: var(--bs-cream-soft);
+  color: var(--bs-text-muted);
+  border: 1px solid var(--bs-border);
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--bs-dark);
+  margin-bottom: 0.5rem;
+}
+
+.card-desc {
+  font-size: 0.9rem;
+  color: var(--bs-text-muted);
+  margin-bottom: 1.25rem;
+  line-height: 1.45;
+}
+
+.card-features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.card-features-list li {
+  font-size: 0.85rem;
+  color: #4A5568;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.card-features-list li svg {
+  color: var(--bs-success);
+  flex-shrink: 0;
+}
+
+.card-footer {
+  margin-top: auto;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--bs-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-price {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--bs-dark);
+}
+
+.card-price small {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--bs-text-muted);
+}
+
+.btn-open-module {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bs-dark);
+  color: var(--bs-white);
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-open-module:hover {
+  background: var(--bs-gold-dark);
+  color: var(--bs-white);
+}
+
+.btn-activate-module {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, var(--bs-gold) 0%, var(--bs-gold-dark) 100%);
+  color: var(--bs-white);
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(201, 154, 76, 0.25);
+  transition: all 0.15s ease;
+}
+
+.btn-activate-module:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+/* ─── PAYWALL / ACCÈS VERROUILLÉ DANS LE MODULE ─────────────── */
+.ai-paywall-container {
+  max-width: 650px;
+  margin: 3rem auto;
+  background: var(--bs-white);
+  border-radius: 16px;
+  border: 1px solid var(--bs-border);
+  padding: 2.5rem;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.paywall-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: var(--bs-gold-bg);
+  color: var(--bs-gold-dark);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.paywall-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--bs-dark);
+  margin-bottom: 0.75rem;
+}
+
+.paywall-desc {
+  font-size: 0.95rem;
+  color: var(--bs-text-muted);
+  margin-bottom: 1.75rem;
+  line-height: 1.5;
+}
+
+.paywall-price-box {
+  background: var(--bs-cream-soft);
+  border: 1px solid var(--bs-border);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+  display: inline-block;
+  min-width: 250px;
+}
+
+.paywall-price-val {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--bs-dark);
+}
+
+.paywall-price-period {
+  font-size: 0.85rem;
+  color: var(--bs-text-muted);
+}
+

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BâtiSwift AI — Qualification & Analyse Devis</title>
+
+  <link rel="icon" href="../../assets/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="../../icons.css">
+  <link rel="stylesheet" href="../css/bs-private-icons.css">
+  <link rel="stylesheet" href="../css/ai-layout.css">
+  <link rel="stylesheet" href="../css/ai-modules.css">
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="ai-sidebar">
+    <div class="ai-sidebar-header">
+      <a href="../index.html" class="ai-sidebar-logo">
+        <span>BâtiSwift</span>
+        <span class="badge-ai">AI</span>
+      </a>
+    </div>
+
+    <nav class="ai-sidebar-nav">
+      <div class="ai-nav-category">Général</div>
+      <a href="../index.html" class="ai-nav-item">
+        <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><use href="#ic-grid"/></svg>
+        <span>Tableau de bord</span>
+      </a>
+
+      <div class="ai-nav-category">Modules IA</div>
+      <a href="qualification.html" class="ai-nav-item active">
+        <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><use href="#ic-document"/></svg>
+        <span>Analyse Devis</span>
+      </a>
+      <a href="chantier.html" class="ai-nav-item">
+        <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><use href="#ic-mic"/></svg>
+        <span>Assistant Chantier</span>
+      </a>
+      <a href="achats.html" class="ai-nav-item">
+        <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><use href="#ic-cart"/></svg>
+        <span>Contrôle Factures</span>
+      </a>
+      <a href="travaux-sup.html" class="ai-nav-item">
+        <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><use href="#ic-shield"/></svg>
+        <span>Travaux Sup'</span>
+      </a>
+      <a href="coordination.html" class="ai-nav-item">
+        <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><use href="#ic-bell"/></svg>
+        <span>Relances & Planning</span>
+      </a>
+
+      <div class="ai-nav-category">Navigation Externe</div>
+      <a href="../../espace-artisan.html" class="ai-nav-item">
+        <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><use href="#ic-briefcase"/></svg>
+        <span>Marketplace Leads</span>
+      </a>
+    </nav>
+
+    <div class="ai-sidebar-footer">
+      <div class="ai-user-card">
+        <div class="ai-user-avatar" id="ai-artisan-avatar">B</div>
+        <div class="ai-user-info">
+          <div class="ai-user-name" id="ai-artisan-name">Chargement...</div>
+          <div class="ai-user-badge">Compte Artisan Pro</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTENU -->
+  <div class="ai-main-wrapper">
+    <header class="ai-topbar">
+      <div class="ai-topbar-breadcrumb">
+        <a href="../index.html">BâtiSwift AI</a>
+        <span>/</span>
+        <span>Qualification & Analyse Devis</span>
+      </div>
+      <div class="ai-topbar-actions">
+        <a href="../index.html" class="btn-marketplace">
+          <svg class="bs-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#ic-arrow-left"/></svg>
+          Tous les modules
+        </a>
+      </div>
+    </header>
+
+    <main class="ai-content" id="module-content">
+      <div style="text-align:center;padding:4rem;color:var(--bs-text-muted);">
+        Vérification des droits d'accès au module...
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/bs-private-icons.js" data-sprite></script>
+  <script src="../../js/config.js"></script>
+  <script src="../js/ai-api.js"></script>
+  <script src="../js/ai-auth.js"></script>
+  <script>
+    const MODULE_ID = 'qualification';
+    const MODULE_NAME = 'Qualification & Analyse Devis';
+    const PRICE_EUR = 29;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!AIAuth.init()) return;
+      const container = document.getElementById('module-content');
+
+      try {
+        await AIApi.checkModuleStatus(MODULE_ID);
+        // Accès autorisé côté serveur
+        container.innerHTML = `
+          <div class="ai-hero">
+            <h1 class="ai-hero-title">
+              <svg class="bs-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#ic-document"/></svg>
+              ${MODULE_NAME}
+              <span class="card-status-badge badge-active" style="margin-left:0.75rem;">Module Actif</span>
+            </h1>
+            <p class="ai-hero-desc">
+              Importez vos devis ou dossiers clients (PDF, texte) pour une extraction automatisée des postes, 
+              le contrôle de conformité et l'analyse des risques de chantier.
+            </p>
+          </div>
+
+          <div style="background:var(--bs-white);padding:2rem;border-radius:14px;border:1px solid var(--bs-border);">
+            <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;">Importer un devis ou une demande</h3>
+            <div style="border:2px dashed var(--bs-border);border-radius:12px;padding:3rem;text-align:center;background:var(--bs-cream-soft);cursor:pointer;">
+              <svg class="bs-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--bs-gold);margin-bottom:1rem;"><use href="#ic-document"/></svg>
+              <p style="font-weight:600;margin-bottom:0.25rem;">Glissez-déposez votre devis (PDF, DOCX) ou cliquez pour parcourir</p>
+              <small style="color:var(--bs-text-muted);">Fichiers acceptés jusqu'à 25 Mo • Analyse par le modèle Gemini Pro</small>
+            </div>
+            <div style="margin-top:1.5rem;padding:1rem;background:var(--bs-cream-soft);border-radius:8px;font-size:0.85rem;color:var(--bs-text-muted);">
+              ℹ️ <strong>Socle Phase 1 validé :</strong> Le raccordement fonctionnel du pipeline d'analyse de devis sera développé en Phase 2.
+            </div>
+          </div>
+        `;
+      } catch (err) {
+        // Accès refusé : affichage du paywall individuel
+        container.innerHTML = `
+          <div class="ai-paywall-container">
+            <div class="paywall-icon">
+              <svg class="bs-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#ic-lock"/></svg>
+            </div>
+            <h2 class="paywall-title">${MODULE_NAME}</h2>
+            <p class="paywall-desc">
+              Ce module est actuellement inactif sur votre compte. Activez-le pour analyser automatiquement vos dossiers clients, extraire les postes de travail et identifier les omissions avant signature.
+            </p>
+            <div class="paywall-price-box">
+              <div class="paywall-price-val">${PRICE_EUR}€</div>
+              <div class="paywall-price-period">par mois • sans engagement</div>
+            </div>
+            <div>
+              <button class="btn-activate-module" style="padding:0.75rem 2rem;font-size:1rem;" onclick="handleSubscribe('${MODULE_ID}')">
+                Activer ce module maintenant
+                <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#ic-lightning"/></svg>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+    });
+
+    async function handleSubscribe(moduleId) {
+      try {
+        const res = await AIApi.createCheckoutSession(moduleId);
+        if (res.checkout_url) window.location.href = res.checkout_url;
+      } catch (e) {
+        alert("Erreur lors de l'initialisation Stripe: " + e.message);
+      }
+    }
+  </script>
+</body>
+</html>
+

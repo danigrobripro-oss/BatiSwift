@@ -1,0 +1,9 @@
+/* bs-private-icons.css — utilitaires du pack d'icônes privé BâtiSwift AI.
+   Aucune couleur : les icônes héritent de currentColor. */
+.bs-ic { display: inline-block; flex-shrink: 0; vertical-align: -0.2em; }
+.bs-ic--rot-90  { transform: rotate(90deg); }
+.bs-ic--rot-180 { transform: rotate(180deg); }
+.bs-ic--rot-270 { transform: rotate(270deg); }
+.bs-ic--spin    { animation: bs-ic-spin 0.9s linear infinite; }
+@keyframes bs-ic-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .bs-ic--spin { animation-duration: 3s; } }
