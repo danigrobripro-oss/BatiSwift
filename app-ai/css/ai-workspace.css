@@ -1,0 +1,126 @@
+/* ============================================================
+   BâtiSwift AI — ai-workspace.css
+   Composants des espaces de travail. S'appuie sur les variables de ai-layout.css.
+   Sections : 0 commun · 1 qualification · 2 chantier · 3 achats · 4 travaux sup' · 5 coordination
+   ============================================================ */
+
+/* ── 0. COMMUN ────────────────────────────────────────────── */
+.ai-pagehead { margin-bottom: 1.5rem; }
+.ai-pagehead h1 { font-size: 1.6rem; font-weight: 800; color: var(--bs-dark); }
+.ai-pagehead p { color: var(--bs-text-muted); max-width: 760px; margin-top: .25rem; }
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:.45rem; padding:.55rem 1.1rem; border-radius:8px;
+  border:1px solid var(--bs-border); background: var(--bs-white); color: var(--bs-dark); font-weight:600; font-size:.88rem; cursor:pointer; min-height:40px; }
+.btn:hover { border-color: var(--bs-gold); color: var(--bs-gold-dark); }
+.btn:disabled { opacity:.55; cursor:not-allowed; }
+.btn-primary { background: linear-gradient(135deg, var(--bs-gold), var(--bs-gold-dark)); color:#fff; border-color:transparent; }
+.btn-primary:hover { filter:brightness(1.08); color:#fff; }
+.btn-danger { color: var(--bs-danger); }
+.btn-sm { padding:.3rem .7rem; min-height:32px; font-size:.8rem; }
+.ai-card { background: var(--bs-white); border:1px solid var(--bs-border); border-radius:14px; padding:1.25rem; }
+.ai-card h2, .ai-card h3 { font-size:1.05rem; font-weight:700; margin-bottom:.75rem; color: var(--bs-dark); }
+.ai-field { display:flex; flex-direction:column; gap:.3rem; margin-bottom:.9rem; font-size:.85rem; font-weight:600; }
+.ai-field small { font-weight:400; color: var(--bs-text-muted); }
+.ai-field input, .ai-field select, .ai-field textarea, .ai-input { font: inherit; font-weight:400; padding:.55rem .7rem; border:1px solid var(--bs-border);
+  border-radius:8px; background:#fff; color: var(--bs-text); width:100%; min-height:40px; }
+.ai-field textarea { resize: vertical; min-height: 110px; }
+.ai-field input:focus, .ai-field select:focus, .ai-field textarea:focus { outline:2px solid var(--bs-gold); outline-offset:1px; }
+.ai-row { display:flex; gap:.75rem; flex-wrap:wrap; align-items:center; }
+.ai-actions { display:flex; gap:.6rem; justify-content:flex-end; flex-wrap:wrap; }
+.ai-badge { display:inline-block; font-size:.72rem; font-weight:700; padding:2px 9px; border-radius:20px; white-space:nowrap; }
+.ai-badge-neutral { background:var(--bs-cream-soft); color:var(--bs-text-muted); border:1px solid var(--bs-border); }
+.ai-badge-ok { background:var(--bs-success-bg); color:var(--bs-success); }
+.ai-badge-warn { background:var(--bs-warning-bg); color:var(--bs-warning); }
+.ai-badge-bad { background:var(--bs-danger-bg); color:var(--bs-danger); }
+.ai-badge-gold { background:var(--bs-gold-bg); color:var(--bs-gold-dark); }
+.ai-loading, .ai-empty { text-align:center; color:var(--bs-text-muted); padding:2rem 1rem; font-size:.9rem; }
+.ai-list { margin:.25rem 0 .75rem 1.1rem; display:flex; flex-direction:column; gap:.3rem; font-size:.92rem; }
+.ai-notice { background: var(--bs-warning-bg); border:1px solid var(--bs-warning); color:#7C4A03; border-radius:10px; padding:.75rem 1rem; font-size:.85rem; margin-bottom:1rem; }
+.ai-note-muted { background: var(--bs-cream-soft); border-radius:8px; padding:.7rem .9rem; color:var(--bs-text-muted); font-size:.82rem; }
+.ai-kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:1rem; margin-bottom:1.5rem; }
+.ai-kpi { background:#fff; border:1px solid var(--bs-border); border-radius:12px; padding:1rem 1.1rem; }
+.ai-kpi span { display:block; font-size:.78rem; color:var(--bs-text-muted); }
+.ai-kpi strong { font-size:1.45rem; color:var(--bs-dark); }
+.ai-kpi.warn strong { color: var(--bs-danger); }
+.ai-table-wrap { overflow-x:auto; }
+.ai-table { width:100%; border-collapse:collapse; font-size:.88rem; }
+.ai-table th { text-align:left; font-size:.72rem; text-transform:uppercase; letter-spacing:.5px; color:var(--bs-text-muted); padding:.55rem .6rem; border-bottom:1px solid var(--bs-border); }
+.ai-table td { padding:.6rem; border-bottom:1px solid var(--bs-border); vertical-align:top; }
+.ai-table .num { text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; }
+.ai-tabs { display:flex; gap:.25rem; border-bottom:1px solid var(--bs-border); margin-bottom:1rem; overflow-x:auto; }
+.ai-tab { background:none; border:none; padding:.6rem .9rem; font:inherit; font-weight:600; color:var(--bs-text-muted); cursor:pointer; border-bottom:3px solid transparent; white-space:nowrap; }
+.ai-tab.active { color:var(--bs-dark); border-bottom-color:var(--bs-gold); }
+.ai-tab-count { margin-left:.4rem; background:var(--bs-gold-bg); color:var(--bs-gold-dark); border-radius:10px; padding:0 7px; font-size:.72rem; }
+.ai-drop { border:2px dashed var(--bs-border); border-radius:12px; background:var(--bs-cream-soft); text-align:center; padding:1.5rem 1rem; cursor:pointer; display:flex; flex-direction:column; gap:.25rem; }
+.ai-drop.over, .ai-drop:focus-visible { border-color:var(--bs-gold); background:var(--bs-gold-bg); outline:none; }
+.ai-drop small { color:var(--bs-text-muted); }
+#ai-toasts { position:fixed; right:1rem; bottom:1rem; display:flex; flex-direction:column; gap:.5rem; z-index:400; max-width:min(92vw,380px); }
+.ai-toast { background:var(--bs-dark); color:#fff; padding:.7rem 1rem; border-radius:10px; font-size:.88rem; box-shadow:0 8px 24px rgba(0,0,0,.2); }
+.ai-toast-success { background:var(--bs-success); } .ai-toast-error { background:var(--bs-danger); }
+.ai-modal-overlay { position:fixed; inset:0; background:rgba(30,35,42,.6); z-index:300; display:flex; align-items:center; justify-content:center; padding:1rem; }
+.ai-modal { background:#fff; border-radius:14px; width:100%; max-width:480px; max-height:92vh; overflow:auto; }
+.ai-modal.wide { max-width:720px; }
+.ai-modal-head { display:flex; justify-content:space-between; align-items:center; padding:1rem 1.25rem; border-bottom:1px solid var(--bs-border); }
+.ai-modal-head h3 { font-size:1.05rem; }
+.ai-x { background:none; border:none; font-size:1.6rem; line-height:1; cursor:pointer; color:var(--bs-text-muted); min-width:40px; min-height:40px; }
+.ai-modal-body { padding:1.25rem; }
+
+/* ── 1. QUALIFICATION : dossier à gauche, rapport à droite ── */
+.qa-grid { display:grid; grid-template-columns:minmax(300px,380px) 1fr; gap:1.5rem; align-items:start; }
+.qa-history { margin-top:1.25rem; display:flex; flex-direction:column; gap:.4rem; max-height:340px; overflow:auto; }
+.qa-hist-item { text-align:left; background:var(--bs-cream-soft); border:1px solid var(--bs-border); border-radius:8px; padding:.55rem .7rem; cursor:pointer; font:inherit; }
+.qa-hist-item.active { border-color:var(--bs-gold); background:var(--bs-gold-bg); }
+.qa-hist-item small { display:block; color:var(--bs-text-muted); }
+.qa-report-head { display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:1rem; }
+.qa-anom { border-left:4px solid var(--bs-warning); background:var(--bs-warning-bg); padding:.6rem .8rem; border-radius:6px; margin-bottom:.5rem; font-size:.9rem; }
+.qa-anom.info { border-left-color:var(--bs-text-muted); background:var(--bs-cream-soft); }
+
+/* ── 2. CHANTIER : terrain, mobile d'abord, gros boutons ──── */
+.ch-bar { display:flex; gap:.6rem; align-items:center; margin-bottom:1rem; }
+.ch-bar select { flex:1; font:inherit; padding:.7rem; border:1px solid var(--bs-border); border-radius:10px; min-height:48px; background:#fff; }
+.ch-actions { display:grid; grid-template-columns:repeat(3,1fr); gap:.75rem; margin-bottom:1.25rem; }
+.ch-act { display:flex; flex-direction:column; align-items:center; gap:.3rem; padding:1rem .5rem; min-height:84px; border-radius:14px; border:1px solid var(--bs-border);
+  background:#fff; font:inherit; font-weight:700; color:var(--bs-dark); cursor:pointer; font-size:1rem; }
+.ch-act:hover { border-color:var(--bs-gold); background:var(--bs-gold-bg); }
+.ch-act .ico { font-size:1.6rem; }
+.ch-day { font-size:.78rem; text-transform:uppercase; letter-spacing:1px; color:var(--bs-text-muted); font-weight:700; margin:1.25rem 0 .5rem; }
+.ch-feed { display:flex; flex-direction:column; gap:.6rem; border-left:3px solid var(--bs-gold-bg); padding-left:.9rem; }
+.ch-item { background:#fff; border:1px solid var(--bs-border); border-radius:12px; padding:.8rem .95rem; }
+.ch-item-head { display:flex; justify-content:space-between; gap:.5rem; font-size:.78rem; color:var(--bs-text-muted); margin-bottom:.35rem; align-items:center; }
+.ch-item p { white-space:pre-wrap; font-size:.95rem; }
+.ch-item.cr { border-left:4px solid var(--bs-gold); background:var(--bs-cream-soft); }
+.ch-rec { text-align:center; font-size:2rem; font-variant-numeric:tabular-nums; margin:1rem 0; }
+.ch-rec.on { color:var(--bs-danger); }
+@media (max-width:900px) { .ch-actions { position:sticky; bottom:.5rem; z-index:20; background:var(--bs-cream); padding:.5rem 0; margin:0 0 .5rem; } }
+
+/* ── 3. ACHATS : tableau de bord financier ────────────────── */
+.ac-sites { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1rem; margin-bottom:1.5rem; }
+.ac-bar { height:10px; border-radius:6px; background:var(--bs-cream); overflow:hidden; margin:.6rem 0; }
+.ac-bar > i { display:block; height:100%; background:var(--bs-success); }
+.ac-bar.vigilance > i { background:var(--bs-warning); } .ac-bar.depassement > i { background:var(--bs-danger); }
+.ac-nums { display:flex; justify-content:space-between; font-size:.85rem; gap:.5rem; flex-wrap:wrap; }
+.ac-detail td { background:var(--bs-cream-soft); }
+.ac-row { cursor:pointer; } .ac-row:hover td { background:var(--bs-gold-bg); }
+
+/* ── 4. TRAVAUX SUP' : comparaison avant/après + avenant ──── */
+.ts-compare { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; }
+.ts-col { border-top:4px solid var(--bs-text-muted); } .ts-col.after { border-top-color:var(--bs-gold); }
+.ts-steps { display:flex; gap:.5rem; margin-bottom:1.25rem; flex-wrap:wrap; }
+.ts-step { background:#fff; border:1px solid var(--bs-border); border-radius:20px; padding:.3rem .9rem; font-size:.82rem; font-weight:600; color:var(--bs-text-muted); }
+.ts-step.on { background:var(--bs-dark); color:#fff; border-color:var(--bs-dark); }
+.ts-diff td:first-child { width:36px; }
+.ts-just { color:var(--bs-text-muted); font-size:.82rem; margin-top:.2rem; }
+.ts-editor { width:100%; min-height:380px; font-family:Georgia,'Times New Roman',serif; font-size:.98rem; line-height:1.6; padding:1.25rem; border:1px solid var(--bs-border); border-radius:10px; background:#fff; }
+
+/* ── 5. COORDINATION : tableau d'actions + chronologie ────── */
+.co-board { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; align-items:start; }
+.co-col h3 { font-size:.8rem; text-transform:uppercase; letter-spacing:1px; color:var(--bs-text-muted); margin-bottom:.6rem; display:flex; justify-content:space-between; }
+.co-col.late h3 { color:var(--bs-danger); }
+.co-stack { display:flex; flex-direction:column; gap:.6rem; }
+.co-card { background:#fff; border:1px solid var(--bs-border); border-radius:12px; padding:.85rem; }
+.co-card.late { border-left:4px solid var(--bs-danger); }
+.co-card strong { display:block; } .co-card small { color:var(--bs-text-muted); display:block; margin:.15rem 0 .5rem; }
+.co-card .ai-row { gap:.4rem; }
+.co-log { border-left:3px solid var(--bs-gold-bg); padding-left:.7rem; margin-top:.8rem; display:flex; flex-direction:column; gap:.4rem; font-size:.85rem; }
+
+@media (max-width:1100px) { .co-board { grid-template-columns:1fr; } }
+@media (max-width:900px) { .qa-grid, .ts-compare { grid-template-columns:1fr; } }

@@ -10,11 +10,13 @@
   <link rel="stylesheet" href="../css/bs-private-icons.css">
   <link rel="stylesheet" href="../css/ai-layout.css">
   <link rel="stylesheet" href="../css/ai-modules.css">
+  <link rel="stylesheet" href="../css/ai-workspace.css">
 </head>
 <body>
 
   <!-- SIDEBAR -->
-  <aside class="ai-sidebar">
+  <div class="ai-overlay" id="ai-overlay"></div>
+  <aside class="ai-sidebar" id="ai-sidebar">
     <div class="ai-sidebar-header">
       <a href="../index.html" class="ai-sidebar-logo">
         <span>BâtiSwift</span>
@@ -56,6 +58,10 @@
         <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><use href="#ic-briefcase"/></svg>
         <span>Marketplace Leads</span>
       </a>
+      <a href="../../tarifs.html" class="ai-nav-item">
+        <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><use href="#ic-payment"/></svg>
+        <span>Tarifs & abonnements</span>
+      </a>
     </nav>
 
     <div class="ai-sidebar-footer">
@@ -73,6 +79,7 @@
   <div class="ai-main-wrapper">
     <header class="ai-topbar">
       <div class="ai-topbar-breadcrumb">
+        <button type="button" class="ai-menu-toggle" id="ai-menu-toggle" aria-label="Ouvrir le menu" aria-controls="ai-sidebar" aria-expanded="false"><span></span><span></span><span></span></button>
         <a href="../index.html">BâtiSwift AI</a>
         <span>/</span>
         <span>Assistant de Chantier</span>
@@ -96,95 +103,9 @@
   <script src="../../js/config.js"></script>
   <script src="../js/ai-api.js"></script>
   <script src="../js/ai-auth.js"></script>
-  <script>
-    const MODULE_ID = 'chantier';
-    const MODULE_NAME = 'Assistant de Chantier';
-    const PRICE_EUR = 49;
-
-    document.addEventListener('DOMContentLoaded', async () => {
-      if (!AIAuth.init()) return;
-      const container = document.getElementById('module-content');
-
-      try {
-        await AIApi.checkModuleStatus(MODULE_ID);
-        // Accès autorisé côté serveur
-        container.innerHTML = `
-          <div class="ai-hero">
-            <h1 class="ai-hero-title">
-              <svg class="bs-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#ic-mic"/></svg>
-              ${MODULE_NAME}
-              <span class="card-status-badge badge-active" style="margin-left:0.75rem;">Module Actif</span>
-            </h1>
-            <p class="ai-hero-desc">
-              Dictez vos observations sur le terrain et téléchargez les photos de vos ouvrages. 
-              L'IA génère en temps réel des comptes-rendus d'avancement normés et datés.
-            </p>
-          </div>
-
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
-            <div style="background:var(--bs-white);padding:2rem;border-radius:14px;border:1px solid var(--bs-border);">
-              <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;">
-                <svg class="bs-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#ic-mic"/></svg>
-                Dictée vocale de chantier
-              </h3>
-              <p style="font-size:0.9rem;color:var(--bs-text-muted);margin-bottom:1.5rem;">Enregistrez votre mémo vocal directement depuis votre mobile sur le chantier.</p>
-              <button style="display:flex;align-items:center;gap:0.5rem;padding:0.75rem 1.5rem;border-radius:8px;background:var(--bs-gold);color:#fff;border:none;font-weight:600;cursor:pointer;">
-                <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#ic-mic"/></svg>
-                Démarrer un enregistrement
-              </button>
-            </div>
-
-            <div style="background:var(--bs-white);padding:2rem;border-radius:14px;border:1px solid var(--bs-border);">
-              <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;">
-                <svg class="bs-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#ic-camera"/></svg>
-                Photos & Constats visuels
-              </h3>
-              <p style="font-size:0.9rem;color:var(--bs-text-muted);margin-bottom:1.5rem;">Ajoutez les photos de l'avancement pour analyse visuelle par l'IA.</p>
-              <button style="display:flex;align-items:center;gap:0.5rem;padding:0.75rem 1.5rem;border-radius:8px;background:var(--bs-dark);color:#fff;border:none;font-weight:600;cursor:pointer;">
-                <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#ic-camera"/></svg>
-                Ajouter des photos
-              </button>
-            </div>
-          </div>
-          <div style="margin-top:1.5rem;padding:1rem;background:var(--bs-cream-soft);border-radius:8px;font-size:0.85rem;color:var(--bs-text-muted);">
-            ℹ️ <strong>Socle Phase 1 validé :</strong> Le pipeline multimodal audio/vision complet sera activé en Phase 2.
-          </div>
-        `;
-      } catch (err) {
-        // Accès refusé : affichage du paywall individuel
-        container.innerHTML = `
-          <div class="ai-paywall-container">
-            <div class="paywall-icon">
-              <svg class="bs-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#ic-lock"/></svg>
-            </div>
-            <h2 class="paywall-title">${MODULE_NAME}</h2>
-            <p class="paywall-desc">
-              Transformez vos mémos vocaux et photos de chantier en comptes-rendus professionnels et partageables à vos clients sans perdre de temps le soir au bureau.
-            </p>
-            <div class="paywall-price-box">
-              <div class="paywall-price-val">${PRICE_EUR}€</div>
-              <div class="paywall-price-period">par mois • sans engagement</div>
-            </div>
-            <div>
-              <button class="btn-activate-module" style="padding:0.75rem 2rem;font-size:1rem;" onclick="handleSubscribe('${MODULE_ID}')">
-                Activer ce module maintenant
-                <svg class="bs-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#ic-lightning"/></svg>
-              </button>
-            </div>
-          </div>
-        `;
-      }
-    });
-
-    async function handleSubscribe(moduleId) {
-      try {
-        const res = await AIApi.createCheckoutSession(moduleId);
-        if (res.checkout_url) window.location.href = res.checkout_url;
-      } catch (e) {
-        alert("Erreur lors de l'initialisation Stripe: " + e.message);
-      }
-    }
-  </script>
+  <script src="../js/ai-nav.js"></script>
+  <script src="../js/ai-ui.js"></script>
+  <script src="../js/modules/chantier.js"></script>
 </body>
 </html>
 
