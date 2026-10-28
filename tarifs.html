@@ -1,17 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tarifs – BâtiSwift</title>
+  <title>Tarifs – BâtiSwift Pro</title>
 
-  <!-- ─── FAVICON ─── -->
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg" />
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg" />
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="manifest" href="/assets/site.webmanifest" />
   <meta name="theme-color" content="#F5F0EB" />
@@ -20,499 +17,655 @@
   <link rel="stylesheet" href="/icons.css">
 
   <style>
-    /* ============================================================
-       PAGE TARIFAIRE – Design moderne et conversion
-       ============================================================ */
+    /* ── HERO ────────────────────────────────────────── */
     .pricing-hero {
       padding: calc(var(--header-h) + 60px) 0 20px;
       text-align: center;
     }
     .pricing-hero h1 {
       font-family: var(--font-display);
-      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-size: clamp(2.2rem, 4.5vw, 3.4rem);
       font-weight: 700;
       margin-bottom: 1rem;
       line-height: 1.2;
     }
-    .pricing-hero .hero-accent {
-      color: var(--or);
-    }
+    .pricing-hero .hero-accent { color: var(--or); }
     .pricing-hero .subhead {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       color: var(--gris);
-      max-width: 700px;
-      margin: 0 auto 3rem;
+      max-width: 720px;
+      margin: 0 auto 2.5rem;
       line-height: 1.7;
     }
 
-    /* Grille des offres */
-    .pricing-grid {
+    /* ── GRILLE MODULES ─────────────────────────────── */
+    .modules-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-      max-width: 1000px;
-      margin: 0 auto 3rem;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1240px;
+      margin: 0 auto 2rem;
+      padding: 0 1.25rem;
     }
-    .pricing-column {
+
+    .module-card {
+      position: relative;
       background: var(--blanc);
-      padding: 3rem 2.5rem;
+      border: 2px solid var(--beige-dark);
+      border-radius: var(--radius-xl);
+      padding: 2rem 1.75rem 1.75rem;
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
       display: flex;
       flex-direction: column;
+      user-select: none;
     }
-    .pricing-column:first-child {
-      border-radius: var(--radius-xl) 0 0 var(--radius-xl);
+    .module-card:hover:not(.active-module) {
+      border-color: var(--or);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(201,168,76,0.18);
+    }
+    .module-card.selected {
+      border-color: var(--or);
       background: linear-gradient(180deg, #FFFFFF 0%, #FFFDF5 100%);
-      border: 2px solid var(--or);
-      box-shadow: 0 20px 60px rgba(201,168,76,0.15);
-      position: relative;
-      z-index: 1;
+      box-shadow: 0 12px 32px rgba(201,168,76,0.25);
     }
-    .pricing-column:last-child {
-      border-radius: 0 var(--radius-xl) var(--radius-xl) 0;
-      border: 1px solid var(--beige-dark);
-      border-left: 0;
+    .module-card.active-module {
+      border-color: var(--success);
+      background: linear-gradient(180deg, #FFFFFF 0%, #F0F9F4 100%);
+      cursor: not-allowed;
+      opacity: .85;
     }
-    .popular-badge {
+
+    .module-checkbox {
       position: absolute;
-      top: -16px;
-      right: 30px;
-      background: var(--or);
-      color: var(--blanc);
-      font-size: 0.8rem;
-      font-weight: 700;
-      padding: 6px 20px;
-      border-radius: 20px;
-      letter-spacing: 0.5px;
-      box-shadow: 0 6px 20px rgba(201,168,76,0.4);
+      top: 1.25rem;
+      right: 1.25rem;
+      width: 22px;
+      height: 22px;
+      cursor: pointer;
+      accent-color: var(--or);
     }
-    .plan-name {
+    .active-module .module-checkbox { display: none; }
+
+    .active-badge {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: var(--success);
+      color: #fff;
+      font-size: .7rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 12px;
+      letter-spacing: .3px;
+    }
+
+    .module-icon {
+      width: 48px;
+      height: 48px;
+      background: #F5F0EB;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      color: var(--or);
+    }
+    .module-icon svg { width: 26px; height: 26px; }
+
+    .module-name {
       font-family: var(--font-display);
-      font-size: 1.5rem;
+      font-size: 1.15rem;
       font-weight: 700;
-      margin-bottom: 0.2rem;
+      margin-bottom: .5rem;
+      color: var(--anthracite);
+      padding-right: 2rem;
+      line-height: 1.3;
     }
-    .plan-price {
-      font-size: 2.6rem;
+    .module-desc {
+      font-size: .88rem;
+      color: var(--gris);
+      line-height: 1.55;
+      margin-bottom: 1rem;
+    }
+    .module-features {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1.25rem;
+      flex-grow: 1;
+    }
+    .module-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: .5rem;
+      font-size: .82rem;
+      color: var(--anthracite);
+      padding: .3rem 0;
+      line-height: 1.5;
+    }
+    .module-features .check {
+      color: var(--success);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .module-price {
+      font-size: 1.8rem;
       font-weight: 800;
       color: var(--anthracite);
-      margin-bottom: 0.5rem;
+      margin-top: auto;
     }
-    .plan-price small {
-      font-size: 0.95rem;
+    .module-price small {
+      font-size: .85rem;
       font-weight: 400;
       color: var(--gris);
     }
-    .plan-desc {
-      font-size: 0.9rem;
-      color: var(--gris);
-      margin-bottom: 1.5rem;
-      line-height: 1.6;
-    }
-    .plan-divider {
-      height: 1px;
-      background: var(--beige-dark);
-      margin: 1.5rem 0;
-    }
-    .feature-list {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 2rem;
-      flex: 1;
-    }
-    .feature-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.7rem;
-      padding: 0.55rem 0;
-      font-size: 0.9rem;
-      color: var(--anthracite);
-    }
-    .feature-icon {
-      font-size: 1.1rem;
-      width: 1.1rem;
-      height: 1.1rem;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 2px;
-      line-height: 1;
-    }
-    .feature-icon.check { color: var(--success); }
-    .feature-icon.cross { color: var(--gris-light); }
-    .feature-icon.star { color: var(--or); }
-    .feature-icon svg { width: 1.1rem; height: 1.1rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; display: block; margin: 0 auto; }
 
-    .plan-cta {
-      margin-top: auto;
-    }
+    /* ── BARRE DE SÉLECTION (fixe) ─────────────────── */
+    body { padding-bottom: 140px; }
 
-    /* Bloc de rentabilité */
-    .rentability-box {
-      max-width: 1000px;
-      margin: 0 auto 2rem;
-      background: linear-gradient(135deg, var(--anthracite2) 0%, #1a1a1a 100%);
+    .modules-summary {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 32px);
+      max-width: 900px;
+      background: var(--blanc);
+      border: 2px solid var(--or);
       border-radius: var(--radius-xl);
+      padding: 1.15rem 1.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+      box-shadow: 0 12px 40px rgba(0,0,0,.15);
+      z-index: 100;
+    }
+    .summary-info { display: flex; flex-direction: column; gap: .2rem; }
+    .summary-count { font-size: .82rem; color: var(--gris); font-weight: 500; }
+    .summary-total { font-size: 1.5rem; font-weight: 800; color: var(--anthracite); }
+    .summary-total small { font-size: .85rem; font-weight: 400; color: var(--gris); }
+
+    /* ── BLOC INFO / À L'ACTE ──────────────────────── */
+    .info-acte {
+      max-width: 1000px;
+      margin: 2rem auto;
       padding: 2rem 2.5rem;
+      background: linear-gradient(135deg, #2B2B2B 0%, #1a1a1a 100%);
+      color: #fff;
+      border-radius: var(--radius-xl);
       display: flex;
       align-items: center;
       gap: 2rem;
-      color: var(--blanc);
     }
-    .rentability-icon {
-      font-size: 3rem;
+    .info-acte-icon { font-size: 2.5rem; flex-shrink: 0; }
+    .info-acte-icon svg {
+      width: 3rem; height: 3rem;
+      fill: none; stroke: currentColor;
+      stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
     }
-    .rentability-icon svg { width: 3rem; height: 3rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; display: block; margin: 0 auto; }
-    .rentability-text h3 {
+    .info-acte h3 {
       font-family: var(--font-display);
-      font-size: 1.4rem;
-      margin-bottom: 0.3rem;
+      font-size: 1.3rem;
+      margin-bottom: .3rem;
       color: var(--or-light);
     }
-    .rentability-text p {
-      font-size: 0.95rem;
-      color: rgba(255,255,255,0.7);
-      margin: 0;
+    .info-acte p {
+      font-size: .92rem;
+      color: rgba(255,255,255,.75);
+      margin: 0 0 .8rem;
+    }
+    .info-acte a.btn-acte {
+      display: inline-block;
+      background: var(--or);
+      color: #fff;
+      padding: .6rem 1.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: .9rem;
     }
 
-    /* Barre de réassurance */
+    /* ── BARRE DE RÉASSURANCE ──────────────────────── */
     .trust-bar {
       max-width: 1000px;
-      margin: 0 auto 4rem;
+      margin: 1rem auto 3rem;
       display: flex;
       justify-content: center;
-      gap: 3rem;
+      gap: 2.5rem;
       flex-wrap: wrap;
       text-align: center;
     }
     .trust-item {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-      font-size: 0.9rem;
+      gap: .6rem;
+      font-size: .88rem;
       color: var(--gris);
     }
-    .trust-item .icon {
-      font-size: 1.5rem;
+    .trust-item .icon svg {
+      width: 1.4rem; height: 1.4rem;
+      fill: none; stroke: currentColor;
+      stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
     }
-    .trust-item .icon svg { width: 1.5rem; height: 1.5rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; display: block; margin: 0 auto; }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      .pricing-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+    /* ── RESPONSIVE ────────────────────────────────── */
+    @media (max-width: 640px) {
+      .modules-summary {
+        flex-direction: column;
+        padding: 1rem 1.25rem;
+        gap: .75rem;
+        bottom: 10px;
       }
-      .pricing-column:first-child,
-      .pricing-column:last-child {
-        border-radius: var(--radius-xl);
-        border: 1px solid var(--beige-dark);
-      }
-      .pricing-column:first-child {
-        border: 2px solid var(--or);
-      }
-      .rentability-box {
+      .modules-summary .btn { width: 100%; }
+      body { padding-bottom: 190px; }
+      .info-acte {
         flex-direction: column;
         text-align: center;
         padding: 1.5rem;
       }
     }
   </style>
+
   <script src="/icons.js"></script>
 </head>
-<body>  <!-- Sprite SVG BâtiSwift (52 icônes officielles) -->
+<body>
+  <!-- Sprite SVG BâtiSwift + 4 icônes IA (ic-mic, ic-cart, ic-shield, ic-bell) -->
   <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute;display:none" aria-hidden="true" focusable="false">
     <symbol id="ic-accueil" viewBox="0 0 24 24"><path d="M3.5 11.5 12 4l8.5 7.5"/><path d="M5.5 10V20h13V10"/><path d="M10 20v-5h4v5"/></symbol>
     <symbol id="ic-achats" viewBox="0 0 24 24"><path d="M5.5 8h13l1 11.5a1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1z"/><path d="M9 8V7a3 3 0 0 1 6 0v1"/></symbol>
-    <symbol id="ic-aide" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.6 2.2c-.7.4-1.1.9-1.1 1.8M12 16.8h.01"/></symbol>
-    <symbol id="ic-briefcase" viewBox="0 0 24 24"><rect x="3.5" y="7.5" width="17" height="12" rx="2.5"/><path d="M9 7.5V6a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 6v1.5M3.5 13h17M10.5 13v1.5h3V13"/></symbol>
-    <symbol id="ic-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
-    <symbol id="ic-camera" viewBox="0 0 24 24"><path d="M4.5 8h2.5l1.5-2.5h7L17 8h2.5a1 1 0 0 1 1 1v9.5a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></symbol>
-    <symbol id="ic-carte" viewBox="0 0 24 24"><path d="M9 5 3.5 7v13L9 18l5 1.7M9 5v13"/><path d="M17.5 13s3-2.6 3-5.4a3 3 0 0 0-6 0c0 2.8 3 5.4 3 5.4z"/><circle cx="17.5" cy="7.6" r="1"/></symbol>
-    <symbol id="ic-chart" viewBox="0 0 24 24"><path d="M6 20v-6M12 20V5M18 20v-9"/></symbol>
     <symbol id="ic-chat" viewBox="0 0 24 24"><path d="M3.5 6.5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H11l-4.5 3.5V16.5h-1a2 2 0 0 1-2-2z"/><path d="M8 9.5h8M8 13h5"/></symbol>
     <symbol id="ic-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.7 2.7L16 9.5"/></symbol>
-    <symbol id="ic-clipboard" viewBox="0 0 24 24"><rect x="5" y="4.5" width="14" height="16.5" rx="2.5"/><rect x="9" y="2.5" width="6" height="4" rx="1.5"/><path d="M9 11h6M9 15h4"/></symbol>
     <symbol id="ic-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
     <symbol id="ic-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
-    <symbol id="ic-credit-card" viewBox="0 0 24 24"><rect x="2.5" y="5.5" width="19" height="13" rx="3"/><path d="M2.5 10h19M6.5 14.5h4"/></symbol>
-    <symbol id="ic-dashboard" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="3.5"/><path d="M10 3.5v17M10 12h10.5"/></symbol>
-    <symbol id="ic-deconnexion" viewBox="0 0 24 24"><path d="M9.5 4h-3a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h3"/><path d="m15 8 4 4-4 4M19 12H9.5"/></symbol>
     <symbol id="ic-document" viewBox="0 0 24 24"><path d="M6.5 3.5h7l6 6v9a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2z"/><path d="M13.5 3.5V8a1.5 1.5 0 0 0 1.5 1.5h4.5M8 13h8M8 16.5h5"/></symbol>
-    <symbol id="ic-error" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/></symbol>
-    <symbol id="ic-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></symbol>
-    <symbol id="ic-eye-off" viewBox="0 0 24 24"><path d="M10.5 5.7A9 9 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a16 16 0 0 1-2.2 3M6.6 7.1A15.5 15.5 0 0 0 2.5 12S6 18.5 12 18.5c1.6 0 3-.4 4.2-1M9.9 9.9a3 3 0 0 0 4.2 4.2M3.5 3.5l17 17"/></symbol>
-    <symbol id="ic-fire" viewBox="0 0 24 24"><path d="M12 21c3.9 0 6.5-2.6 6.5-6.2 0-2.6-1.4-4.4-2.8-6-.6 1.4-1.5 2.2-2.5 2.6.4-3-.8-5.4-3.2-7.4-.4 3.8-4.5 6.2-4.5 10.8C5.5 18.4 8.1 21 12 21z"/></symbol>
-    <symbol id="ic-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></symbol>
-    <symbol id="ic-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="m5.6 5.6 3.9 3.9M14.5 14.5l3.9 3.9M18.4 5.6l-3.9 3.9M9.5 14.5l-3.9 3.9"/></symbol>
-    <symbol id="ic-ia-robot" viewBox="0 0 24 24"><rect x="4.5" y="8" width="15" height="11" rx="3.5"/><path d="M12 8V5"/><circle cx="12" cy="4" r="1"/><path d="M9 12.5V14M15 12.5V14M9.5 16.5h5M2.5 12.5v3M21.5 12.5v-3v6"/></symbol>
-    <symbol id="ic-inbox-empty" viewBox="0 0 24 24"><path d="m3.5 13.5 2.5-8a1.5 1.5 0 0 1 1.4-1h9.2a1.5 1.5 0 0 1 1.4 1l2.5 8"/><path d="M3.5 13.5v4a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2v-4h-5l-1.2 2H8.7l-1.2-2z"/></symbol>
-    <symbol id="ic-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5h.01"/></symbol>
-    <symbol id="ic-lightning" viewBox="0 0 24 24"><path d="M13 3 5 13.5h6L10 21l8-10.5h-6z"/></symbol>
-    <symbol id="ic-list" viewBox="0 0 24 24"><path d="M9 6.5h11.5M9 12h11.5M9 17.5h11.5M4.5 6.5h.01M4.5 12h.01M4.5 17.5h.01"/></symbol>
-    <symbol id="ic-loader" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9"/></symbol>
-    <symbol id="ic-location-pin" viewBox="0 0 24 24"><path d="M12 21s6.5-5.6 6.5-11a6.5 6.5 0 0 0-13 0c0 5.4 6.5 11 6.5 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
     <symbol id="ic-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5M12 14.5v2"/></symbol>
-    <symbol id="ic-mail" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="3"/><path d="m3.5 8 8.5 6 8.5-6"/></symbol>
-    <symbol id="ic-map" viewBox="0 0 24 24"><path d="M9 4.5 3.5 6.5v13L9 17.5l6 2 5.5-2v-13L15 6.5z"/><path d="M9 4.5v13M15 6.5v13"/></symbol>
+    <symbol id="ic-lightning" viewBox="0 0 24 24"><path d="M13 3 5 13.5h6L10 21l8-10.5h-6z"/></symbol>
     <symbol id="ic-marketplace" viewBox="0 0 24 24"><path d="M3.5 9.5 5 4h14l1.5 5.5"/><path d="M3.5 9.5a2.75 2.75 0 0 0 5.5 0 3 3 0 0 0 6 0 2.75 2.75 0 0 0 5.5 0"/><path d="M5 12.5V20h14v-7.5"/><path d="M10 20v-4.5h4V20"/></symbol>
-    <symbol id="ic-money" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.2c-.4-.9-1.4-1.4-2.5-1.4-1.4 0-2.5.7-2.5 1.9 0 2.6 5 1.4 5 4 0 1.2-1.1 1.9-2.5 1.9-1.1 0-2.2-.5-2.6-1.5M12 6.3v1.5M12 16.2v1.5"/></symbol>
-    <symbol id="ic-nouvelle-demande" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><path d="M12 8v8M8 12h8"/></symbol>
-    <symbol id="ic-package" viewBox="0 0 24 24"><path d="M12 3.5 20 7.5v9l-8 4-8-4v-9z"/><path d="m4 7.5 8 4 8-4M12 11.5v9"/></symbol>
-    <symbol id="ic-parametres" viewBox="0 0 24 24"><path d="M4 6h8M16 6h4M4 12h3M11 12h9M4 18h9M17 18h3"/><circle cx="14" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="15" cy="18" r="2"/></symbol>
-    <symbol id="ic-phone" viewBox="0 0 24 24"><path d="M6.5 3.5h2.8l1.5 4-2 1.3a11 11 0 0 0 5.4 5.4l1.3-2 4 1.5v2.8a2 2 0 0 1-2 2A15.5 15.5 0 0 1 4.5 5.5a2 2 0 0 1 2-2z"/></symbol>
-    <symbol id="ic-refresh" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 0 1-13 5.1M4.5 12a7.5 7.5 0 0 1 13-5.1M18 3.5v4h-4M6 20.5v-4h4"/></symbol>
-    <symbol id="ic-rocket" viewBox="0 0 24 24"><path d="M12 3c3.2 2 5 5.2 5 9v3.5H7V12c0-3.8 1.8-7 5-9z"/><circle cx="12" cy="9.5" r="1.5"/><path d="M7 12.5 4.5 15.5V18L7 16.5M17 12.5l2.5 3V18L17 16.5M10 18.5l2 3 2-3"/></symbol>
-    <symbol id="ic-save" viewBox="0 0 24 24"><path d="M5.5 3.5h11l3 3v11a2 2 0 0 1-2 2h-12a2 2 0 0 1-2-2v-12a2 2 0 0 1 2-2z"/><path d="M8 3.5v4.5h7V3.5M7.5 20.5v-6h9v6"/></symbol>
-    <symbol id="ic-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></symbol>
-    <symbol id="ic-siren" viewBox="0 0 24 24"><path d="M6.5 18v-5a5.5 5.5 0 0 1 11 0v5"/><rect x="4.5" y="18" width="15" height="3" rx="1"/><path d="M12 3v1.5M4.5 6l1 1M19.5 6l-1 1M3 12h1.5M19.5 12H21"/></symbol>
-    <symbol id="ic-sparkles" viewBox="0 0 24 24"><path d="M11 3.5 13 9.5 19 11.5 13 13.5 11 19.5 9 13.5 3 11.5 9 9.5z"/><path d="M19 3.5v3M17.5 5h3"/></symbol>
-    <symbol id="ic-star" viewBox="0 0 24 24"><path d="m12 3.8 2.4 5 5.4.7-4 3.7 1 5.4-4.8-2.7-4.8 2.7 1-5.4-4-3.7 5.4-.7z"/></symbol>
-    <symbol id="ic-stripe" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><path d="M15 9.2c0-1-1.3-1.7-3-1.7S9 8.2 9 9.3c0 2.7 6 1.4 6 4.2 0 1.1-1.3 1.8-3 1.8s-3-.7-3-1.7"/></symbol>
-    <symbol id="ic-tarifs" viewBox="0 0 24 24"><path d="M3.5 4.5a1 1 0 0 1 1-1h6.6a1 1 0 0 1 .7.3l8.4 8.4a1 1 0 0 1 0 1.4l-6.6 6.6a1 1 0 0 1-1.4 0L3.8 11.8a1 1 0 0 1-.3-.7z"/><circle cx="8" cy="8" r="1.25"/></symbol>
-    <symbol id="ic-tick" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
-    <symbol id="ic-trouver-artisan" viewBox="0 0 24 24"><path d="M7 9.5a5 5 0 0 1 10 0z"/><path d="M9 9.5v1a3 3 0 0 0 6 0v-1"/><path d="M4.5 20.5c0-3.6 3.4-6 7.5-6s7.5 2.4 7.5 6"/></symbol>
-    <symbol id="ic-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20c0-3.6 3.4-6 7.5-6s7.5 2.4 7.5 6"/></symbol>
-    <symbol id="ic-warning" viewBox="0 0 24 24"><path d="M10.3 4.2 2.9 17a2 2 0 0 0 1.7 3h14.8a2 2 0 0 0 1.7-3L13.7 4.2a2 2 0 0 0-3.4 0z"/><path d="M12 9.5v4M12 17h.01"/></symbol>
+    <symbol id="ic-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/></symbol>
+    <symbol id="ic-cart" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 3h2l2.5 12h12l2-8H6"/></symbol>
+    <symbol id="ic-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="ic-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/></symbol>
   </svg>
 
-<div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
-<div id="header-container"></div>
+  <div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
+  <div id="header-container"></div>
 
-<!-- ============================================================
-     HERO
-     ============================================================ -->
-<section class="pricing-hero">
-  <div class="container">
-    <h1>Remplissez votre carnet de commandes<br>sans effort, <span class="hero-accent">24h/24</span></h1>
-    <p class="subhead">
-      Choisissez la formule qui correspond à votre activité. Achetez des chantiers à l'unité, ou confiez la prospection à votre assistant IA pour ne plus jamais rater une opportunité.
-    </p>
-  </div>
-</section>
-
-<!-- ============================================================
-     GRILLE TARIFAIRE
-     ============================================================ -->
-<div class="container">
-  <div class="pricing-grid">
-
-    <!-- Colonne 2 : Offre Pro (mise en avant) -->
-    <div class="pricing-column" style="position:relative;">
-      <div class="popular-badge">⭐ Le plus populaire</div>
-      <div class="plan-name"><svg class="bs-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-ia-robot"/></svg> BatiSwift Pro — Votre Agent IA</div>
-      <div class="plan-price">19€ <small>/ mois</small></div>
-      <p class="plan-desc">L'assistant qui prospecte, filtre et vous alerte 24h/24. Sans engagement, annulable en un clic.</p>
-
-      <ul class="feature-list">
-        <li><span class="feature-icon check" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-check"/></svg></span> Traduction de l'interface du site</li>
-        <li><span class="feature-icon check" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-check"/></svg></span> Catalogue des leads géolocalisés (coordonnées incluses)</li>
-        <li><span class="feature-icon star" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-lightning"/></svg></span> Réactivité Instant-Reply (en 60 secondes)</li>
-        <li><span class="feature-icon star" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-location-pin"/></svg></span> Filtres de géolocalisation et de rentabilité</li>
-        <li><span class="feature-icon star" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chat"/></svg></span> Notifications & Alertes WhatsApp directes (Infobip)</li>
-        <li><span class="feature-icon star" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-refresh"/></svg></span> Relances automatiques (6 types d'emails & SMS)</li>
-        <li><span class="feature-icon star" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chart"/></svg></span> Dashboard de suivi complet (tags, notes, statuts)</li>
-        <li><span class="feature-icon star" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-globe"/></svg></span> Traduction des conversations clients (DeepL via IA)</li>
-      </ul>
-
-      <div class="plan-cta">
-        <button id="btn-subscribe" class="btn btn-gold btn-block btn-lg">
-          Activer mon Agent IA (19€/mois)
-        </button>
-      </div>
-    </div>
-
-
-    <!-- Colonne 1 : Offre découverte / à l'acte -->
-    <div class="pricing-column">
-      <div class="plan-name"><svg class="bs-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-search"/></svg> Découverte & À l'acte</div>
-      <div class="plan-price">0€ <small>/ mois</small></div>
-      <p class="plan-desc">Pour les artisans qui veulent tester la plateforme ou acheter des chantiers au coup par coup.</p>
-
-      <ul class="feature-list">
-        <li><span class="feature-icon check" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-check"/></svg></span> Traduction de l'interface du site</li>
-        <li><span class="feature-icon check" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-check"/></svg></span> Catalogue des leads géolocalisés</li>
-        <li><span class="feature-icon check" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-check"/></svg></span> Visualisation : type, urgence, distance</li>
-        <li><span class="feature-icon cross" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-lock"/></svg></span> Coordonnées masquées avant achat</li>
-        <li><span class="feature-icon cross">—</span> Agent IA et réponses automatiques</li>
-        <li><span class="feature-icon cross">—</span> Notifications WhatsApp</li>
-        <li><span class="feature-icon cross">—</span> Relances automatiques</li>
-        <li><span class="feature-icon cross">—</span> Dashboard de suivi avancé</li>
-        <li><span class="feature-icon cross">—</span> Traduction des conversations</li>
-      </ul>
-
-      <p class="plan-desc" style="margin-bottom:1rem;">
-        <strong>Achat de lead unitaire : 10 €</strong> par lead (paiement sécurisé Stripe).
+  <!-- HERO -->
+  <section class="pricing-hero">
+    <div class="container">
+      <h1>Composez votre <span class="hero-accent">BâtiSwift Pro</span><br>à la carte</h1>
+      <p class="subhead">
+        Cinq modules IA conçus pour les artisans du BTP. Sélectionnez ceux dont vous avez besoin,
+        activez-les en un clic, résiliez à tout moment. Sans engagement.
       </p>
-
-      <div class="plan-cta">
-        <a href="/marketplace.html" class="btn btn-primary btn-block btn-lg">Explorer les chantiers disponibles</a>
-      </div>
     </div>
+  </section>
 
-
-  </div>
-
-  <!-- ============================================================
-       BLOC DE RENTABILITÉ
-       ============================================================ -->
-  <div class="rentability-box">
-    <div class="rentability-icon" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-money"/></svg></div>
-    <div class="rentability-text">
-      <h3>Un seul chantier décroché rembourse votre année d'abonnement</h3>
-      <p>Avec un panier moyen de 800 € à 2 000 € dans le BTP, l'abonnement Pro est amorti dès votre première intervention. Tout le reste, c'est du bénéfice net.</p>
+  <!-- GRILLE MODULES -->
+  <div class="modules-grid" id="modules-grid">
+    <div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--gris);">
+      <div class="spinner spinner-dark" style="margin:0 auto;"></div>
+      <p style="margin-top:1rem;">Chargement des modules…</p>
     </div>
   </div>
 
-  <!-- ============================================================
-       BARRE DE RÉASSURANCE
-       ============================================================ -->
+  <!-- BLOC À L'ACTE -->
+  <div class="info-acte">
+    <div class="info-acte-icon">
+      <svg viewBox="0 0 24 24"><use href="#ic-marketplace"/></svg>
+    </div>
+    <div>
+      <h3>Pas encore prêt pour un abonnement ?</h3>
+      <p>
+        L'accès au marketplace reste inchangé : parcourez les chantiers disponibles
+        et achetez uniquement le lead qui vous intéresse (10 €, paiement Stripe sécurisé).
+      </p>
+      <a href="/marketplace.html" class="btn-acte">
+        Explorer les chantiers disponibles
+      </a>
+    </div>
+  </div>
+
+  <!-- RÉASSURANCE -->
   <div class="trust-bar">
     <div class="trust-item">
-      <span class="icon" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-lock"/></svg></span>
-      <span>Paiement 100% sécurisé par Stripe</span>
+      <span class="icon"><svg viewBox="0 0 24 24"><use href="#ic-lock"/></svg></span>
+      <span>Paiement 100 % sécurisé par Stripe</span>
     </div>
     <div class="trust-item">
-      <span class="icon" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-close"/></svg></span>
+      <span class="icon"><svg viewBox="0 0 24 24"><use href="#ic-close"/></svg></span>
       <span>Sans engagement, annulable en un clic</span>
     </div>
     <div class="trust-item">
-      <span class="icon" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chat"/></svg></span>
+      <span class="icon"><svg viewBox="0 0 24 24"><use href="#ic-chat"/></svg></span>
       <span>Support client dédié</span>
     </div>
   </div>
-</div>
 
-<div id="footer-container"></div>
+  <!-- BARRE DE SÉLECTION FIXE -->
+  <div class="modules-summary" id="modules-summary">
+    <div class="summary-info">
+      <span class="summary-count" id="summary-count">Aucun module sélectionné</span>
+      <span class="summary-total" id="summary-total">0 € <small>/ mois</small></span>
+    </div>
+    <button id="btn-subscribe" class="btn btn-gold btn-lg" disabled>
+      Souscrire aux modules sélectionnés
+    </button>
+  </div>
 
-<!-- Scripts partagés -->
-<script src="/js/config.js"></script>
-<script src="/js/api.js"></script>
-<script src="/js/session.js"></script>
-<script src="/js/main.js"></script>
+  <div id="footer-container"></div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
+  <script src="/js/config.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/session.js"></script>
+  <script src="/js/main.js"></script>
 
-  function initSidebar() {
-    var toggle = document.getElementById('menu-toggle');
-    var overlay = document.getElementById('sidebar-overlay');
-    var sidebar = document.getElementById('sidebar');
-    var closeBtn = document.getElementById('sidebar-close');
-    var allLinks = sidebar ? sidebar.querySelectorAll('a') : [];
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
 
-    if (!toggle || !sidebar || !overlay) {
-      console.warn('Sidebar elements not found');
-      return;
+    // ── Helpers ───────────────────────────────────
+    function apiBase() {
+      if (typeof CONFIG !== 'undefined' && CONFIG.API_URL) return CONFIG.API_URL;
+      var h = window.location.hostname;
+      return (h === 'localhost' || h === '127.0.0.1')
+        ? 'http://localhost:8000'
+        : 'https://agent-btp.onrender.com';
     }
 
-    // Retirer les anciens écouteurs pour éviter les doublons
-    var newToggle = toggle.cloneNode(true);
-    toggle.parentNode.replaceChild(newToggle, toggle);
-    toggle = newToggle;
-
-    function openSidebar() {
-      toggle.classList.add('open');
-      overlay.classList.add('active');
-      sidebar.classList.add('active');
-      document.body.style.overflow = 'hidden';
+    function getToken() {
+      return localStorage.getItem('batiswift_token') ||
+             localStorage.getItem('artisan_token') || null;
     }
 
-    function closeSidebar() {
-      toggle.classList.remove('open');
-      overlay.classList.remove('active');
-      sidebar.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    toggle.addEventListener('click', function(e) {
-      e.stopPropagation();
-      if (sidebar.classList.contains('active')) {
-        closeSidebar();
+    function toast(msg, type, delay) {
+      if (typeof window.toast === 'function') {
+        window.toast(msg, type, delay);
       } else {
-        openSidebar();
+        console.log('[toast]', type || 'info', msg);
+        if (type === 'danger') alert(msg);
       }
-    });
-
-    if (closeBtn) {
-      var newClose = closeBtn.cloneNode(true);
-      closeBtn.parentNode.replaceChild(newClose, closeBtn);
-      closeBtn = newClose;
-      closeBtn.addEventListener('click', closeSidebar);
     }
 
-    if (overlay) {
-      var newOverlay = overlay.cloneNode(true);
-      overlay.parentNode.replaceChild(newOverlay, overlay);
-      overlay = newOverlay;
-      overlay.addEventListener('click', closeSidebar);
+    // ── State ─────────────────────────────────────
+    var state = {
+      catalog: [],
+      activeModules: [],
+      selected: new Set(),
+    };
+
+    var ICON_FALLBACKS = {
+      'ic-document': 'ic-document',
+      'ic-mic': 'ic-mic',
+      'ic-cart': 'ic-cart',
+      'ic-shield': 'ic-shield',
+      'ic-bell': 'ic-bell',
+    };
+
+    // ── Chargement du catalogue ───────────────────
+    async function loadCatalog() {
+      try {
+        var res = await fetch(apiBase() + '/api/ai/catalog', {
+          headers: { 'Accept': 'application/json' }
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        var data = await res.json();
+        state.catalog = data.modules || [];
+      } catch (err) {
+        console.error('Erreur catalogue IA :', err);
+        toast('Impossible de charger les tarifs. Réessayez plus tard.', 'danger');
+        state.catalog = [];
+      }
+      renderModules();
     }
 
-    allLinks.forEach(function(link) {
-      link.addEventListener('click', closeSidebar);
-    });
-  }
-
-  // ─── GESTION DE SESSION ──────────────────────────────────
-  function updateSessionUI() {
-    var user = JSON.parse(localStorage.getItem('batiswift_user') || 'null');
-    var guestDiv = document.querySelector('.sidebar-guest');
-    var userDiv = document.querySelector('.sidebar-user');
-    var userNameSpan = document.getElementById('sidebar-user-nom');
-
-    if (user && userDiv && guestDiv) {
-      guestDiv.style.display = 'none';
-      userDiv.style.display = 'flex';
-      userDiv.style.flexDirection = 'column';
-      userDiv.style.gap = '0.8rem';
-      if (userNameSpan) userNameSpan.textContent = user.nom || 'Artisan';
+    // ── Chargement du statut actif (si connecté) ──
+    async function loadActiveModules() {
+      var token = getToken();
+      if (!token) return;
+      try {
+        var res = await fetch(apiBase() + '/api/ai/modules', {
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          }
+        });
+        if (res.status === 401) {
+          // Token invalide → on laisse l'utilisateur consulter les prix,
+          // il sera redirigé à la souscription.
+          localStorage.removeItem('batiswift_token');
+          localStorage.removeItem('artisan_token');
+          return;
+        }
+        if (!res.ok) return;
+        var data = await res.json();
+        state.activeModules = (data.modules || [])
+          .filter(function (m) { return m.is_active; })
+          .map(function (m) { return m.id; });
+        renderModules();
+      } catch (err) {
+        console.warn('Statut modules indisponible :', err);
+      }
     }
-  }
 
-  // ─── DÉCONNEXION ──────────────────────────────────────────
-  document.addEventListener('click', function(e) {
-    if (e.target.id === 'sidebar-logout' || e.target.closest('#sidebar-logout')) {
-      localStorage.removeItem('batiswift_token');
-      localStorage.removeItem('batiswift_user');
-      window.location.href = '/index.html';
-    }
-  });
+    // ── Rendu des cartes ──────────────────────────
+    function renderModules() {
+      var grid = document.getElementById('modules-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
 
-  // ─── BOUTON D'ABONNEMENT PRO ─────────────────────────────
-  var btnSubscribe = document.getElementById('btn-subscribe');
-  if (btnSubscribe) {
-    btnSubscribe.addEventListener('click', async function() {
-      var user = await Session.verify();
-      if (!user) {
-        window.location.href = '/connexion.html?redirect=' + encodeURIComponent('/tarifs.html');
+      if (!state.catalog.length) {
+        grid.innerHTML =
+          '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--gris);">' +
+          'Aucun module disponible pour le moment.</div>';
         return;
       }
 
-      btnSubscribe.disabled = true;
-      btnSubscribe.innerHTML = '<span class="spinner"></span> Création de votre abonnement...';
+      state.catalog.forEach(function (mod) {
+        var isActive = state.activeModules.indexOf(mod.id) !== -1;
+        var isSelected = state.selected.has(mod.id);
+
+        var card = document.createElement('div');
+        card.className = 'module-card' +
+          (isActive ? ' active-module' : '') +
+          (isSelected ? ' selected' : '');
+        card.setAttribute('data-module-id', mod.id);
+
+        var iconId = ICON_FALLBACKS[mod.icon] || 'ic-document';
+
+        var featuresHtml = (mod.features || []).map(function (f) {
+          return '<li><span class="check"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-check"/></svg></span><span>' + escapeHtml(f) + '</span></li>';
+        }).join('');
+
+        card.innerHTML =
+          (isActive
+            ? '<span class="active-badge">✓ Actif</span>'
+            : '<input type="checkbox" class="module-checkbox" tabindex="-1" ' +
+              (isSelected ? 'checked' : '') +
+              (isActive ? 'disabled' : '') + '>') +
+
+          '<div class="module-icon">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+            '<use href="#' + iconId + '"/></svg>' +
+          '</div>' +
+
+          '<div class="module-name">' + escapeHtml(mod.name) + '</div>' +
+          '<p class="module-desc">' + escapeHtml(mod.short_desc) + '</p>' +
+          '<ul class="module-features">' + featuresHtml + '</ul>' +
+          '<div class="module-price">' + mod.price_eur + ' € <small>/ mois</small></div>';
+
+        if (!isActive) {
+          card.addEventListener('click', function (e) {
+            // Ignorer le clic direct sur la checkbox (on gère l'état global)
+            if (e.target && e.target.classList.contains('module-checkbox')) return;
+            toggleModule(mod.id);
+          });
+        }
+
+        grid.appendChild(card);
+      });
+
+      updateSummary();
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
+    // ── Interaction ───────────────────────────────
+    function toggleModule(moduleId) {
+      if (state.activeModules.indexOf(moduleId) !== -1) return;
+      if (state.selected.has(moduleId)) {
+        state.selected.delete(moduleId);
+      } else {
+        state.selected.add(moduleId);
+      }
+      // Mise à jour visuelle locale
+      var card = document.querySelector('[data-module-id="' + moduleId + '"]');
+      if (card) {
+        card.classList.toggle('selected', state.selected.has(moduleId));
+        var cb = card.querySelector('.module-checkbox');
+        if (cb) cb.checked = state.selected.has(moduleId);
+      }
+      updateSummary();
+    }
+
+    function updateSummary() {
+      var count = state.selected.size;
+      var total = 0;
+      state.selected.forEach(function (id) {
+        var mod = state.catalog.find(function (m) { return m.id === id; });
+        if (mod) total += mod.price_eur;
+      });
+
+      var countEl = document.getElementById('summary-count');
+      var totalEl = document.getElementById('summary-total');
+      var btn = document.getElementById('btn-subscribe');
+
+      if (countEl) {
+        countEl.textContent = count === 0
+          ? 'Aucun module sélectionné'
+          : count + ' module' + (count > 1 ? 's' : '') + ' sélectionné' + (count > 1 ? 's' : '');
+      }
+      if (totalEl) {
+        totalEl.innerHTML = total + ' € <small>/ mois</small>';
+      }
+      if (btn) {
+        btn.disabled = count === 0;
+        btn.textContent = count === 0
+          ? 'Souscrire aux modules sélectionnés'
+          : 'Souscrire (' + total + ' €/mois)';
+      }
+    }
+
+    // ── Souscription ──────────────────────────────
+    document.getElementById('btn-subscribe').addEventListener('click', async function () {
+      var btn = this;
+      var moduleIds = Array.from(state.selected);
+      if (moduleIds.length === 0) return;
+
+      var token = getToken();
+      if (!token) {
+        window.location.href = '/connexion.html?redirect=' +
+          encodeURIComponent('/tarifs.html');
+        return;
+      }
+
+      btn.disabled = true;
+      var old = btn.textContent;
+      btn.innerHTML = '<span class="spinner"></span> Redirection…';
 
       try {
-        var data = await API.post('/api/create-subscription');
+        var res = await fetch(apiBase() + '/api/ai/checkout-session', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
+          body: JSON.stringify({ module_ids: moduleIds }),
+        });
+        var data = await res.json().catch(function () { return {}; });
+
+        if (res.status === 401) {
+          localStorage.removeItem('batiswift_token');
+          localStorage.removeItem('artisan_token');
+          window.location.href = '/connexion.html?redirect=' +
+            encodeURIComponent('/tarifs.html') + '&expired=1';
+          return;
+        }
+
+        if (!res.ok) {
+          // Cas particulier : tous les modules sélectionnés déjà actifs
+          if (data.already_active && data.already_active.length) {
+            toast('Modules déjà actifs : ' + data.already_active.join(', '), 'info', 6000);
+          }
+          throw new Error(data.error || 'Erreur lors de la création du paiement');
+        }
+
+        if (!data.checkout_url) {
+          throw new Error('URL de paiement manquante dans la réponse serveur.');
+        }
         window.location.href = data.checkout_url;
-      } catch(err) {
+      } catch (err) {
+        console.error('Souscription IA erreur :', err);
         toast('Erreur : ' + err.message, 'danger');
-        btnSubscribe.disabled = false;
-        btnSubscribe.textContent = 'Activer mon Agent IA (19€/mois)';
+        btn.disabled = false;
+        btn.textContent = old;
       }
     });
-  }
 
-  // ─── TOAST DE CONFIRMATION DE PAIEMENT ───────────────────
-  var urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('session_id')) {
-    toast('<svg class="bs-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-check"/></svg> Paiement validé ! Votre abonnement est actif.', 'success', 6000);
-    if (window.history && window.history.replaceState) {
-      window.history.replaceState({}, document.title, window.location.pathname);
+    // ── Sidebar (comportement conservé de l'ancienne page) ──
+    (function initSidebar() {
+      var toggle = document.getElementById('menu-toggle');
+      var overlay = document.getElementById('sidebar-overlay');
+      var sidebar = document.getElementById('sidebar');
+      var closeBtn = document.getElementById('sidebar-close');
+      if (!toggle || !sidebar || !overlay) return;
+      function open() {
+        toggle.classList.add('open'); overlay.classList.add('active');
+        sidebar.classList.add('active'); document.body.style.overflow = 'hidden';
+      }
+      function close() {
+        toggle.classList.remove('open'); overlay.classList.remove('active');
+        sidebar.classList.remove('active'); document.body.style.overflow = '';
+      }
+      toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        sidebar.classList.contains('active') ? close() : open();
+      });
+      if (closeBtn) closeBtn.addEventListener('click', close);
+      overlay.addEventListener('click', close);
+      sidebar.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', close);
+      });
+    })();
+
+    // ── Déconnexion ───────────────────────────────
+    document.addEventListener('click', function (e) {
+      if (e.target.id === 'sidebar-logout' || e.target.closest('#sidebar-logout')) {
+        localStorage.removeItem('batiswift_token');
+        localStorage.removeItem('batiswift_user');
+        window.location.href = '/index.html';
+      }
+    });
+
+    // ── Message de confirmation après Stripe ─────
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('session_id') || urlParams.get('sub_success')) {
+      toast('Paiement validé ! Vos modules sont en cours d\'activation.', 'success', 6000);
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
     }
-  }
 
-});
-</script>
+    // ── Init ──────────────────────────────────────
+    loadCatalog().then(loadActiveModules);
+  });
+  </script>
 </body>
 </html>
 
