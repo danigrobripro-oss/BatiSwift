@@ -1922,32 +1922,116 @@ header.user-logged-in::after {
 
 
 /* ============================================================
-   BÂTISWIFT — MODERN UI OVERRIDES v4
-   Objectif : moderne, premium, tech, avec le violet BâtiSwift
-   Ces règles restent en fin de fichier pour ne pas casser les
-   composants existants.
+   BÂTISWIFT — NOUVELLE IDENTITÉ VISUELLE VIOLETTE & ARCHITECTURALE
+   Palette Officielle 2026 :
+   - Noir violet : #17131F
+   - Violet principal : #7138D5
+   - Violet lumineux : #A879FF
+   - Violet complémentaire : #8251DC
+   - Or discret / architectural : #C99A4C
+   - Blanc cassé / texturé : #F0EBE4
    ============================================================ */
 
 :root {
-  --brand-primary: #6D28D9;
-  --brand-primary-dark: #4C1D95;
-  --brand-primary-light: #8B5CF6;
-  --brand-primary-soft: rgba(109, 40, 217, 0.10);
-  --brand-primary-glow: rgba(109, 40, 217, 0.22);
+  --color-black-violet:    #17131F;
+  --color-purple-primary:  #7138D5;
+  --color-purple-luminous: #A879FF;
+  --color-purple-sub:      #8251DC;
+  --color-gold-discreet:   #C99A4C;
+  --color-off-white:       #F0EBE4;
+  --color-purple-glow:     rgba(113, 56, 213, 0.35);
+  --color-purple-soft:     rgba(113, 56, 213, 0.08);
 
-  --surface: #FFFFFF;
-  --surface-soft: #FAF9FC;
-  --surface-muted: #F3F1F7;
-  --border-modern: rgba(47, 26, 58, 0.10);
-  --text-primary: #24152F;
-  --text-secondary: #746B7D;
+  /* Images de fond par défaut (Mode Lumineux) */
+  --bg-artisan-file:       url('/assets/backgrounds/artisan-light.jpg');
+  --bg-internal-file:      url('/assets/backgrounds/internal-light.jpg');
+  --bg-overlay-opacity:    0.14;
 
-  --modern-shadow-sm: 0 2px 10px rgba(36, 21, 47, 0.06);
-  --modern-shadow-md: 0 10px 30px rgba(36, 21, 47, 0.09);
-  --modern-shadow-lg: 0 20px 55px rgba(36, 21, 47, 0.13);
+  /* Alignement SaaS moderne */
+  --brand-primary:         #7138D5;
+  --brand-primary-dark:    #17131F;
+  --brand-primary-light:   #A879FF;
+  --brand-primary-sub:     #8251DC;
+  --brand-primary-soft:    rgba(113, 56, 213, 0.08);
+  --brand-primary-glow:    rgba(113, 56, 213, 0.35);
 
-  --modern-radius: 16px;
-  --modern-radius-lg: 24px;
+  --surface:               #FFFFFF;
+  --surface-soft:          #FAF9FC;
+  --surface-muted:         #F3F1F7;
+  --border-modern:         rgba(113, 56, 213, 0.12);
+  --text-primary:          #17131F;
+  --text-secondary:        #6B5E7B;
+
+  --modern-shadow-sm:      0 2px 10px rgba(23, 19, 31, 0.05);
+  --modern-shadow-md:      0 10px 30px rgba(23, 19, 31, 0.08);
+  --modern-shadow-lg:      0 20px 55px rgba(23, 19, 31, 0.12);
+
+  --modern-radius:         16px;
+  --modern-radius-lg:      24px;
+}
+
+[data-theme="dark"] {
+  --color-black-violet:    #0D0A12;
+  --surface:               #17131F;
+  --surface-soft:          #110D17;
+  --surface-muted:         #1C1626;
+  --border-modern:         rgba(168, 121, 255, 0.18);
+  --text-primary:          #F0EBE4;
+  --text-secondary:        #B2A6C4;
+
+  --brand-primary:         #A879FF;
+  --brand-primary-dark:    #17131F;
+  --brand-primary-light:   #C4A1FF;
+  --brand-primary-soft:    rgba(168, 121, 255, 0.12);
+  --brand-primary-glow:    rgba(168, 121, 255, 0.40);
+
+  /* Images de fond (Mode Sombre) */
+  --bg-artisan-file:       url('/assets/backgrounds/artisan-dark.jpg');
+  --bg-internal-file:      url('/assets/backgrounds/internal-dark.jpg');
+  --bg-overlay-opacity:    0.28;
+}
+
+/* ============================================================
+   INTÉGRATION DES FONDS ARCHITECTURAUX BÂTISWIFT
+   Fixed background overlay pour 60fps sans lag ni saccade
+   ============================================================ */
+body.theme-artisan,
+body.theme-internal {
+  position: relative;
+  background-color: var(--surface-soft);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] body.theme-artisan,
+[data-theme="dark"] body.theme-internal {
+  background-color: var(--color-black-violet);
+  color: var(--text-primary);
+}
+
+body.theme-artisan::before,
+body.theme-internal::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  transition: opacity 0.3s ease, background-image 0.3s ease;
+  will-change: opacity;
+}
+
+body.theme-artisan::before {
+  background-image: var(--bg-artisan-file);
+  opacity: var(--bg-overlay-opacity);
+}
+
+body.theme-internal::before {
+  background-image: var(--bg-internal-file);
+  opacity: var(--bg-overlay-opacity);
 }
 
 /* Base : plus clair et plus contemporain */
@@ -1959,26 +2043,50 @@ body {
   color: var(--text-primary);
 }
 
-/* Titres : garder l'identité BâtiSwift sans l'effet "ancien luxe" */
+/* Titres : identité BâtiSwift élégante et contrastée */
 h1, h2, h3, h4 {
   color: var(--text-primary);
   letter-spacing: -0.025em;
 }
 
-/* Cartes : effet premium plus subtil */
+/* Cartes : effet premium et lisibilité assurée au-dessus du fond */
 .glass-card,
 .lead-card,
 .stat-card,
 .kpi-card,
 .stat-card-premium,
 .pricing-card,
-.review-item {
+.review-item,
+.auth-card,
+.aide-card,
+.detail-pane,
+.chat-main {
   border-color: var(--border-modern);
   box-shadow: var(--modern-shadow-sm);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+[data-theme="dark"] .glass-card,
+[data-theme="dark"] .lead-card,
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .kpi-card,
+[data-theme="dark"] .stat-card-premium,
+[data-theme="dark"] .pricing-card,
+[data-theme="dark"] .review-item,
+[data-theme="dark"] .auth-card,
+[data-theme="dark"] .aide-card,
+[data-theme="dark"] .detail-pane,
+[data-theme="dark"] .chat-main {
+  background: rgba(23, 19, 31, 0.86);
+  border-color: var(--border-modern);
+  color: var(--text-primary);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.88);
   border-radius: var(--modern-radius-lg);
 }
 
@@ -1989,36 +2097,194 @@ h1, h2, h3, h4 {
 .pricing-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--modern-shadow-lg);
-  border-color: rgba(109, 40, 217, 0.18);
+  border-color: rgba(113, 56, 213, 0.25);
 }
 
-/* Boutons : le violet devient réellement la couleur d'action */
+/* ============================================================
+   SYSTÈME DE BOUTONS HARMONISÉ — FORME PILULE & VIOLET GLOW
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 26px;
+  border-radius: 50px !important;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  text-decoration: none;
+  line-height: 1.25;
+  min-height: 44px;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:disabled {
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+  pointer-events: none;
+}
+
+/* Bouton Principal : Dégradé Violet BâtiSwift avec Ombre Douce Lumineuse */
 .btn-primary {
-  background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-dark));
-  color: #fff;
-  box-shadow: 0 8px 22px var(--brand-primary-glow);
+  background: linear-gradient(135deg, var(--color-purple-primary) 0%, var(--color-purple-sub) 100%) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.20) !important;
+  box-shadow: 0 4px 18px var(--color-purple-glow), 0 2px 4px rgba(23, 19, 31, 0.15) !important;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--brand-primary-light), var(--brand-primary));
-  box-shadow: 0 12px 30px rgba(109, 40, 217, 0.30);
+  background: linear-gradient(135deg, var(--color-purple-sub) 0%, var(--color-purple-luminous) 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 8px 28px rgba(113, 56, 213, 0.50), 0 3px 8px rgba(23, 19, 31, 0.20) !important;
   transform: translateY(-2px);
 }
 
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 10px var(--color-purple-glow) !important;
+}
+
+/* Bouton Secondaire : Contour fin violet, fond doux translucide */
 .btn-secondary {
-  color: var(--brand-primary-dark);
-  border-color: rgba(109, 40, 217, 0.22);
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(113, 56, 213, 0.06) !important;
+  color: var(--color-purple-primary) !important;
+  border: 1.5px solid rgba(113, 56, 213, 0.35) !important;
+  box-shadow: 0 2px 8px rgba(23, 19, 31, 0.04);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  color: var(--brand-primary);
-  border-color: var(--brand-primary);
-  background: var(--brand-primary-soft);
+  background: rgba(113, 56, 213, 0.14) !important;
+  color: var(--color-purple-primary) !important;
+  border-color: var(--color-purple-primary) !important;
+  box-shadow: 0 6px 18px rgba(113, 56, 213, 0.22) !important;
+  transform: translateY(-2px);
 }
 
+.btn-secondary:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+[data-theme="dark"] .btn-secondary {
+  background: rgba(168, 121, 255, 0.10) !important;
+  color: var(--color-purple-luminous) !important;
+  border-color: rgba(168, 121, 255, 0.45) !important;
+}
+
+[data-theme="dark"] .btn-secondary:hover:not(:disabled) {
+  background: rgba(168, 121, 255, 0.22) !important;
+  border-color: var(--color-purple-luminous) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 6px 20px rgba(168, 121, 255, 0.32) !important;
+}
+
+/* Bouton Accent Or Architectural */
 .btn-gold {
-  background: linear-gradient(135deg, #D4A84F, #B9822F);
+  background: linear-gradient(135deg, var(--color-gold-discreet) 0%, #DFBA73 100%) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 4px 18px rgba(201, 154, 76, 0.35) !important;
+}
+
+.btn-gold:hover:not(:disabled) {
+  background: linear-gradient(135deg, #B58639 0%, var(--color-gold-discreet) 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 8px 26px rgba(201, 154, 76, 0.48) !important;
+  transform: translateY(-2px);
+}
+
+.btn-gold:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Bouton Danger / Action destructive */
+.btn-danger {
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.32) !important;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%) !important;
+  box-shadow: 0 6px 22px rgba(239, 68, 68, 0.42) !important;
+  transform: translateY(-2px);
+}
+
+.btn-danger:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Boutons utilitaires spécifiques harmonisés */
+.btn-reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 22px;
+  border-radius: 50px !important;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(113, 56, 213, 0.08);
+  color: var(--color-purple-primary);
+  border: 1.5px solid rgba(113, 56, 213, 0.3);
+  transition: all 0.22s ease;
+  min-height: 40px;
+}
+
+.btn-reset:hover {
+  background: rgba(113, 56, 213, 0.16);
+  border-color: var(--color-purple-primary);
+  transform: translateY(-1px);
+}
+
+.btn-contact {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 30px;
+  border-radius: 50px !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  background: linear-gradient(135deg, var(--color-purple-primary) 0%, var(--color-purple-sub) 100%);
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 18px var(--color-purple-glow);
+  transition: all 0.24s ease;
+  text-decoration: none;
+  min-height: 44px;
+}
+
+.btn-contact:hover {
+  background: linear-gradient(135deg, var(--color-purple-sub) 0%, var(--color-purple-luminous) 100%);
+  box-shadow: 0 8px 28px rgba(113, 56, 213, 0.48);
+  transform: translateY(-2px);
+}
+
+/* Tailles de boutons */
+.btn-sm {
+  padding: 8px 18px !important;
+  font-size: 0.85rem !important;
+  min-height: 38px;
+}
+
+.btn-lg {
+  padding: 15px 36px !important;
+  font-size: 1.05rem !important;
+  min-height: 50px;
+}
+
+.btn-block {
+  width: 100%;
 }
 
 /* Champs : focus violet */
@@ -2030,15 +2296,24 @@ h1, h2, h3, h4 {
 
 .form-control:focus {
   border-color: var(--brand-primary);
-  box-shadow: 0 0 0 4px rgba(109, 40, 217, 0.10);
+  box-shadow: 0 0 0 4px rgba(113, 56, 213, 0.12);
 }
 
 /* Header : plus fin, plus SaaS moderne */
 header,
 .site-header {
-  background: rgba(255, 255, 255, 0.82);
-  border-bottom: 1px solid rgba(47, 26, 58, 0.08);
-  box-shadow: 0 4px 24px rgba(36, 21, 47, 0.05);
+  background: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid rgba(113, 56, 213, 0.10);
+  box-shadow: 0 4px 24px rgba(23, 19, 31, 0.05);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+[data-theme="dark"] header,
+[data-theme="dark"] .site-header {
+  background: rgba(23, 19, 31, 0.88);
+  border-bottom: 1px solid rgba(168, 121, 255, 0.15);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
 }
 
 .nav-logo {
@@ -2072,7 +2347,7 @@ header,
 }
 
 .stat-card-premium:hover {
-  border-color: rgba(109, 40, 217, 0.20);
+  border-color: rgba(113, 56, 213, 0.25);
 }
 
 /* Prix / informations importantes */
@@ -2103,7 +2378,7 @@ header,
 
 /* Modales : profondeur plus moderne */
 .modal-overlay {
-  background: rgba(25, 12, 35, 0.52);
+  background: rgba(23, 19, 31, 0.65);
   backdrop-filter: blur(8px);
 }
 
@@ -2118,7 +2393,7 @@ header,
 }
 
 .chat-bubble.assistant {
-  border-color: rgba(109, 40, 217, 0.12);
+  border-color: rgba(113, 56, 213, 0.15);
 }
 
 /* Filtres */
@@ -2129,12 +2404,21 @@ header,
 
 /* Pricing */
 .pricing-card.featured {
-  border-color: rgba(109, 40, 217, 0.30);
+  border-color: rgba(113, 56, 213, 0.35);
   background: linear-gradient(
     180deg,
-    rgba(109, 40, 217, 0.07) 0%,
+    rgba(113, 56, 213, 0.08) 0%,
     #fff 72%
   );
+}
+
+[data-theme="dark"] .pricing-card.featured {
+  background: linear-gradient(
+    180deg,
+    rgba(113, 56, 213, 0.18) 0%,
+    #17131F 72%
+  );
+  border-color: rgba(168, 121, 255, 0.40);
 }
 
 .pricing-card.featured::before {
@@ -2185,5 +2469,254 @@ a:hover {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   ACCÈS RAPIDE AU FOOTER (MOBILE BOTTOM SHEET)
+   BâtiSwift — Amélioration ergonomique mobile
+   ============================================================ */
+
+/* Le bouton flottant n'apparaît que sur mobile/tablette */
+.footer-quick-btn {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .footer-quick-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    position: fixed;
+    right: 14px;
+    bottom: max(16px, env(safe-area-inset-bottom, 16px));
+    z-index: 850;
+    background: rgba(35, 35, 35, 0.94);
+    color: var(--blanc);
+    border: 1px solid rgba(201, 168, 76, 0.4);
+    border-radius: 50px;
+    padding: 8px 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: var(--font-body);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    cursor: pointer;
+    transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .footer-quick-btn:hover,
+  .footer-quick-btn:focus-visible {
+    background: var(--anthracite);
+    border-color: var(--or);
+    box-shadow: 0 6px 22px rgba(201, 168, 76, 0.25);
+    outline: none;
+  }
+
+  .footer-quick-btn:active {
+    transform: scale(0.96);
+  }
+
+  .footer-quick-btn svg {
+    color: var(--or);
+    flex-shrink: 0;
+  }
+
+  /* Ajustement spécifique sur la page de chat pour ne pas masquer le champ input */
+  body.client-layout .footer-quick-btn {
+    bottom: max(78px, calc(env(safe-area-inset-bottom, 0px) + 78px));
+  }
+}
+
+/* Overlay sombre du panneau inférieur */
+.footer-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 15, 15, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 950;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.footer-sheet-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Panneau inférieur (Bottom Sheet) */
+.footer-bottom-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 85vh;
+  background: var(--blanc);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.25);
+  border-top: 2px solid var(--or);
+  z-index: 960;
+  transform: translateY(100%);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.footer-sheet-overlay.is-open .footer-bottom-sheet {
+  transform: translateY(0);
+}
+
+/* Poignée supérieure (drag handle) */
+.footer-sheet-drag-handle {
+  width: 40px;
+  height: 4px;
+  background: var(--beige-dark);
+  border-radius: 4px;
+  margin: 10px auto 4px;
+  flex-shrink: 0;
+}
+
+/* Header du panneau */
+.footer-sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px 12px;
+  border-bottom: 1px solid var(--beige-dark);
+  flex-shrink: 0;
+}
+
+.footer-sheet-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--anthracite);
+}
+
+.footer-sheet-title svg {
+  color: var(--or);
+}
+
+.footer-sheet-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--gris-ultra);
+  color: var(--anthracite);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.footer-sheet-close:hover,
+.footer-sheet-close:focus-visible {
+  background: var(--beige-dark);
+  outline: none;
+}
+
+.footer-sheet-close:active {
+  transform: scale(0.92);
+}
+
+/* Corps scrollable du panneau */
+.footer-sheet-body {
+  padding: 16px 18px max(24px, env(safe-area-inset-bottom, 24px));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.footer-sheet-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.footer-sheet-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer-sheet-group.full-width {
+  grid-column: 1 / -1;
+  padding-top: 6px;
+  border-top: 1px dashed var(--beige-dark);
+}
+
+.footer-sheet-grouptitle {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--gris);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-sheet-grouptitle svg {
+  color: var(--or);
+}
+
+.footer-sheet-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  min-height: 44px;
+  background: var(--gris-ultra);
+  color: var(--anthracite);
+  font-size: 0.86rem;
+  font-weight: 500;
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.footer-sheet-link:hover,
+.footer-sheet-link:focus-visible {
+  background: var(--beige-dark);
+  color: var(--anthracite);
+  outline: none;
+}
+
+.footer-sheet-link:active {
+  background: var(--or);
+  color: var(--blanc);
+}
+
+.footer-sheet-sublinks {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+@media (max-width: 380px) {
+  .footer-sheet-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-sheet-overlay,
+  .footer-bottom-sheet {
+    transition: none !important;
   }
 }

@@ -15,8 +15,18 @@
   <link rel="stylesheet" href="css/bs-private-icons.css">
   <link rel="stylesheet" href="css/ai-layout.css">
   <link rel="stylesheet" href="css/ai-modules.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("batiswift-theme");
+        if (t === "dark" || (!t && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
-<body>
+<body class="theme-artisan">
 
   <!-- ─── SIDEBAR GAUCHE ─────────────────────────────────────── -->
   <aside class="ai-sidebar">

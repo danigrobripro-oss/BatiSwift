@@ -206,20 +206,89 @@
       #map { height: 450px; }
     }
     @media (max-width: 640px) {
-      .carte-header h1 { font-size: 1.6rem; }
-      .stats-bar { grid-template-columns: 1fr; }
-      .controls-panel { flex-direction: column; align-items: stretch; }
-      .radius-control { flex-wrap: wrap; }
-      .radius-control input[type="range"] { flex: 1; min-width: 120px; }
-      .btn-reset { width: 100%; text-align: center; }
-      #map { height: 380px; }
-      .map-legend { justify-content: center; }
+      .carte-page {
+        padding: calc(var(--header-h) + 12px) 3vw 24px;
+      }
+      .carte-header h1 {
+        font-size: 1.4rem;
+        margin-bottom: 2px;
+      }
+      .carte-header p {
+        font-size: 0.85rem;
+        margin-bottom: 0.75rem;
+        line-height: 1.35;
+      }
+      /* Grille 2x2 compacte évitant l'empilement vertical */
+      .stats-bar {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+      }
+      .stat-card {
+        padding: 0.55rem 0.6rem;
+        border-radius: var(--radius);
+      }
+      .stat-card .stat-value {
+        font-size: 1.35rem;
+        line-height: 1.1;
+      }
+      .stat-card .stat-label {
+        font-size: 0.65rem;
+        margin-top: 2px;
+        letter-spacing: 0.3px;
+      }
+      /* Contrôles du rayon compacts sur une seule ligne */
+      .controls-panel {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.6rem;
+        padding: 0.5rem 0.8rem;
+        margin-bottom: 0.75rem;
+        border-radius: var(--radius);
+      }
+      .radius-control {
+        flex: 1;
+        min-width: 0;
+        gap: 0.5rem;
+      }
+      .radius-control label {
+        font-size: 0.8rem;
+        white-space: nowrap;
+      }
+      .radius-control input[type="range"] {
+        flex: 1;
+        min-width: 80px;
+      }
+      .radius-control .radius-value {
+        font-size: 0.82rem;
+        min-width: 44px;
+      }
+      .btn-reset {
+        width: auto;
+        padding: 0.4rem 0.9rem;
+        font-size: 0.78rem;
+        border-radius: 50px;
+        flex-shrink: 0;
+      }
+      /* Carte remontée avec hauteur confortable */
+      #map {
+        height: min(52vh, 420px);
+        min-height: 320px;
+        border-radius: var(--radius);
+      }
+      .map-legend {
+        padding: 0.5rem 0.6rem;
+        font-size: 0.72rem;
+        gap: 8px;
+        justify-content: center;
+      }
     }
   </style>
   <link rel="stylesheet" href="/icons.css">
   <script src="/icons.js"></script>
 </head>
-<body>  <!-- Sprite SVG BâtiSwift (52 icônes officielles) -->
+<body class="theme-internal">  <!-- Sprite SVG BâtiSwift (52 icônes officielles) -->
   <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute;display:none" aria-hidden="true" focusable="false">
     <symbol id="ic-accueil" viewBox="0 0 24 24"><path d="M3.5 11.5 12 4l8.5 7.5"/><path d="M5.5 10V20h13V10"/><path d="M10 20v-5h4v5"/></symbol>
     <symbol id="ic-achats" viewBox="0 0 24 24"><path d="M5.5 8h13l1 11.5a1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1z"/><path d="M9 8V7a3 3 0 0 1 6 0v1"/></symbol>

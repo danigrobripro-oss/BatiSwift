@@ -279,3 +279,74 @@ body {
   }
 }
 
+
+
+/* ============================================================
+   BÂTISWIFT AI — INTÉGRATION DU FOND ARTISAN & NOUVELLE IDENTITÉ
+   ============================================================ */
+body.theme-artisan {
+  position: relative;
+  background-color: var(--bs-cream-soft);
+}
+
+body.theme-artisan::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: url('/assets/backgrounds/artisan-light.jpg');
+  opacity: 0.14;
+  transition: opacity 0.3s ease;
+}
+
+
+[data-theme="dark"] {
+  --bs-dark: #F0EBE4;
+  --bs-dark-card: #251E30;
+  --bs-cream: #17131F;
+  --bs-cream-soft: #120E18;
+  --bs-white: #1E1727;
+  --bs-border: rgba(168, 121, 255, 0.18);
+  --bs-text: #F0EBE4;
+  --bs-text-muted: #B2A6C4;
+}
+
+[data-theme="dark"] body.theme-artisan {
+  background-color: #17131F;
+  color: #F0EBE4;
+}
+
+[data-theme="dark"] body.theme-artisan::before {
+  background-image: url('/assets/backgrounds/artisan-dark.jpg');
+  opacity: 0.28;
+}
+
+.btn-marketplace {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  padding: 0.55rem 1.25rem !important;
+  border-radius: 50px !important;
+  border: 1.5px solid rgba(113, 56, 213, 0.35) !important;
+  background: rgba(113, 56, 213, 0.08) !important;
+  color: #7138D5 !important;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.24s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 2px 8px rgba(113, 56, 213, 0.06);
+}
+
+.btn-marketplace:hover {
+  background: linear-gradient(135deg, #7138D5 0%, #8251DC 100%) !important;
+  border-color: #7138D5 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 18px rgba(113, 56, 213, 0.40) !important;
+  transform: translateY(-2px);
+}

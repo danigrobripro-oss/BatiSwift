@@ -1,55 +1,188 @@
-﻿<footer class="site-footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="nav-logo" style="color:var(--blanc);margin-bottom:12px">
-          <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg" style="filter:invert(1)">
-          BâtiSwift
-        </div>
-        <p>La plateforme qui connecte clients et artisans BTP qualifiés en moins de 2 minutes.</p>
-        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
-          <span style="font-size:.8rem;color:rgba(255,255,255,.35)">
-            <span data-stat="artisans_inscrits">—</span> artisans · <span data-stat="leads_total">—</span> demandes traitées
-          </span>
-        </div>
-      </div>
-
-      <div class="footer-col">
-        <h4>Clients</h4>
-        <a href="/client.html">Déposer une demande</a>
-        <a href="/index.html#how">Comment ça marche</a>
-        <a href="/tarifs.html">Tarifs</a>
-      </div>
-
-      <div class="footer-col">
-        <h4>Artisans</h4>
-        <a href="/inscription.html">S'inscrire</a>
-        <a href="/connexion.html">Connexion</a>
-        <a href="/dashboard.html">Mon dashboard</a>
-        <a href="/parametres.html">Paramètres</a>
-      </div>
-
-      <div class="footer-col">
-        <h4>Informations</h4>
-        <a href="/aide.html">Centre d'aide</a>
-        <a href="/mentions-legales.html">Mentions légales</a>
-        <a href="/cgu.html">CGU</a>
-        <a href="mailto:contact@batiswift.com">contact@batiswift.com</a>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <span>© 2026 BâtiSwift. Tous droits réservés.</span>
-      <div style="display:flex;gap:20px;flex-wrap:wrap">
-        <a href="/mentions-legales.html">Mentions légales</a>
-        <a href="/cgu.html">CGU</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-
-
-
-
-
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo" style="color:var(--blanc);margin-bottom:12px">
+          <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg" style="filter:invert(1)">
+          BâtiSwift
+        </div>
+        <p>La plateforme qui connecte clients et artisans BTP qualifiés en moins de 2 minutes.</p>
+        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+          <span style="font-size:.8rem;color:rgba(255,255,255,.35)">
+            <span data-stat="artisans_inscrits">—</span> artisans · <span data-stat="leads_total">—</span> demandes traitées
+          </span>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Clients</h4>
+        <a href="/client.html">Déposer une demande</a>
+        <a href="/index.html#how">Comment ça marche</a>
+        <a href="/tarifs.html">Tarifs</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Artisans</h4>
+        <a href="/inscription.html">S'inscrire</a>
+        <a href="/connexion.html">Connexion</a>
+        <a href="/dashboard.html">Mon dashboard</a>
+        <a href="/parametres.html">Paramètres</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Informations</h4>
+        <a href="/aide.html">Centre d'aide</a>
+        <a href="/mentions-legales.html">Mentions légales</a>
+        <a href="/cgu.html">CGU</a>
+        <a href="mailto:contact@batiswift.com">contact@batiswift.com</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 BâtiSwift. Tous droits réservés.</span>
+      <div style="display:flex;gap:20px;flex-wrap:wrap">
+        <a href="/mentions-legales.html">Mentions légales</a>
+        <a href="/cgu.html">CGU</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ─── ACCÈS RAPIDE AU FOOTER (MOBILE BOTTOM SHEET) ─── -->
+<button type="button" 
+        class="footer-quick-btn" 
+        id="footerQuickBtn" 
+        aria-label="Ouvrir le menu d'accès rapide aux liens utiles" 
+        aria-expanded="false" 
+        aria-controls="footerBottomSheet">
+  <svg class="bs-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-list"/></svg>
+  <span>Liens utiles</span>
+</button>
+
+<div class="footer-sheet-overlay" id="footerSheetOverlay" aria-hidden="true">
+  <div class="footer-bottom-sheet" id="footerBottomSheet" role="dialog" aria-modal="true" aria-labelledby="footerSheetTitle" tabindex="-1">
+    <div class="footer-sheet-drag-handle" aria-hidden="true"></div>
+    <div class="footer-sheet-header">
+      <div class="footer-sheet-title" id="footerSheetTitle">
+        <svg class="bs-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-accueil"/></svg>
+        BâtiSwift — Liens utiles
+      </div>
+      <button type="button" class="footer-sheet-close" id="footerSheetClose" aria-label="Fermer le menu">
+        <svg class="bs-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-close"/></svg>
+      </button>
+    </div>
+
+    <div class="footer-sheet-body">
+      <div class="footer-sheet-grid">
+        <!-- Section Clients -->
+        <div class="footer-sheet-group">
+          <div class="footer-sheet-grouptitle">
+            <svg class="bs-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-user"/></svg>
+            Clients
+          </div>
+          <a href="/client.html" class="footer-sheet-link">Déposer une demande</a>
+          <a href="/index.html#how" class="footer-sheet-link">Comment ça marche</a>
+          <a href="/tarifs.html" class="footer-sheet-link">Tarifs</a>
+          <a href="/carte-client.html" class="footer-sheet-link">Carte artisans</a>
+        </div>
+
+        <!-- Section Artisans -->
+        <div class="footer-sheet-group">
+          <div class="footer-sheet-grouptitle">
+            <svg class="bs-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-briefcase"/></svg>
+            Artisans
+          </div>
+          <a href="/inscription.html" class="footer-sheet-link">S'inscrire</a>
+          <a href="/connexion.html" class="footer-sheet-link">Connexion</a>
+          <a href="/dashboard.html" class="footer-sheet-link">Mon dashboard</a>
+          <a href="/parametres.html" class="footer-sheet-link">Paramètres</a>
+        </div>
+
+        <!-- Section Infos & Légal -->
+        <div class="footer-sheet-group full-width">
+          <div class="footer-sheet-grouptitle">
+            <svg class="bs-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-aide"/></svg>
+            Informations & Support
+          </div>
+          <div class="footer-sheet-sublinks">
+            <a href="/aide.html" class="footer-sheet-link">Centre d'aide</a>
+            <a href="/mentions-legales.html" class="footer-sheet-link">Mentions légales</a>
+            <a href="/cgu.html" class="footer-sheet-link">CGU</a>
+            <a href="mailto:contact@batiswift.com" class="footer-sheet-link">Contact</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var btn = document.getElementById('footerQuickBtn');
+  var overlay = document.getElementById('footerSheetOverlay');
+  var sheet = document.getElementById('footerBottomSheet');
+  var closeBtn = document.getElementById('footerSheetClose');
+
+  if (!btn || !overlay || !sheet) return;
+
+  function openSheet() {
+    overlay.classList.add('is-open');
+    overlay.setAttribute('aria-hidden', 'false');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function closeSheet() {
+    overlay.classList.remove('is-open');
+    overlay.setAttribute('aria-hidden', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (overlay.classList.contains('is-open')) {
+      closeSheet();
+    } else {
+      openSheet();
+    }
+  });
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      closeSheet();
+    });
+  }
+
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) {
+      closeSheet();
+    }
+  });
+
+  // Fermer avec la touche Echap
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && overlay.classList.contains('is-open')) {
+      closeSheet();
+      btn.focus();
+    }
+  });
+
+  // Fermer si on clique sur un lien du panneau
+  var links = sheet.querySelectorAll('.footer-sheet-link');
+  links.forEach(function(l) {
+    l.addEventListener('click', function() {
+      closeSheet();
+    });
+  });
+
+  // Fermer le bottom sheet si le menu hamburger s'ouvre
+  document.addEventListener('click', function(e) {
+    if (e.target && (e.target.id === 'menu-toggle' || e.target.closest('#menu-toggle'))) {
+      if (overlay.classList.contains('is-open')) closeSheet();
+    }
+  });
+})();
+</script>

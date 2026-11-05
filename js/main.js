@@ -4,6 +4,35 @@
  * Chargé EN DERNIER, après session.js.
  */
 
+// ─── INITIALISATION DU THÈME & FONDS BÂTISWIFT ───────────────
+(function initBatiSwiftTheme() {
+  try {
+    var stored = localStorage.getItem("batiswift-theme");
+    var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (stored === "dark" || (!stored && prefersDark)) {
+      document.documentElement.setAttribute("data-theme", "dark");
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+    }
+  } catch(e) {}
+})();
+
+// Fonction globale d'alternance de thème
+window.toggleBatiSwiftTheme = function() {
+  var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  var newTheme = isDark ? "light" : "dark";
+  if (newTheme === "dark") {
+    document.documentElement.setAttribute("data-theme", "dark");
+  } else {
+    document.documentElement.removeAttribute("data-theme");
+  }
+  try {
+    localStorage.setItem("batiswift-theme", newTheme);
+  } catch(e) {}
+  document.dispatchEvent(new CustomEvent("theme:changed", { detail: { theme: newTheme } }));
+  return newTheme;
+};
+
 // ─── INJECTION COMPOSANTS ────────────────────────────────────
 async function loadComponent(containerId, filePath) {
   var container = document.getElementById(containerId);
