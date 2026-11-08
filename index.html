@@ -11,7 +11,7 @@
   <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="manifest" href="/assets/site.webmanifest" />
-  <meta name="theme-color" content="#F5F0EB" />
+  <meta name="theme-color" content="#17131F" />
 
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/icons.css">
@@ -27,11 +27,11 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      background: #F5F0EB;
+      background: #F4F4F7;
       /* Gradient radial subtil en haut */
       background-image: radial-gradient(
         ellipse 80% 50% at 50% -5%,
-        rgba(201,154,76,0.10) 0%,
+        rgba(113,56,213,0.12) 0%,
         transparent 70%
       );
     }
@@ -52,8 +52,8 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(201,154,76,0.12);
-      color: #7a5b1a;
+      background: rgba(113,56,213,0.08);
+      color: #7138D5;
       padding: 6px 20px;
       border-radius: 50px;
       font-size: 0.78rem;
@@ -61,14 +61,15 @@
       letter-spacing: 0.8px;
       text-transform: uppercase;
       margin-bottom: 1.6rem;
-      border: 1px solid rgba(201,154,76,0.2);
+      border: none;
+      box-shadow: 0 2px 10px rgba(113,56,213,0.10);
     }
 
     .portal-eyebrow::before {
       content: '';
       width: 6px; height: 6px;
       border-radius: 50%;
-      background: #C99A4C;
+      background: #7138D5;
       flex-shrink: 0;
     }
 
@@ -85,13 +86,13 @@
 
     .portal-title em {
       font-style: normal;
-      color: #C99A4C;
+      color: #7138D5;
     }
 
     /* ── SUBTITLE ── */
     .portal-subtitle {
       font-size: clamp(0.95rem, 2vw, 1.12rem);
-      color: #8B8B8B;
+      color: #5A5A66;
       max-width: 560px;
       margin: 0 auto 3rem;
       line-height: 1.65;
@@ -112,7 +113,7 @@
       background: #FFFFFF;
       border-radius: 28px;
       padding: 2.8rem 2.5rem;
-      border: 2px solid #EDE6DD;
+      border: none;
       text-align: left;
       cursor: pointer;
       display: flex;
@@ -121,9 +122,8 @@
       overflow: hidden;
       transition:
         transform 0.3s cubic-bezier(0.4,0,0.2,1),
-        box-shadow 0.3s cubic-bezier(0.4,0,0.2,1),
-        border-color 0.3s ease;
-      box-shadow: 0 4px 24px rgba(47,26,58,0.05);
+        box-shadow 0.3s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 10px 36px rgba(17, 17, 20, 0.08), 0 2px 6px rgba(17, 17, 20, 0.03);
       text-decoration: none;
       color: inherit;
     }
@@ -149,11 +149,11 @@
 
     /* ── ARTISAN CARD ── */
     .card-artisan:hover {
-      border-color: #C99A4C;
+      box-shadow: 0 24px 60px rgba(113, 56, 213, 0.20);
     }
 
     .card-artisan::before {
-      background: linear-gradient(90deg, #C99A4C, #EDD88A);
+      background: linear-gradient(90deg, #7138D5, #A879FF);
       opacity: 0;
     }
 
@@ -161,11 +161,11 @@
 
     /* ── CLIENT CARD ── */
     .card-client:hover {
-      border-color: #2F1A3A;
+      box-shadow: 0 24px 60px rgba(23, 19, 31, 0.18);
     }
 
     .card-client::before {
-      background: linear-gradient(90deg, #2F1A3A, #6B3A8A);
+      background: linear-gradient(90deg, #17131F, #7138D5);
       opacity: 0;
     }
 
@@ -193,13 +193,13 @@
     .card-icon svg { width: 2.2rem; height: 2.2rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; display: block; margin: 0 auto; }
 
     .card-artisan .card-icon {
-      background: rgba(201,154,76,0.10);
-      color: var(--or, #C99A4C);
+      background: rgba(113,56,213,0.12);
+      color: #7138D5;
     }
 
     .card-client .card-icon {
       background: rgba(47,26,58,0.07);
-      color: var(--anthracite, #2F1A3A);
+      color: #17131F;
     }
 
     .portal-card:hover .card-icon { transform: scale(1.08) rotate(-3deg); }
@@ -214,15 +214,15 @@
     }
 
     .card-artisan .card-tag {
-      background: rgba(201,154,76,0.12);
-      color: #7a5b1a;
-      border: 1px solid rgba(201,154,76,0.2);
+      background: rgba(113,56,213,0.10);
+      color: #7138D5;
+      border: none;
     }
 
     .card-client .card-tag {
-      background: rgba(47,26,58,0.07);
-      color: #2F1A3A;
-      border: 1px solid rgba(47,26,58,0.15);
+      background: rgba(23,19,31,0.07);
+      color: #17131F;
+      border: none;
     }
 
     /* ── CARD BODY ── */
@@ -272,8 +272,8 @@
     }
 
     .card-artisan .card-features li .check {
-      background: rgba(201,154,76,0.15);
-      color: #7a5b1a;
+      background: rgba(113,56,213,0.12);
+      color: #7138D5;
     }
 
     .card-client .card-features li .check {
@@ -309,15 +309,15 @@
     }
 
     .card-client .card-cta {
-      background: linear-gradient(135deg, #17131F 0%, #2F1A3A 100%);
+      background: linear-gradient(135deg, #17131F 0%, #292832 100%);
       color: #FFFFFF;
-      box-shadow: 0 6px 24px rgba(23, 19, 31, 0.3);
-      border: 1px solid rgba(168, 121, 255, 0.25);
+      box-shadow: 0 6px 24px rgba(23, 19, 31, 0.28);
+      border: none;
     }
 
     .card-client .card-cta:hover {
-      background: linear-gradient(135deg, #2F1A3A 0%, #7138D5 100%);
-      box-shadow: 0 10px 32px rgba(113, 56, 213, 0.4);
+      background: linear-gradient(135deg, #292832 0%, #7138D5 100%);
+      box-shadow: 0 10px 32px rgba(113, 56, 213, 0.38);
       transform: translateY(-2px);
     }
 
@@ -377,7 +377,7 @@
     .portal-stat-sep {
       width: 1px;
       height: 40px;
-      background: #E8E0D4;
+      background: #E5E5EA;
     }
 
     /* ── RESPONSIVE ── */
@@ -398,6 +398,48 @@
     @media (max-width: 480px) {
       .portal-wrapper { padding-top: 32px; }
       .card-title { font-size: 1.7rem; }
+    }
+
+    /* ── PORTAL DARK THEME ── */
+    [data-theme="dark"] body {
+      background: #111114;
+      background-image: radial-gradient(
+        ellipse 80% 50% at 50% -5%,
+        rgba(168,121,255,0.12) 0%,
+        transparent 70%
+      );
+    }
+    [data-theme="dark"] .portal-title,
+    [data-theme="dark"] .card-title,
+    [data-theme="dark"] .portal-stat-value {
+      color: #FFFFFF;
+    }
+    [data-theme="dark"] .portal-subtitle,
+    [data-theme="dark"] .card-desc,
+    [data-theme="dark"] .portal-stat-label,
+    [data-theme="dark"] .portal-footer-link {
+      color: #B2B2BC;
+    }
+    [data-theme="dark"] .portal-footer-link:hover {
+      color: #FFFFFF;
+    }
+    [data-theme="dark"] .portal-card {
+      background: #1A1722;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+    }
+    [data-theme="dark"] .card-features li {
+      color: #F4F4F7;
+    }
+    [data-theme="dark"] .card-client .card-icon {
+      background: rgba(168, 121, 255, 0.12);
+      color: #A879FF;
+    }
+    [data-theme="dark"] .card-client .card-tag {
+      background: rgba(168, 121, 255, 0.12);
+      color: #C4A1FF;
+    }
+    [data-theme="dark"] .portal-stat-sep {
+      background: #292832;
     }
   </style>
   <script src="/icons.js"></script>
