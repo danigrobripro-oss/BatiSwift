@@ -10,7 +10,7 @@
   <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
   <link rel="manifest" href="/assets/site.webmanifest">
-  <meta name="theme-color" content="#F5F0EB">
+  <meta name="theme-color" content="#17131F">
 
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/icons.css">
@@ -32,7 +32,7 @@
     .purchases-head h1 {
       margin: 0 0 .4rem;
       font-family: var(--font-display);
-      color: var(--anthracite);
+      color: var(--text-primary);
       font-size: clamp(1.8rem, 4vw, 2.5rem);
     }
 
@@ -55,7 +55,7 @@
       padding: 1rem 1.2rem;
       margin-bottom: 1rem;
       background: var(--blanc);
-      border: 1.5px solid var(--beige-dark);
+      border: 1.5px solid var(--color-grey-light);
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-sm);
     }
@@ -63,7 +63,7 @@
     .purchases-count {
       font-family: var(--font-display);
       font-weight: 700;
-      color: var(--anthracite);
+      color: var(--text-primary);
       font-size: 1.2rem;
     }
 
@@ -79,16 +79,16 @@
     .subscription-card {
       margin-bottom: 1.25rem;
       padding: 1.35rem;
-      border: 2px solid var(--or);
+      border: 2px solid var(--color-purple-primary);
       border-radius: var(--radius-lg);
       background: linear-gradient(135deg, #fffdf7 0%, #ffffff 100%);
-      box-shadow: 0 12px 35px rgba(201,154,76,.12);
+      box-shadow: 0 12px 35px rgba(113, 56, 213, .12);
     }
-    .subscription-card.inactive { border-color: var(--beige-dark); box-shadow: var(--shadow-sm); }
+    .subscription-card.inactive { border-color: var(--color-grey-light); box-shadow: var(--shadow-sm); }
     .subscription-head { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; }
-    .subscription-title { margin:0; font-family:var(--font-display); color:var(--anthracite); font-size:1.25rem; }
-    .subscription-price { margin-top:.25rem; font-size:1.5rem; font-weight:800; color:var(--anthracite); }
-    .subscription-status { flex-shrink:0; padding:.35rem .7rem; border-radius:999px; background:rgba(201,154,76,.16); color:var(--anthracite); font-size:.75rem; font-weight:800; }
+    .subscription-title { margin:0; font-family:var(--font-display); color:var(--text-primary); font-size:1.25rem; }
+    .subscription-price { margin-top:.25rem; font-size:1.5rem; font-weight:800; color:var(--text-primary); }
+    .subscription-status { flex-shrink:0; padding:.35rem .7rem; border-radius:999px; background:rgba(113, 56, 213, .16); color:var(--text-primary); font-size:.75rem; font-weight:800; }
     .subscription-meta { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.7rem; margin-top:1rem; font-size:.86rem; color:var(--gris); }
 
     .purchases-list {
@@ -99,7 +99,7 @@
 
     .purchase-card {
       background: var(--blanc);
-      border: 1.5px solid var(--beige-dark);
+      border: 1.5px solid var(--color-grey-light);
       border-radius: var(--radius-lg);
       padding: 1.2rem;
       box-shadow: var(--shadow-sm);
@@ -115,7 +115,7 @@
     .purchase-top h2 {
       margin: 0;
       font-family: var(--font-display);
-      color: var(--anthracite);
+      color: var(--text-primary);
       font-size: 1.15rem;
     }
 
@@ -130,8 +130,8 @@
       flex-shrink: 0;
       padding: .28rem .65rem;
       border-radius: 999px;
-      background: rgba(201,154,76,.15);
-      color: var(--anthracite);
+      background: rgba(113, 56, 213, .15);
+      color: var(--text-primary);
       font-size: .72rem;
       font-weight: 700;
     }
@@ -140,14 +140,14 @@
       margin-top: 1rem;
       padding: 1rem;
       background: var(--gris-ultra);
-      border: 1px solid var(--beige-dark);
+      border: 1px solid var(--color-grey-light);
       border-radius: 12px;
     }
 
     .purchase-contact-title {
       margin: 0 0 .6rem;
       font-family: var(--font-display);
-      color: var(--anthracite);
+      color: var(--text-primary);
       font-size: .95rem;
     }
 
@@ -158,13 +158,13 @@
     }
 
     .purchase-contact a {
-      color: var(--anthracite);
+      color: var(--text-primary);
       font-weight: 600;
       text-decoration: none;
     }
 
     .purchase-contact a:hover {
-      color: var(--or);
+      color: var(--color-purple-primary);
     }
 
     .purchase-meta {
@@ -178,14 +178,14 @@
 
     .purchase-description {
       padding-top: .9rem;
-      border-top: 1px solid var(--beige-dark);
+      border-top: 1px solid var(--color-grey-light);
       color: var(--gris);
       font-size: .88rem;
       line-height: 1.55;
     }
 
     .purchase-description strong {
-      color: var(--anthracite);
+      color: var(--text-primary);
     }
 
     .purchases-empty,
@@ -195,7 +195,7 @@
       text-align: center;
       padding: 2.5rem 1.5rem;
       background: var(--blanc);
-      border: 1.5px solid var(--beige-dark);
+      border: 1.5px solid var(--color-grey-light);
       border-radius: var(--radius-lg);
       color: var(--gris);
     }
@@ -211,16 +211,16 @@
     }
 
     .refresh-btn {
-      border: 1px solid var(--beige-dark);
+      border: 1px solid var(--color-grey-light);
       background: var(--blanc);
-      color: var(--anthracite);
+      color: var(--text-primary);
       border-radius: 10px;
       padding: .55rem .8rem;
       cursor: pointer;
     }
 
     .refresh-btn:hover {
-      border-color: var(--or);
+      border-color: var(--color-purple-primary);
     }
 
     @media (max-width: 800px) {

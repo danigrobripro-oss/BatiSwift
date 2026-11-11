@@ -15,7 +15,7 @@
   <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="manifest" href="/assets/site.webmanifest" />
-  <meta name="theme-color" content="#F5F0EB" />
+  <meta name="theme-color" content="#17131F" />
 
   <link rel="stylesheet" href="/css/style.css">
 
@@ -37,7 +37,7 @@
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       text-align: center;
       padding: calc(var(--header-h) + 60px) 5vw 80px;
-      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,.08) 0%, transparent 70%), var(--beige);
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,.08) 0%, transparent 70%), var(--surface-soft);
       position: relative; overflow: hidden;
     }
     .hero::before {
@@ -54,22 +54,22 @@
       margin-bottom: 28px;
     }
     .hero h1 { max-width: 800px; }
-    .hero h1 span { color: var(--or); }
+    .hero h1 span { color: var(--color-purple-primary); }
     .hero-sub { max-width: 560px; margin: 20px auto 0; font-size: 1.05rem; color: var(--gris); }
     .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 36px; }
     .metiers-chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 44px; }
     .chip {
       display: flex; align-items: center; gap: 8px;
-      background: var(--blanc); border: 1.5px solid var(--beige-dark);
+      background: var(--blanc); border: 1.5px solid var(--color-grey-light);
       padding: 9px 18px; border-radius: 50px; font-size: .87rem; font-weight: 500;
-      box-shadow: 0 2px 8px rgba(43,43,43,.05);
+      box-shadow: 0 2px 8px rgba(17, 17, 20, .05);
       transition: all var(--transition); cursor: default;
     }
-    .chip:hover { border-color: var(--or); box-shadow: 0 4px 16px rgba(201,168,76,.15); transform: translateY(-2px); }
+    .chip:hover { border-color: var(--color-purple-primary); box-shadow: 0 4px 16px rgba(201,168,76,.15); transform: translateY(-2px); }
 
     /* ── STATS BANDE ── */
     .stats-band {
-      background: var(--anthracite); padding: 36px 5vw;
+      background: var(--text-primary); padding: 36px 5vw;
       display: flex; justify-content: center; flex-wrap: wrap; gap: 0;
     }
     .stats-band .stat {
@@ -78,7 +78,7 @@
     }
     .stats-band .stat:last-child { border-right: none; }
     .stats-band .stat-num { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: var(--blanc); }
-    .stats-band .stat-num span { color: var(--or); }
+    .stats-band .stat-num span { color: var(--color-purple-primary); }
     .stats-band .stat-lbl { font-size: .8rem; color: rgba(255,255,255,.5); margin-top: 4px; }
 
     /* ── RESPONSIVE STATS ── */
@@ -95,8 +95,8 @@
 
     /* ── HOW IT WORKS ── */
     .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 24px; margin-top: 56px; }
-    .step-card { background: var(--blanc); border-radius: var(--radius-lg); padding: var(--space-lg); border: 1.5px solid var(--beige-dark); position: relative; overflow: hidden; }
-    .step-num { position: absolute; top: -8px; right: 14px; font-family: var(--font-display); font-size: 5rem; font-weight: 800; color: rgba(43,43,43,.04); line-height: 1; }
+    .step-card { background: var(--blanc); border-radius: var(--radius-lg); padding: var(--space-lg); border: 1.5px solid var(--color-grey-light); position: relative; overflow: hidden; }
+    .step-num { position: absolute; top: -8px; right: 14px; font-family: var(--font-display); font-size: 5rem; font-weight: 800; color: rgba(17, 17, 20, .04); line-height: 1; }
     .step-icon { font-size: 2rem; margin-bottom: 14px; }
 .step-icon svg { width: 2rem; height: 2rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; display: block; margin: 0 auto; }
     .step-card h3 { font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 8px; }
@@ -104,8 +104,8 @@
 
     /* ── AVANTAGES ── */
     .av-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 18px; margin-top: 52px; }
-    .av-card { background: var(--beige); border-radius: var(--radius-lg); padding: var(--space-md); transition: all var(--transition); cursor: default; }
-    .av-card:hover { background: var(--anthracite); color: var(--blanc); transform: translateY(-3px); }
+    .av-card { background: var(--surface-soft); border-radius: var(--radius-lg); padding: var(--space-md); transition: all var(--transition); cursor: default; }
+    .av-card:hover { background: var(--text-primary); color: var(--blanc); transform: translateY(-3px); }
     .av-card:hover p { color: rgba(255,255,255,.65); }
     .av-icon { font-size: 1.6rem; margin-bottom: 12px; }
 .av-icon svg { width: 1.6rem; height: 1.6rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; display: block; margin: 0 auto; }
@@ -115,7 +115,7 @@
     /* ── ARTISANS CTA ── */
     .artisans-cta-section {
       margin: 0 5vw var(--space-xxl);
-      background: linear-gradient(135deg, var(--anthracite2) 0%, #1a1a1a 100%);
+      background: linear-gradient(135deg, var(--brand-primary-dark) 0%, #1a1a1a 100%);
       border-radius: var(--radius-xl); padding: 64px 5vw;
       display: flex; gap: 48px; align-items: center; flex-wrap: wrap; color: var(--blanc);
     }
@@ -125,8 +125,8 @@
     .artisans-features { margin-top: 24px; display: flex; flex-direction: column; gap: 10px; }
     .artisans-features li { display: flex; align-items: center; gap: 10px; font-size: .9rem; color: rgba(255,255,255,.8); list-style: none; }
     .artisans-features li::before { content: '✓'; width: 20px; height: 20px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .7rem; font-weight: 700; flex-shrink: 0; }
-    .btn-or { background: var(--or); color: var(--blanc); box-shadow: 0 4px 18px rgba(201,168,76,.4); }
-    .btn-or:hover { background: #b8952e; transform: translateY(-2px); }
+    .btn-or { background: var(--color-purple-primary); color: var(--blanc); box-shadow: 0 4px 18px rgba(201,168,76,.4); }
+    .btn-or:hover { background: linear-gradient(135deg, #8251DC 0%, #7138D5 100%); transform: translateY(-2px); }
 
     /* ── RESPONSIVE ARTISANS CTA ── */
     @media (max-width: 768px) {

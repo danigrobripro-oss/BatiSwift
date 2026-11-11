@@ -1,27 +1,44 @@
 /* ============================================================
    BâtiSwift AI — ai-layout.css
-   Charte graphique officielle BâtiSwift (Or BTP, Anthracite & Crème)
+   Nouvelle Identité Visuelle : Architectural Premium — Violet & Gris — Néo-brutalisme maîtrisé
    ============================================================ */
 
 :root {
-  --bs-gold: #C99A4C;
-  --bs-gold-light: #DFBA73;
-  --bs-gold-dark: #A0742B;
-  --bs-gold-bg: rgba(201, 154, 76, 0.08);
-  --bs-dark: #1E232A;
-  --bs-dark-card: #272E38;
-  --bs-cream: #F5F0EB;
-  --bs-cream-soft: #FAF7F4;
+  /* Nouvelle palette violet & gris - Cohérente avec style.css */
+  --bs-primary: #7138D5;
+  --bs-primary-light: #A879FF;
+  --bs-primary-dark: #8251DC;
+  --bs-primary-bg: rgba(113, 56, 213, 0.08);
+  --bs-primary-glow: rgba(113, 56, 213, 0.35);
+
+  --bs-violet-deep: #17131F;
+  --bs-violet-soft: #292832;
+
+  --bs-grey-light: #E5E5EA;
+  --bs-grey-medium: #8D8D99;
+  --bs-grey-dark: #292832;
+
+  --bs-surface: #FFFFFF;
+  --bs-surface-soft: #F4F4F7;
+  --bs-surface-muted: #EBECEF;
+
+  --bs-cream: #F4F4F7;
+  --bs-cream-soft: #F8F6F3;
+
   --bs-white: #FFFFFF;
-  --bs-border: rgba(30, 35, 42, 0.1);
-  --bs-text: #2D3748;
-  --bs-text-muted: #718096;
-  --bs-success: #1B873F;
-  --bs-success-bg: rgba(27, 135, 63, 0.1);
-  --bs-warning: #D97706;
-  --bs-warning-bg: rgba(217, 119, 6, 0.1);
-  --bs-danger: #DC2626;
-  --bs-danger-bg: rgba(220, 38, 38, 0.1);
+  --bs-black: #111114;
+
+  --bs-border: rgba(17, 17, 20, 0.06);
+  --bs-text: #111114;
+  --bs-text-muted: #5A5A66;
+
+  --bs-success: #10B981;
+  --bs-success-bg: rgba(16, 185, 129, 0.1);
+  --bs-warning: #F59E0B;
+  --bs-warning-bg: rgba(245, 158, 11, 0.1);
+  --bs-danger: #EF4444;
+  --bs-danger-bg: rgba(239, 68, 68, 0.1);
+
   --sidebar-w: 260px;
   --header-h: 70px;
 }
@@ -34,7 +51,7 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background-color: var(--bs-cream);
+  background-color: var(--bs-surface-soft);
   color: var(--bs-text);
   line-height: 1.5;
   min-height: 100vh;
@@ -44,7 +61,7 @@ body {
 /* ─── SIDEBAR ─────────────────────────────────────────────── */
 .ai-sidebar {
   width: var(--sidebar-w);
-  background: var(--bs-dark);
+  background: var(--bs-black);
   color: #E2E8F0;
   display: flex;
   flex-direction: column;
@@ -76,7 +93,7 @@ body {
 }
 
 .ai-sidebar-logo .badge-ai {
-  background: linear-gradient(135deg, var(--bs-gold) 0%, var(--bs-gold-dark) 100%);
+  background: linear-gradient(135deg, var(--bs-primary) 0%, var(--bs-primary-dark) 100%);
   color: var(--bs-white);
   font-size: 0.7rem;
   padding: 2px 7px;
@@ -122,10 +139,10 @@ body {
 }
 
 .ai-nav-item.active {
-  background: var(--bs-gold-bg);
-  color: var(--bs-gold-light);
+  background: var(--bs-primary-bg);
+  color: var(--bs-primary-light);
   font-weight: 600;
-  border-left: 3px solid var(--bs-gold);
+  border-left: 3px solid var(--bs-primary);
 }
 
 .ai-nav-item svg {
@@ -166,7 +183,7 @@ body {
   width: 36px;
   height: 36px;
   border-radius: 8px;
-  background: var(--bs-gold);
+  background: var(--bs-primary);
   color: var(--bs-white);
   display: flex;
   align-items: center;
@@ -191,7 +208,7 @@ body {
 
 .ai-user-badge {
   font-size: 0.7rem;
-  color: var(--bs-gold-light);
+  color: var(--bs-primary-light);
 }
 
 /* ─── MAIN CONTENT ────────────────────────────────────────── */
@@ -205,7 +222,7 @@ body {
 
 .ai-topbar {
   height: var(--header-h);
-  background: var(--bs-white);
+  background: var(--bs-surface);
   border-bottom: 1px solid var(--bs-border);
   display: flex;
   align-items: center;
@@ -244,17 +261,17 @@ body {
   padding: 0.45rem 0.9rem;
   border-radius: 6px;
   border: 1px solid var(--bs-border);
-  background: var(--bs-cream-soft);
-  color: var(--bs-dark);
+  background: var(--bs-surface-soft);
+  color: var(--bs-text);
   text-decoration: none;
   font-weight: 600;
   transition: all 0.15s ease;
 }
 
 .btn-marketplace:hover {
-  background: var(--bs-white);
-  border-color: var(--bs-gold);
-  color: var(--bs-gold-dark);
+  background: var(--bs-surface);
+  border-color: var(--bs-primary);
+  color: var(--bs-primary-dark);
 }
 
 .ai-content {
@@ -286,7 +303,7 @@ body {
    ============================================================ */
 body.theme-artisan {
   position: relative;
-  background-color: var(--bs-cream-soft);
+  background-color: var(--bs-surface-soft);
 }
 
 body.theme-artisan::before {
@@ -309,7 +326,7 @@ body.theme-artisan::before {
 [data-theme="dark"] {
   --bs-dark: #F0EBE4;
   --bs-dark-card: #251E30;
-  --bs-cream: #17131F;
+  --bs-cream: var(--bs-violet-deep);
   --bs-cream-soft: #120E18;
   --bs-white: #1E1727;
   --bs-border: rgba(168, 121, 255, 0.18);

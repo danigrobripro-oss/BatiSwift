@@ -30,7 +30,7 @@
 
   <link rel="manifest" href="/assets/site.webmanifest" />
 
-  <meta name="theme-color" content="#F5F0EB" />
+  <meta name="theme-color" content="#17131F" />
 
 
 
@@ -54,7 +54,7 @@
 
       background: var(--blanc);
 
-      border-right: 1px solid var(--beige-dark);
+      border-right: 1px solid var(--color-grey-light);
 
     }
 
@@ -62,7 +62,7 @@
 
       padding: 20px var(--space-lg);
 
-      border-bottom: 1px solid var(--beige-dark);
+      border-bottom: 1px solid var(--color-grey-light);
 
       display: flex; align-items: center; gap: 14px;
 
@@ -72,7 +72,7 @@
 
       width: 44px; height: 44px; border-radius: 50%;
 
-      background: var(--anthracite);
+      background: var(--text-primary);
 
       display: flex; align-items: center; justify-content: center;
 
@@ -106,7 +106,7 @@
 
     .chat-bubble.chat-assistant {
 
-      background: var(--beige); color: var(--anthracite);
+      background: var(--surface-soft); color: var(--text-primary);
 
       border-bottom-left-radius: 4px; align-self: flex-start;
 
@@ -114,7 +114,7 @@
 
     .chat-bubble.chat-user {
 
-      background: var(--anthracite); color: var(--blanc);
+      background: var(--text-primary); color: var(--blanc);
 
       border-bottom-right-radius: 4px; align-self: flex-end;
 
@@ -138,7 +138,7 @@
 
       padding: var(--space-md) var(--space-lg);
 
-      border-top: 1px solid var(--beige-dark);
+      border-top: 1px solid var(--color-grey-light);
 
       background: var(--blanc);
 
@@ -150,7 +150,7 @@
 
       flex: 1; padding: 12px 16px;
 
-      border: 1.5px solid var(--beige-dark); border-radius: 14px;
+      border: 1.5px solid var(--color-grey-light); border-radius: 14px;
 
       font-size: .93rem; resize: none; max-height: 100px;
 
@@ -160,13 +160,13 @@
 
     }
 
-    #chat-input:focus { border-color: var(--anthracite); }
+    #chat-input:focus { border-color: var(--text-primary); }
 
     #btn-send {
 
       width: 46px; height: 46px; border-radius: 50%;
 
-      background: var(--anthracite); color: var(--blanc);
+      background: var(--text-primary); color: var(--blanc);
 
       border: none; cursor: pointer; font-size: 1.1rem; flex-shrink: 0;
 
@@ -174,7 +174,7 @@
 
     }
 
-    #btn-send:hover:not(:disabled) { background: var(--or); transform: scale(1.05); }
+    #btn-send:hover:not(:disabled) { background: var(--color-purple-primary); transform: scale(1.05); }
 
     #btn-send:disabled { opacity: .4; cursor: not-allowed; }
 
@@ -194,7 +194,7 @@
 
     .step-mini { display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; }
 
-    .step-mini-num { width: 28px; height: 28px; border-radius: 50%; background: var(--anthracite); color: var(--blanc); display: flex; align-items: center; justify-content: center; font-size: .78rem; font-weight: 700; flex-shrink: 0; }
+    .step-mini-num { width: 28px; height: 28px; border-radius: 50%; background: var(--text-primary); color: var(--blanc); display: flex; align-items: center; justify-content: center; font-size: .78rem; font-weight: 700; flex-shrink: 0; }
 
     .step-mini-text h4 { font-size: .9rem; margin-bottom: 3px; }
 
@@ -214,7 +214,7 @@
 
       background: var(--blanc);
 
-      border: 1px solid var(--beige-dark);
+      border: 1px solid var(--color-grey-light);
 
       border-radius: var(--radius);
 
@@ -240,7 +240,7 @@
 
       font-weight: 700;
 
-      color: var(--anthracite);
+      color: var(--text-primary);
 
       cursor: pointer;
 
@@ -268,7 +268,7 @@
 
       transform: rotate(90deg);
 
-      color: var(--or);
+      color: var(--color-purple-primary);
 
     }
 
@@ -276,7 +276,7 @@
 
       padding: 4px 16px 14px;
 
-      border-top: 1px solid var(--beige-dark);
+      border-top: 1px solid var(--color-grey-light);
 
       background: var(--blanc);
 
@@ -284,7 +284,7 @@
 
     .step-mini { display: flex; gap: 14px; margin-top: 12px; align-items: flex-start; }
 
-    .step-mini-num { width: 26px; height: 26px; border-radius: 50%; background: var(--anthracite); color: var(--blanc); display: flex; align-items: center; justify-content: center; font-size: .75rem; font-weight: 700; flex-shrink: 0; }
+    .step-mini-num { width: 26px; height: 26px; border-radius: 50%; background: var(--text-primary); color: var(--blanc); display: flex; align-items: center; justify-content: center; font-size: .75rem; font-weight: 700; flex-shrink: 0; }
 
     .step-mini-text h4 { font-size: .88rem; margin-bottom: 2px; }
 

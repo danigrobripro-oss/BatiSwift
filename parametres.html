@@ -14,19 +14,19 @@
 <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="manifest" href="/assets/site.webmanifest" />
-  <meta name="theme-color" content="#F5F0EB" />
+  <meta name="theme-color" content="#17131F" />
 
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/icons.css">
   <style>
-    body { background: var(--beige); }
+    body { background: var(--surface-soft); }
     .params-wrapper {
       max-width: 860px; margin: 0 auto;
       padding: calc(var(--header-h) + 40px) 5vw 60px;
     }
     .params-card {
       background: var(--blanc); border-radius: var(--radius-xl);
-      padding: 52px 48px; box-shadow: 0 8px 48px rgba(43,43,43,.10);
+      padding: 52px 48px; box-shadow: 0 8px 48px rgba(17, 17, 20, .10);
     }
     .params-title { font-family: var(--font-display); font-size: 2rem; font-weight: 700; margin-bottom: 6px; }
     .params-subtitle { color: var(--gris); font-size: .9rem; margin-bottom: var(--space-xl); }
@@ -34,7 +34,7 @@
     /* Onglets */
     .tab-nav {
       display: flex; gap: 6px; margin-bottom: var(--space-xl);
-      border-bottom: 2px solid var(--beige-dark); padding-bottom: 0;
+      border-bottom: 2px solid var(--color-grey-light); padding-bottom: 0;
     }
     .tab-btn {
       background: none; border: none;
@@ -44,10 +44,10 @@
       transition: all 0.2s;
       font-family: inherit;
     }
-    .tab-btn:hover { color: var(--anthracite); }
+    .tab-btn:hover { color: var(--text-primary); }
     .tab-btn.active {
-      color: var(--anthracite);
-      border-bottom-color: var(--anthracite);
+      color: var(--text-primary);
+      border-bottom-color: var(--text-primary);
     }
     .tab-pane { display: none; }
     .tab-pane.active { display: block; }
@@ -59,7 +59,7 @@
       display: flex; align-items: center; gap: 12px;
     }
     .section-divider::before, .section-divider::after {
-      content: ''; flex: 1; height: 1px; background: var(--beige-dark);
+      content: ''; flex: 1; height: 1px; background: var(--color-grey-light);
     }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .form-group { margin-bottom: 18px; }
@@ -71,15 +71,15 @@
     .toggle-desc { font-size: .8rem; color: var(--gris); margin-top: 2px; }
     .switch { position: relative; display: inline-block; width: 48px; height: 26px; }
     .switch input { opacity: 0; width: 0; height: 0; }
-    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: var(--beige-dark); transition: .3s; border-radius: 26px; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: var(--color-grey-light); transition: .3s; border-radius: 26px; }
     .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background: white; transition: .3s; border-radius: 50%; }
-    input:checked + .slider { background: var(--anthracite); }
+    input:checked + .slider { background: var(--text-primary); }
     input:checked + .slider:before { transform: translateX(22px); }
     .badge-plan {
       display: inline-block; padding: 4px 12px; border-radius: 20px;
-      font-size: .8rem; font-weight: 600; background: var(--or); color: var(--blanc);
+      font-size: .8rem; font-weight: 600; background: var(--color-purple-primary); color: var(--blanc);
     }
-    .badge-plan.standard { background: var(--gris-light); color: var(--anthracite); }
+    .badge-plan.standard { background: var(--gris-light); color: var(--text-primary); }
     @media (max-width: 640px) {
       .params-card { padding: 28px 20px; }
       .form-row { grid-template-columns: 1fr; }
@@ -356,9 +356,9 @@
           <p style="color:var(--gris);">Chargement…</p>
         </div>
 
-        <div style="background:var(--beige);padding:14px;border-radius:12px;margin-top:16px;display:flex;align-items:center;gap:12px;">
+        <div style="background:var(--surface-soft);padding:14px;border-radius:12px;margin-top:16px;display:flex;align-items:center;gap:12px;">
           <span style="font-size:1.4rem;"><svg class="bs-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-credit-card"/></svg></span>
-          <p style="font-size:.82rem;color:var(--anthracite);margin:0;">
+          <p style="font-size:.82rem;color:var(--text-primary);margin:0;">
             Vos transactions et coordonnées bancaires sont cryptées et sécurisées par <strong>Stripe</strong>. BâtiSwift ne stocke aucune donnée bancaire.
           </p>
         </div>
@@ -590,7 +590,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         var rows = list.map(function (inv) {
           var amount = inv.amount_paid != null ? inv.amount_paid : (inv.amount != null ? inv.amount : '');
           var pdf = inv.invoice_pdf || inv.pdf_url || '';
-          return '<tr style="border-bottom:1px solid var(--beige-dark);">' +
+          return '<tr style="border-bottom:1px solid var(--color-grey-light);">' +
             '<td style="padding:8px;">' + escapeHtml(inv.date || '—') + '</td>' +
             '<td style="padding:8px;">' + escapeHtml(inv.description || 'Facture BâtiSwift') + '</td>' +
             '<td style="text-align:right;padding:8px;">' + escapeHtml(String(amount)) + ' ' +
@@ -602,7 +602,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         invoices.innerHTML =
           '<div style="overflow-x:auto;"><table style="width:100%;font-size:.85rem;border-collapse:collapse;">' +
-          '<thead><tr style="border-bottom:1px solid var(--beige-dark);">' +
+          '<thead><tr style="border-bottom:1px solid var(--color-grey-light);">' +
           '<th style="text-align:left;padding:8px;">Date</th>' +
           '<th style="text-align:left;padding:8px;">Description</th>' +
           '<th style="text-align:right;padding:8px;">Montant</th>' +

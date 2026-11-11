@@ -14,7 +14,7 @@
 <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="manifest" href="/assets/site.webmanifest" />
-  <meta name="theme-color" content="#F5F0EB" />
+  <meta name="theme-color" content="#17131F" />
 
   <!-- ─── DESIGN SYSTEM ─── -->
   <link rel="stylesheet" href="/css/style.css" />
@@ -25,7 +25,7 @@
     /* ── PAGE CARTE ── */
     .carte-page {
       padding: calc(var(--header-h) + 20px) 5vw 60px;
-      background: var(--beige);
+      background: var(--surface-soft);
       min-height: 100vh;
     }
     .carte-header h1 {
@@ -51,18 +51,18 @@
       border-radius: var(--radius-lg);
       padding: 1.2rem 1rem;
       text-align: center;
-      border: 1.5px solid var(--beige-dark);
+      border: 1.5px solid var(--color-grey-light);
       transition: all var(--transition);
     }
     .stat-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(43,43,43,0.06);
+      box-shadow: 0 8px 24px rgba(17, 17, 20, 0.06);
     }
     .stat-card .stat-value {
       font-family: var(--font-display);
       font-size: 2rem;
       font-weight: 700;
-      color: var(--anthracite);
+      color: var(--text-primary);
       line-height: 1.2;
     }
     .stat-card .stat-label {
@@ -73,7 +73,7 @@
       margin-top: 4px;
     }
     .stat-card.highlight .stat-value {
-      color: var(--or);
+      color: var(--color-purple-primary);
     }
 
     /* ── CONTROLS ── */
@@ -85,7 +85,7 @@
       background: var(--blanc);
       border-radius: var(--radius-lg);
       padding: 0.8rem 1.5rem;
-      border: 1.5px solid var(--beige-dark);
+      border: 1.5px solid var(--color-grey-light);
       margin-bottom: 1.5rem;
     }
     .radius-control {
@@ -98,24 +98,24 @@
     .radius-control label {
       font-size: 0.85rem;
       font-weight: 500;
-      color: var(--anthracite);
+      color: var(--text-primary);
       white-space: nowrap;
     }
     .radius-control input[type="range"] {
       flex: 1;
       height: 4px;
-      accent-color: var(--or);
+      accent-color: var(--color-purple-primary);
       cursor: pointer;
     }
     .radius-control .radius-value {
       font-weight: 700;
-      color: var(--or);
+      color: var(--color-purple-primary);
       min-width: 50px;
       text-align: right;
       font-size: 0.9rem;
     }
     .btn-reset {
-      background: var(--anthracite);
+      background: var(--text-primary);
       color: var(--blanc);
       border: none;
       border-radius: 50px;
@@ -127,16 +127,16 @@
       white-space: nowrap;
     }
     .btn-reset:hover {
-      background: var(--or);
+      background: var(--color-purple-primary);
     }
 
     /* ── MAP ── */
     .map-wrapper {
       background: var(--blanc);
       border-radius: var(--radius-xl);
-      border: 1.5px solid var(--beige-dark);
+      border: 1.5px solid var(--color-grey-light);
       overflow: hidden;
-      box-shadow: 0 4px 24px rgba(43,43,43,0.06);
+      box-shadow: 0 4px 24px rgba(17, 17, 20, 0.06);
     }
     #map {
       height: 550px;
@@ -147,7 +147,7 @@
       flex-wrap: wrap;
       gap: 1.2rem;
       padding: 0.8rem 1.5rem;
-      border-top: 1px solid var(--beige-dark);
+      border-top: 1px solid var(--color-grey-light);
       font-size: 0.8rem;
       color: var(--gris);
     }
@@ -163,25 +163,25 @@
       display: inline-block;
       flex-shrink: 0;
     }
-    .legend-dot.leads { background: var(--or); opacity: 0.75; }
-    .legend-dot.center { background: var(--anthracite); }
-    .legend-dot.zone { border: 2px solid var(--or); background: transparent; }
+    .legend-dot.leads { background: var(--color-purple-primary); opacity: 0.75; }
+    .legend-dot.center { background: var(--text-primary); }
+    .legend-dot.zone { border: 2px solid var(--color-purple-primary); background: transparent; }
 
     /* ─── POPUP LEAFET ─── */
     .leaflet-popup-content-wrapper {
       border-radius: var(--radius);
-      box-shadow: 0 8px 32px rgba(43,43,43,0.12);
+      box-shadow: 0 8px 32px rgba(17, 17, 20, 0.12);
     }
     .popup-ville {
       font-family: var(--font-display);
       font-size: 1.1rem;
       font-weight: 700;
-      color: var(--anthracite);
+      color: var(--text-primary);
       margin: 0 0 4px;
     }
     .popup-leads {
       font-weight: 600;
-      color: var(--or);
+      color: var(--color-purple-primary);
       margin: 0 0 2px;
     }
     .popup-travaux {
@@ -576,9 +576,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 
       const marker = L.circleMarker([data.lat, data.lon], {
         radius: radiusPx,
-        color: '#C9A84C',
+        color: '#7138D5',
         weight: 1.5,
-        fillColor: '#C9A84C',
+        fillColor: '#7138D5',
         fillOpacity: 0.65,
       }).addTo(map);
 
@@ -611,9 +611,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Cercle
     circle = L.circle([state.center.lat, state.center.lon], {
       radius: state.radius * 1000,
-      color: '#C9A84C',
+      color: '#7138D5',
       weight: 2,
-      fillColor: '#C9A84C',
+      fillColor: '#7138D5',
       fillOpacity: 0.08,
     }).addTo(map);
 

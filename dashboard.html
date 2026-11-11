@@ -12,7 +12,7 @@
   <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg" />
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="manifest" href="/assets/site.webmanifest" />
-  <meta name="theme-color" content="#F5F0EB" />
+  <meta name="theme-color" content="#17131F" />
 
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/icons.css">
@@ -29,9 +29,9 @@
       padding-bottom: 3rem;
     }
     .page-hero-artisan {
-      background: linear-gradient(135deg, #F5F0EB 0%, #FDFBF8 100%);
-      border-top: 3px solid var(--or, #C99A4C);
-      border-bottom: 1px solid rgba(201,154,76,0.15);
+      background: linear-gradient(135deg, #17131F 0%, #F8F6F3 100%);
+      border-top: 3px solid var(--color-purple-primary, #7138D5);
+      border-bottom: 1px solid rgba(113, 56, 213, 0.15);
     }
 
     /* ── WELCOME BLOCK ── */
@@ -42,17 +42,17 @@
       font-family: var(--font-display, 'Cormorant Garamond', serif);
       font-size: clamp(1.8rem, 4vw, 2.6rem);
       font-weight: 700;
-      color: var(--anthracite, #2F1A3A);
+      color: var(--anthracite, #111114);
       line-height: 1.2;
       margin-bottom: 0.35rem;
     }
     .dashboard-welcome h1 em {
       font-style: normal;
-      color: var(--or, #C99A4C);
+      color: var(--color-purple-primary, #7138D5);
     }
     .dashboard-welcome .sub {
       font-size: 0.95rem;
-      color: var(--gris, #8B8B8B);
+      color: var(--gris, #5A5A66);
       margin-bottom: 1rem;
     }
 
@@ -74,17 +74,17 @@
       letter-spacing: 0.02em;
     }
     .badge-pill-role {
-      background: var(--anthracite, #2F1A3A);
+      background: var(--anthracite, #111114);
       color: #fff;
     }
     .badge-pill-gold {
-      background: rgba(201,154,76,0.12);
-      color: var(--or, #C99A4C);
-      border: 1px solid rgba(201,154,76,0.3);
+      background: rgba(113, 56, 213, 0.12);
+      color: var(--color-purple-primary, #7138D5);
+      border: 1px solid rgba(113, 56, 213, 0.3);
     }
     .badge-pill-neutral {
       background: rgba(47,26,58,0.06);
-      color: var(--anthracite, #2F1A3A);
+      color: var(--anthracite, #111114);
       border: 1px solid rgba(47,26,58,0.1);
     }
 
@@ -99,7 +99,7 @@
       background: var(--blanc, #fff);
       border-radius: 16px;
       padding: 1.4rem 1.25rem;
-      border: 1.5px solid rgba(201,154,76,0.15);
+      border: 1.5px solid rgba(113, 56, 213, 0.15);
       box-shadow: 0 2px 12px rgba(47,26,58,0.05);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       position: relative;
@@ -110,7 +110,7 @@
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 3px;
-      background: linear-gradient(90deg, var(--or, #C99A4C), rgba(201,154,76,0.3));
+      background: linear-gradient(90deg, var(--color-purple-primary, #7138D5), rgba(113, 56, 213, 0.3));
     }
     .kpi-card:hover {
       transform: translateY(-2px);
@@ -136,7 +136,7 @@
       font-family: var(--font-display, 'Cormorant Garamond', serif);
       font-size: 2.4rem;
       font-weight: 700;
-      color: var(--anthracite, #2F1A3A);
+      color: var(--anthracite, #111114);
       line-height: 1;
       display: block;
       margin-bottom: 0.3rem;
@@ -146,13 +146,13 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: var(--gris, #8B8B8B);
+      color: var(--gris, #5A5A66);
     }
     .kpi-card-gold .kpi-value {
-      color: var(--or, #C99A4C);
+      color: var(--color-purple-primary, #7138D5);
     }
     .kpi-card-gold .kpi-icon {
-      color: var(--or, #C99A4C);
+      color: var(--color-purple-primary, #7138D5);
     }
 
     /* ── SECTION HEADER ── */
@@ -168,16 +168,16 @@
       font-family: var(--font-display, 'Cormorant Garamond', serif);
       font-size: 1.5rem;
       font-weight: 700;
-      color: var(--anthracite, #2F1A3A);
+      color: var(--anthracite, #111114);
       margin: 0;
     }
     .section-header h2 span {
       font-family: var(--font-body, sans-serif);
       font-size: 0.8rem;
       font-weight: 600;
-      background: rgba(201,154,76,0.12);
-      color: var(--or, #C99A4C);
-      border: 1px solid rgba(201,154,76,0.3);
+      background: rgba(113, 56, 213, 0.12);
+      color: var(--color-purple-primary, #7138D5);
+      border: 1px solid rgba(113, 56, 213, 0.3);
       border-radius: 999px;
       padding: 0.2rem 0.65rem;
       margin-left: 0.5rem;
@@ -215,14 +215,14 @@
     .lead-card:hover {
       transform: translateY(-3px);
       box-shadow: 0 10px 32px rgba(47,26,58,0.1);
-      border-color: rgba(201,154,76,0.3);
+      border-color: rgba(113, 56, 213, 0.3);
     }
 
     /* ── EMPTY STATE ── */
     .empty-state {
       text-align: center;
       padding: 3rem 1rem;
-      color: var(--gris, #8B8B8B);
+      color: var(--gris, #5A5A66);
       grid-column: 1 / -1;
     }
     .empty-state .icon {
@@ -249,19 +249,19 @@
       font-family: var(--font-display, 'Cormorant Garamond', serif);
       font-size: 1.5rem;
       font-weight: 700;
-      color: var(--anthracite, #2F1A3A);
+      color: var(--anthracite, #111114);
       margin: 0 0 0.25rem;
     }
     .avis-card {
-      background: #FDFBF8;
+      background: #F8F6F3;
       border-radius: 12px;
       padding: 1rem 1.1rem;
-      border: 1px solid rgba(201,154,76,0.15);
+      border: 1px solid rgba(113, 56, 213, 0.15);
       margin-bottom: 0.75rem;
     }
-    .avis-card .stars { color: var(--or, #C99A4C); }
-    .avis-card .client { font-weight: 600; color: var(--anthracite, #2F1A3A); }
-    .avis-card .comment { font-size: 0.9rem; color: var(--gris, #8B8B8B); margin-top: 4px; }
+    .avis-card .stars { color: var(--color-purple-primary, #7138D5); }
+    .avis-card .client { font-weight: 600; color: var(--anthracite, #111114); }
+    .avis-card .comment { font-size: 0.9rem; color: var(--gris, #5A5A66); margin-top: 4px; }
     .avis-card .date { font-size: 0.72rem; color: #bbb; }
 
     /* ── QUICK ACTIONS ── */
@@ -297,14 +297,14 @@
       font-family: var(--font-display, 'Cormorant Garamond', serif);
       font-size: 1.4rem;
       margin-bottom: 1rem;
-      color: var(--anthracite, #2F1A3A);
+      color: var(--anthracite, #111114);
     }
     .modal-close {
       position: absolute;
       top: 1rem; right: 1.1rem;
       background: none; border: none;
       font-size: 1.3rem; cursor: pointer;
-      color: var(--gris, #8B8B8B);
+      color: var(--gris, #5A5A66);
     }
 
     /* ── RESPONSIVE ── */
@@ -504,7 +504,7 @@
   <div class="modal-box">
     <button class="modal-close" data-close-modal="modal-buy" aria-label="Fermer">✕</button>
     <h3><svg class="bs-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-achats"/></svg> Acheter ce lead</h3>
-    <div id="modal-lead-info" style="margin-bottom:1.25rem;font-size:0.95rem;color:var(--anthracite);"></div>
+    <div id="modal-lead-info" style="margin-bottom:1.25rem;font-size:0.95rem;color:var(--text-primary);"></div>
     <p style="font-size:0.85rem;color:var(--gris);margin-bottom:1.25rem;">
       Paiement sécurisé via Stripe. Les coordonnées complètes du client seront débloquées immédiatement.
     </p>

@@ -14,18 +14,18 @@
 <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="manifest" href="/assets/site.webmanifest" />
-  <meta name="theme-color" content="#F5F0EB" />
+  <meta name="theme-color" content="#17131F" />
 
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/icons.css">
   <style>
-    body { background: var(--beige); }
+    body { background: var(--surface-soft); }
     .auth-wrapper {
       min-height: 100vh;
       display: grid; grid-template-columns: 1fr 1fr;
     }
     .auth-visual {
-      background: linear-gradient(145deg, var(--anthracite2) 0%, #0d0d0d 100%);
+      background: linear-gradient(145deg, var(--brand-primary-dark) 0%, #0d0d0d 100%);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       padding: var(--space-xl); position: relative; overflow: hidden;
     }
@@ -38,7 +38,7 @@
     .auth-visual-content h2 { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; margin-bottom: 16px; }
     .auth-visual-content p  { color: rgba(255,255,255,.6); font-size: .95rem; line-height: 1.7; max-width: 340px; }
     .auth-stats { display: flex; gap: 32px; margin-top: 40px; justify-content: center; }
-    .auth-stat-num { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--or); }
+    .auth-stat-num { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--color-purple-primary); }
     .auth-stat-lbl { font-size: .75rem; color: rgba(255,255,255,.4); margin-top: 2px; }
     .auth-form-side {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -53,7 +53,7 @@
       background: none; border: none; cursor: pointer; font-size: 1rem; color: var(--gris); padding: 4px;
     }
     .auth-link { text-align: center; margin-top: var(--space-lg); font-size: .88rem; color: var(--gris); }
-    .auth-link a { color: var(--anthracite); font-weight: 600; }
+    .auth-link a { color: var(--text-primary); font-weight: 600; }
     .forgot-link {
       text-align: center;
       margin-top: 12px;
@@ -65,7 +65,7 @@
       transition: color 0.2s;
     }
     .forgot-link a:hover {
-      color: var(--anthracite);
+      color: var(--text-primary);
       text-decoration: underline;
     }
     @media (max-width: 768px) {
