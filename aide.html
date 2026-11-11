@@ -16,10 +16,6 @@
 
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
-
 <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
 
 <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg" />
@@ -35,6 +31,7 @@
 
 
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/public.css">
 
   <link rel="stylesheet" href="/icons.css">
 
@@ -574,7 +571,7 @@
 
 </head>
 
-<body class="theme-internal">  <!-- Sprite SVG BâtiSwift (52 icônes officielles) -->
+<body class="theme-internal public-layout">  <!-- Sprite SVG BâtiSwift (52 icônes officielles) -->
 
   <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute;display:none" aria-hidden="true" focusable="false">
 
@@ -704,7 +701,7 @@
 
     <h1>Comment pouvons-nous vous aider ?</h1>
 
-    <p class="subhead">Posez votre question à notre assistant IA, il vous répond instantanément.</p>
+    <p class="subhead">Parcourez les réponses aux questions fréquentes ou posez une question à l'assistant.</p>
 
 
 
@@ -792,11 +789,11 @@
 
   <h3>Vous n'avez pas trouvé la réponse ?</h3>
 
-  <p>Notre équipe est disponible pour vous aider. Réponse en moins de 2 heures.</p>
+  <p>Pour une question qui reste sans réponse, vous pouvez contacter l'équipe BâtiSwift par e-mail.</p>
 
   <a href="mailto:support@batiswift.fr" class="btn-contact">
 
-    <svg class="bs-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-chat"/></svg> Contacter un humain (WhatsApp / E-mail)
+    <svg class="bs-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-chat"/></svg> Contacter l'équipe par e-mail
 
   </a>
 
@@ -1006,19 +1003,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     { category: 'leads', q: 'Comment fonctionne l\'achat d\'un lead à 10 € ?', a: 'Dans votre tableau de bord, vous voyez les leads disponibles (type de travaux, urgence, distance, description). Avant achat, les coordonnées du client sont masquées. Cliquez sur "Acheter ce lead", payez 10 € par carte bancaire (Stripe), et les coordonnées complètes sont débloquées instantanément.' },
 
-    { category: 'leads', q: 'Que contient un lead avant achat ?', a: 'Vous voyez : le type de travaux (plomberie, électricité...), l\'urgence (immédiate, normale, faible), la ville, la distance par rapport à chez vous, et une description qualifiée par notre IA. Le nom et le téléphone du client sont masqués (Client vérifié #XXXX, 06 XX XX XX XX).' },
+    { category: 'leads', q: 'Que contient un lead avant achat ?', a: 'Vous voyez : le type de travaux (plomberie, électricité...), l\'urgence (immédiate, normale, faible), la ville, la distance par rapport à chez vous et une description de la demande. Le nom et le téléphone du client sont masqués (Client vérifié #XXXX, 06 XX XX XX XX).' },
 
-    { category: 'leads', q: 'Comment être sûr que le lead est sérieux ?', a: 'Chaque lead est qualifié par notre Agent IA (Claude) qui vérifie la cohérence de la demande. Nous affichons le message "Lead 100% vérifié par notre Agent IA". Vous ne payez que si vous décidez de l\'acheter.' },
+    { category: 'leads', q: 'Comment être sûr que le lead est sérieux ?', a: 'Les informations affichées aident à examiner une demande, mais ne garantissent ni la réalisation d\'un chantier ni le sérieux de son émetteur. Vérifiez les détails avec le client avant de prendre une décision. Une éventuelle qualification automatique ne remplace pas cette vérification.' },
 
     { category: 'leads', q: 'Puis-je être remboursé si le lead ne me convient pas ?', a: 'Si le lead s\'avère manifestement non conforme (fausse information, numéro invalide), contactez notre support sous 48h pour un remboursement.' },
 
-    { category: 'ia', q: 'Qu\'est-ce qui est inclus dans l\'abonnement Pro à 19 €/mois ?', a: 'L\'abonnement Pro inclut : la réactivité Instant-Reply (l\'IA répond en 60 secondes aux clients), les filtres avancés de géolocalisation, les notifications WhatsApp instantanées, les relances automatiques (6 types d\'emails/SMS), le dashboard de suivi complet (tags, notes, statuts) et la traduction DeepL des conversations.' },
+    { category: 'ia', q: 'Qu\'est-ce qui est inclus dans l\'abonnement Pro à 19 €/mois ?', a: 'La page Tarifs présente les fonctionnalités associées à cette formule. La disponibilité des réponses automatisées, notifications, relances et traductions dépend de la configuration et des intégrations actives. Vérifiez les fonctionnalités accessibles dans votre compte et les conditions affichées avant toute souscription.' },
 
-    { category: 'ia', q: 'Comment l\'Agent IA répond-il aux clients ?', a: 'Dès qu\'un client dépose une demande, notre IA (Claude) la qualifie et peut répondre automatiquement si vous avez activé l\'abonnement Pro. L\'agent respecte le ton que vous avez choisi (professionnel ou chaleureux) et peut relancer automatiquement les devis non signés.' },
+    { category: 'ia', q: 'Comment l\'Agent IA répond-il aux clients ?', a: 'Le comportement de l\'assistant dépend de la disponibilité du module et de ses intégrations. Vérifiez son état et ses paramètres dans votre compte ; ne présumez pas qu\'une réponse ou une relance a été envoyée sans en contrôler le statut.' },
 
-    { category: 'ia', q: 'Puis-je configurer les horaires de l\'agent IA ?', a: 'Oui, dans Paramètres > Notifications, vous pouvez définir les horaires de contact (début/fin). L\'agent respectera ces plages pour les relances.' },
+    { category: 'ia', q: 'Puis-je configurer les horaires de l\'agent IA ?', a: 'La configuration des horaires dépend de la disponibilité du module et de ses paramètres. Vérifiez son état dans votre compte ; ne présumez pas qu\'une relance a respecté une plage horaire sans en contrôler le statut.' },
 
-    { category: 'ia', q: 'Comment activer la traduction DeepL ?', a: 'Dans Paramètres > Agent IA, activez l\'option "Traduction automatique" et choisissez votre langue par défaut. L\'agent traduira automatiquement les échanges avec les clients non francophones.' },
+    { category: 'ia', q: 'Comment activer la traduction DeepL ?', a: 'Si cette option est disponible pour votre compte, consultez les paramètres de l\'espace concerné et vérifiez que l\'intégration est active. La traduction automatique ne doit pas être considérée comme disponible avant confirmation dans l\'application.' },
 
     { category: 'facturation', q: 'Où puis-je retrouver mes factures pour mon comptable ?', a: 'Connectez-vous, allez dans Paramètres > Abonnement & Sécurité. Vous y trouverez l\'historique complet de vos factures avec un lien de téléchargement PDF pour chacune.' },
 
@@ -1028,7 +1025,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     { category: 'facturation', q: 'Mes données bancaires sont-elles sécurisées ?', a: 'Absolument. Toutes les transactions sont cryptées et traitées par Stripe, leader mondial du paiement en ligne certifié PCI-DSS niveau 1. BatiSwift ne voit ni ne stocke vos numéros de carte.' },
 
-    { category: 'ia', q: 'Que faire si je ne reçois pas mes alertes WhatsApp ?', a: 'Vérifiez d\'abord que votre numéro WhatsApp est correctement renseigné dans Paramètres > Notifications. Ensuite, assurez-vous que l\'option "Notifications WhatsApp" est activée. Si le problème persiste, contactez le support.' },
+    { category: 'ia', q: 'Que faire si je ne reçois pas mes alertes WhatsApp ?', a: 'Si cette intégration est disponible pour votre compte, vérifiez le numéro et l\'état de la notification dans vos paramètres. Sans confirmation de l\'envoi dans l\'application, une alerte ne doit pas être considérée comme transmise. Contactez le support si nécessaire.' },
 
     { category: 'compte', q: 'Comment supprimer mon compte ?', a: 'Conformément au RGPD, vous pouvez demander la suppression de votre compte depuis Paramètres > Abonnement & Sécurité en cliquant sur "Supprimer mon compte", ou en contactant notre support.' }
 
@@ -1197,4 +1194,3 @@ document.addEventListener('DOMContentLoaded', function() {
 </body>
 
 </html>
-

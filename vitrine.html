@@ -3,13 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="BâtiSwift — Trouvez un artisan BTP qualifié en moins de 2 minutes. Plomberie, électricité, peinture, maçonnerie.">
+  <meta name="description" content="Découvrez le parcours BâtiSwift de mise en relation entre particuliers et professionnels du bâtiment.">
   <title>Accueil – BâtiSwift</title>
 
   <!-- ─── FAVICON ─── -->
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
   <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
   <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg" />
   <link rel="icon" type="image/svg+xml" href="/assets/favicon-v2.svg">
@@ -18,6 +16,7 @@
   <meta name="theme-color" content="#17131F" />
 
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/public.css">
 
   <!-- Sprite SVG minimal (pages autonomes) -->
   <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -149,7 +148,7 @@
     }
   </style>
 </head>
-<body></body>
+<body class="public-layout theme-internal">
 
 <!-- Sprite SVG minimal (pages autonomes) -->
 <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -163,7 +162,7 @@
   <symbol id="ic-fire" viewBox="0 0 24 24"><path d="M12 21c3.9 0 6.5-2.6 6.5-6.2 0-2.6-1.4-4.4-2.8-6-.6 1.4-1.5 2.2-2.5 2.6.4-3-.8-5.4-3.2-7.4-.4 3.8-4.5 6.2-4.5 10.8C5.5 18.4 8.1 21 12 21z"/></symbol>
   <symbol id="ic-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5M12 14.5v2"/></symbol>
 
-    <symbol id="ic-briefcase" viewBox="0 0 24 24"><rect x=\</symbol>
+    <symbol id="ic-briefcase" viewBox="0 0 24 24"><rect x="3.5" y="7.5" width="17" height="12" rx="2.5"/><path d="M9 7.5V6a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 6v1.5M3.5 13h17M10.5 13v1.5h3V13"/></symbol>
   </svg>
 
 <div id="page-loader" class="page-loader"><div class="spinner spinner-dark"></div></div>
@@ -173,27 +172,33 @@
 
   <!-- ── HERO ─────────────────────────────────────── -->
   <section class="hero">
-    <div class="hero-badge"><svg class="bs-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-lightning"/></svg> Service disponible 7j/7 · 24h/24</div>
-    <h1>Trouvez un artisan qualifié<br><span>en moins de 2 minutes</span></h1>
-    <p class="hero-sub">Panne d'eau ? Problème électrique ? Peinture urgente ? Décrivez votre besoin et un artisan vérifié vous rappelle sous 1h — gratuitement.</p>
-    <div class="hero-cta">
-      <a href="/client.html" class="btn btn-primary btn-lg"><svg class="bs-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-chat"/></svg> Décrire mon besoin</a>
-      <a href="/inscription.html" class="btn btn-secondary btn-lg">Je suis artisan →</a>
+    <div class="hero-copy">
+      <div class="hero-badge">BâtiSwift · Mise en relation BTP</div>
+      <h1>Vos travaux méritent une mise en relation <span>claire.</span></h1>
+      <p class="hero-sub">Présentez votre projet et découvrez un parcours conçu pour les particuliers comme pour les professionnels du bâtiment.</p>
+      <div class="hero-cta">
+        <a href="/client.html" class="btn btn-primary btn-lg"><svg class="bs-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-chat"/></svg> Présenter mon projet</a>
+        <a href="/inscription.html" class="btn btn-secondary btn-lg">Découvrir l'espace artisan</a>
+      </div>
     </div>
-    <div class="metiers-chips">
+    <aside class="hero-aside" aria-label="Métiers du bâtiment concernés">
+      <span class="hero-aside-label">Des projets, plusieurs métiers</span>
+      <h2>Un point de départ pour vos travaux.</h2>
+      <div class="metiers-chips">
       <div class="chip"><svg class="bs-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-briefcase"/></svg> Plomberie</div>
       <div class="chip"><svg class="bs-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-lightning"/></svg> Électricité</div>
       <div class="chip"><svg class="bs-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-briefcase"/></svg> Peinture</div>
       <div class="chip"><svg class="bs-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-briefcase"/></svg> Maçonnerie</div>
       <div class="chip"><svg class="bs-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-fire"/></svg> Chauffage</div>
       <div class="chip"><svg class="bs-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-lock"/></svg> Serrurerie</div>
-    </div>
+      </div>
+    </aside>
   </section>
 
   <!-- ── STATS LIVE ─────────────────────────────── -->
   <div class="stats-band">
-    <div class="stat"><div class="stat-num"><span data-stat="artisans_inscrits">—</span></div><div class="stat-lbl">Artisans partenaires</div></div>
-    <div class="stat"><div class="stat-num"><span data-stat="leads_total">—</span></div><div class="stat-lbl">Demandes traitées</div></div>
+    <div class="stat"><div class="stat-num"><span data-stat="artisans_inscrits">—</span></div><div class="stat-lbl">Artisans inscrits</div></div>
+    <div class="stat"><div class="stat-num"><span data-stat="leads_total">—</span></div><div class="stat-lbl">Demandes enregistrées</div></div>
     <div class="stat"><div class="stat-num">10<span>€</span></div><div class="stat-lbl">Prix par lead (artisan)</div></div>
     <div class="stat"><div class="stat-num">0<span>€</span></div><div class="stat-lbl">Gratuit pour le client</div></div>
   </div>
@@ -203,27 +208,27 @@
     <div class="container">
       <div class="text-center">
         <span class="section-label reveal">Comment ça marche</span>
-        <h2 class="reveal">Simple, rapide, efficace</h2>
-        <p class="reveal" style="max-width:480px;margin:12px auto 0">Trois étapes, moins de deux minutes, un artisan qualifié.</p>
+        <h2 class="reveal">Avancer étape par étape</h2>
+        <p class="reveal" style="max-width:480px;margin:12px auto 0">Les grandes étapes pour présenter votre projet et avancer avec les professionnels concernés.</p>
       </div>
       <div class="steps">
         <div class="step-card reveal">
           <div class="step-num">1</div>
           <div class="step-icon" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chat"/></svg></div>
           <h3>Décrivez votre problème</h3>
-          <p>Notre agent IA analyse votre demande en temps réel. Une photo suffit. Aucune inscription requise.</p>
+          <p>Présentez les travaux souhaités et ajoutez les informations utiles à leur compréhension.</p>
         </div>
         <div class="step-card reveal reveal-delay-1">
           <div class="step-num">2</div>
           <div class="step-icon" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-search"/></svg></div>
-          <h3>BâtiSwift qualifie votre besoin</h3>
-          <p>L'IA détermine l'urgence, le type de travaux et localise les artisans disponibles près de vous.</p>
+          <h3>Votre demande prend forme</h3>
+          <p>Les informations de votre projet aident à orienter la mise en relation vers les professionnels concernés.</p>
         </div>
         <div class="step-card reveal reveal-delay-2">
           <div class="step-num">3</div>
           <div class="step-icon" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-phone"/></svg></div>
-          <h3>Un artisan vous rappelle sous 1h</h3>
-          <p>Un professionnel vérifié vous contacte directement. Devis gratuit, sans engagement.</p>
+          <h3>Échangez sur la suite du projet</h3>
+          <p>Précisez votre besoin et les prochaines étapes avec le professionnel concerné.</p>
         </div>
       </div>
     </div>
@@ -234,28 +239,28 @@
     <div class="container">
       <div class="text-center">
         <span class="section-label reveal">Pourquoi BâtiSwift</span>
-        <h2 class="reveal">La mise en relation la plus rapide</h2>
+        <h2 class="reveal">Un parcours pensé autour de votre projet</h2>
       </div>
       <div class="av-grid">
-        <div class="av-card reveal"><div class="av-icon" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-check"/></svg></div><h3>Artisans vérifiés</h3><p>Chaque artisan est contrôlé : assurance décennale, qualifications, avis clients.</p></div>
-        <div class="av-card reveal reveal-delay-1"><div class="av-icon" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-lightning"/></svg></div><h3>Réponse sous 1h</h3><p>Réseau d'artisans disponibles pour garantir une réponse rapide, même les weekends.</p></div>
-        <div class="av-card reveal reveal-delay-2"><div class="av-icon" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-money"/></svg></div><h3>Devis 100% gratuit</h3><p>Aucun frais pour le client. Le devis est toujours gratuit et sans engagement.</p></div>
-        <div class="av-card reveal reveal-delay-3"><div class="av-icon" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-camera"/></svg></div><h3>Photos acceptées</h3><p>Envoyez une photo ou une vidéo pour une évaluation encore plus précise de votre problème.</p></div>
+        <div class="av-card reveal"><div class="av-icon" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-check"/></svg></div><h3>Un besoin mieux décrit</h3><p>Rassemblez les informations utiles autour du type de travaux et du contexte du projet.</p></div>
+        <div class="av-card reveal reveal-delay-1"><div class="av-icon" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-lightning"/></svg></div><h3>Des étapes lisibles</h3><p>Repérez les principales étapes du parcours, de la demande aux échanges avec les professionnels.</p></div>
+        <div class="av-card reveal reveal-delay-2"><div class="av-icon" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-money"/></svg></div><h3>Des tarifs consultables</h3><p>Retrouvez les formules et modalités affichées sur la page dédiée aux tarifs.</p></div>
+        <div class="av-card reveal reveal-delay-3"><div class="av-icon" aria-hidden="true"><svg class="bs-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-camera"/></svg></div><h3>Un espace par profil</h3><p>Choisissez le parcours particulier ou artisan selon votre besoin.</p></div>
       </div>
     </div>
   </section>
 
   <!-- ── CTA ARTISANS ───────────────────────────── -->
-  <div class="artisans-cta-section">
+  <div class="artisans-cta-section" id="artisans">
     <div class="artisans-cta-text">
-      <span class="section-label" style="color:rgba(255,255,255,.4)">Pour les artisans</span>
-      <h2>Recevez des clients qualifiés directement sur votre téléphone</h2>
-      <p>Fini les appels manqués. BâtiSwift vous envoie une fiche client complète en temps réel. 10€ par lead, aucun abonnement.</p>
+      <span class="section-label" style="color:rgba(255,255,255,.74)">Pour les artisans</span>
+      <h2>Un espace dédié aux professionnels du bâtiment</h2>
+      <p>Découvrez les outils de suivi et les modalités de mise en relation proposées aux artisans.</p>
       <ul class="artisans-features">
-        <li>Clients pré-qualifiés avec ville, urgence et description</li>
-        <li>Notification instantanée WhatsApp/SMS</li>
-        <li>10€ par lead, 0€ commission sur vos chantiers</li>
-        <li>Dashboard simple, aucune formation nécessaire</li>
+        <li>Consultez les demandes disponibles sur la plateforme</li>
+        <li>Accédez à votre espace professionnel</li>
+        <li>Consultez les modalités sur la page Tarifs</li>
+        <li>Retrouvez les outils liés à votre activité</li>
       </ul>
     </div>
     <div>
@@ -274,4 +279,3 @@
 <script src="/js/main.js"></script>
 </body>
 </html>
-

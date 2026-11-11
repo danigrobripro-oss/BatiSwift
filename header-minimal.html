@@ -60,10 +60,15 @@
       <img src="/assets/logo.svg" alt="BâtiSwift" class="logo-svg">
       <span>BâtiSwift</span>
     </a>
-    <nav class="minimal-nav-links">
-      <a href="/vitrine.html" class="minimal-nav-link">Fonctionnement</a>
-      <a href="/tarifs.html"  class="minimal-nav-link">Tarifs</a>
-      <a href="/aide.html"    class="minimal-nav-link">Aide</a>
+    <button class="public-nav-toggle" id="public-nav-toggle" type="button" aria-expanded="false" aria-controls="public-navigation" aria-label="Ouvrir la navigation">
+      <span aria-hidden="true">Menu</span>
+    </button>
+    <nav class="minimal-nav-links" id="public-navigation" aria-label="Navigation du site">
+      <a href="/vitrine.html" class="minimal-nav-link nav-link">Fonctionnement</a>
+      <a href="/tarifs.html" class="minimal-nav-link nav-link">Tarifs</a>
+      <a href="/aide.html" class="minimal-nav-link nav-link">Aide</a>
+      <a href="/connexion.html" class="minimal-nav-link nav-link">Se connecter</a>
+      <a href="/index.html" class="minimal-nav-link minimal-nav-link--cta nav-link">Choisir mon espace</a>
     </nav>
   </div>
 </header>
@@ -130,6 +135,31 @@
 
 @media (max-width: 640px) {
   .minimal-nav-links { display: none; }
+  .minimal-nav-links.is-open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 72px;
+    left: 0;
+    right: 0;
+    padding: 14px 20px 20px;
+    background: rgba(250,249,252,0.98);
+    border-bottom: 1px solid rgba(23,19,31,0.1);
+    box-shadow: 0 12px 24px rgba(23,19,31,0.08);
+  }
+  .public-nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    min-height: 44px;
+    border: 1px solid rgba(23,19,31,0.14);
+    border-radius: 4px;
+    background: #fff;
+    color: #17131F;
+    font: 600 .82rem 'DM Sans', system-ui, sans-serif;
+    cursor: pointer;
+  }
 
   .site-header--minimal {
     padding: 0 1rem;
@@ -144,4 +174,31 @@
 }
 </style>
 
+<script>
+  (function() {
+    var toggle = document.getElementById('public-nav-toggle');
+    var navigation = document.getElementById('public-navigation');
+    if (!toggle || !navigation) return;
 
+    function closeNavigation() {
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Ouvrir la navigation');
+      navigation.classList.remove('is-open');
+    }
+
+    toggle.addEventListener('click', function() {
+      var isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!isOpen));
+      toggle.setAttribute('aria-label', isOpen ? 'Ouvrir la navigation' : 'Fermer la navigation');
+      navigation.classList.toggle('is-open', !isOpen);
+    });
+
+    navigation.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', closeNavigation);
+    });
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') closeNavigation();
+    });
+  })();
+</script>

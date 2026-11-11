@@ -38,7 +38,7 @@ async function loadComponent(containerId, filePath) {
   var container = document.getElementById(containerId);
   if (!container) return;
   try {
-    var resp = await fetch(filePath);
+    var resp = await fetch(filePath, { cache: 'no-cache' });
     if (!resp.ok) return;
     container.innerHTML = await resp.text();
     // Exécute les <script> inline du composant
@@ -55,11 +55,12 @@ async function loadComponent(containerId, filePath) {
 async function initLayout() {
   var isMinimal = document.body.classList.contains('minimal-layout');
   var isClient = document.body.classList.contains('client-layout');
+  var isPublic = document.body.classList.contains('public-layout');
   // <body class="no-header"> : page autonome (ex. sélection Client / Artisan).
   // Aucun header n'est injecté ; les autres pages ne sont pas concernées.
   var noHeader = document.body.classList.contains('no-header');
   var headerFile = '/header.html';
-  if (isMinimal) headerFile = '/header-minimal.html';
+  if (isMinimal || isPublic) headerFile = '/header-minimal.html';
   else if (isClient) headerFile = '/header-client.html';
   if (!noHeader) {
     await loadComponent('header-container', headerFile);
@@ -73,7 +74,8 @@ async function initLayout() {
 function highlightActiveNav() {
   var current = window.location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.nav-link[href]').forEach(function(a) {
-    a.classList.toggle('active', a.getAttribute('href') === current);
+    var target = new URL(a.href, window.location.href).pathname.split('/').pop();
+    a.classList.toggle('active', target === current);
   });
 }
 
